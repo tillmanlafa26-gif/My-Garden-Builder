@@ -2,7 +2,7 @@ export const gardenPlans = {
 
     container: {
         name: "Container Garden",
-        icon: "🪴",
+        icon: "🌱",
 
         supplies: [
             "Containers with drainage holes",

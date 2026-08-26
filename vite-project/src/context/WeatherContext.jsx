@@ -105,7 +105,6 @@ export function WeatherProvider({
                 error
             );
 
-
             setError(
                 error.message
             );
@@ -123,7 +122,15 @@ export function WeatherProvider({
 
     useEffect(() => {
 
-        refreshWeather();
+        const timeoutId =
+            setTimeout(() => {
+                refreshWeather();
+            }, 0);
+
+
+        return () => {
+            clearTimeout(timeoutId);
+        };
 
     }, []);
 
@@ -155,6 +162,8 @@ export function WeatherProvider({
 }
 
 
+// The hook is intentionally co-located with its provider and context.
+// eslint-disable-next-line react-refresh/only-export-components
 export function useWeather() {
 
     const context =

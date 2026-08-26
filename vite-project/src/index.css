@@ -235,7 +235,7 @@ body {
 @media (max-width: 400px) {
 
     .app-container {
-        padding: 15px;
+        padding: 15px 15px 100px;
     }
 
 
@@ -3071,7 +3071,10 @@ html.dark-mode .journal-empty,
 html.dark-mode .calendar-empty,
 html.dark-mode .supplies-progress,
 html.dark-mode .supply-card,
-html.dark-mode .supplies-empty {
+html.dark-mode .supplies-empty,
+html.dark-mode .plant-profile-notice,
+html.dark-mode .vegetable-loading,
+html.dark-mode .vegetable-error {
     background-color: #202920;
 
     color: #e5eee3;
@@ -3833,3 +3836,4029 @@ html.dark-mode
 
     color: #c8d1d4;
 }
+/* =========================
+   SMART WATERING PROFILE
+========================= */
+
+.watering-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 12px;
+}
+
+
+.watering-garden-type {
+    flex-shrink: 0;
+
+    padding:
+        5px
+        8px;
+
+    background-color: #edf5eb;
+
+    color: #315c3d;
+
+    border-radius: 15px;
+
+    font-size: 0.68rem;
+
+    font-weight: bold;
+}
+
+
+/* =========================
+   WATERING PROFILE WARNING
+========================= */
+
+.watering-profile-warning {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin:
+        12px
+        0;
+
+    padding: 10px;
+
+    background-color: #fff5dc;
+
+    border-radius: 9px;
+}
+
+
+.watering-profile-warning p {
+    flex: 1;
+
+    margin: 0;
+
+    font-size: 0.76rem;
+
+    color: #6e581f;
+}
+
+
+.watering-profile-warning a {
+    font-size: 0.72rem;
+
+    font-weight: bold;
+
+    color: #315c3d;
+}
+
+
+/* =========================
+   WATER NEED META
+========================= */
+
+.watering-meta {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 6px;
+
+    margin-top: 5px;
+}
+
+
+.watering-meta span {
+    padding:
+        3px
+        6px;
+
+    background-color: #f2f5f0;
+
+    border-radius: 10px;
+
+    color: #657064;
+
+    font-size: 0.64rem;
+}
+
+
+/* =========================
+   HYDROPONIC ADVICE
+========================= */
+
+.watering-weather-advice.hydro {
+    background-color: #e5f4f5;
+
+    color: #315f63;
+}
+
+
+.watering-weather-advice strong {
+    display: block;
+
+    margin-bottom: 2px;
+
+    font-size: 0.72rem;
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+html.dark-mode
+.watering-garden-type {
+    background-color: #304030;
+
+    color: #b6ddb5;
+}
+
+
+html.dark-mode
+.watering-profile-warning {
+    background-color: #493f25;
+}
+
+
+html.dark-mode
+.watering-profile-warning p {
+    color: #ead49c;
+}
+
+
+html.dark-mode
+.watering-meta span {
+    background-color: #293329;
+
+    color: #aebbaa;
+}
+
+
+html.dark-mode
+.watering-weather-advice.hydro {
+    background-color: #253d40;
+
+    color: #b9dde0;
+}
+/* =========================
+   WATERING ACTIONS
+========================= */
+
+.watering-actions {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    width: 100%;
+
+    margin-top: 10px;
+}
+
+
+.watering-actions button {
+    flex: 1;
+
+    min-width: 90px;
+
+    padding:
+        8px
+        9px;
+
+    border-radius: 8px;
+
+    font-size: 0.72rem;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+/* =========================
+   DELAY WATERING
+========================= */
+
+.delay-watering-button {
+    border:
+        1px solid #d7a950;
+
+    background-color: #fff7e6;
+
+    color: #795816;
+}
+
+
+.delay-watering-button:hover {
+    background-color: #ffefc7;
+}
+
+
+/* =========================
+   RAIN WATERED
+========================= */
+
+.rain-watered-button {
+    border:
+        1px solid #5c91aa;
+
+    background-color: #e8f5fa;
+
+    color: #315f73;
+}
+
+
+.rain-watered-button:hover {
+    background-color: #d8edf5;
+}
+
+
+/* =========================
+   LAST WATERING METHOD
+========================= */
+
+.last-watering-method {
+    width: fit-content;
+
+    margin-top: 6px;
+
+    padding:
+        4px
+        7px;
+
+    border-radius: 10px;
+
+    background-color: #e8f5fa;
+
+    color: #315f73;
+
+    font-size: 0.65rem;
+
+    font-weight: bold;
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+html.dark-mode
+.delay-watering-button {
+    border-color: #806b40;
+
+    background-color: #443922;
+
+    color: #efd18f;
+}
+
+
+html.dark-mode
+.rain-watered-button {
+    border-color: #51798a;
+
+    background-color: #243d48;
+
+    color: #b5dbe9;
+}
+
+
+html.dark-mode
+.last-watering-method {
+    background-color: #243d48;
+
+    color: #b5dbe9;
+}
+/* =========================
+   HARDINESS ZONE BUILDER
+========================= */
+
+.hardiness-builder {
+    margin-top: 25px;
+
+    padding: 18px;
+
+    background-color: white;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 4px 10px
+        rgba(0, 0, 0, 0.07);
+}
+
+
+.hardiness-builder-heading {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 15px;
+
+    margin-bottom: 15px;
+}
+
+
+.hardiness-builder-heading h2 {
+    margin: 0 0 5px;
+}
+
+
+.hardiness-builder-heading p {
+    margin: 0;
+
+    color: #667566;
+
+    font-size: 0.82rem;
+}
+
+
+.hardiness-builder-heading > span {
+    font-size: 2rem;
+}
+
+
+.hardiness-label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    font-size: 0.8rem;
+
+    font-weight: bold;
+}
+
+
+.hardiness-select {
+    width: 100%;
+
+    padding: 12px;
+
+    border:
+        1px solid #ccd6c9;
+
+    border-radius: 8px;
+
+    background-color: white;
+}
+
+
+/* =========================
+   SELECTED ZONE
+========================= */
+
+.selected-hardiness-zone {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 12px;
+
+    padding: 12px;
+
+    background-color: #edf5eb;
+
+    border-radius: 10px;
+}
+
+
+.selected-hardiness-zone > span {
+    font-size: 1.5rem;
+}
+
+
+.selected-hardiness-zone div {
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+.selected-hardiness-zone p {
+    margin: 2px 0 0;
+
+    color: #667566;
+
+    font-size: 0.74rem;
+}
+
+
+.usda-zone-link {
+    display: inline-block;
+
+    margin-top: 12px;
+
+    color: #3f704d;
+
+    font-size: 0.76rem;
+
+    font-weight: bold;
+
+    text-decoration: none;
+}
+
+
+/* =========================
+   GARDEN PROFILE ZONE
+========================= */
+
+.garden-zone-card {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    margin-top: 12px;
+
+    padding: 10px;
+
+    background-color: #edf5eb;
+
+    border-radius: 9px;
+}
+
+
+.garden-zone-card > span {
+    font-size: 1.3rem;
+}
+
+
+.garden-zone-card div {
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+.garden-zone-card small {
+    color: #667566;
+}
+
+
+/* =========================
+   LIBRARY ZONE
+========================= */
+
+.library-zone-filter {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    margin-bottom: 14px;
+
+    padding: 10px 12px;
+
+    background-color: #edf5eb;
+
+    border-radius: 9px;
+}
+
+
+.library-zone-filter div {
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+.library-zone-filter strong {
+    font-size: 0.8rem;
+}
+
+
+.library-zone-filter small {
+    color: #667566;
+
+    font-size: 0.7rem;
+}
+
+
+/* =========================
+   DARK MODE ZONES
+========================= */
+
+html.dark-mode
+.hardiness-builder {
+    background-color: #202920;
+
+    color: #e5eee3;
+}
+
+
+html.dark-mode
+.hardiness-select {
+    background-color: #283228;
+
+    color: #edf5eb;
+
+    border-color: #465246;
+}
+
+
+html.dark-mode
+.selected-hardiness-zone,
+html.dark-mode
+.garden-zone-card,
+html.dark-mode
+.library-zone-filter {
+    background-color: #304030;
+}
+
+
+html.dark-mode
+.usda-zone-link {
+    color: #b6ddb5;
+}
+/* =========================
+   GARDEN BUILDER OPTIONS
+========================= */
+
+.garden-option {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    min-height: 48px;
+
+    padding: 10px 12px;
+
+    border:
+        2px solid #d7e2d3;
+
+    border-radius: 10px;
+
+    background-color: #ffffff;
+
+    color: #243524;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.garden-option:hover {
+    border-color: #5f8c62;
+
+    background-color: #f1f7ef;
+}
+
+
+.garden-option.selected {
+    border-color: #3f704d;
+
+    background-color: #dfeedd;
+
+    color: #244b2e;
+}
+
+
+.garden-option span {
+    font-size: 1.25rem;
+}
+
+
+/* =========================
+   DARK MODE GARDEN OPTIONS
+========================= */
+
+html.dark-mode
+.garden-option {
+    background-color: #283228;
+
+    color: #edf5eb;
+
+    border-color: #465246;
+}
+
+
+html.dark-mode
+.garden-option:hover {
+    background-color: #304030;
+
+    border-color: #6b986d;
+}
+
+
+html.dark-mode
+.garden-option.selected {
+    background-color: #426b48;
+
+    color: #ffffff;
+
+    border-color: #89b88a;
+}
+
+/* =========================
+   PRIMARY BUTTON
+========================= */
+
+.primary-button {
+    width: 100%;
+
+    padding: 12px 14px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background-color: #3f704d;
+
+    color: #ffffff;
+
+    font: inherit;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.primary-button:hover:not(:disabled) {
+    background-color: #315c3d;
+
+    transform: translateY(-1px);
+}
+
+
+.primary-button:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+}
+
+
+html.dark-mode
+.primary-button {
+    background-color: #5e9465;
+
+    color: #ffffff;
+}
+
+
+html.dark-mode
+.primary-button:hover:not(:disabled) {
+    background-color: #72a979;
+}
+
+
+/* =========================
+   SAVE GARDEN BUTTON
+========================= */
+
+.garden-save-button {
+    width: 100%;
+
+    margin-top: 18px;
+
+    padding: 13px 16px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background-color: #3f704d;
+
+    color: #ffffff;
+
+    font-size: 0.95rem;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.garden-save-button:hover {
+    background-color: #315c3d;
+
+    transform: translateY(-1px);
+}
+
+
+html.dark-mode
+.garden-save-button {
+    background-color: #5e9465;
+
+    color: #ffffff;
+}
+
+
+html.dark-mode
+.garden-save-button:hover {
+    background-color: #72a979;
+}
+/* =========================
+   GARDEN DESIGNER
+========================= */
+
+.designer-form {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 16px;
+}
+
+
+.designer-card {
+    padding: 18px;
+
+    background-color: white;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 4px 10px
+        rgba(0, 0, 0, 0.07);
+}
+
+
+/* =========================
+   DESIGNER HEADING
+========================= */
+
+.designer-section-heading {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 10px;
+
+    margin-bottom: 16px;
+}
+
+
+.designer-section-heading > span {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 28px;
+    height: 28px;
+
+    padding: 0 5px;
+
+    border-radius: 50%;
+
+    background-color: #3f704d;
+
+    color: white;
+
+    font-size: 0.75rem;
+
+    font-weight: bold;
+}
+
+
+.designer-section-heading h2 {
+    margin: 0 0 4px;
+
+    font-size: 1rem;
+}
+
+
+.designer-section-heading p {
+    margin: 0;
+
+    color: #667566;
+
+    font-size: 0.78rem;
+}
+
+
+/* =========================
+   DESIGN MODE
+========================= */
+
+.design-mode-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            1fr
+        );
+
+    gap: 10px;
+}
+
+
+.design-mode-card {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 7px;
+
+    min-height: 125px;
+
+    padding: 15px;
+
+    border:
+        2px solid #dce5d9;
+
+    border-radius: 12px;
+
+    background-color: #ffffff;
+
+    color: #243524;
+
+    cursor: pointer;
+}
+
+
+.design-mode-card > span {
+    font-size: 2rem;
+}
+
+
+.design-mode-card small {
+    color: #667566;
+
+    text-align: center;
+}
+
+
+.design-mode-card.selected {
+    border-color: #3f704d;
+
+    background-color: #edf5eb;
+}
+
+
+.design-mode-card.coming-soon {
+    opacity: 0.55;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================
+   DESIGNER CHOICES
+========================= */
+
+.designer-choice-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            1fr
+        );
+
+    gap: 9px;
+}
+
+
+.designer-choice {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    min-height: 48px;
+
+    padding: 10px;
+
+    border:
+        2px solid #dce5d9;
+
+    border-radius: 10px;
+
+    background-color: white;
+
+    color: #243524;
+
+    cursor: pointer;
+}
+
+
+.designer-choice > span {
+    font-size: 1.15rem;
+}
+
+
+.designer-choice strong {
+    font-size: 0.78rem;
+}
+
+
+.designer-choice.selected {
+    border-color: #3f704d;
+
+    background-color: #dfeedd;
+
+    color: #244b2e;
+}
+
+
+/* =========================
+   DIMENSIONS
+========================= */
+
+.dimension-grid {
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        auto
+        1fr
+        90px;
+
+    align-items: end;
+
+    gap: 8px;
+}
+
+
+.dimension-grid > div {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+
+.dimension-grid label {
+    font-size: 0.72rem;
+
+    font-weight: bold;
+}
+
+
+.dimension-grid input,
+.dimension-grid select {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 11px;
+
+    border:
+        1px solid #ccd6c9;
+
+    border-radius: 8px;
+}
+
+
+.dimension-symbol {
+    padding-bottom: 10px;
+
+    font-size: 1.2rem;
+
+    font-weight: bold;
+}
+
+
+.space-area-result {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 12px;
+
+    padding: 11px;
+
+    border-radius: 10px;
+
+    background-color: #edf5eb;
+}
+
+
+.space-area-result > span {
+    font-size: 1.4rem;
+}
+
+
+.space-area-result p {
+    margin: 2px 0 0;
+
+    color: #667566;
+
+    font-size: 0.74rem;
+}
+
+
+/* =========================
+   FEATURE GRID
+========================= */
+
+.feature-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            1fr
+        );
+
+    gap: 9px;
+}
+
+
+.feature-card {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 5px;
+
+    min-height: 95px;
+
+    padding: 12px;
+
+    border:
+        2px solid #dce5d9;
+
+    border-radius: 10px;
+
+    background-color: white;
+
+    color: #243524;
+
+    cursor: pointer;
+}
+
+
+.feature-card > span {
+    font-size: 1.4rem;
+}
+
+
+.feature-card strong {
+    font-size: 0.76rem;
+}
+
+
+.feature-card small {
+    color: #738071;
+
+    font-size: 0.65rem;
+}
+
+
+.feature-card.selected {
+    border-color: #3f704d;
+
+    background-color: #dfeedd;
+}
+
+
+
+.feature-card button {
+    width: 100%;
+
+    margin-top: auto;
+
+    padding: 8px 10px;
+
+    border:
+        1px solid #3f704d;
+
+    border-radius: 8px;
+
+    background-color: #ffffff;
+
+    color: #315c3d;
+
+    font: inherit;
+
+    font-size: 0.68rem;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+.feature-card button:hover {
+    background-color: #edf5eb;
+}
+
+
+html.dark-mode
+.feature-card button {
+    background-color: #283228;
+
+    color: #b6ddb5;
+
+    border-color: #6a9c6c;
+}
+
+
+html.dark-mode
+.feature-card button:hover {
+    background-color: #304030;
+}
+
+
+/* =========================
+   BUDGET
+========================= */
+
+.budget-field {
+    display: flex;
+
+    align-items: center;
+
+    overflow: hidden;
+
+    border:
+        1px solid #ccd6c9;
+
+    border-radius: 9px;
+}
+
+
+.budget-field > span {
+    padding:
+        11px
+        12px;
+
+    background-color: #edf5eb;
+
+    font-weight: bold;
+}
+
+
+.budget-field input {
+    flex: 1;
+
+    min-width: 0;
+
+    padding: 11px;
+
+    border: none;
+
+    outline: none;
+}
+
+
+/* =========================
+   SPACE PREVIEW
+========================= */
+
+.space-preview-wrapper {
+    position: relative;
+
+    max-width: 330px;
+
+    margin:
+        30px
+        auto
+        10px;
+}
+
+
+.space-preview {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 4px;
+
+    width: 100%;
+
+    max-height: 300px;
+
+    min-height: 120px;
+
+    border:
+        3px solid #557b59;
+
+    border-radius: 5px;
+
+    background:
+        repeating-linear-gradient(
+            45deg,
+            #edf5eb,
+            #edf5eb 12px,
+            #e7f0e4 12px,
+            #e7f0e4 24px
+        );
+}
+
+
+.space-preview > span {
+    font-size: 2rem;
+}
+
+
+.space-preview small {
+    color: #667566;
+}
+
+
+.space-preview-area {
+    margin-top: 6px;
+
+    padding:
+        4px
+        8px;
+
+    border-radius: 12px;
+
+    background-color:
+        rgba(
+            255,
+            255,
+            255,
+            0.8
+        );
+
+    font-size: 0.7rem;
+
+    font-weight: bold;
+}
+
+
+.space-preview-width {
+    position: absolute;
+
+    top: -23px;
+
+    left: 50%;
+
+    transform:
+        translateX(
+            -50%
+        );
+
+    font-size: 0.7rem;
+
+    font-weight: bold;
+}
+
+
+.space-preview-length {
+    position: absolute;
+
+    right: -38px;
+
+    top: 50%;
+
+    transform:
+        translateY(
+            -50%
+        )
+        rotate(
+            90deg
+        );
+
+    font-size: 0.7rem;
+
+    font-weight: bold;
+
+    white-space: nowrap;
+}
+
+
+/* =========================
+   DESIGN FOUNDATION
+========================= */
+
+.design-foundation-stats {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            1fr
+        );
+
+    gap: 8px;
+
+    margin-top: 15px;
+}
+
+
+.design-foundation-stats > div {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+
+    padding: 10px;
+
+    border-radius: 9px;
+
+    background-color: #f4f7f2;
+}
+
+
+.design-foundation-stats strong {
+    font-size: 0.7rem;
+}
+
+
+.design-foundation-stats span {
+    color: #667566;
+
+    font-size: 0.75rem;
+}
+
+
+.layout-next-message {
+    margin:
+        14px
+        0
+        0;
+
+    padding: 10px;
+
+    border-radius: 9px;
+
+    background-color: #edf5eb;
+
+    color: #315c3d;
+
+    font-size: 0.78rem;
+
+    line-height: 1.45;
+}
+
+
+/* =========================
+   DESIGN MESSAGE
+========================= */
+
+.designer-message {
+    margin: 0;
+
+    padding: 11px;
+
+    border-radius: 9px;
+
+    background-color: #edf5eb;
+
+    color: #315c3d;
+
+    font-size: 0.8rem;
+
+    font-weight: bold;
+}
+
+
+/* =========================
+   HOME DESIGN SUMMARY
+========================= */
+
+.garden-space-summary {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            1fr
+        );
+
+    gap: 7px;
+
+    margin-top: 12px;
+}
+
+
+.garden-space-summary > div {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 3px;
+
+    padding: 9px 5px;
+
+    border-radius: 9px;
+
+    background-color: #f4f7f2;
+
+    text-align: center;
+}
+
+
+.garden-space-summary strong {
+    font-size: 0.68rem;
+}
+
+
+.garden-space-summary small {
+    color: #667566;
+
+    font-size: 0.66rem;
+}
+
+
+.garden-design-features {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 5px;
+
+    margin-top: 10px;
+}
+
+
+.garden-design-features span {
+    padding:
+        4px
+        7px;
+
+    border-radius: 12px;
+
+    background-color: #edf5eb;
+
+    color: #315c3d;
+
+    font-size: 0.63rem;
+
+    font-weight: bold;
+
+    text-transform: capitalize;
+}
+
+
+/* =========================
+   DESIGNER DARK MODE
+========================= */
+
+html.dark-mode
+.designer-card {
+    background-color: #202920;
+}
+
+
+html.dark-mode
+.design-mode-card,
+html.dark-mode
+.designer-choice,
+html.dark-mode
+.feature-card {
+    background-color: #283228;
+
+    color: #edf5eb;
+
+    border-color: #465246;
+}
+
+
+html.dark-mode
+.design-mode-card.selected,
+html.dark-mode
+.designer-choice.selected,
+html.dark-mode
+.feature-card.selected {
+    background-color: #426b48;
+
+    color: white;
+
+    border-color: #89b88a;
+}
+
+
+html.dark-mode
+.space-area-result,
+html.dark-mode
+.layout-next-message,
+html.dark-mode
+.designer-message,
+html.dark-mode
+.garden-design-features span {
+    background-color: #304030;
+
+    color: #b6ddb5;
+}
+
+
+html.dark-mode
+.budget-field {
+    border-color: #465246;
+}
+
+
+html.dark-mode
+.budget-field > span {
+    background-color: #304030;
+}
+
+
+html.dark-mode
+.budget-field input {
+    background-color: #283228;
+
+    color: #edf5eb;
+}
+
+
+html.dark-mode
+.space-preview {
+    border-color: #79a67b;
+
+    background:
+        repeating-linear-gradient(
+            45deg,
+            #293329,
+            #293329 12px,
+            #263026 12px,
+            #263026 24px
+        );
+}
+
+
+html.dark-mode
+.space-preview-area {
+    background-color:
+        rgba(
+            20,
+            30,
+            20,
+            0.85
+        );
+
+    color: #edf5eb;
+}
+
+
+html.dark-mode
+.design-foundation-stats > div,
+html.dark-mode
+.garden-space-summary > div {
+    background-color: #293329;
+}
+
+
+/* =========================
+   DESIGNER MOBILE
+========================= */
+
+@media (
+    max-width: 430px
+) {
+
+    .dimension-grid {
+        grid-template-columns:
+            1fr
+            auto
+            1fr;
+    }
+
+
+    .dimension-grid > div:last-child {
+        grid-column:
+            1 /
+            -1;
+    }
+
+
+    .garden-space-summary {
+        grid-template-columns:
+            1fr;
+    }
+
+}
+/* =========================
+   GENERATED GARDEN LAYOUT
+========================= */
+
+.layout-preview-section {
+    padding: 18px;
+
+    background-color: white;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 4px 10px
+        rgba(0, 0, 0, 0.07);
+}
+
+
+/* =========================
+   LAYOUT WRAPPER
+========================= */
+
+.garden-layout-wrapper {
+    position: relative;
+
+    width: calc(100% - 35px);
+
+    max-width: 430px;
+
+    margin:
+        35px
+        auto
+        25px;
+}
+
+
+.garden-layout-canvas {
+    position: relative;
+
+    width: 100%;
+
+    min-height: 200px;
+
+    overflow: hidden;
+
+    border:
+        3px solid #4f7253;
+
+    border-radius: 6px;
+
+    background-color: #edf3e9;
+}
+
+
+/* =========================
+   GRID
+========================= */
+
+.layout-grid {
+    position: absolute;
+
+    inset: 0;
+
+    background-image:
+        linear-gradient(
+            rgba(63, 112, 77, 0.08)
+            1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(63, 112, 77, 0.08)
+            1px,
+            transparent 1px
+        );
+
+    background-size:
+        5%
+        5%;
+
+    pointer-events: none;
+}
+
+
+/* =========================
+   DIMENSION LABELS
+========================= */
+
+.layout-width-label {
+    position: absolute;
+
+    top: -25px;
+
+    left: 50%;
+
+    transform:
+        translateX(
+            -50%
+        );
+
+    font-size: 0.72rem;
+
+    font-weight: bold;
+}
+
+
+.layout-length-label {
+    position: absolute;
+
+    top: 50%;
+
+    right: -42px;
+
+    transform:
+        translateY(
+            -50%
+        )
+        rotate(
+            90deg
+        );
+
+    font-size: 0.72rem;
+
+    font-weight: bold;
+
+    white-space: nowrap;
+}
+
+
+/* =========================
+   LAYOUT ITEMS
+========================= */
+
+.layout-item {
+    position: absolute;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 2px;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+
+    padding: 3px;
+
+    text-align: center;
+
+    transition:
+        transform
+        0.2s ease;
+}
+
+
+.layout-item:hover {
+    z-index: 10;
+
+    transform:
+        scale(
+            1.03
+        );
+}
+
+
+.layout-item > span {
+    font-size: 0.9rem;
+}
+
+
+.layout-item > strong {
+    max-width: 100%;
+
+    overflow: hidden;
+
+    font-size: 0.55rem;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+.layout-item > small {
+    font-size: 0.48rem;
+}
+
+
+/* =========================
+   RAISED BED
+========================= */
+
+.layout-raised-bed {
+    border:
+        2px solid #725237;
+
+    border-radius: 4px;
+
+    background-color: #9a7550;
+
+    color: white;
+}
+
+
+/* =========================
+   COMPOST
+========================= */
+
+.layout-compost {
+    border:
+        2px solid #5d6844;
+
+    border-radius: 5px;
+
+    background-color: #7f8a5b;
+
+    color: white;
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.layout-container {
+    border:
+        2px solid #5a7655;
+
+    border-radius: 50%;
+
+    background-color: #769770;
+
+    color: white;
+}
+
+
+/* =========================
+   VERTICAL
+========================= */
+
+.layout-vertical {
+    border:
+        2px solid #477248;
+
+    background-color: #669b69;
+
+    color: white;
+}
+
+
+/* =========================
+   HYDROPONIC
+========================= */
+
+.layout-hydroponic {
+    border:
+        2px solid #4d7f8f;
+
+    border-radius: 4px;
+
+    background-color: #73a4b3;
+
+    color: white;
+}
+
+
+/* =========================
+   TRELLIS
+========================= */
+
+.layout-trellis {
+    z-index: 5;
+
+    min-height: 3px;
+
+    border:
+        1px dashed #604b39;
+
+    background-color: #8d7157;
+
+    color: white;
+}
+
+
+/* =========================
+   IRRIGATION
+========================= */
+
+.layout-irrigation {
+    z-index: 6;
+
+    min-height: 3px;
+
+    border-radius: 10px;
+
+    background-color: #4c9bc4;
+
+    color: white;
+}
+
+
+/* =========================
+   LAYOUT STATS
+========================= */
+
+.layout-stat-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            1fr
+        );
+
+    gap: 8px;
+}
+
+
+.layout-stat-grid > div {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 3px;
+
+    padding: 10px;
+
+    border-radius: 9px;
+
+    background-color: #f4f7f2;
+
+    text-align: center;
+}
+
+
+.layout-stat-grid strong {
+    color: #315c3d;
+
+    font-size: 0.85rem;
+}
+
+
+.layout-stat-grid span {
+    color: #667566;
+
+    font-size: 0.66rem;
+}
+
+
+/* =========================
+   LAYOUT WARNINGS
+========================= */
+
+.layout-warnings {
+    margin-top: 12px;
+
+    padding: 11px;
+
+    border-radius: 9px;
+
+    background-color: #fff5dc;
+}
+
+
+.layout-warnings > strong {
+    color: #765c19;
+
+    font-size: 0.78rem;
+}
+
+
+.layout-warnings p {
+    margin:
+        5px
+        0
+        0;
+
+    color: #765c19;
+
+    font-size: 0.7rem;
+
+    line-height: 1.4;
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+html.dark-mode
+.layout-preview-section {
+    background-color: #202920;
+}
+
+
+html.dark-mode
+.garden-layout-canvas {
+    border-color: #79a67b;
+
+    background-color: #283228;
+}
+
+
+html.dark-mode
+.layout-grid {
+    background-image:
+        linear-gradient(
+            rgba(190, 220, 190, 0.07)
+            1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(190, 220, 190, 0.07)
+            1px,
+            transparent 1px
+        );
+}
+
+
+html.dark-mode
+.layout-stat-grid > div {
+    background-color: #293329;
+}
+
+
+html.dark-mode
+.layout-stat-grid strong {
+    color: #b6ddb5;
+}
+
+
+html.dark-mode
+.layout-warnings {
+    background-color: #493f25;
+}
+
+
+html.dark-mode
+.layout-warnings > strong,
+html.dark-mode
+.layout-warnings p {
+    color: #ead49c;
+}
+/* =========================
+   MATERIALS CALCULATOR
+========================= */
+
+.garden-materials-section {
+    padding: 18px;
+
+    background-color: white;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 4px 10px
+        rgba(0, 0, 0, 0.07);
+}
+
+
+/* =========================
+   MATERIAL SUMMARY
+========================= */
+
+.material-summary {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 18px;
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+    background-color: #edf5eb;
+}
+
+
+.material-summary > span {
+    font-size: 1.5rem;
+}
+
+
+.material-summary p {
+    margin:
+        3px
+        0
+        0;
+
+    color: #667566;
+
+    font-size: 0.7rem;
+}
+
+
+/* =========================
+   MATERIAL CATEGORY
+========================= */
+
+.material-category {
+    margin-top: 18px;
+}
+
+
+.material-category h3 {
+    margin:
+        0
+        0
+        8px;
+
+    padding-bottom: 6px;
+
+    border-bottom:
+        1px solid #dfe6dc;
+
+    color: #315c3d;
+
+    font-size: 0.85rem;
+}
+
+
+.material-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+/* =========================
+   MATERIAL ITEM
+========================= */
+
+.material-item {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    padding: 10px;
+
+    border:
+        1px solid #e3e9e0;
+
+    border-radius: 9px;
+
+    background-color: #fafcf9;
+}
+
+
+.material-item-main {
+    display: flex;
+
+    flex: 1;
+
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+
+.material-item-main > strong {
+    font-size: 0.74rem;
+}
+
+
+.material-item-main > small {
+    color: #6d796b;
+
+    font-size: 0.63rem;
+
+    line-height: 1.35;
+}
+
+
+.material-quantity {
+    display: flex;
+
+    min-width: 70px;
+
+    flex-direction: column;
+
+    align-items: flex-end;
+
+    text-align: right;
+}
+
+
+.material-quantity > strong {
+    color: #315c3d;
+
+    font-size: 1rem;
+}
+
+
+.material-quantity > span {
+    color: #667566;
+
+    font-size: 0.6rem;
+}
+
+
+/* =========================
+   ASSUMPTIONS
+========================= */
+
+.material-assumptions {
+    margin-top: 18px;
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+    background-color: #fff7e6;
+}
+
+
+.material-assumptions > strong {
+    color: #765c19;
+
+    font-size: 0.76rem;
+}
+
+
+.material-assumptions p {
+    margin:
+        7px
+        0
+        0;
+
+    color: #765c19;
+
+    font-size: 0.68rem;
+
+    line-height: 1.4;
+}
+
+
+/* =========================
+   DARK MODE MATERIALS
+========================= */
+
+html.dark-mode
+.garden-materials-section {
+    background-color: #202920;
+}
+
+
+html.dark-mode
+.material-summary {
+    background-color: #304030;
+}
+
+
+html.dark-mode
+.material-category h3 {
+    border-color: #3f4c3f;
+
+    color: #b6ddb5;
+}
+
+
+html.dark-mode
+.material-item {
+    border-color: #3a463a;
+
+    background-color: #293329;
+}
+
+
+html.dark-mode
+.material-item-main > small,
+html.dark-mode
+.material-quantity > span {
+    color: #aebbaa;
+}
+
+
+html.dark-mode
+.material-quantity > strong {
+    color: #b6ddb5;
+}
+
+
+html.dark-mode
+.material-assumptions {
+    background-color: #493f25;
+}
+
+
+html.dark-mode
+.material-assumptions > strong,
+html.dark-mode
+.material-assumptions p {
+    color: #ead49c;
+}
+/* =========================
+   BUILD OPTIONS
+========================= */
+
+.build-options-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 10px;
+}
+
+
+.build-options-grid label {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+    font-size: 0.72rem;
+
+    font-weight: bold;
+}
+
+
+.build-options-grid select,
+.build-options-grid input {
+    width: 100%;
+
+    padding: 10px;
+
+    border:
+        1px solid #ccd6c9;
+
+    border-radius: 8px;
+
+    background-color: white;
+}
+
+
+.build-options-subheading {
+    margin:
+        18px
+        0
+        8px;
+
+    font-size: 0.8rem;
+}
+
+
+.build-option-button-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 8px;
+}
+
+
+.build-option-button {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 3px;
+
+    min-height: 48px;
+
+    padding: 9px;
+
+    border:
+        2px solid #dce5d9;
+
+    border-radius: 9px;
+
+    background-color: white;
+
+    color: #243524;
+
+    font-size: 0.7rem;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+.build-option-button small {
+    color: #667566;
+
+    font-size: 0.58rem;
+}
+
+
+.build-option-button.selected {
+    border-color: #3f704d;
+
+    background-color: #dfeedd;
+
+    color: #244b2e;
+}
+
+
+/* =========================
+   MATERIAL BUILD SUMMARY
+========================= */
+
+.material-build-summary {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 7px;
+
+    margin-bottom: 15px;
+}
+
+
+.material-build-summary div {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+
+    padding: 9px;
+
+    border-radius: 8px;
+
+    background-color: #f4f7f2;
+}
+
+
+.material-build-summary strong {
+    font-size: 0.65rem;
+}
+
+
+.material-build-summary span {
+    color: #667566;
+
+    font-size: 0.7rem;
+}
+
+
+.capitalize-text {
+    text-transform: capitalize;
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+html.dark-mode
+.build-options-grid select,
+html.dark-mode
+.build-options-grid input {
+    background-color: #283228;
+
+    color: #edf5eb;
+
+    border-color: #465246;
+}
+
+
+html.dark-mode
+.build-option-button {
+    background-color: #283228;
+
+    color: #edf5eb;
+
+    border-color: #465246;
+}
+
+
+html.dark-mode
+.build-option-button.selected {
+    background-color: #426b48;
+
+    border-color: #89b88a;
+
+    color: white;
+}
+
+
+html.dark-mode
+.material-build-summary div {
+    background-color: #293329;
+}
+
+/* =========================
+   DESIGN GOALS
+========================= */
+
+.design-goal-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 10px;
+}
+
+
+.design-goal-card {
+    display: flex;
+
+    min-height: 145px;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 7px;
+
+    padding: 13px;
+
+    border:
+        2px solid #dfe6dc;
+
+    border-radius: 12px;
+
+    background-color: white;
+
+    color: #243524;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        border-color 0.15s ease,
+        background-color 0.15s ease;
+}
+
+
+.design-goal-card:hover {
+    transform:
+        translateY(-1px);
+}
+
+
+.design-goal-card.selected {
+    border-color:
+        #3f704d;
+
+    background-color:
+        #e7f2e4;
+}
+
+
+.design-goal-icon {
+    font-size:
+        1.5rem;
+}
+
+
+.design-goal-card strong {
+    font-size:
+        0.78rem;
+}
+
+
+.design-goal-card small {
+    color:
+        #667566;
+
+    font-size:
+        0.64rem;
+
+    line-height:
+        1.4;
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+html.dark-mode
+.design-goal-card {
+    border-color:
+        #465246;
+
+    background-color:
+        #283228;
+
+    color:
+        #edf5eb;
+}
+
+
+html.dark-mode
+.design-goal-card.selected {
+    border-color:
+        #89b88a;
+
+    background-color:
+        #35533a;
+}
+
+
+html.dark-mode
+.design-goal-card small {
+    color:
+        #aebbaa;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (
+    max-width: 430px
+) {
+
+    .design-goal-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .design-goal-card {
+        min-height:
+            0;
+    }
+
+}
+
+/* =========================
+   ACCESSIBLE FOCUS
+========================= */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline:
+        3px solid rgba(63, 112, 77, 0.35);
+
+    outline-offset: 2px;
+}
+
+
+html.dark-mode button:focus-visible,
+html.dark-mode a:focus-visible,
+html.dark-mode input:focus-visible,
+html.dark-mode select:focus-visible,
+html.dark-mode textarea:focus-visible {
+    outline-color:
+        rgba(137, 184, 138, 0.55);
+}
+
+/* =========================================================
+   PHASE 2 — VISUAL POLISH
+   Safe presentation overrides only.
+   No layout/data/functionality changes.
+========================================================= */
+
+
+/* =========================
+   TYPOGRAPHY FOUNDATION
+========================= */
+
+body {
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+
+    line-height: 1.5;
+
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+/* =========================
+   APP SHELL
+========================= */
+
+.app-container {
+    position: relative;
+}
+
+
+.app-header {
+    padding:
+        26px
+        12px
+        24px;
+}
+
+
+.app-header h1 {
+    margin-bottom: 8px;
+
+    font-size: clamp(
+        1.7rem,
+        6vw,
+        2rem
+    );
+
+    line-height: 1.12;
+
+    letter-spacing: -0.035em;
+}
+
+
+.app-header p {
+    max-width: 380px;
+
+    margin:
+        0
+        auto;
+
+    font-size: 0.94rem;
+}
+
+
+/* =========================
+   CARD HIERARCHY
+========================= */
+
+.welcome-card,
+.weather-card,
+.score-card,
+.add-task-section,
+.garden-profile-card,
+.builder-section,
+.garden-plan-card,
+.plant-profile-notice,
+.plant-card,
+.my-garden-plants,
+.calendar-form-card,
+.calendar-card,
+.upcoming-event-card,
+.watering-section,
+.journal-form-card,
+.journal-entry-card,
+.api-plant-card,
+.hardiness-builder,
+.designer-card,
+.layout-preview-section,
+.garden-materials-section,
+.supplies-progress,
+.supplies-empty {
+    border:
+        1px solid
+        rgba(
+            49,
+            92,
+            61,
+            0.08
+        );
+
+    box-shadow:
+        0 5px 16px
+        rgba(
+            36,
+            53,
+            36,
+            0.075
+        );
+}
+
+
+/* =========================
+   SECTION HEADINGS
+========================= */
+
+.tasks-section > h2,
+.sustainability-section > h2,
+.plant-results-header h2,
+.upcoming-events-header h2,
+.journal-history-header h2 {
+    letter-spacing: -0.02em;
+}
+
+
+.plant-results-header,
+.upcoming-events-header,
+.journal-history-header {
+    gap: 12px;
+}
+
+
+/* =========================
+   BUTTON FOUNDATION
+========================= */
+
+.build-garden-button,
+.garden-save-button,
+.calendar-add-button,
+.journal-save-button,
+.vegetable-search button,
+.supplies-build-link,
+.primary-button,
+#task-form button {
+    min-height: 44px;
+
+    box-shadow:
+        0 3px 8px
+        rgba(
+            49,
+            92,
+            61,
+            0.14
+        );
+
+    transition:
+        transform 0.16s ease,
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.build-garden-button:hover,
+.garden-save-button:hover,
+.calendar-add-button:hover,
+.journal-save-button:hover,
+.vegetable-search button:hover,
+.primary-button:hover:not(:disabled),
+#task-form button:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 5px 12px
+        rgba(
+            49,
+            92,
+            61,
+            0.18
+        );
+}
+
+
+.build-garden-button:active,
+.garden-save-button:active,
+.calendar-add-button:active,
+.journal-save-button:active,
+.vegetable-search button:active,
+.primary-button:active:not(:disabled),
+#task-form button:active {
+    transform: translateY(0);
+}
+
+
+/* =========================
+   FORM CONTROLS
+========================= */
+
+#task-input,
+#task-points,
+.builder-question select,
+.plant-controls input,
+.plant-controls select,
+.calendar-form-field input,
+.calendar-form-field select,
+.journal-form-field input,
+.journal-form-field select,
+.journal-form-field textarea,
+.vegetable-search input,
+.hardiness-select,
+.dimension-grid input,
+.dimension-grid select,
+.build-options-grid select,
+.build-options-grid input,
+.journal-history-header select {
+    min-height: 44px;
+
+    border-color: #cbd7c8;
+
+    transition:
+        border-color 0.18s ease,
+        box-shadow 0.18s ease,
+        background-color 0.18s ease;
+}
+
+
+#task-input:focus,
+#task-points:focus,
+.builder-question select:focus,
+.plant-controls input:focus,
+.plant-controls select:focus,
+.calendar-form-field input:focus,
+.calendar-form-field select:focus,
+.journal-form-field input:focus,
+.journal-form-field select:focus,
+.journal-form-field textarea:focus,
+.vegetable-search input:focus,
+.hardiness-select:focus,
+.dimension-grid input:focus,
+.dimension-grid select:focus,
+.build-options-grid select:focus,
+.build-options-grid input:focus,
+.journal-history-header select:focus {
+    border-color: #5f8c62;
+
+    outline: none;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(
+            63,
+            112,
+            77,
+            0.12
+        );
+}
+
+
+/* =========================
+   INTERACTIVE CARDS
+========================= */
+
+.garden-option,
+.design-mode-card,
+.designer-choice,
+.feature-card,
+.build-option-button,
+.design-goal-card,
+.plant-garden-button,
+.api-plant-add-button {
+    transition:
+        transform 0.16s ease,
+        border-color 0.18s ease,
+        background-color 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+
+.garden-option:hover,
+.design-mode-card:not(.coming-soon):hover,
+.designer-choice:hover,
+.feature-card:hover,
+.build-option-button:hover,
+.design-goal-card:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 4px 10px
+        rgba(
+            36,
+            53,
+            36,
+            0.08
+        );
+}
+
+
+.garden-option.selected,
+.design-mode-card.selected,
+.designer-choice.selected,
+.feature-card.selected,
+.build-option-button.selected,
+.design-goal-card.selected {
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(
+            63,
+            112,
+            77,
+            0.12
+        );
+}
+
+
+/* =========================
+   GARDEN DESIGNER
+========================= */
+
+.designer-form {
+    gap: 14px;
+}
+
+
+.designer-card {
+    padding: 19px;
+}
+
+
+.designer-section-heading {
+    margin-bottom: 18px;
+}
+
+
+.designer-section-heading h2 {
+    font-size: 1.02rem;
+
+    letter-spacing: -0.015em;
+}
+
+
+.designer-section-heading p {
+    line-height: 1.45;
+}
+
+
+.space-area-result,
+.material-summary,
+.material-assumptions,
+.layout-next-message,
+.designer-message {
+    line-height: 1.45;
+}
+
+
+/* =========================
+   PLANT LIBRARY
+========================= */
+
+.vegetable-search input {
+    background-color: #ffffff;
+}
+
+
+.api-plant-heading h3,
+.plant-card-header h3 {
+    line-height: 1.25;
+
+    letter-spacing: -0.015em;
+}
+
+
+.api-plant-image-container {
+    background:
+        linear-gradient(
+            145deg,
+            #edf3e9,
+            #e4ece1
+        );
+}
+
+
+/* =========================
+   CALENDAR
+========================= */
+
+.calendar-card {
+    overflow: hidden;
+}
+
+
+.calendar-day {
+    transition:
+        background-color 0.16s ease,
+        outline-color 0.16s ease;
+}
+
+
+.calendar-day:not(.blank):hover {
+    background-color: #eef4eb;
+}
+
+
+.upcoming-event-card {
+    min-height: 66px;
+}
+
+
+.upcoming-event-info strong {
+    line-height: 1.3;
+}
+
+
+.upcoming-event-info small + small {
+    line-height: 1.35;
+}
+
+
+/* =========================
+   BOTTOM NAVIGATION
+========================= */
+
+.bottom-nav {
+    padding:
+        9px
+        10px
+        calc(
+            9px +
+            env(
+                safe-area-inset-bottom
+            )
+        );
+
+    border-top-color: #dfe7dc;
+
+    box-shadow:
+        0 -5px 18px
+        rgba(
+            36,
+            53,
+            36,
+            0.08
+        );
+}
+
+
+.nav-link {
+    min-width: 0;
+
+    transition:
+        color 0.18s ease,
+        background-color 0.18s ease,
+        transform 0.16s ease;
+}
+
+
+.nav-link:active {
+    transform: scale(0.97);
+}
+
+
+.nav-link.active {
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(
+            63,
+            112,
+            77,
+            0.07
+        );
+}
+
+
+/* =========================
+   FLOATING CONTROLS
+========================= */
+
+.theme-toggle,
+.supplies-menu-button {
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        background-color 0.2s ease;
+}
+
+
+.theme-toggle:hover,
+.supplies-menu-button:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 6px 16px
+        rgba(
+            0,
+            0,
+            0,
+            0.18
+        );
+}
+
+
+/* =========================
+   DARK MODE POLISH
+========================= */
+
+html.dark-mode
+.welcome-card,
+html.dark-mode
+.weather-card,
+html.dark-mode
+.score-card,
+html.dark-mode
+.add-task-section,
+html.dark-mode
+.garden-profile-card,
+html.dark-mode
+.builder-section,
+html.dark-mode
+.garden-plan-card,
+html.dark-mode
+.plant-profile-notice,
+html.dark-mode
+.plant-card,
+html.dark-mode
+.my-garden-plants,
+html.dark-mode
+.calendar-form-card,
+html.dark-mode
+.calendar-card,
+html.dark-mode
+.upcoming-event-card,
+html.dark-mode
+.watering-section,
+html.dark-mode
+.journal-form-card,
+html.dark-mode
+.journal-entry-card,
+html.dark-mode
+.api-plant-card,
+html.dark-mode
+.hardiness-builder,
+html.dark-mode
+.designer-card,
+html.dark-mode
+.layout-preview-section,
+html.dark-mode
+.garden-materials-section,
+html.dark-mode
+.supplies-progress,
+html.dark-mode
+.supplies-empty {
+    border-color: #344034;
+
+    box-shadow:
+        0 5px 16px
+        rgba(
+            0,
+            0,
+            0,
+            0.22
+        );
+}
+
+
+html.dark-mode
+.calendar-day:not(.blank):hover {
+    background-color: #303b30;
+}
+
+
+html.dark-mode
+#task-input:focus,
+html.dark-mode
+#task-points:focus,
+html.dark-mode
+.builder-question select:focus,
+html.dark-mode
+.plant-controls input:focus,
+html.dark-mode
+.plant-controls select:focus,
+html.dark-mode
+.calendar-form-field input:focus,
+html.dark-mode
+.calendar-form-field select:focus,
+html.dark-mode
+.journal-form-field input:focus,
+html.dark-mode
+.journal-form-field select:focus,
+html.dark-mode
+.journal-form-field textarea:focus,
+html.dark-mode
+.vegetable-search input:focus,
+html.dark-mode
+.hardiness-select:focus,
+html.dark-mode
+.dimension-grid input:focus,
+html.dark-mode
+.dimension-grid select:focus,
+html.dark-mode
+.build-options-grid select:focus,
+html.dark-mode
+.build-options-grid input:focus,
+html.dark-mode
+.journal-history-header select:focus {
+    border-color: #89b88a;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(
+            137,
+            184,
+            138,
+            0.15
+        );
+}
+
+
+/* =========================
+   SMALL SCREEN POLISH
+========================= */
+
+@media (
+    max-width: 400px
+) {
+
+    .app-header {
+        padding:
+            24px
+            8px
+            20px;
+    }
+
+
+    .designer-card,
+    .layout-preview-section,
+    .garden-materials-section {
+        padding: 16px;
+    }
+
+
+    .upcoming-event-card {
+        gap: 10px;
+
+        padding: 12px;
+    }
+
+}
+
+
+/* =========================
+   REDUCED MOTION
+========================= */
+
+@media (
+    prefers-reduced-motion:
+        reduce
+) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+
+        transition-duration:
+            0.01ms !important;
+
+        animation-duration:
+            0.01ms !important;
+
+        animation-iteration-count:
+            1 !important;
+    }
+
+}
+
+/* =========================================================
+   PHASE 3A — GARDEN DESIGNER VISUAL UPGRADE
+   CSS-only checkpoint.
+   No React or data-flow changes.
+========================================================= */
+
+
+/* =========================
+   DESIGNER PAGE FLOW
+========================= */
+
+.designer-form {
+    position: relative;
+
+    gap: 16px;
+}
+
+
+/* =========================
+   DESIGNER STEP CARDS
+========================= */
+
+.designer-card {
+    position: relative;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        rgba(
+            63,
+            112,
+            77,
+            0.10
+        );
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ffffff 0%,
+            #fbfdf9 100%
+        );
+}
+
+
+.designer-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 4px;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            180deg,
+            #3f704d,
+            #7fa56c
+        );
+
+    opacity: 0.9;
+}
+
+
+/* =========================
+   DESIGNER STEP HEADING
+========================= */
+
+.designer-section-heading {
+    position: relative;
+
+    z-index: 1;
+
+    align-items: center;
+}
+
+
+.designer-section-heading > span {
+    min-width: 34px;
+    height: 34px;
+
+    padding: 0 8px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #3f704d,
+            #315c3d
+        );
+
+    box-shadow:
+        0 3px 8px
+        rgba(
+            49,
+            92,
+            61,
+            0.18
+        );
+
+    font-size: 0.78rem;
+}
+
+
+.designer-section-heading h2 {
+    font-size: 1.08rem;
+}
+
+
+.designer-section-heading p {
+    max-width: 360px;
+
+    font-size: 0.8rem;
+
+    line-height: 1.45;
+}
+
+
+/* =========================
+   CHOICE CARDS
+========================= */
+
+.design-mode-card,
+.designer-choice,
+.feature-card,
+.build-option-button,
+.design-goal-card {
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ffffff 0%,
+            #fafcf9 100%
+        );
+}
+
+
+.design-mode-card.selected,
+.designer-choice.selected,
+.feature-card.selected,
+.build-option-button.selected,
+.design-goal-card.selected {
+    border-color: #3f704d;
+
+    background:
+        linear-gradient(
+            180deg,
+            #eaf4e7 0%,
+            #dfeedd 100%
+        );
+
+    box-shadow:
+        0 5px 12px
+        rgba(
+            63,
+            112,
+            77,
+            0.10
+        );
+}
+
+
+/* =========================
+   DIMENSION AREA
+========================= */
+
+.dimension-grid {
+    padding: 12px;
+
+    border:
+        1px solid #e1e8de;
+
+    border-radius: 12px;
+
+    background-color: #f8fbf6;
+}
+
+
+.dimension-grid input,
+.dimension-grid select {
+    background-color: #ffffff;
+}
+
+
+.dimension-symbol {
+    color: #5b6e5b;
+}
+
+
+/* =========================
+   SPACE AREA RESULT
+========================= */
+
+.space-area-result {
+    border:
+        1px solid #dce8d8;
+
+    background:
+        linear-gradient(
+            145deg,
+            #edf5eb,
+            #e7f1e4
+        );
+}
+
+
+/* =========================
+   BUILD OPTIONS
+========================= */
+
+.build-options-grid {
+    padding: 12px;
+
+    border:
+        1px solid #e1e8de;
+
+    border-radius: 12px;
+
+    background-color: #f8fbf6;
+}
+
+
+.build-options-subheading {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+.build-options-subheading::before {
+    content: "";
+
+    width: 18px;
+    height: 2px;
+
+    border-radius: 999px;
+
+    background-color: #7fa56c;
+}
+
+
+/* =========================
+   GROW / FEATURE SELECTION
+========================= */
+
+.feature-card {
+    min-height: 108px;
+
+    justify-content: center;
+
+    text-align: center;
+}
+
+
+.feature-card > span {
+    font-size: 1.55rem;
+}
+
+
+.feature-card strong {
+    font-size: 0.78rem;
+}
+
+
+.feature-card small {
+    line-height: 1.35;
+}
+
+
+/* =========================
+   DESIGN GOALS
+========================= */
+
+.design-goal-card {
+    position: relative;
+
+    min-height: 136px;
+}
+
+
+.design-goal-card.selected::after {
+    content: "✓";
+
+    position: absolute;
+
+    top: 9px;
+    right: 9px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 22px;
+    height: 22px;
+
+    border-radius: 50%;
+
+    background-color: #3f704d;
+
+    color: #ffffff;
+
+    font-size: 0.7rem;
+
+    font-weight: bold;
+}
+
+
+/* =========================
+   SPACE PREVIEW
+========================= */
+
+.space-preview-wrapper {
+    margin-top: 36px;
+}
+
+
+.space-preview {
+    border-radius: 10px;
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(
+            255,
+            255,
+            255,
+            0.55
+        ),
+        0 5px 14px
+        rgba(
+            63,
+            112,
+            77,
+            0.10
+        );
+}
+
+
+.space-preview-width,
+.space-preview-length {
+    color: #4f604f;
+}
+
+
+/* =========================
+   GENERATED RESULTS
+========================= */
+
+.layout-preview-section,
+.garden-materials-section {
+    position: relative;
+
+    overflow: hidden;
+
+    border-radius: 18px;
+}
+
+
+.layout-preview-section::before,
+.garden-materials-section::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 4px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #3f704d,
+            #7fa56c
+        );
+}
+
+
+/* =========================
+   GENERATED LAYOUT CANVAS
+========================= */
+
+.garden-layout-canvas {
+    border-radius: 10px;
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(
+            255,
+            255,
+            255,
+            0.45
+        ),
+        0 6px 16px
+        rgba(
+            36,
+            53,
+            36,
+            0.10
+        );
+}
+
+
+/* =========================
+   MATERIALS
+========================= */
+
+.material-summary {
+    border:
+        1px solid #dce8d8;
+
+    background:
+        linear-gradient(
+            145deg,
+            #edf5eb,
+            #e7f1e4
+        );
+}
+
+
+.material-category h3 {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+.material-category h3::before {
+    content: "";
+
+    width: 8px;
+    height: 8px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background-color: #7fa56c;
+}
+
+
+.material-item {
+    transition:
+        transform 0.15s ease,
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+
+.material-item:hover {
+    transform: translateY(-1px);
+
+    border-color: #ceddcc;
+
+    box-shadow:
+        0 4px 10px
+        rgba(
+            36,
+            53,
+            36,
+            0.06
+        );
+}
+
+
+/* =========================
+   SAVE GARDEN CTA
+========================= */
+
+.garden-save-button {
+    min-height: 48px;
+
+    border-radius: 12px;
+
+    font-size: 1rem;
+
+    box-shadow:
+        0 6px 14px
+        rgba(
+            49,
+            92,
+            61,
+            0.18
+        );
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+html.dark-mode
+.designer-card {
+    border-color: #344034;
+
+    background:
+        linear-gradient(
+            180deg,
+            #202920 0%,
+            #1c251c 100%
+        );
+}
+
+
+html.dark-mode
+.designer-card::before,
+html.dark-mode
+.layout-preview-section::before,
+html.dark-mode
+.garden-materials-section::before {
+    background:
+        linear-gradient(
+            180deg,
+            #79a67b,
+            #4f7d54
+        );
+}
+
+
+html.dark-mode
+.design-mode-card,
+html.dark-mode
+.designer-choice,
+html.dark-mode
+.feature-card,
+html.dark-mode
+.build-option-button,
+html.dark-mode
+.design-goal-card {
+    background:
+        linear-gradient(
+            180deg,
+            #283228 0%,
+            #252f25 100%
+        );
+}
+
+
+html.dark-mode
+.design-mode-card.selected,
+html.dark-mode
+.designer-choice.selected,
+html.dark-mode
+.feature-card.selected,
+html.dark-mode
+.build-option-button.selected,
+html.dark-mode
+.design-goal-card.selected {
+    background:
+        linear-gradient(
+            180deg,
+            #426b48 0%,
+            #35583b 100%
+        );
+}
+
+
+html.dark-mode
+.dimension-grid,
+html.dark-mode
+.build-options-grid {
+    border-color: #3a463a;
+
+    background-color: #242e24;
+}
+
+
+html.dark-mode
+.space-area-result,
+html.dark-mode
+.material-summary {
+    border-color: #405240;
+
+    background:
+        linear-gradient(
+            145deg,
+            #304030,
+            #2a392a
+        );
+}
+
+
+html.dark-mode
+.space-preview-width,
+html.dark-mode
+.space-preview-length {
+    color: #c6d2c4;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (
+    max-width: 430px
+) {
+
+    .designer-card {
+        border-radius: 15px;
+    }
+
+
+    .designer-card::before {
+        width: 3px;
+    }
+
+
+    .designer-section-heading > span {
+        min-width: 32px;
+        height: 32px;
+    }
+
+
+    .feature-card {
+        min-height: 100px;
+    }
+
+
+    .dimension-grid,
+    .build-options-grid {
+        padding: 10px;
+    }
+
+}
+

@@ -9,15 +9,22 @@ import {
 
 
 function WateringReminder({
+    gardenProfile,
     gardenPlants = [],
     wateringRecords = [],
-    onMarkPlantWatered
+    onMarkPlantWatered,
+    onDelayWatering,
+    onRainWatered
 }) {
 
     const {
         weather
     } = useWeather();
 
+
+    /* =========================
+       DATE HELPERS
+    ========================= */
 
     function getLocalDateString(
         date
@@ -141,6 +148,113 @@ function WateringReminder({
 
 
     /* =========================
+       GARDEN EXPOSURE
+    ========================= */
+
+    function getGardenExposure() {
+
+        if (
+            !gardenProfile
+        ) {
+
+            return "unknown";
+
+        }
+
+
+        if (
+            gardenProfile.type ===
+            "backyard" ||
+
+            gardenProfile.type ===
+            "raised"
+        ) {
+
+            return "outdoor";
+
+        }
+
+
+        if (
+            gardenProfile.type ===
+            "container" ||
+
+            gardenProfile.type ===
+            "balcony"
+        ) {
+
+            return "variable";
+
+        }
+
+
+        if (
+            gardenProfile.type ===
+            "hydroponic"
+        ) {
+
+            return "hydroponic";
+
+        }
+
+
+        return "unknown";
+
+    }
+
+
+    /* =========================
+       WATER NEED
+    ========================= */
+
+    function getPlantWaterNeed(
+        plant
+    ) {
+
+        const wateringText =
+            String(
+                plant.watering ||
+                plant.water ||
+                ""
+            ).toLowerCase();
+
+
+        if (
+            wateringText.includes(
+                "frequent"
+            ) ||
+
+            Number(
+                plant.waterEveryDays
+            ) <= 1
+        ) {
+
+            return "high";
+
+        }
+
+
+        if (
+            wateringText.includes(
+                "minimum"
+            ) ||
+
+            Number(
+                plant.waterEveryDays
+            ) >= 4
+        ) {
+
+            return "low";
+
+        }
+
+
+        return "medium";
+
+    }
+
+
+    /* =========================
        WEATHER ADVICE
     ========================= */
 
@@ -170,6 +284,16 @@ function WateringReminder({
         }
 
 
+        const gardenExposure =
+            getGardenExposure();
+
+
+        const plantWaterNeed =
+            getPlantWaterNeed(
+                plant
+            );
+
+
         const rainLikely =
             todayForecast.rainChance >=
             70 ||
@@ -178,22 +302,142 @@ function WateringReminder({
             0.1;
 
 
-        const hotWeather =
+        const heavyRain =
+            todayForecast.precipitation >=
+            0.25;
+
+
+        const hot =
             weather.current.temperature >=
             90;
 
 
-        const veryHotWeather =
+        const veryHot =
             weather.current.temperature >=
             95;
 
 
-        const highWind =
+        const windy =
             weather.current.windSpeed >=
             20;
 
 
+        /* HYDROPONIC */
+
         if (
+            gardenExposure ===
+            "hydroponic"
+        ) {
+
+            if (
+                veryHot
+            ) {
+
+                return {
+
+                    type:
+                        "heat",
+
+                    icon:
+                        "🌡️",
+
+                    title:
+                        "Check reservoir",
+
+                    text:
+                        "Hot weather can increase water loss. Check your hydroponic reservoir level.",
+
+                    allowRainWatering:
+                        false
+
+                };
+
+            }
+
+
+            return {
+
+                type:
+                    "hydro",
+
+                icon:
+                    "💧",
+
+                title:
+                    "Hydroponic system",
+
+                text:
+                    "Outdoor rainfall does not replace reservoir maintenance.",
+
+                allowRainWatering:
+                    false
+
+            };
+
+        }
+
+
+        /* OUTDOOR */
+
+        if (
+            gardenExposure ===
+            "outdoor" &&
+            rainLikely
+        ) {
+
+            if (
+                heavyRain
+            ) {
+
+                return {
+
+                    type:
+                        "rain",
+
+                    icon:
+                        "🌧️",
+
+                    title:
+                        "Watering may not be needed",
+
+                    text:
+                        "Significant rain is expected. Check the soil before adding more water.",
+
+                    allowRainWatering:
+                        true
+
+                };
+
+            }
+
+
+            return {
+
+                type:
+                    "rain",
+
+                icon:
+                    "🌦️",
+
+                title:
+                    "Rain may help",
+
+                text:
+                    "Rain is likely today. Check soil moisture before watering.",
+
+                allowRainWatering:
+                    true
+
+            };
+
+        }
+
+
+        /* CONTAINER / BALCONY */
+
+        if (
+            gardenExposure ===
+            "variable" &&
             rainLikely
         ) {
 
@@ -203,21 +447,54 @@ function WateringReminder({
                     "rain",
 
                 icon:
-                    "🌧️",
+                    "🪴",
+
+                title:
+                    "Check plant exposure",
 
                 text:
-                    "Rain likely — check soil before watering."
+                    "Rain is expected. Use Rain Watered only if the container actually received enough rain.",
+
+                allowRainWatering:
+                    true
 
             };
 
         }
 
 
+        /* VERY HOT */
+
         if (
-            veryHotWeather &&
-            plant.waterEveryDays <=
-            2
+            veryHot
         ) {
+
+            if (
+                plantWaterNeed ===
+                "high"
+            ) {
+
+                return {
+
+                    type:
+                        "heat",
+
+                    icon:
+                        "🔥",
+
+                    title:
+                        "High water demand",
+
+                    text:
+                        "Very hot weather plus a thirsty plant can dry soil quickly. Check moisture today.",
+
+                    allowRainWatering:
+                        false
+
+                };
+
+            }
+
 
             return {
 
@@ -225,18 +502,28 @@ function WateringReminder({
                     "heat",
 
                 icon:
-                    "🔥",
+                    "☀️",
+
+                title:
+                    "Heat alert",
 
                 text:
-                    "Very hot today — soil may dry faster."
+                    "Very hot conditions may dry the soil faster than the normal schedule.",
+
+                allowRainWatering:
+                    false
 
             };
 
         }
 
 
+        /* HOT */
+
         if (
-            hotWeather
+            hot &&
+            plantWaterNeed !==
+            "low"
         ) {
 
             return {
@@ -247,16 +534,26 @@ function WateringReminder({
                 icon:
                     "☀️",
 
+                title:
+                    "Warm conditions",
+
                 text:
-                    "Hot weather — check moisture closely."
+                    "Hot weather may increase this plant's water needs.",
+
+                allowRainWatering:
+                    false
 
             };
 
         }
 
 
+        /* WIND */
+
         if (
-            highWind
+            windy &&
+            gardenExposure !==
+            "unknown"
         ) {
 
             return {
@@ -267,8 +564,14 @@ function WateringReminder({
                 icon:
                     "💨",
 
+                title:
+                    "Drying winds",
+
                 text:
-                    "Wind may increase moisture loss."
+                    "Wind can increase evaporation. Check exposed soil and containers.",
+
+                allowRainWatering:
+                    false
 
             };
 
@@ -279,6 +582,10 @@ function WateringReminder({
 
     }
 
+
+    /* =========================
+       SCHEDULE
+    ========================= */
 
     const scheduledPlants =
         gardenPlants
@@ -305,6 +612,10 @@ function WateringReminder({
 
                         nextWatering:
                             record?.nextWatering ||
+                            null,
+
+                        lastWateringMethod:
+                            record?.lastWateringMethod ||
                             null
 
                     };
@@ -334,6 +645,55 @@ function WateringReminder({
         );
 
 
+    /* =========================
+       GARDEN SUMMARY
+    ========================= */
+
+    function getGardenWateringSummary() {
+
+        const exposure =
+            getGardenExposure();
+
+
+        if (
+            exposure ===
+            "outdoor"
+        ) {
+
+            return "Outdoor soil garden";
+
+        }
+
+
+        if (
+            exposure ===
+            "variable"
+        ) {
+
+            return "Container exposure varies";
+
+        }
+
+
+        if (
+            exposure ===
+            "hydroponic"
+        ) {
+
+            return "Hydroponic reservoir system";
+
+        }
+
+
+        return "Garden profile not set";
+
+    }
+
+
+    /* =========================
+       RENDER
+    ========================= */
+
     return (
 
         <section className="watering-section">
@@ -341,20 +701,60 @@ function WateringReminder({
 
             <div className="watering-header">
 
-                <h2>
-                    💧 Smart Watering
-                </h2>
+                <div>
 
-                <p>
-                    Plant schedule adjusted
-                    with local weather advice.
-                </p>
+                    <h2>
+                        💧 Smart Watering
+                    </h2>
+
+                    <p>
+                        Weather + garden type +
+                        plant water needs
+                    </p>
+
+                </div>
+
+
+                <span className="watering-garden-type">
+
+                    {
+                        getGardenWateringSummary()
+                    }
+
+                </span>
 
             </div>
 
 
             {
-                gardenPlants.length === 0
+                !gardenProfile && (
+
+                    <div className="watering-profile-warning">
+
+                        <span>
+                            🪴
+                        </span>
+
+                        <p>
+                            Build your Garden Profile
+                            for more accurate watering advice.
+                        </p>
+
+                        <Link
+                            to="/garden"
+                        >
+                            Build Garden
+                        </Link>
+
+                    </div>
+
+                )
+            }
+
+
+            {
+                gardenPlants.length ===
+                0
                     ? (
 
                         <div className="watering-empty">
@@ -397,6 +797,12 @@ function WateringReminder({
                                                     plant
                                                 )
                                                 : null;
+
+
+                                        const waterNeed =
+                                            getPlantWaterNeed(
+                                                plant
+                                            );
 
 
                                         return (
@@ -468,23 +874,58 @@ function WateringReminder({
                                                     </span>
 
 
-                                                    <small>
+                                                    <div className="watering-meta">
 
-                                                        Baseline:
-                                                        every{" "}
+                                                        <span>
 
-                                                        {
-                                                            plant.waterEveryDays
-                                                        }
+                                                            💧{" "}
 
-                                                        {
-                                                            plant.waterEveryDays ===
-                                                            1
-                                                                ? " day"
-                                                                : " days"
-                                                        }
+                                                            {
+                                                                waterNeed ===
+                                                                "high"
+                                                                    ? "High need"
+                                                                    : waterNeed ===
+                                                                      "low"
+                                                                        ? "Low need"
+                                                                        : "Moderate need"
+                                                            }
 
-                                                    </small>
+                                                        </span>
+
+
+                                                        <span>
+
+                                                            Every{" "}
+
+                                                            {
+                                                                plant.waterEveryDays
+                                                            }
+
+                                                            {
+                                                                plant.waterEveryDays ===
+                                                                1
+                                                                    ? " day"
+                                                                    : " days"
+                                                            }
+
+                                                        </span>
+
+                                                    </div>
+
+
+                                                    {
+                                                        plant.lastWateringMethod ===
+                                                        "rain" && (
+
+                                                            <div className="last-watering-method">
+
+                                                                🌧️ Last cycle:
+                                                                rain
+
+                                                            </div>
+
+                                                        )
+                                                    }
 
 
                                                     {
@@ -502,11 +943,22 @@ function WateringReminder({
                                                                     }
                                                                 </span>
 
-                                                                <p>
-                                                                    {
-                                                                        weatherAdvice.text
-                                                                    }
-                                                                </p>
+
+                                                                <div>
+
+                                                                    <strong>
+                                                                        {
+                                                                            weatherAdvice.title
+                                                                        }
+                                                                    </strong>
+
+                                                                    <p>
+                                                                        {
+                                                                            weatherAdvice.text
+                                                                        }
+                                                                    </p>
+
+                                                                </div>
 
                                                             </div>
 
@@ -516,19 +968,61 @@ function WateringReminder({
                                                 </div>
 
 
-                                                <button
-                                                    type="button"
-                                                    className="mark-watered-button"
-                                                    onClick={() =>
-                                                        onMarkPlantWatered(
-                                                            plant.plantKey
-                                                        )
-                                                    }
-                                                >
+                                                {
+                                                    due && (
 
-                                                    ✓ Watered
+                                                        <div className="watering-actions">
 
-                                                </button>
+
+                                                            <button
+                                                                type="button"
+                                                                className="mark-watered-button"
+                                                                onClick={() =>
+                                                                    onMarkPlantWatered(
+                                                                        plant.plantKey
+                                                                    )
+                                                                }
+                                                            >
+                                                                ✓ Watered
+                                                            </button>
+
+
+                                                            <button
+                                                                type="button"
+                                                                className="delay-watering-button"
+                                                                onClick={() =>
+                                                                    onDelayWatering(
+                                                                        plant.plantKey
+                                                                    )
+                                                                }
+                                                            >
+                                                                +1 Day
+                                                            </button>
+
+
+                                                            {
+                                                                weatherAdvice
+                                                                    ?.allowRainWatering && (
+
+                                                                    <button
+                                                                        type="button"
+                                                                        className="rain-watered-button"
+                                                                        onClick={() =>
+                                                                            onRainWatered(
+                                                                                plant.plantKey
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        🌧️ Rain Watered
+                                                                    </button>
+
+                                                                )
+                                                            }
+
+                                                        </div>
+
+                                                    )
+                                                }
 
                                             </article>
 

@@ -1,3 +1,7 @@
+import {
+    getWholeHardinessZone
+} from "../data/hardinessZones";
+
 const API_BASE_URL =
     "https://perenual.com/api/v2";
 
@@ -107,7 +111,8 @@ function normalizePlant(
 
 export async function searchPlants(
     searchTerm = "",
-    page = 1
+    page = 1,
+    hardinessZone = ""
 ) {
 
     checkApiKey();
@@ -130,6 +135,24 @@ export async function searchPlants(
         )
     );
 
+    const wholeZone =
+    getWholeHardinessZone(
+        hardinessZone
+    );
+
+
+if (
+    wholeZone
+) {
+
+    parameters.set(
+        "hardiness",
+        String(
+            wholeZone
+        )
+    );
+
+}
 
     parameters.set(
         "edible",

@@ -36,6 +36,11 @@ import {
 } from "./data/tasks";
 
 
+import {
+    createHarvestCalendarEvents
+} from "./utils/harvestScheduleGenerator";
+
+
 /* =========================
    STORAGE HELPERS
 ========================= */
@@ -187,8 +192,45 @@ function addDaysToDateString(
 }
 
 
+function getDateFromIsoValue(
+    value
+) {
+
+    if (
+        !value
+    ) {
+
+        return null;
+
+    }
+
+
+    const date =
+        new Date(
+            value
+        );
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return null;
+
+    }
+
+
+    return getLocalDateString(
+        date
+    );
+
+}
+
+
 /* =========================
-   API WATERING CONVERSION
+   WATERING CONVERSION
 ========================= */
 
 function getApiWaterEveryDays(
@@ -252,6 +294,222 @@ function getApiWaterEveryDays(
 
 
 /* =========================
+   CROP IDENTIFICATION
+========================= */
+
+function resolveCropIdFromPlant(
+    plant
+) {
+
+    if (
+        plant?.cropId
+    ) {
+
+        return plant.cropId;
+
+    }
+
+
+    const scientificNames =
+        Array.isArray(
+            plant?.scientific_name
+        )
+            ? plant.scientific_name.join(
+                " "
+            )
+            : plant?.scientific_name ||
+              "";
+
+
+    const text = [
+
+        plant?.name,
+
+        plant?.common_name,
+
+        plant?.commonName,
+
+        scientificNames
+
+    ]
+        .filter(
+            Boolean
+        )
+        .join(
+            " "
+        )
+        .toLowerCase();
+
+
+    const aliases = [
+
+        {
+            cropId: "tomato",
+            terms: [
+                "tomato",
+                "solanum lycopersicum",
+                "lycopersicon esculentum"
+            ]
+        },
+
+        {
+            cropId: "pepper",
+            terms: [
+                "pepper",
+                "capsicum"
+            ]
+        },
+
+        {
+            cropId: "cucumber",
+            terms: [
+                "cucumber",
+                "cucumis sativus"
+            ]
+        },
+
+        {
+            cropId: "beans",
+            terms: [
+                "pole bean",
+                "green bean",
+                "common bean",
+                "phaseolus vulgaris"
+            ]
+        },
+
+        {
+            cropId: "lettuce",
+            terms: [
+                "lettuce",
+                "lactuca sativa"
+            ]
+        },
+
+        {
+            cropId: "kale",
+            terms: [
+                "kale"
+            ]
+        },
+
+        {
+            cropId: "carrot",
+            terms: [
+                "carrot",
+                "daucus carota"
+            ]
+        },
+
+        {
+            cropId: "radish",
+            terms: [
+                "radish",
+                "raphanus sativus"
+            ]
+        },
+
+        {
+            cropId: "basil",
+            terms: [
+                "basil",
+                "ocimum basilicum"
+            ]
+        },
+
+        {
+            cropId: "strawberry",
+            terms: [
+                "strawberry",
+                "fragaria"
+            ]
+        }
+
+    ];
+
+
+    const match =
+        aliases.find(
+            (item) =>
+
+                item.terms.some(
+                    (term) =>
+
+                        text.includes(
+                            term
+                        )
+
+                )
+
+        );
+
+
+    return (
+        match?.cropId ||
+        null
+    );
+
+}
+
+
+/* =========================
+   PLANT START DATE
+========================= */
+
+function resolvePlantStartDate(
+    plant
+) {
+
+    if (
+        plant?.startDate
+    ) {
+
+        return plant.startDate;
+
+    }
+
+
+    if (
+        plant?.plantedDate
+    ) {
+
+        return plant.plantedDate;
+
+    }
+
+
+    if (
+        plant?.dateStarted
+    ) {
+
+        return plant.dateStarted;
+
+    }
+
+
+    const addedDate =
+        getDateFromIsoValue(
+            plant?.addedAt
+        );
+
+
+    if (
+        addedDate
+    ) {
+
+        return addedDate;
+
+    }
+
+
+    return getLocalDateString(
+        new Date()
+    );
+
+}
+
+
+/* =========================
    NORMALIZE PLANT
 ========================= */
 
@@ -261,10 +519,8 @@ function normalizeGardenPlant(
 
     if (
         !plant ||
-        plant.id ===
-        undefined ||
-        plant.id ===
-        null
+        plant.id === undefined ||
+        plant.id === null
     ) {
 
         return null;
@@ -294,11 +550,24 @@ function normalizeGardenPlant(
 
         plantKey,
 
+        cropId:
+            resolveCropIdFromPlant(
+                plant
+            ),
+
+        startDate:
+            resolvePlantStartDate(
+                plant
+            ),
+
+        startMethod:
+            plant.startMethod ||
+            null,
+
         category:
             plant.category ||
             (
-                source ===
-                "perenual"
+                source === "perenual"
                     ? "Edible Plant"
                     : "Plant"
             ),
@@ -331,13 +600,9 @@ function normalizeGardenPlant(
 
 function loadGardenPlants() {
 
-    const storedPlants =
-        loadArray(
-            "gardenPlants"
-        );
-
-
-    return storedPlants
+    return loadArray(
+        "gardenPlants"
+    )
         .map(
             normalizeGardenPlant
         )
@@ -443,8 +708,7 @@ function App() {
 
 
     /* =========================
-       KEEP WATERING RECORDS
-       SYNCHRONIZED
+       SYNC WATERING RECORDS
     ========================= */
 
     useEffect(() => {
@@ -500,6 +764,9 @@ function App() {
                                 lastWatered:
                                     null,
 
+                                lastWateringMethod:
+                                    null,
+
                                 nextWatering:
                                     today
 
@@ -530,6 +797,92 @@ function App() {
 
 
                 return updatedRecords;
+
+            }
+        );
+
+    }, [
+        gardenPlants
+    ]);
+
+
+    /* =========================
+       SYNC HARVEST EVENTS
+
+       This is the important fix.
+
+       Harvest events are now stored
+       directly in calendarEvents.
+    ========================= */
+
+    useEffect(() => {
+
+        setCalendarEvents(
+            (currentEvents) => {
+
+                /*
+                    Preserve manual events and
+                    unrelated automatic events.
+                */
+
+                const nonHarvestSchedulerEvents =
+                    currentEvents.filter(
+                        (event) =>
+
+                            event.source !==
+                            "harvest-scheduler"
+
+                    );
+
+
+                const generatedHarvestEvents =
+                    gardenPlants.flatMap(
+                        (plant) => {
+
+                            if (
+                                !plant.cropId ||
+                                !plant.startDate
+                            ) {
+
+                                return [];
+
+                            }
+
+
+                            return createHarvestCalendarEvents({
+
+                                plantKey:
+                                    plant.plantKey,
+
+                                plantId:
+                                    plant.id,
+
+                                cropId:
+                                    plant.cropId,
+
+                                plantName:
+                                    plant.name ||
+                                    plant.common_name,
+
+                                startDate:
+                                    plant.startDate,
+
+                                startMethod:
+                                    plant.startMethod
+
+                            });
+
+                        }
+                    );
+
+
+                return [
+
+                    ...nonHarvestSchedulerEvents,
+
+                    ...generatedHarvestEvents
+
+                ];
 
             }
         );
@@ -767,12 +1120,18 @@ function App() {
 
 
     /* =========================
-       ADD API PLANT
+       ADD GARDEN PLANT
     ========================= */
 
     function addGardenPlant(
         plant
     ) {
+
+        const addedAt =
+            plant.addedAt ||
+            new Date()
+                .toISOString();
+
 
         const normalizedPlant =
             normalizeGardenPlant({
@@ -780,15 +1139,23 @@ function App() {
                 ...plant,
 
                 source:
+                    plant.source ||
                     "perenual",
 
                 plantKey:
-                    `perenual:${plant.id}`,
+                    plant.plantKey ||
+                    `${plant.source || "perenual"}:${plant.id}`,
 
-                addedAt:
-                    plant.addedAt ||
-                    new Date()
-                        .toISOString()
+                addedAt,
+
+                startDate:
+                    plant.startDate ||
+                    getDateFromIsoValue(
+                        addedAt
+                    ) ||
+                    getLocalDateString(
+                        new Date()
+                    )
 
             });
 
@@ -877,7 +1244,59 @@ function App() {
 
 
     /* =========================
-       MARK WATERED
+       UPDATE PLANT START
+    ========================= */
+
+    function updateGardenPlantStart({
+
+        plantKey,
+
+        startDate,
+
+        startMethod
+
+    }) {
+
+        setGardenPlants(
+            (currentPlants) =>
+
+                currentPlants.map(
+                    (plant) => {
+
+                        if (
+                            plant.plantKey !==
+                            plantKey
+                        ) {
+
+                            return plant;
+
+                        }
+
+
+                        return {
+
+                            ...plant,
+
+                            startDate:
+                                startDate ||
+                                plant.startDate,
+
+                            startMethod:
+                                startMethod ||
+                                plant.startMethod
+
+                        };
+
+                    }
+                )
+
+        );
+
+    }
+
+
+    /* =========================
+       WATER PLANT
     ========================= */
 
     function markPlantWatered(
@@ -950,6 +1369,9 @@ function App() {
                             lastWatered:
                                 today,
 
+                            lastWateringMethod:
+                                "manual",
+
                             nextWatering
 
                         }
@@ -977,6 +1399,9 @@ function App() {
                                 lastWatered:
                                     today,
 
+                                lastWateringMethod:
+                                    "manual",
+
                                 nextWatering
 
                             };
@@ -990,6 +1415,155 @@ function App() {
                 );
 
             }
+        );
+
+    }
+
+
+    /* =========================
+       DELAY WATERING
+    ========================= */
+
+    function delayWatering(
+        plantKey
+    ) {
+
+        setWateringRecords(
+            (currentRecords) =>
+
+                currentRecords.map(
+                    (record) => {
+
+                        if (
+                            record.plantKey !==
+                            plantKey
+                        ) {
+
+                            return record;
+
+                        }
+
+
+                        const startingDate =
+                            record.nextWatering ||
+                            getLocalDateString(
+                                new Date()
+                            );
+
+
+                        return {
+
+                            ...record,
+
+                            nextWatering:
+                                addDaysToDateString(
+                                    startingDate,
+                                    1
+                                ),
+
+                            lastScheduleAction:
+                                "delayed",
+
+                            lastScheduleActionDate:
+                                getLocalDateString(
+                                    new Date()
+                                )
+
+                        };
+
+                    }
+                )
+
+        );
+
+    }
+
+
+    /* =========================
+       RAIN WATERING
+    ========================= */
+
+    function markRainWatered(
+        plantKey
+    ) {
+
+        const plant =
+            gardenPlants.find(
+                (gardenPlant) =>
+
+                    gardenPlant.plantKey ===
+                    plantKey
+
+            );
+
+
+        if (
+            !plant
+        ) {
+
+            return;
+
+        }
+
+
+        const today =
+            getLocalDateString(
+                new Date()
+            );
+
+
+        const nextWatering =
+            addDaysToDateString(
+                today,
+                Number(
+                    plant.waterEveryDays
+                ) ||
+                2
+            );
+
+
+        setWateringRecords(
+            (currentRecords) =>
+
+                currentRecords.map(
+                    (record) => {
+
+                        if (
+                            record.plantKey !==
+                            plantKey
+                        ) {
+
+                            return record;
+
+                        }
+
+
+                        return {
+
+                            ...record,
+
+                            plantId:
+                                plant.id,
+
+                            lastWatered:
+                                today,
+
+                            lastWateringMethod:
+                                "rain",
+
+                            nextWatering,
+
+                            lastScheduleAction:
+                                "rain",
+
+                            lastScheduleActionDate:
+                                today
+
+                        };
+
+                    }
+                )
+
         );
 
     }
@@ -1078,7 +1652,7 @@ function App() {
 
 
     /* =========================
-       AUTOMATIC WATERING
+       AUTOMATIC WATERING EVENTS
     ========================= */
 
     const automaticWateringEvents =
@@ -1147,7 +1721,10 @@ function App() {
                             plant.id,
 
                         automatic:
-                            true
+                            true,
+
+                        source:
+                            "watering-scheduler"
 
                     });
 
@@ -1169,6 +1746,15 @@ function App() {
             }
         );
 
+
+    /* =========================
+       ALL CALENDAR EVENTS
+
+       Harvest events are already
+       stored in calendarEvents.
+
+       Only watering remains derived.
+    ========================= */
 
     const allCalendarEvents = [
 
@@ -1271,6 +1857,14 @@ function App() {
                             onMarkPlantWatered={
                                 markPlantWatered
                             }
+
+                            onDelayWatering={
+                                delayWatering
+                            }
+
+                            onRainWatered={
+                                markRainWatered
+                            }
                         />
 
                     }
@@ -1297,6 +1891,10 @@ function App() {
 
                             onRemovePlant={
                                 removeGardenPlant
+                            }
+
+                            onUpdatePlantStart={
+                                updateGardenPlantStart
                             }
                         />
 

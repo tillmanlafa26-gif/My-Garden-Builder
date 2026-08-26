@@ -5,31 +5,14 @@ import {
 
 function BottomNav() {
 
-    function navClass({
-        isActive
-    }) {
-
-        return isActive
-            ? "nav-link active"
-            : "nav-link";
-
-    }
-
-
     return (
 
-        <nav
-            className="bottom-nav"
-            aria-label="Main navigation"
-        >
-
+        <nav className="bottom-nav">
 
             <NavLink
                 to="/"
                 end
-                className={
-                    navClass
-                }
+                className="nav-link"
             >
 
                 <span>
@@ -44,28 +27,8 @@ function BottomNav() {
 
 
             <NavLink
-                to="/plants"
-                className={
-                    navClass
-                }
-            >
-
-                <span>
-                    🌿
-                </span>
-
-                <p>
-                    Plants
-                </p>
-
-            </NavLink>
-
-
-            <NavLink
                 to="/garden"
-                className={
-                    navClass
-                }
+                className="nav-link"
             >
 
                 <span>
@@ -80,10 +43,24 @@ function BottomNav() {
 
 
             <NavLink
+                to="/plants"
+                className="nav-link"
+            >
+
+                <span>
+                    🌿
+                </span>
+
+                <p>
+                    Plants
+                </p>
+
+            </NavLink>
+
+
+            <NavLink
                 to="/calendar"
-                className={
-                    navClass
-                }
+                className="nav-link"
             >
 
                 <span>
@@ -99,9 +76,7 @@ function BottomNav() {
 
             <NavLink
                 to="/journal"
-                className={
-                    navClass
-                }
+                className="nav-link"
             >
 
                 <span>
@@ -113,7 +88,6 @@ function BottomNav() {
                 </p>
 
             </NavLink>
-
 
         </nav>
 

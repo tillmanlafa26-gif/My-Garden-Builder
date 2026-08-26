@@ -35,7 +35,9 @@ function Home({
     gardenPlants,
     onRemoveGardenPlant,
     wateringRecords,
-    onMarkPlantWatered
+    onMarkPlantWatered,
+    onDelayWatering,
+    onRainWatered
 }) {
 
     return (
@@ -68,6 +70,10 @@ function Home({
 
 
             <WateringReminder
+                gardenProfile={
+                    gardenProfile
+                }
+
                 gardenPlants={
                     gardenPlants
                 }
@@ -78,6 +84,14 @@ function Home({
 
                 onMarkPlantWatered={
                     onMarkPlantWatered
+                }
+
+                onDelayWatering={
+                    onDelayWatering
+                }
+
+                onRainWatered={
+                    onRainWatered
                 }
             />
 
