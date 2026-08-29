@@ -12290,3 +12290,105 @@ html.dark-mode
     }
 
 }
+/* =========================================================
+   HOME GUIDED BUILDER — STEP 5 DESIGN
+========================================================= */
+
+.home-design-input-summary {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap: 7px;
+
+    margin-bottom: 14px;
+}
+
+
+.home-design-input-summary > div {
+    display: flex;
+
+    min-width: 0;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 2px;
+
+    padding: 10px 6px;
+
+    border: 1px solid #e0e8dd;
+
+    border-radius: 10px;
+
+    background-color: #f7faf5;
+
+    text-align: center;
+}
+
+
+.home-design-input-summary span {
+    font-size: 1rem;
+}
+
+
+.home-design-input-summary strong {
+    color: #39513d;
+
+    font-size: 0.66rem;
+}
+
+
+.home-design-input-summary small {
+    color: #758174;
+
+    font-size: 0.54rem;
+}
+
+
+html.dark-mode
+.home-design-input-summary > div {
+    border-color: #414e41;
+
+    background-color: #293329;
+}
+
+
+html.dark-mode
+.home-design-input-summary strong {
+    color: #dce8d9;
+}
+
+
+html.dark-mode
+.home-design-input-summary small {
+    color: #aab6a8;
+}
+
+
+@media (
+    max-width: 430px
+) {
+
+    .home-design-input-summary {
+        grid-template-columns:
+            repeat(
+                3,
+                1fr
+            );
+    }
+
+
+    .design-goal-grid {
+        grid-template-columns: 1fr;
+    }
+
+}

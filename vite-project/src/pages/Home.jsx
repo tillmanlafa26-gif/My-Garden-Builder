@@ -3,10 +3,6 @@ import {
     useState
 } from "react";
 
-import {
-    Link
-} from "react-router";
-
 
 import Header
     from "../components/Header";
@@ -38,6 +34,9 @@ import BottomNav
 import GardenLocationCard
     from "../components/GardenLocationCard";
 
+import HomeGardenDesignStep
+    from "../components/HomeGardenDesignStep";
+
 
 import {
     gardenPlans,
@@ -54,23 +53,11 @@ import {
 import {
     cropPlanningData
 } from "../data/cropPlanningData";
-console.log(
-    "MY GARDEN BUILDER CROP COUNT:",
-    cropPlanningData.length
-);
-
-console.log(
-    "ROOT CROPS:",
-    cropPlanningData.filter(
-        (crop) =>
-            crop.placementGroup === "root"
-    )
-);
 
 
-/* =========================
+/* =========================================================
    SPACE TYPES
-========================= */
+========================================================= */
 
 const spaceTypes = [
     {
@@ -101,9 +88,9 @@ const spaceTypes = [
 ];
 
 
-/* =========================
+/* =========================================================
    SURFACE TYPES
-========================= */
+========================================================= */
 
 const surfaceTypes = [
     {
@@ -139,9 +126,9 @@ const surfaceTypes = [
 ];
 
 
-/* =========================
+/* =========================================================
    GARDEN FEATURES
-========================= */
+========================================================= */
 
 const gardenFeatureOptions = [
     {
@@ -196,9 +183,9 @@ const gardenFeatureOptions = [
 ];
 
 
-/* =========================
+/* =========================================================
    CROP CATEGORIES
-========================= */
+========================================================= */
 
 const cropCategories = [
     {
@@ -234,9 +221,9 @@ const cropCategories = [
 ];
 
 
-/* =========================
+/* =========================================================
    GARDEN SIZE
-========================= */
+========================================================= */
 
 function getGardenSizeFromArea(
     squareFeet
@@ -245,24 +232,29 @@ function getGardenSizeFromArea(
     if (
         squareFeet <= 50
     ) {
+
         return "small";
+
     }
 
 
     if (
         squareFeet <= 150
     ) {
+
         return "medium";
+
     }
 
 
     return "large";
+
 }
 
 
-/* =========================
+/* =========================================================
    HOME PAGE
-========================= */
+========================================================= */
 
 function Home({
     tasks,
@@ -279,14 +271,15 @@ function Home({
     onRainWatered
 }) {
 
+
     const designSpace =
         gardenProfile?.designSpace ||
         {};
 
 
-    /* =========================
+    /* =====================================================
        STEP 1 — SPACE DRAFT
-    ========================= */
+    ===================================================== */
 
     const [
         spaceType,
@@ -347,9 +340,9 @@ function Home({
     );
 
 
-    /* =========================
+    /* =====================================================
        STEP 2 — ENVIRONMENT DRAFT
-    ========================= */
+    ===================================================== */
 
     const [
         gardenType,
@@ -396,9 +389,9 @@ function Home({
     );
 
 
-    /* =========================
+    /* =====================================================
        STEP 3 — FEATURES DRAFT
-    ========================= */
+    ===================================================== */
 
     const [
         selectedFeatures,
@@ -436,9 +429,9 @@ function Home({
     );
 
 
-    /* =========================
+    /* =====================================================
        STEP 4 — CROPS DRAFT
-    ========================= */
+    ===================================================== */
 
     const [
         selectedCrops,
@@ -476,9 +469,9 @@ function Home({
     );
 
 
-    /* =========================
+    /* =====================================================
        INITIAL COMPLETION
-    ========================= */
+    ===================================================== */
 
     const initialSpaceComplete =
         Number(
@@ -520,9 +513,9 @@ function Home({
         designSpace.growGoals.length > 0;
 
 
-    /* =========================
+    /* =====================================================
        EXPANDED / COLLAPSED
-    ========================= */
+    ===================================================== */
 
     const [
         spaceExpanded,
@@ -556,9 +549,9 @@ function Home({
     );
 
 
-    /* =========================
+    /* =====================================================
        SCROLL TARGETS
-    ========================= */
+    ===================================================== */
 
     const environmentStepRef =
         useRef(
@@ -584,9 +577,9 @@ function Home({
         );
 
 
-    /* =========================
+    /* =====================================================
        BUILD PROGRESS
-    ========================= */
+    ===================================================== */
 
     const spaceComplete =
         Number(
@@ -718,9 +711,9 @@ function Home({
         buildStages.length;
 
 
-    /* =========================
+    /* =====================================================
        SPACE MEASUREMENTS
-    ========================= */
+    ===================================================== */
 
     const numericWidth =
         Number(
@@ -753,9 +746,9 @@ function Home({
               10.7639;
 
 
-    /* =========================
+    /* =====================================================
        CROP FILTERING
-    ========================= */
+    ===================================================== */
 
     const normalizedCropSearch =
         cropSearch
@@ -818,9 +811,9 @@ function Home({
     }
 
 
-    /* =========================
+    /* =====================================================
        SCROLL HELPER
-    ========================= */
+    ===================================================== */
 
     function scrollToStep(
         ref
@@ -853,9 +846,9 @@ function Home({
     }
 
 
-    /* =========================
+    /* =====================================================
        STEP 1 — SAVE SPACE
-    ========================= */
+    ===================================================== */
 
     function saveSpaceStep() {
 
@@ -868,6 +861,7 @@ function Home({
             );
 
             return;
+
         }
 
 
@@ -952,9 +946,9 @@ function Home({
     }
 
 
-    /* =========================
+    /* =====================================================
        STEP 2 — SAVE ENVIRONMENT
-    ========================= */
+    ===================================================== */
 
     function saveEnvironmentStep() {
 
@@ -967,6 +961,7 @@ function Home({
             );
 
             return;
+
         }
 
 
@@ -979,6 +974,7 @@ function Home({
             );
 
             return;
+
         }
 
 
@@ -991,6 +987,7 @@ function Home({
             );
 
             return;
+
         }
 
 
@@ -1056,9 +1053,9 @@ function Home({
     }
 
 
-    /* =========================
+    /* =====================================================
        STEP 3 — FEATURE TOGGLE
-    ========================= */
+    ===================================================== */
 
     function toggleGardenFeature(
         featureId
@@ -1121,9 +1118,9 @@ function Home({
     }
 
 
-    /* =========================
+    /* =====================================================
        STEP 3 — SAVE FEATURES
-    ========================= */
+    ===================================================== */
 
     function saveFeaturesStep() {
 
@@ -1137,6 +1134,7 @@ function Home({
             );
 
             return;
+
         }
 
 
@@ -1196,9 +1194,9 @@ function Home({
     }
 
 
-    /* =========================
+    /* =====================================================
        STEP 4 — CROP TOGGLE
-    ========================= */
+    ===================================================== */
 
     function toggleCrop(
         cropId
@@ -1237,9 +1235,9 @@ function Home({
     }
 
 
-    /* =========================
+    /* =====================================================
        STEP 4 — SAVE CROPS
-    ========================= */
+    ===================================================== */
 
     function saveCropsStep() {
 
@@ -1252,6 +1250,7 @@ function Home({
             );
 
             return;
+
         }
 
 
@@ -1303,9 +1302,9 @@ function Home({
     }
 
 
-    /* =========================
+    /* =====================================================
        DISPLAY HELPERS
-    ========================= */
+    ===================================================== */
 
     const savedSpace =
         spaceTypes.find(
@@ -1369,9 +1368,9 @@ function Home({
             : [];
 
 
-    /* =========================
+    /* =====================================================
        RENDER
-    ========================= */
+    ===================================================== */
 
     return (
 
@@ -1381,11 +1380,12 @@ function Home({
             <Header />
 
 
-            {/* =========================
+            {/* =================================================
                 GARDEN BUILD PROGRESS
-            ========================= */}
+            ================================================= */}
 
             <section className="home-build-progress">
+
 
                 <div className="home-build-progress-header">
 
@@ -1591,9 +1591,9 @@ function Home({
             </section>
 
 
-            {/* =========================
+            {/* =================================================
                 STEP 1 — DEFINE SPACE
-            ========================= */}
+            ================================================= */}
 
             <section
                 className={
@@ -1722,6 +1722,7 @@ function Home({
                         : (
 
                             <>
+
 
                                 <div className="home-builder-field-group">
 
@@ -2038,9 +2039,9 @@ function Home({
             </section>
 
 
-            {/* =========================
-                STEP 2 — ENVIRONMENT
-            ========================= */}
+            {/* =================================================
+                STEP 2 — GROWING CONDITIONS
+            ================================================= */}
 
             <section
                 ref={
@@ -2182,6 +2183,7 @@ function Home({
                             : (
 
                                 <>
+
 
                                     <div className="home-builder-field-group">
 
@@ -2494,9 +2496,9 @@ function Home({
             </section>
 
 
-            {/* =========================
-                STEP 3 — FEATURES
-            ========================= */}
+            {/* =================================================
+                STEP 3 — GARDEN FEATURES
+            ================================================= */}
 
             <section
                 ref={
@@ -2627,6 +2629,7 @@ function Home({
                             : (
 
                                 <>
+
 
                                     <div className="home-builder-field-group">
 
@@ -2896,9 +2899,9 @@ function Home({
             </section>
 
 
-            {/* =========================
-                STEP 4 — CROPS
-            ========================= */}
+            {/* =================================================
+                STEP 4 — CHOOSE CROPS
+            ================================================= */}
 
             <section
                 ref={
@@ -3041,9 +3044,6 @@ function Home({
 
                                 <>
 
-                                    {/* =========================
-                                        SELECTED COUNT
-                                    ========================= */}
 
                                     <div className="home-crop-selection-header">
 
@@ -3079,10 +3079,6 @@ function Home({
                                     </div>
 
 
-                                    {/* =========================
-                                        SEARCH
-                                    ========================= */}
-
                                     <label className="home-crop-search">
 
                                         <span>
@@ -3109,10 +3105,6 @@ function Home({
 
                                     </label>
 
-
-                                    {/* =========================
-                                        CATEGORIES
-                                    ========================= */}
 
                                     <div className="home-crop-category-scroll">
 
@@ -3177,10 +3169,6 @@ function Home({
                                     </div>
 
 
-                                    {/* =========================
-                                        CROP GRID
-                                    ========================= */}
-
                                     {
                                         filteredCrops.length > 0
                                             ? (
@@ -3235,11 +3223,9 @@ function Home({
                                                                         <div>
 
                                                                             <strong>
-
                                                                                 {
                                                                                     crop.name
                                                                                 }
-
                                                                             </strong>
 
 
@@ -3317,10 +3303,6 @@ function Home({
                                             )
                                     }
 
-
-                                    {/* =========================
-                                        SELECTED CROPS
-                                    ========================= */}
 
                                     {
                                         selectedCrops.length > 0 && (
@@ -3438,19 +3420,42 @@ function Home({
             </section>
 
 
-            {/* =========================
-                STEP 5 — DESIGN PREVIEW
-            ========================= */}
+            {/* =================================================
+                STEP 5 — GENERATE DESIGN
+            ================================================= */}
 
-            <section
+            <div
                 ref={
                     designStepRef
                 }
+            >
+
+                <HomeGardenDesignStep
+
+                    gardenProfile={
+                        gardenProfile
+                    }
+
+                    onSaveGardenProfile={
+                        onSaveGardenProfile
+                    }
+
+                />
+
+            </div>
+
+
+            {/* =================================================
+                STEP 6 — MATERIALS / BUILD PREVIEW
+            ================================================= */}
+
+            <section
+                id="home-builder-step-build"
 
                 className={
-                    designComplete
+                    buildComplete
                         ? "home-builder-step complete collapsed"
-                        : cropsComplete
+                        : designComplete
                             ? "home-builder-step upcoming"
                             : "home-builder-step upcoming"
                 }
@@ -3461,9 +3466,9 @@ function Home({
                     <span className="home-builder-step-number">
 
                         {
-                            designComplete
+                            buildComplete
                                 ? "✓"
-                                : "5"
+                                : "6"
                         }
 
                     </span>
@@ -3472,19 +3477,20 @@ function Home({
                     <div>
 
                         <small>
-                            STEP 5
+                            STEP 6
                         </small>
 
 
                         <h2>
-                            🗺️ Generate Your Design
+                            🔨 Materials & Build Instructions
                         </h2>
 
 
                         <p>
-                            Turn your space, conditions,
-                            features, and crops into
-                            a practical garden layout.
+                            Turn your finished layout
+                            into the materials and
+                            instructions needed to
+                            build it.
                         </p>
 
                     </div>
@@ -3493,7 +3499,7 @@ function Home({
 
 
                 {
-                    !cropsComplete
+                    !designComplete
                         ? (
 
                             <div className="home-builder-locked">
@@ -3504,26 +3510,25 @@ function Home({
 
 
                                 <p>
-                                    Choose your crops
-                                    before generating
-                                    the garden design.
+                                    Generate your garden
+                                    design first.
                                 </p>
 
                             </div>
 
                         )
-                        : designComplete
+                        : buildComplete
                             ? (
 
                                 <div className="home-builder-summary">
 
                                     <strong>
-                                        Garden design generated
+                                        Build plan ready
                                     </strong>
 
 
                                     <span>
-                                        Layout ready for review
+                                        Materials and instructions saved
                                     </span>
 
                                 </div>
@@ -3534,14 +3539,15 @@ function Home({
                                 <div className="home-builder-next-preview">
 
                                     <span>
-                                        🗺️
+                                        🔨
                                     </span>
 
 
                                     <p>
-                                        Your garden information
-                                        is ready. Design preferences
-                                        and layout generation come next.
+                                        Your layout is ready.
+                                        Materials, quantities,
+                                        and step-by-step build
+                                        instructions come next.
                                     </p>
 
                                 </div>
@@ -3549,29 +3555,12 @@ function Home({
                             )
                 }
 
-
-                {
-                    cropsComplete && (
-
-                        <Link
-                            to="/garden"
-
-                            className="home-builder-temporary-link"
-                        >
-
-                            Open Current Garden Designer
-
-                        </Link>
-
-                    )
-                }
-
             </section>
 
 
-            {/* =========================
-                CURRENT DASHBOARD
-            ========================= */}
+            {/* =================================================
+                CURRENT GARDEN DASHBOARD
+            ================================================= */}
 
             <WeatherCard />
 
