@@ -1,4 +1,8 @@
 import {
+    useState
+} from "react";
+
+import {
     Link
 } from "react-router";
 
@@ -18,8 +22,14 @@ import {
 
 
 import {
-    cropPlanningData
+    cropPlanningData,
+    getCropById
 } from "../data/cropPlanningData";
+
+
+import {
+    calculateHarvestSchedule
+} from "../utils/harvestScheduleGenerator";
 
 
 /* =========================
@@ -83,6 +93,161 @@ function createCoreGardenPlant(
 
 
 /* =========================
+   DATE FORMATTER
+========================= */
+
+function formatGardenDate(
+    dateString
+) {
+
+    if (
+        !dateString
+    ) {
+
+        return "Not set";
+
+    }
+
+
+    const date =
+        new Date(
+            `${dateString}T12:00:00`
+        );
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return dateString;
+
+    }
+
+
+    return date.toLocaleDateString(
+        undefined,
+        {
+            month:
+                "short",
+
+            day:
+                "numeric",
+
+            year:
+                "numeric"
+        }
+    );
+
+}
+
+
+/* =========================
+   START METHOD LABEL
+========================= */
+
+function getStartMethodLabel(
+    startMethod
+) {
+
+    if (
+        startMethod ===
+        "seed"
+    ) {
+
+        return "Started from Seed";
+
+    }
+
+
+    if (
+        startMethod ===
+        "transplant"
+    ) {
+
+        return "Transplant";
+
+    }
+
+
+    if (
+        startMethod ===
+        "direct-sow"
+    ) {
+
+        return "Direct Sow";
+
+    }
+
+
+    return "Not set";
+
+}
+
+
+/* =========================
+   PLANT DISPLAY NAME
+========================= */
+
+function getPlantName(
+    plant
+) {
+
+    return (
+        plant.name ||
+        plant.common_name ||
+        plant.commonName ||
+        "Garden Plant"
+    );
+
+}
+
+
+/* =========================
+   PLANT ICON
+========================= */
+
+function getPlantIcon(
+    plant
+) {
+
+    if (
+        plant.icon
+    ) {
+
+        return plant.icon;
+
+    }
+
+
+    if (
+        plant.cropId
+    ) {
+
+        const crop =
+            getCropById(
+                plant.cropId
+            );
+
+
+        if (
+            crop?.icon
+        ) {
+
+            return crop.icon;
+
+        }
+
+    }
+
+
+    return "🌱";
+
+}
+
+
+/* =========================
    PLANTS PAGE
 ========================= */
 
@@ -99,6 +264,43 @@ function Plants({
     onUpdatePlantStart
 
 }) {
+
+
+    /* =========================
+       EDITING STATE
+    ========================= */
+
+    const [
+        editingPlantKey,
+        setEditingPlantKey
+    ] = useState(
+        null
+    );
+
+
+    const [
+        draftStartMethod,
+        setDraftStartMethod
+    ] = useState(
+        ""
+    );
+
+
+    const [
+        draftStartDate,
+        setDraftStartDate
+    ] = useState(
+        ""
+    );
+
+
+    const [
+        plantSetupMessage,
+        setPlantSetupMessage
+    ] = useState(
+        ""
+    );
+
 
     const selectedGarden =
         gardenProfile
@@ -186,9 +388,229 @@ function Plants({
         }
 
 
+        if (
+            editingPlantKey ===
+            existingPlant.plantKey
+        ) {
+
+            setEditingPlantKey(
+                null
+            );
+
+        }
+
+
         onRemovePlant(
             existingPlant
         );
+
+    }
+
+
+    /* =========================
+       START EDITING
+    ========================= */
+
+    function beginPlantSetup(
+        plant
+    ) {
+
+        const crop =
+            plant.cropId
+                ? getCropById(
+                    plant.cropId
+                )
+                : null;
+
+
+        setEditingPlantKey(
+            plant.plantKey
+        );
+
+
+        setDraftStartMethod(
+            plant.startMethod ||
+            crop?.preferredStartMethod ||
+            "direct-sow"
+        );
+
+
+        setDraftStartDate(
+            plant.startDate ||
+            ""
+        );
+
+
+        setPlantSetupMessage(
+            ""
+        );
+
+    }
+
+
+    /* =========================
+       CANCEL EDIT
+    ========================= */
+
+    function cancelPlantSetup() {
+
+        setEditingPlantKey(
+            null
+        );
+
+
+        setDraftStartMethod(
+            ""
+        );
+
+
+        setDraftStartDate(
+            ""
+        );
+
+
+        setPlantSetupMessage(
+            ""
+        );
+
+    }
+
+
+    /* =========================
+       SAVE PLANT START
+    ========================= */
+
+    function savePlantSetup(
+        plant
+    ) {
+
+        if (
+            !draftStartMethod
+        ) {
+
+            setPlantSetupMessage(
+                "Choose how this plant was started."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            !draftStartDate
+        ) {
+
+            setPlantSetupMessage(
+                "Choose the planting or start date."
+            );
+
+            return;
+
+        }
+
+
+        onUpdatePlantStart({
+
+            plantKey:
+                plant.plantKey,
+
+            startDate:
+                draftStartDate,
+
+            startMethod:
+                draftStartMethod
+
+        });
+
+
+        setPlantSetupMessage(
+            ""
+        );
+
+
+        setEditingPlantKey(
+            null
+        );
+
+
+        setDraftStartMethod(
+            ""
+        );
+
+
+        setDraftStartDate(
+            ""
+        );
+
+    }
+
+
+    /* =========================
+       HARVEST SCHEDULE
+    ========================= */
+
+    function getPlantHarvestSchedule(
+        plant
+    ) {
+
+        if (
+            !plant.cropId ||
+            !plant.startDate
+        ) {
+
+            return null;
+
+        }
+
+
+        return calculateHarvestSchedule({
+
+            cropId:
+                plant.cropId,
+
+            startDate:
+                plant.startDate,
+
+            startMethod:
+                plant.startMethod
+
+        });
+
+    }
+
+
+    /* =========================
+       DRAFT HARVEST SCHEDULE
+    ========================= */
+
+    function getDraftHarvestSchedule(
+        plant
+    ) {
+
+        if (
+            !plant.cropId ||
+            !draftStartDate ||
+            !draftStartMethod
+        ) {
+
+            return null;
+
+        }
+
+
+        return calculateHarvestSchedule({
+
+            cropId:
+                plant.cropId,
+
+            startDate:
+                draftStartDate,
+
+            startMethod:
+                draftStartMethod
+
+        });
 
     }
 
@@ -334,6 +756,549 @@ function Plants({
                 </span>
 
             </section>
+
+
+            {/* =========================
+                PLANT START SETUP
+            ========================= */}
+
+            {
+                gardenPlants.length >
+                0 && (
+
+                    <section className="designer-card plant-start-section">
+
+                        <div className="designer-section-heading">
+
+                            <span>
+                                📅
+                            </span>
+
+
+                            <div>
+
+                                <h2>
+                                    Planting Setup
+                                </h2>
+
+
+                                <p>
+                                    Tell us how and when
+                                    each plant was started
+                                    for better harvest timing.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div className="plant-start-list">
+
+                            {
+                                gardenPlants.map(
+                                    (plant) => {
+
+                                        const isEditing =
+                                            editingPlantKey ===
+                                            plant.plantKey;
+
+
+                                        const crop =
+                                            plant.cropId
+                                                ? getCropById(
+                                                    plant.cropId
+                                                )
+                                                : null;
+
+
+                                        const savedSchedule =
+                                            getPlantHarvestSchedule(
+                                                plant
+                                            );
+
+
+                                        const draftSchedule =
+                                            isEditing
+                                                ? getDraftHarvestSchedule(
+                                                    plant
+                                                )
+                                                : null;
+
+
+                                        return (
+
+                                            <article
+                                                key={
+                                                    plant.plantKey
+                                                }
+
+                                                className="plant-start-card"
+                                            >
+
+
+                                                {/* =========================
+                                                    PLANT HEADER
+                                                ========================= */}
+
+                                                <div className="plant-start-header">
+
+                                                    <span className="plant-start-icon">
+
+                                                        {
+                                                            getPlantIcon(
+                                                                plant
+                                                            )
+                                                        }
+
+                                                    </span>
+
+
+                                                    <div>
+
+                                                        <strong>
+
+                                                            {
+                                                                getPlantName(
+                                                                    plant
+                                                                )
+                                                            }
+
+                                                        </strong>
+
+
+                                                        <small>
+
+                                                            {
+                                                                crop
+                                                                    ? crop.seasonType ===
+                                                                      "warm"
+                                                                        ? "Warm-season crop"
+                                                                        : "Cool-season crop"
+                                                                    : plant.category ||
+                                                                      "Garden plant"
+                                                            }
+
+                                                        </small>
+
+                                                    </div>
+
+                                                </div>
+
+
+                                                {
+                                                    !isEditing
+                                                        ? (
+
+                                                            <>
+
+                                                                {/* =========================
+                                                                    SAVED DETAILS
+                                                                ========================= */}
+
+                                                                <div className="plant-start-details">
+
+                                                                    <div>
+
+                                                                        <span>
+                                                                            Start Method
+                                                                        </span>
+
+                                                                        <strong>
+
+                                                                            {
+                                                                                getStartMethodLabel(
+                                                                                    plant.startMethod
+                                                                                )
+                                                                            }
+
+                                                                        </strong>
+
+                                                                    </div>
+
+
+                                                                    <div>
+
+                                                                        <span>
+                                                                            Start Date
+                                                                        </span>
+
+                                                                        <strong>
+
+                                                                            {
+                                                                                formatGardenDate(
+                                                                                    plant.startDate
+                                                                                )
+                                                                            }
+
+                                                                        </strong>
+
+                                                                    </div>
+
+                                                                </div>
+
+
+                                                                {
+                                                                    crop && (
+
+                                                                        <div className="plant-start-recommendation">
+
+                                                                            <span>
+                                                                                💡
+                                                                            </span>
+
+                                                                            <p>
+
+                                                                                Recommended start:
+
+                                                                                {" "}
+
+                                                                                <strong>
+
+                                                                                    {
+                                                                                        getStartMethodLabel(
+                                                                                            crop.preferredStartMethod
+                                                                                        )
+                                                                                    }
+
+                                                                                </strong>
+
+                                                                            </p>
+
+                                                                        </div>
+
+                                                                    )
+                                                                }
+
+
+                                                                {/* =========================
+                                                                    HARVEST PREVIEW
+                                                                ========================= */}
+
+                                                                {
+                                                                    savedSchedule
+                                                                        ? (
+
+                                                                            <div className="plant-harvest-preview">
+
+                                                                                <span>
+                                                                                    🧺
+                                                                                </span>
+
+
+                                                                                <div>
+
+                                                                                    <small>
+                                                                                        Estimated Harvest
+                                                                                    </small>
+
+
+                                                                                    <strong>
+
+                                                                                        {
+                                                                                            formatGardenDate(
+                                                                                                savedSchedule.harvestStartDate
+                                                                                            )
+                                                                                        }
+
+                                                                                        {" – "}
+
+                                                                                        {
+                                                                                            formatGardenDate(
+                                                                                                savedSchedule.harvestEndDate
+                                                                                            )
+                                                                                        }
+
+                                                                                    </strong>
+
+                                                                                </div>
+
+                                                                            </div>
+
+                                                                        )
+                                                                        : (
+
+                                                                            <div className="plant-harvest-unavailable">
+
+                                                                                <span>
+                                                                                    ℹ️
+                                                                                </span>
+
+
+                                                                                <p>
+
+                                                                                    {
+                                                                                        plant.cropId
+                                                                                            ? "Set planting information to calculate the harvest window."
+                                                                                            : "Harvest timing is not yet available for this database plant."
+                                                                                    }
+
+                                                                                </p>
+
+                                                                            </div>
+
+                                                                        )
+                                                                }
+
+
+                                                                <button
+                                                                    type="button"
+
+                                                                    className="plant-start-edit-button"
+
+                                                                    onClick={() =>
+                                                                        beginPlantSetup(
+                                                                            plant
+                                                                        )
+                                                                    }
+                                                                >
+
+                                                                    ✏️ Edit Planting Info
+
+                                                                </button>
+
+                                                            </>
+
+                                                        )
+                                                        : (
+
+                                                            <>
+
+                                                                {/* =========================
+                                                                    EDIT FORM
+                                                                ========================= */}
+
+                                                                <div className="plant-start-editor">
+
+                                                                    <label>
+
+                                                                        How was it started?
+
+                                                                        <select
+                                                                            value={
+                                                                                draftStartMethod
+                                                                            }
+
+                                                                            onChange={
+                                                                                (event) =>
+                                                                                    setDraftStartMethod(
+                                                                                        event.target.value
+                                                                                    )
+                                                                            }
+                                                                        >
+
+                                                                            <option value="seed">
+                                                                                🌱 Started from Seed
+                                                                            </option>
+
+                                                                            <option value="transplant">
+                                                                                🪴 Transplant
+                                                                            </option>
+
+                                                                            <option value="direct-sow">
+                                                                                🌾 Direct Sow
+                                                                            </option>
+
+                                                                        </select>
+
+                                                                    </label>
+
+
+                                                                    <label>
+
+                                                                        Planting / Start Date
+
+                                                                        <input
+                                                                            type="date"
+
+                                                                            value={
+                                                                                draftStartDate
+                                                                            }
+
+                                                                            onChange={
+                                                                                (event) =>
+                                                                                    setDraftStartDate(
+                                                                                        event.target.value
+                                                                                    )
+                                                                            }
+                                                                        />
+
+                                                                    </label>
+
+                                                                </div>
+
+
+                                                                {
+                                                                    crop && (
+
+                                                                        <div className="plant-start-recommendation">
+
+                                                                            <span>
+                                                                                💡
+                                                                            </span>
+
+                                                                            <p>
+
+                                                                                Recommended for {
+
+                                                                                    crop.name
+
+                                                                                }:
+
+                                                                                {" "}
+
+                                                                                <strong>
+
+                                                                                    {
+                                                                                        getStartMethodLabel(
+                                                                                            crop.preferredStartMethod
+                                                                                        )
+                                                                                    }
+
+                                                                                </strong>
+
+                                                                            </p>
+
+                                                                        </div>
+
+                                                                    )
+                                                                }
+
+
+                                                                {/* =========================
+                                                                    LIVE HARVEST PREVIEW
+                                                                ========================= */}
+
+                                                                {
+                                                                    draftSchedule && (
+
+                                                                        <div className="plant-harvest-preview">
+
+                                                                            <span>
+                                                                                🧺
+                                                                            </span>
+
+
+                                                                            <div>
+
+                                                                                <small>
+                                                                                    New Estimated Harvest
+                                                                                </small>
+
+
+                                                                                <strong>
+
+                                                                                    {
+                                                                                        formatGardenDate(
+                                                                                            draftSchedule.harvestStartDate
+                                                                                        )
+                                                                                    }
+
+                                                                                    {" – "}
+
+                                                                                    {
+                                                                                        formatGardenDate(
+                                                                                            draftSchedule.harvestEndDate
+                                                                                        )
+                                                                                    }
+
+                                                                                </strong>
+
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                    )
+                                                                }
+
+
+                                                                {
+                                                                    plantSetupMessage && (
+
+                                                                        <p className="plant-start-message">
+
+                                                                            {
+                                                                                plantSetupMessage
+                                                                            }
+
+                                                                        </p>
+
+                                                                    )
+                                                                }
+
+
+                                                                <div className="plant-start-actions">
+
+                                                                    <button
+                                                                        type="button"
+
+                                                                        className="plant-start-cancel-button"
+
+                                                                        onClick={
+                                                                            cancelPlantSetup
+                                                                        }
+                                                                    >
+
+                                                                        Cancel
+
+                                                                    </button>
+
+
+                                                                    <button
+                                                                        type="button"
+
+                                                                        className="plant-start-save-button"
+
+                                                                        onClick={() =>
+                                                                            savePlantSetup(
+                                                                                plant
+                                                                            )
+                                                                        }
+                                                                    >
+
+                                                                        Save Planting Info
+
+                                                                    </button>
+
+                                                                </div>
+
+                                                            </>
+
+                                                        )
+                                                }
+
+                                            </article>
+
+                                        );
+
+                                    }
+                                )
+                            }
+
+                        </div>
+
+
+                        <div className="material-assumptions">
+
+                            <strong>
+                                🧺 Harvest Calendar
+                            </strong>
+
+
+                            <p>
+                                Changing a start method
+                                or planting date will
+                                automatically update that
+                                crop's estimated harvest
+                                dates on your Calendar.
+                            </p>
+
+                        </div>
+
+                    </section>
+
+                )
+            }
 
 
             {/* =========================

@@ -3,42 +3,46 @@ import {
     useState
 } from "react";
 
-
 import {
     Navigate,
     Route,
     Routes
 } from "react-router";
 
+import Home from "./pages/Home";
+import Garden from "./pages/Garden";
+import Plants from "./pages/Plants";
+import Calendar from "./pages/Calendar";
+import Journal from "./pages/Journal";
 
-import Home
-    from "./pages/Home";
-
-import Garden
-    from "./pages/Garden";
-
-import Plants
-    from "./pages/Plants";
-
-import Calendar
-    from "./pages/Calendar";
-
-import Journal
-    from "./pages/Journal";
-
-
-import SuppliesMenu
-    from "./components/SuppliesMenu";
-
+import SuppliesMenu from "./components/SuppliesMenu";
+import AppSettings from "./components/AppSettings";
 
 import {
     defaultTasks
 } from "./data/tasks";
 
-
 import {
     createHarvestCalendarEvents
 } from "./utils/harvestScheduleGenerator";
+
+
+/* =========================
+   APP STORAGE KEYS
+========================= */
+
+const appStorageKeys = [
+    "gardenPlants",
+    "gardenTasks",
+    "gardenProfile",
+    "ownedSupplies",
+    "wateringRecords",
+    "calendarEvents",
+    "journalEntries",
+    "gardenTheme",
+    "gardenScore",
+    "gardenOnboardingSeen"
+];
 
 
 /* =========================
@@ -80,7 +84,9 @@ function loadArray(
 
         }
 
-    } catch (error) {
+    } catch (
+        error
+    ) {
 
         console.error(
             `Unable to load ${key}:`,
@@ -118,7 +124,9 @@ function loadObject(
 
         }
 
-    } catch (error) {
+    } catch (
+        error
+    ) {
 
         console.error(
             `Unable to load ${key}:`,
@@ -322,15 +330,10 @@ function resolveCropIdFromPlant(
 
 
     const text = [
-
         plant?.name,
-
         plant?.common_name,
-
         plant?.commonName,
-
         scientificNames
-
     ]
         .filter(
             Boolean
@@ -423,6 +426,118 @@ function resolveCropIdFromPlant(
                 "strawberry",
                 "fragaria"
             ]
+        },
+
+        {
+            cropId: "broccoli",
+            terms: [
+                "broccoli"
+            ]
+        },
+
+        {
+            cropId: "cauliflower",
+            terms: [
+                "cauliflower"
+            ]
+        },
+
+        {
+            cropId: "cabbage",
+            terms: [
+                "cabbage"
+            ]
+        },
+
+        {
+            cropId: "spinach",
+            terms: [
+                "spinach",
+                "spinacia oleracea"
+            ]
+        },
+
+        {
+            cropId: "peas",
+            terms: [
+                "pea",
+                "pisum sativum"
+            ]
+        },
+
+        {
+            cropId: "corn",
+            terms: [
+                "sweet corn",
+                "corn",
+                "zea mays"
+            ]
+        },
+
+        {
+            cropId: "zucchini",
+            terms: [
+                "zucchini",
+                "courgette"
+            ]
+        },
+
+        {
+            cropId: "eggplant",
+            terms: [
+                "eggplant",
+                "aubergine",
+                "solanum melongena"
+            ]
+        },
+
+        {
+            cropId: "onion",
+            terms: [
+                "onion",
+                "allium cepa"
+            ]
+        },
+
+        {
+            cropId: "sweet-potato",
+            terms: [
+                "sweet potato",
+                "ipomoea batatas"
+            ]
+        },
+
+        {
+            cropId: "potato",
+            terms: [
+                "potato",
+                "solanum tuberosum"
+            ]
+        },
+
+        {
+            cropId: "beet",
+            terms: [
+                "beet",
+                "beetroot",
+                "beta vulgaris"
+            ]
+        },
+
+        {
+            cropId: "celery",
+            terms: [
+                "celery",
+                "apium graveolens"
+            ]
+        },
+
+        {
+            cropId: "brussels-sprouts",
+            terms: [
+                "brussels sprout",
+                "brussel sprout"
+            ]
         }
 
     ];
@@ -431,16 +546,12 @@ function resolveCropIdFromPlant(
     const match =
         aliases.find(
             (item) =>
-
                 item.terms.some(
                     (term) =>
-
                         text.includes(
                             term
                         )
-
                 )
-
         );
 
 
@@ -567,7 +678,8 @@ function normalizeGardenPlant(
         category:
             plant.category ||
             (
-                source === "perenual"
+                source ===
+                "perenual"
                     ? "Edible Plant"
                     : "Plant"
             ),
@@ -614,14 +726,185 @@ function loadGardenPlants() {
 
 
 /* =========================
+   WATERING RECORD SYNC
+========================= */
+
+function syncWateringRecordsForPlants(
+    plants,
+    currentRecords = []
+) {
+
+    const today =
+        getLocalDateString(
+            new Date()
+        );
+
+
+    return plants.map(
+        (plant) => {
+
+            const existingRecord =
+                currentRecords.find(
+                    (record) =>
+                        record.plantKey ===
+                        plant.plantKey
+                );
+
+
+            if (
+                existingRecord
+            ) {
+
+                return existingRecord;
+
+            }
+
+
+            return {
+
+                plantKey:
+                    plant.plantKey,
+
+                plantId:
+                    plant.id,
+
+                lastWatered:
+                    null,
+
+                lastWateringMethod:
+                    null,
+
+                nextWatering:
+                    today
+
+            };
+
+        }
+    );
+
+}
+
+
+/* =========================
+   HARVEST EVENT SYNC
+========================= */
+
+function syncHarvestEventsForPlants(
+    plants,
+    currentEvents = []
+) {
+
+    const nonHarvestSchedulerEvents =
+        currentEvents.filter(
+            (event) =>
+                event.source !==
+                "harvest-scheduler"
+        );
+
+
+    const generatedHarvestEvents =
+        plants.flatMap(
+            (plant) => {
+
+                if (
+                    !plant.cropId ||
+                    !plant.startDate
+                ) {
+
+                    return [];
+
+                }
+
+
+                return createHarvestCalendarEvents({
+
+                    plantKey:
+                        plant.plantKey,
+
+                    plantId:
+                        plant.id,
+
+                    cropId:
+                        plant.cropId,
+
+                    plantName:
+                        plant.name ||
+                        plant.common_name,
+
+                    startDate:
+                        plant.startDate,
+
+                    startMethod:
+                        plant.startMethod
+
+                });
+
+            }
+        );
+
+
+    return [
+        ...nonHarvestSchedulerEvents,
+        ...generatedHarvestEvents
+    ];
+
+}
+
+
+/* =========================
+   INITIAL WATERING RECORDS
+========================= */
+
+function loadWateringRecords() {
+
+    const plants =
+        loadGardenPlants();
+
+
+    const records =
+        loadArray(
+            "wateringRecords"
+        );
+
+
+    return syncWateringRecordsForPlants(
+        plants,
+        records
+    );
+
+}
+
+
+/* =========================
+   INITIAL CALENDAR EVENTS
+========================= */
+
+function loadCalendarEvents() {
+
+    const plants =
+        loadGardenPlants();
+
+
+    const events =
+        loadArray(
+            "calendarEvents"
+        );
+
+
+    return syncHarvestEventsForPlants(
+        plants,
+        events
+    );
+
+}
+
+
+/* =========================
    APP
 ========================= */
 
 function App() {
 
-    /* =========================
-       STATE
-    ========================= */
 
     const [
         tasks,
@@ -670,10 +953,7 @@ function App() {
         calendarEvents,
         setCalendarEvents
     ] = useState(
-        () =>
-            loadArray(
-                "calendarEvents"
-            )
+        loadCalendarEvents
     );
 
 
@@ -681,10 +961,7 @@ function App() {
         wateringRecords,
         setWateringRecords
     ] = useState(
-        () =>
-            loadArray(
-                "wateringRecords"
-            )
+        loadWateringRecords
     );
 
 
@@ -708,302 +985,180 @@ function App() {
 
 
     /* =========================
-       SYNC WATERING RECORDS
-    ========================= */
-
-    useEffect(() => {
-
-        setWateringRecords(
-            (currentRecords) => {
-
-                const today =
-                    getLocalDateString(
-                        new Date()
-                    );
-
-
-                let changed =
-                    false;
-
-
-                const updatedRecords =
-                    gardenPlants.map(
-                        (plant) => {
-
-                            const existingRecord =
-                                currentRecords.find(
-                                    (record) =>
-
-                                        record.plantKey ===
-                                        plant.plantKey
-
-                                );
-
-
-                            if (
-                                existingRecord
-                            ) {
-
-                                return existingRecord;
-
-                            }
-
-
-                            changed =
-                                true;
-
-
-                            return {
-
-                                plantKey:
-                                    plant.plantKey,
-
-                                plantId:
-                                    plant.id,
-
-                                lastWatered:
-                                    null,
-
-                                lastWateringMethod:
-                                    null,
-
-                                nextWatering:
-                                    today
-
-                            };
-
-                        }
-                    );
-
-
-                if (
-                    updatedRecords.length !==
-                    currentRecords.length
-                ) {
-
-                    changed =
-                        true;
-
-                }
-
-
-                if (
-                    !changed
-                ) {
-
-                    return currentRecords;
-
-                }
-
-
-                return updatedRecords;
-
-            }
-        );
-
-    }, [
-        gardenPlants
-    ]);
-
-
-    /* =========================
-       SYNC HARVEST EVENTS
-
-       This is the important fix.
-
-       Harvest events are now stored
-       directly in calendarEvents.
-    ========================= */
-
-    useEffect(() => {
-
-        setCalendarEvents(
-            (currentEvents) => {
-
-                /*
-                    Preserve manual events and
-                    unrelated automatic events.
-                */
-
-                const nonHarvestSchedulerEvents =
-                    currentEvents.filter(
-                        (event) =>
-
-                            event.source !==
-                            "harvest-scheduler"
-
-                    );
-
-
-                const generatedHarvestEvents =
-                    gardenPlants.flatMap(
-                        (plant) => {
-
-                            if (
-                                !plant.cropId ||
-                                !plant.startDate
-                            ) {
-
-                                return [];
-
-                            }
-
-
-                            return createHarvestCalendarEvents({
-
-                                plantKey:
-                                    plant.plantKey,
-
-                                plantId:
-                                    plant.id,
-
-                                cropId:
-                                    plant.cropId,
-
-                                plantName:
-                                    plant.name ||
-                                    plant.common_name,
-
-                                startDate:
-                                    plant.startDate,
-
-                                startMethod:
-                                    plant.startMethod
-
-                            });
-
-                        }
-                    );
-
-
-                return [
-
-                    ...nonHarvestSchedulerEvents,
-
-                    ...generatedHarvestEvents
-
-                ];
-
-            }
-        );
-
-    }, [
-        gardenPlants
-    ]);
-
-
-    /* =========================
        STORAGE
     ========================= */
 
-    useEffect(() => {
-
-        localStorage.setItem(
-            "gardenTasks",
-            JSON.stringify(
-                tasks
-            )
-        );
-
-    }, [
-        tasks
-    ]);
-
-
-    useEffect(() => {
-
-        if (
-            gardenProfile
-        ) {
+    useEffect(
+        () => {
 
             localStorage.setItem(
-                "gardenProfile",
+                "gardenTasks",
                 JSON.stringify(
-                    gardenProfile
+                    tasks
                 )
             );
 
-        } else {
+        },
+        [
+            tasks
+        ]
+    );
 
-            localStorage.removeItem(
-                "gardenProfile"
+
+    useEffect(
+        () => {
+
+            if (
+                gardenProfile
+            ) {
+
+                localStorage.setItem(
+                    "gardenProfile",
+                    JSON.stringify(
+                        gardenProfile
+                    )
+                );
+
+            } else {
+
+                localStorage.removeItem(
+                    "gardenProfile"
+                );
+
+            }
+
+        },
+        [
+            gardenProfile
+        ]
+    );
+
+
+    useEffect(
+        () => {
+
+            localStorage.setItem(
+                "ownedSupplies",
+                JSON.stringify(
+                    ownedSupplies
+                )
+            );
+
+        },
+        [
+            ownedSupplies
+        ]
+    );
+
+
+    useEffect(
+        () => {
+
+            localStorage.setItem(
+                "gardenPlants",
+                JSON.stringify(
+                    gardenPlants
+                )
+            );
+
+        },
+        [
+            gardenPlants
+        ]
+    );
+
+
+    useEffect(
+        () => {
+
+            localStorage.setItem(
+                "calendarEvents",
+                JSON.stringify(
+                    calendarEvents
+                )
+            );
+
+        },
+        [
+            calendarEvents
+        ]
+    );
+
+
+    useEffect(
+        () => {
+
+            localStorage.setItem(
+                "wateringRecords",
+                JSON.stringify(
+                    wateringRecords
+                )
+            );
+
+        },
+        [
+            wateringRecords
+        ]
+    );
+
+
+    useEffect(
+        () => {
+
+            localStorage.setItem(
+                "journalEntries",
+                JSON.stringify(
+                    journalEntries
+                )
+            );
+
+        },
+        [
+            journalEntries
+        ]
+    );
+
+
+    /* =========================
+       RESET APP
+    ========================= */
+
+    function resetAppToOriginalState() {
+
+        try {
+
+            appStorageKeys.forEach(
+                (key) => {
+
+                    localStorage.removeItem(
+                        key
+                    );
+
+                }
+            );
+
+
+            document.documentElement
+                .classList
+                .remove(
+                    "dark-mode"
+                );
+
+
+            window.location.reload();
+
+        } catch (
+            error
+        ) {
+
+            console.error(
+                "Unable to reset My Garden Builder:",
+                error
             );
 
         }
 
-    }, [
-        gardenProfile
-    ]);
-
-
-    useEffect(() => {
-
-        localStorage.setItem(
-            "ownedSupplies",
-            JSON.stringify(
-                ownedSupplies
-            )
-        );
-
-    }, [
-        ownedSupplies
-    ]);
-
-
-    useEffect(() => {
-
-        localStorage.setItem(
-            "gardenPlants",
-            JSON.stringify(
-                gardenPlants
-            )
-        );
-
-    }, [
-        gardenPlants
-    ]);
-
-
-    useEffect(() => {
-
-        localStorage.setItem(
-            "calendarEvents",
-            JSON.stringify(
-                calendarEvents
-            )
-        );
-
-    }, [
-        calendarEvents
-    ]);
-
-
-    useEffect(() => {
-
-        localStorage.setItem(
-            "wateringRecords",
-            JSON.stringify(
-                wateringRecords
-            )
-        );
-
-    }, [
-        wateringRecords
-    ]);
-
-
-    useEffect(() => {
-
-        localStorage.setItem(
-            "journalEntries",
-            JSON.stringify(
-                journalEntries
-            )
-        );
-
-    }, [
-        journalEntries
-    ]);
+    }
 
 
     /* =========================
@@ -1016,11 +1171,8 @@ function App() {
 
         setTasks(
             (currentTasks) => [
-
                 ...currentTasks,
-
                 newTask
-
             ]
         );
 
@@ -1033,7 +1185,6 @@ function App() {
 
         setTasks(
             (currentTasks) =>
-
                 currentTasks.map(
                     (task) => {
 
@@ -1043,12 +1194,9 @@ function App() {
                         ) {
 
                             return {
-
                                 ...task,
-
                                 completed:
                                     !task.completed
-
                             };
 
                         }
@@ -1058,7 +1206,6 @@ function App() {
 
                     }
                 )
-
         );
 
     }
@@ -1106,11 +1253,8 @@ function App() {
 
 
                 return [
-
                     ...currentSupplies,
-
                     supplyId
-
                 ];
 
             }
@@ -1129,8 +1273,7 @@ function App() {
 
         const addedAt =
             plant.addedAt ||
-            new Date()
-                .toISOString();
+            new Date().toISOString();
 
 
         const normalizedPlant =
@@ -1144,7 +1287,10 @@ function App() {
 
                 plantKey:
                     plant.plantKey ||
-                    `${plant.source || "perenual"}:${plant.id}`,
+                    `${
+                        plant.source ||
+                        "perenual"
+                    }:${plant.id}`,
 
                 addedAt,
 
@@ -1169,37 +1315,49 @@ function App() {
         }
 
 
+        const alreadyAdded =
+            gardenPlants.some(
+                (gardenPlant) =>
+                    gardenPlant.plantKey ===
+                    normalizedPlant.plantKey
+            );
+
+
+        if (
+            alreadyAdded
+        ) {
+
+            return;
+
+        }
+
+
+        const nextPlants = [
+            ...gardenPlants,
+            normalizedPlant
+        ];
+
+
         setGardenPlants(
-            (currentPlants) => {
-
-                const alreadyAdded =
-                    currentPlants.some(
-                        (gardenPlant) =>
-
-                            gardenPlant.plantKey ===
-                            normalizedPlant.plantKey
-
-                    );
+            nextPlants
+        );
 
 
-                if (
-                    alreadyAdded
-                ) {
+        setWateringRecords(
+            (currentRecords) =>
+                syncWateringRecordsForPlants(
+                    nextPlants,
+                    currentRecords
+                )
+        );
 
-                    return currentPlants;
 
-                }
-
-
-                return [
-
-                    ...currentPlants,
-
-                    normalizedPlant
-
-                ];
-
-            }
+        setCalendarEvents(
+            (currentEvents) =>
+                syncHarvestEventsForPlants(
+                    nextPlants,
+                    currentEvents
+                )
         );
 
     }
@@ -1224,20 +1382,40 @@ function App() {
 
         const plantKey =
             plant.plantKey ||
-            `${plant.source || "perenual"}:${plant.id}`;
+            `${
+                plant.source ||
+                "perenual"
+            }:${plant.id}`;
+
+
+        const nextPlants =
+            gardenPlants.filter(
+                (gardenPlant) =>
+                    gardenPlant.plantKey !==
+                    plantKey
+            );
 
 
         setGardenPlants(
-            (currentPlants) =>
+            nextPlants
+        );
 
-                currentPlants.filter(
-                    (gardenPlant) =>
 
-                        gardenPlant.plantKey !==
-                        plantKey
-
+        setWateringRecords(
+            (currentRecords) =>
+                syncWateringRecordsForPlants(
+                    nextPlants,
+                    currentRecords
                 )
+        );
 
+
+        setCalendarEvents(
+            (currentEvents) =>
+                syncHarvestEventsForPlants(
+                    nextPlants,
+                    currentEvents
+                )
         );
 
     }
@@ -1248,48 +1426,54 @@ function App() {
     ========================= */
 
     function updateGardenPlantStart({
-
         plantKey,
-
         startDate,
-
         startMethod
-
     }) {
 
-        setGardenPlants(
-            (currentPlants) =>
+        const nextPlants =
+            gardenPlants.map(
+                (plant) => {
 
-                currentPlants.map(
-                    (plant) => {
+                    if (
+                        plant.plantKey !==
+                        plantKey
+                    ) {
 
-                        if (
-                            plant.plantKey !==
-                            plantKey
-                        ) {
-
-                            return plant;
-
-                        }
-
-
-                        return {
-
-                            ...plant,
-
-                            startDate:
-                                startDate ||
-                                plant.startDate,
-
-                            startMethod:
-                                startMethod ||
-                                plant.startMethod
-
-                        };
+                        return plant;
 
                     }
-                )
 
+
+                    return {
+
+                        ...plant,
+
+                        startDate:
+                            startDate ||
+                            plant.startDate,
+
+                        startMethod:
+                            startMethod ||
+                            plant.startMethod
+
+                    };
+
+                }
+            );
+
+
+        setGardenPlants(
+            nextPlants
+        );
+
+
+        setCalendarEvents(
+            (currentEvents) =>
+                syncHarvestEventsForPlants(
+                    nextPlants,
+                    currentEvents
+                )
         );
 
     }
@@ -1306,10 +1490,8 @@ function App() {
         const plant =
             gardenPlants.find(
                 (gardenPlant) =>
-
                     gardenPlant.plantKey ===
                     plantKey
-
             );
 
 
@@ -1333,8 +1515,7 @@ function App() {
                 today,
                 Number(
                     plant.waterEveryDays
-                ) ||
-                2
+                ) || 2
             );
 
 
@@ -1344,10 +1525,8 @@ function App() {
                 const recordExists =
                     currentRecords.some(
                         (record) =>
-
                             record.plantKey ===
                             plantKey
-
                     );
 
 
@@ -1356,11 +1535,8 @@ function App() {
                 ) {
 
                     return [
-
                         ...currentRecords,
-
                         {
-
                             plantKey,
 
                             plantId:
@@ -1373,9 +1549,7 @@ function App() {
                                 "manual",
 
                             nextWatering
-
                         }
-
                     ];
 
                 }
@@ -1430,7 +1604,6 @@ function App() {
 
         setWateringRecords(
             (currentRecords) =>
-
                 currentRecords.map(
                     (record) => {
 
@@ -1473,7 +1646,6 @@ function App() {
 
                     }
                 )
-
         );
 
     }
@@ -1490,10 +1662,8 @@ function App() {
         const plant =
             gardenPlants.find(
                 (gardenPlant) =>
-
                     gardenPlant.plantKey ===
                     plantKey
-
             );
 
 
@@ -1517,14 +1687,12 @@ function App() {
                 today,
                 Number(
                     plant.waterEveryDays
-                ) ||
-                2
+                ) || 2
             );
 
 
         setWateringRecords(
             (currentRecords) =>
-
                 currentRecords.map(
                     (record) => {
 
@@ -1563,7 +1731,6 @@ function App() {
 
                     }
                 )
-
         );
 
     }
@@ -1579,11 +1746,8 @@ function App() {
 
         setCalendarEvents(
             (currentEvents) => [
-
                 ...currentEvents,
-
                 newEvent
-
             ]
         );
 
@@ -1596,15 +1760,11 @@ function App() {
 
         setCalendarEvents(
             (currentEvents) =>
-
                 currentEvents.filter(
                     (calendarEvent) =>
-
                         calendarEvent.id !==
                         eventId
-
                 )
-
         );
 
     }
@@ -1620,11 +1780,8 @@ function App() {
 
         setJournalEntries(
             (currentEntries) => [
-
                 ...currentEntries,
-
                 newEntry
-
             ]
         );
 
@@ -1637,15 +1794,11 @@ function App() {
 
         setJournalEntries(
             (currentEntries) =>
-
                 currentEntries.filter(
                     (entry) =>
-
                         entry.id !==
                         entryId
-
                 )
-
         );
 
     }
@@ -1662,10 +1815,8 @@ function App() {
                 const wateringRecord =
                     wateringRecords.find(
                         (record) =>
-
                             record.plantKey ===
                             plant.plantKey
-
                     );
 
 
@@ -1734,8 +1885,7 @@ function App() {
                             eventDate,
                             Number(
                                 plant.waterEveryDays
-                            ) ||
-                            2
+                            ) || 2
                         );
 
                 }
@@ -1747,21 +1897,9 @@ function App() {
         );
 
 
-    /* =========================
-       ALL CALENDAR EVENTS
-
-       Harvest events are already
-       stored in calendarEvents.
-
-       Only watering remains derived.
-    ========================= */
-
     const allCalendarEvents = [
-
         ...calendarEvents,
-
         ...automaticWateringEvents
-
     ];
 
 
@@ -1840,6 +1978,10 @@ function App() {
 
                             gardenProfile={
                                 gardenProfile
+                            }
+
+                            onSaveGardenProfile={
+                                saveGardenProfile
                             }
 
                             gardenPlants={
@@ -1983,12 +2125,10 @@ function App() {
                     path="*"
 
                     element={
-
                         <Navigate
                             to="/"
                             replace
                         />
-
                     }
                 />
 
@@ -2023,6 +2163,13 @@ function App() {
 
                 onToggleSupply={
                     toggleSupply
+                }
+            />
+
+
+            <AppSettings
+                onResetApp={
+                    resetAppToOriginalState
                 }
             />
 
