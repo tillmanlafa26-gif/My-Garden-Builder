@@ -234,6 +234,44 @@ const designGoals = [
 
 
 /* =========================
+   CROP CATEGORIES
+========================= */
+
+const cropCategories = [
+    {
+        id: "all",
+        name: "All",
+        icon: "🌱"
+    },
+    {
+        id: "fruiting",
+        name: "Fruiting",
+        icon: "🍅"
+    },
+    {
+        id: "leafy",
+        name: "Leafy Greens",
+        icon: "🥬"
+    },
+    {
+        id: "root",
+        name: "Root Crops",
+        icon: "🥕"
+    },
+    {
+        id: "vining",
+        name: "Vines & Legumes",
+        icon: "🫛"
+    },
+    {
+        id: "herb",
+        name: "Herbs",
+        icon: "🌿"
+    }
+];
+
+
+/* =========================
    DEFAULT BUILD OPTIONS
 ========================= */
 
@@ -259,18 +297,23 @@ function getGardenSizeFromArea(
     if (
         squareFeet <= 50
     ) {
+
         return "small";
+
     }
 
 
     if (
         squareFeet <= 150
     ) {
+
         return "medium";
+
     }
 
 
     return "large";
+
 }
 
 
@@ -289,11 +332,14 @@ function Garden({
 
 
     const savedBuildOptions = {
+
         ...defaultBuildOptions,
+
         ...(
             savedSpace.buildOptions ||
             {}
         )
+
     };
 
 
@@ -471,6 +517,22 @@ function Garden({
     );
 
 
+    const [
+        cropSearch,
+        setCropSearch
+    ] = useState(
+        ""
+    );
+
+
+    const [
+        cropCategory,
+        setCropCategory
+    ] = useState(
+        "all"
+    );
+
+
     /* =========================
        RAISED BED OPTIONS
     ========================= */
@@ -577,9 +639,16 @@ function Garden({
                 ) {
 
                     return {
-                        valid: false,
-                        nativeArea: 0,
-                        squareFeet: 0
+
+                        valid:
+                            false,
+
+                        nativeArea:
+                            0,
+
+                        squareFeet:
+                            0
+
                     };
 
                 }
@@ -598,9 +667,14 @@ function Garden({
 
 
                 return {
-                    valid: true,
+
+                    valid:
+                        true,
+
                     nativeArea,
+
                     squareFeet
+
                 };
 
             },
@@ -715,7 +789,9 @@ function Garden({
                 if (
                     !measurements.valid
                 ) {
+
                     return null;
+
                 }
 
 
@@ -742,7 +818,9 @@ function Garden({
                 if (
                     !generatedLayout
                 ) {
+
                     return null;
+
                 }
 
 
@@ -771,7 +849,9 @@ function Garden({
                     !generatedLayout ||
                     !materialPlan
                 ) {
+
                     return null;
+
                 }
 
 
@@ -814,7 +894,9 @@ function Garden({
                     !generatedLayout ||
                     selectedCrops.length === 0
                 ) {
+
                     return null;
+
                 }
 
 
@@ -854,7 +936,9 @@ function Garden({
                     !generatedLayout ||
                     !plantingPlan
                 ) {
+
                     return null;
+
                 }
 
 
@@ -893,7 +977,9 @@ function Garden({
                 if (
                     selectedCrops.length === 0
                 ) {
+
                     return null;
+
                 }
 
 
@@ -914,6 +1000,274 @@ function Garden({
                 firstFallFrost
             ]
         );
+
+
+    /* =========================
+       FILTER CROPS
+    ========================= */
+
+    const filteredCrops =
+        useMemo(
+            () => {
+
+                const cleanSearch =
+                    cropSearch
+                        .trim()
+                        .toLowerCase();
+
+
+                return cropPlanningData.filter(
+                    (crop) => {
+
+                        const categoryMatches =
+                            cropCategory ===
+                            "all" ||
+                            crop.placementGroup ===
+                            cropCategory;
+
+
+                        const searchMatches =
+                            !cleanSearch ||
+                            crop.name
+                                .toLowerCase()
+                                .includes(
+                                    cleanSearch
+                                ) ||
+                            crop.id
+                                .toLowerCase()
+                                .includes(
+                                    cleanSearch
+                                );
+
+
+                        return (
+                            categoryMatches &&
+                            searchMatches
+                        );
+
+                    }
+                );
+
+            },
+            [
+                cropSearch,
+                cropCategory
+            ]
+        );
+
+
+    /* =========================
+       CROP CATEGORY COUNT
+    ========================= */
+
+    function getCropCategoryCount(
+        categoryId
+    ) {
+
+        if (
+            categoryId ===
+            "all"
+        ) {
+
+            return cropPlanningData.length;
+
+        }
+
+
+        return cropPlanningData.filter(
+            (crop) =>
+
+                crop.placementGroup ===
+                categoryId
+
+        ).length;
+
+    }
+
+
+    /* =========================
+       PROGRESS STAGES
+    ========================= */
+
+    const progressStages =
+        useMemo(
+            () => [
+
+                {
+                    id:
+                        "garden-step-space",
+
+                    name:
+                        "Space",
+
+                    icon:
+                        "📐",
+
+                    complete:
+                        measurements.valid &&
+                        Boolean(
+                            spaceType
+                        ) &&
+                        Boolean(
+                            surface
+                        )
+                },
+
+                {
+                    id:
+                        "garden-step-environment",
+
+                    name:
+                        "Environment",
+
+                    icon:
+                        "☀️",
+
+                    complete:
+                        Boolean(
+                            gardenType
+                        ) &&
+                        Boolean(
+                            sunlight
+                        ) &&
+                        Boolean(
+                            hardinessZone
+                        )
+                },
+
+                {
+                    id:
+                        "garden-step-features",
+
+                    name:
+                        "Features",
+
+                    icon:
+                        "🧰",
+
+                    complete:
+                        selectedFeatures.length >
+                        0
+                },
+
+                {
+                    id:
+                        "garden-step-crops",
+
+                    name:
+                        "Crops",
+
+                    icon:
+                        "🥕",
+
+                    complete:
+                        selectedCrops.length >
+                        0
+                },
+
+                {
+                    id:
+                        "garden-step-design",
+
+                    name:
+                        "Design",
+
+                    icon:
+                        "🗺️",
+
+                    complete:
+                        Boolean(
+                            generatedLayout
+                        )
+                },
+
+                {
+                    id:
+                        "garden-step-build",
+
+                    name:
+                        "Build",
+
+                    icon:
+                        "🔨",
+
+                    complete:
+                        Boolean(
+                            materialPlan
+                        ) &&
+                        Boolean(
+                            buildPlan
+                        )
+                }
+
+            ],
+            [
+                measurements.valid,
+                spaceType,
+                surface,
+                gardenType,
+                sunlight,
+                hardinessZone,
+                selectedFeatures,
+                selectedCrops,
+                generatedLayout,
+                materialPlan,
+                buildPlan
+            ]
+        );
+
+
+    const completedStageCount =
+        progressStages.filter(
+            (stage) =>
+                stage.complete
+        ).length;
+
+
+    const progressPercent =
+        Math.round(
+            (
+                completedStageCount /
+                progressStages.length
+            ) *
+            100
+        );
+
+
+    /* =========================
+       SCROLL TO STAGE
+    ========================= */
+
+    function scrollToStage(
+        stageId
+    ) {
+
+        const target =
+            document.getElementById(
+                stageId
+            );
+
+
+        if (
+            !target
+        ) {
+
+            return;
+
+        }
+
+
+        target.scrollIntoView({
+
+            behavior:
+                "smooth",
+
+            block:
+                "start"
+
+        });
+
+    }
 
 
     /* =========================
@@ -989,6 +1343,10 @@ function Garden({
                 "Enter a valid width and length."
             );
 
+            scrollToStage(
+                "garden-step-space"
+            );
+
             return;
 
         }
@@ -1000,6 +1358,10 @@ function Garden({
 
             setMessage(
                 "Choose a primary garden system."
+            );
+
+            scrollToStage(
+                "garden-step-environment"
             );
 
             return;
@@ -1015,6 +1377,10 @@ function Garden({
                 "Choose your sunlight level."
             );
 
+            scrollToStage(
+                "garden-step-environment"
+            );
+
             return;
 
         }
@@ -1028,17 +1394,26 @@ function Garden({
                 "Choose your USDA growing zone."
             );
 
+            scrollToStage(
+                "garden-step-environment"
+            );
+
             return;
 
         }
 
 
         if (
-            selectedFeatures.length === 0
+            selectedFeatures.length ===
+            0
         ) {
 
             setMessage(
                 "Choose at least one garden feature."
+            );
+
+            scrollToStage(
+                "garden-step-features"
             );
 
             return;
@@ -1187,10 +1562,14 @@ function Garden({
         <div className="app-container">
 
 
+            {/* =========================
+                HEADER
+            ========================= */}
+
             <header className="app-header">
 
                 <h1>
-                    🌱 Garden Designer
+                    🪴 Garden Designer
                 </h1>
 
                 <p>
@@ -1199,6 +1578,119 @@ function Garden({
                 </p>
 
             </header>
+
+
+            {/* =========================
+                BUILDER PROGRESS
+            ========================= */}
+
+            <section className="garden-builder-progress">
+
+                <div className="garden-builder-progress-top">
+
+                    <div>
+
+                        <strong>
+                            Garden Builder Progress
+                        </strong>
+
+                        <span>
+
+                            {
+                                completedStageCount
+                            }
+
+                            {" of "}
+
+                            {
+                                progressStages.length
+                            }
+
+                            {" stages ready"}
+
+                        </span>
+
+                    </div>
+
+
+                    <span className="garden-builder-progress-percent">
+
+                        {
+                            progressPercent
+                        }
+
+                        %
+
+                    </span>
+
+                </div>
+
+
+                <div className="garden-builder-progress-bar">
+
+                    <div
+                        className="garden-builder-progress-fill"
+
+                        style={{
+                            width:
+                                `${progressPercent}%`
+                        }}
+                    />
+
+                </div>
+
+
+                <div className="garden-builder-stage-nav">
+
+                    {
+                        progressStages.map(
+                            (stage) => (
+
+                                <button
+                                    type="button"
+
+                                    key={
+                                        stage.id
+                                    }
+
+                                    className={
+                                        stage.complete
+                                            ? "garden-builder-stage complete"
+                                            : "garden-builder-stage"
+                                    }
+
+                                    onClick={() =>
+                                        scrollToStage(
+                                            stage.id
+                                        )
+                                    }
+                                >
+
+                                    <span>
+
+                                        {
+                                            stage.complete
+                                                ? "✓"
+                                                : stage.icon
+                                        }
+
+                                    </span>
+
+                                    <small>
+                                        {
+                                            stage.name
+                                        }
+                                    </small>
+
+                                </button>
+
+                            )
+                        )
+                    }
+
+                </div>
+
+            </section>
 
 
             <form
@@ -1214,7 +1706,10 @@ function Garden({
                     1 — DEFINE SPACE
                 ========================= */}
 
-                <section className="designer-card">
+                <section
+                    id="garden-step-space"
+                    className="designer-card"
+                >
 
                     <div className="designer-section-heading">
 
@@ -1403,6 +1898,8 @@ function Garden({
 
                                 step="0.1"
 
+                                inputMode="decimal"
+
                                 value={
                                     width
                                 }
@@ -1437,6 +1934,8 @@ function Garden({
                                 min="1"
 
                                 step="0.1"
+
+                                inputMode="decimal"
 
                                 value={
                                     length
@@ -1501,7 +2000,17 @@ function Garden({
                                 <div>
 
                                     <strong>
-                                        {width} × {length} {unit}
+
+                                        {width}
+
+                                        {" × "}
+
+                                        {length}
+
+                                        {" "}
+
+                                        {unit}
+
                                     </strong>
 
                                     <p>
@@ -1608,7 +2117,10 @@ function Garden({
                     5 — GARDEN SYSTEM
                 ========================= */}
 
-                <section className="designer-card">
+                <section
+                    id="garden-step-environment"
+                    className="designer-card"
+                >
 
                     <div className="designer-section-heading">
 
@@ -1864,10 +2376,13 @@ function Garden({
                                 <div>
 
                                     <strong>
+
                                         USDA Zone{" "}
+
                                         {
                                             hardinessZone
                                         }
+
                                     </strong>
 
                                     <p>
@@ -2007,7 +2522,10 @@ function Garden({
                     10 — FEATURES
                 ========================= */}
 
-                <section className="designer-card">
+                <section
+                    id="garden-step-features"
+                    className="designer-card"
+                >
 
                     <div className="designer-section-heading">
 
@@ -2099,14 +2617,281 @@ function Garden({
 
 
                 {/* =========================
-                    11 — DESIGN GOAL
+                    11 — CROPS
                 ========================= */}
 
-                <section className="designer-card">
+                <section
+                    id="garden-step-crops"
+                    className="designer-card"
+                >
 
                     <div className="designer-section-heading">
 
                         <span>11</span>
+
+                        <div>
+
+                            <h2>
+                                What Do You Want to Grow?
+                            </h2>
+
+                            <p>
+                                Search and choose crops
+                                for your planting plan.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    {/* =========================
+                        SELECTED CROP SUMMARY
+                    ========================= */}
+
+                    <div className="crop-selection-summary">
+
+                        <span>
+                            🧺
+                        </span>
+
+                        <div>
+
+                            <strong>
+
+                                {
+                                    selectedCrops.length
+                                }
+
+                                {
+                                    selectedCrops.length ===
+                                    1
+                                        ? " crop selected"
+                                        : " crops selected"
+                                }
+
+                            </strong>
+
+                            <small>
+                                Filtering does not
+                                remove your selections.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    {/* =========================
+                        SEARCH
+                    ========================= */}
+
+                    <div className="crop-library-tools">
+
+                        <label className="crop-search-field">
+
+                            <span>
+                                🔎
+                            </span>
+
+                            <input
+                                type="search"
+
+                                placeholder="Search crops..."
+
+                                value={
+                                    cropSearch
+                                }
+
+                                onChange={
+                                    (event) =>
+                                        setCropSearch(
+                                            event.target.value
+                                        )
+                                }
+                            />
+
+                        </label>
+
+
+                        {/* =========================
+                            CATEGORY FILTERS
+                        ========================= */}
+
+                        <div className="crop-category-filter">
+
+                            {
+                                cropCategories.map(
+                                    (category) => (
+
+                                        <button
+                                            type="button"
+
+                                            key={
+                                                category.id
+                                            }
+
+                                            className={
+                                                cropCategory ===
+                                                category.id
+                                                    ? "crop-category-button selected"
+                                                    : "crop-category-button"
+                                            }
+
+                                            onClick={() =>
+                                                setCropCategory(
+                                                    category.id
+                                                )
+                                            }
+                                        >
+
+                                            <span>
+                                                {
+                                                    category.icon
+                                                }
+                                            </span>
+
+                                            <strong>
+                                                {
+                                                    category.name
+                                                }
+                                            </strong>
+
+                                            <small>
+
+                                                {
+                                                    getCropCategoryCount(
+                                                        category.id
+                                                    )
+                                                }
+
+                                            </small>
+
+                                        </button>
+
+                                    )
+                                )
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    {/* =========================
+                        CROP RESULTS
+                    ========================= */}
+
+                    {
+                        filteredCrops.length ===
+                        0
+                            ? (
+
+                                <div className="crop-filter-empty">
+
+                                    <span>
+                                        🌱
+                                    </span>
+
+                                    <strong>
+                                        No crops found
+                                    </strong>
+
+                                    <p>
+                                        Try another search
+                                        or select a different
+                                        crop category.
+                                    </p>
+
+                                </div>
+
+                            )
+                            : (
+
+                                <div className="feature-grid">
+
+                                    {
+                                        filteredCrops.map(
+                                            (crop) => {
+
+                                                const selected =
+                                                    selectedCrops.includes(
+                                                        crop.id
+                                                    );
+
+
+                                                return (
+
+                                                    <button
+                                                        type="button"
+
+                                                        key={
+                                                            crop.id
+                                                        }
+
+                                                        className={
+                                                            selected
+                                                                ? "feature-card selected"
+                                                                : "feature-card"
+                                                        }
+
+                                                        onClick={() =>
+                                                            toggleCrop(
+                                                                crop.id
+                                                            )
+                                                        }
+                                                    >
+
+                                                        <span>
+                                                            {
+                                                                crop.icon
+                                                            }
+                                                        </span>
+
+                                                        <strong>
+                                                            {
+                                                                crop.name
+                                                            }
+                                                        </strong>
+
+                                                        <small>
+
+                                                            {
+                                                                selected
+                                                                    ? "✓ Selected"
+                                                                    : "Add"
+                                                            }
+
+                                                        </small>
+
+                                                    </button>
+
+                                                );
+
+                                            }
+                                        )
+                                    }
+
+                                </div>
+
+                            )
+                    }
+
+                </section>
+
+
+                {/* =========================
+                    12 — DESIGN GOAL
+                ========================= */}
+
+                <section
+                    id="garden-step-design"
+                    className="designer-card"
+                >
+
+                    <div className="designer-section-heading">
+
+                        <span>12</span>
 
                         <div>
 
@@ -2152,9 +2937,11 @@ function Garden({
                                     >
 
                                         <span className="design-goal-icon">
+
                                             {
                                                 goal.icon
                                             }
+
                                         </span>
 
                                         <strong>
@@ -2172,101 +2959,6 @@ function Garden({
                                     </button>
 
                                 )
-                            )
-                        }
-
-                    </div>
-
-                </section>
-
-
-                {/* =========================
-                    12 — CROPS
-                ========================= */}
-
-                <section className="designer-card">
-
-                    <div className="designer-section-heading">
-
-                        <span>12</span>
-
-                        <div>
-
-                            <h2>
-                                What Do You Want to Grow?
-                            </h2>
-
-                            <p>
-                                Choose crops for
-                                your planting plan.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-
-                    <div className="feature-grid">
-
-                        {
-                            cropPlanningData.map(
-                                (crop) => {
-
-                                    const selected =
-                                        selectedCrops.includes(
-                                            crop.id
-                                        );
-
-
-                                    return (
-
-                                        <button
-                                            type="button"
-
-                                            key={
-                                                crop.id
-                                            }
-
-                                            className={
-                                                selected
-                                                    ? "feature-card selected"
-                                                    : "feature-card"
-                                            }
-
-                                            onClick={() =>
-                                                toggleCrop(
-                                                    crop.id
-                                                )
-                                            }
-                                        >
-
-                                            <span>
-                                                {
-                                                    crop.icon
-                                                }
-                                            </span>
-
-                                            <strong>
-                                                {
-                                                    crop.name
-                                                }
-                                            </strong>
-
-                                            <small>
-
-                                                {
-                                                    selected
-                                                        ? "✓ Selected"
-                                                        : "Add"
-                                                }
-
-                                            </small>
-
-                                        </button>
-
-                                    );
-
-                                }
                             )
                         }
 
@@ -2646,234 +3338,260 @@ function Garden({
 
 
                 {/* =========================
-                    SPACE PREVIEW
+                    BUILD / RESULTS STAGE
                 ========================= */}
 
-                {
-                    measurements.valid && (
-
-                        <section className="designer-card">
-
-                            <div className="designer-section-heading">
-
-                                <span>
-                                    👁️
-                                </span>
-
-                                <div>
-
-                                    <h2>
-                                        Space Preview
-                                    </h2>
-
-                                    <p>
-                                        Your available
-                                        garden area.
-                                    </p>
-
-                                </div>
-
-                            </div>
+                <div
+                    id="garden-step-build"
+                    className="designer-save-area"
+                >
 
 
-                            <div className="space-preview-wrapper">
+                    {/* =========================
+                        SPACE PREVIEW
+                    ========================= */}
 
-                                <div className="space-preview-width">
-                                    {width} {unit}
-                                </div>
+                    {
+                        measurements.valid && (
 
+                            <section className="designer-card">
 
-                                <div
-                                    className="space-preview"
-
-                                    style={{
-                                        aspectRatio:
-                                            `${Number(
-                                                width
-                                            )} / ${Number(
-                                                length
-                                            )}`
-                                    }}
-                                >
+                                <div className="designer-section-heading">
 
                                     <span>
-
-                                        {
-                                            selectedSpace?.icon ||
-                                            "📐"
-                                        }
-
+                                        👁️
                                     </span>
 
-                                    <strong>
-                                        {
-                                            selectedSpace?.name
-                                        }
-                                    </strong>
+                                    <div>
 
-                                    <small>
-                                        {
-                                            selectedSurface?.name
-                                        }
-                                    </small>
+                                        <h2>
+                                            Space Preview
+                                        </h2>
 
-                                    <div className="space-preview-area">
-
-                                        {
-                                            measurements
-                                                .squareFeet
-                                                .toFixed(
-                                                    0
-                                                )
-                                        }
-
-                                        {" sq ft"}
+                                        <p>
+                                            Your available
+                                            garden area.
+                                        </p>
 
                                     </div>
 
                                 </div>
 
 
-                                <div className="space-preview-length">
-                                    {length} {unit}
+                                <div className="space-preview-wrapper">
+
+                                    <div className="space-preview-width">
+
+                                        {width}
+
+                                        {" "}
+
+                                        {unit}
+
+                                    </div>
+
+
+                                    <div
+                                        className="space-preview"
+
+                                        style={{
+                                            aspectRatio:
+                                                `${Number(
+                                                    width
+                                                )} / ${Number(
+                                                    length
+                                                )}`
+                                        }}
+                                    >
+
+                                        <span>
+
+                                            {
+                                                selectedSpace?.icon ||
+                                                "📐"
+                                            }
+
+                                        </span>
+
+                                        <strong>
+                                            {
+                                                selectedSpace?.name
+                                            }
+                                        </strong>
+
+                                        <small>
+                                            {
+                                                selectedSurface?.name
+                                            }
+                                        </small>
+
+                                        <div className="space-preview-area">
+
+                                            {
+                                                measurements
+                                                    .squareFeet
+                                                    .toFixed(
+                                                        0
+                                                    )
+                                            }
+
+                                            {" sq ft"}
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div className="space-preview-length">
+
+                                        {length}
+
+                                        {" "}
+
+                                        {unit}
+
+                                    </div>
+
                                 </div>
 
-                            </div>
+                            </section>
 
-                        </section>
-
-                    )
-                }
+                        )
+                    }
 
 
-                {/* =========================
-                    GENERATED LAYOUT
-                ========================= */}
+                    {/* =========================
+                        GENERATED LAYOUT
+                    ========================= */}
 
-                {
-                    generatedLayout && (
+                    {
+                        generatedLayout && (
 
-                        <GardenLayoutPreview
-                            layout={
-                                generatedLayout
-                            }
+                            <GardenLayoutPreview
+                                layout={
+                                    generatedLayout
+                                }
 
-                            bedPlantingPlan={
-                                bedPlantingPlan
-                            }
-                        />
+                                bedPlantingPlan={
+                                    bedPlantingPlan
+                                }
+                            />
 
-                    )
-                }
-
-
-                {/* =========================
-                    PLANTING PLAN
-                ========================= */}
-
-                {
-                    plantingPlan && (
-
-                        <GardenPlantingPlan
-                            plantingPlan={
-                                plantingPlan
-                            }
-                        />
-
-                    )
-                }
+                        )
+                    }
 
 
-                {/* =========================
-                    SEASONAL GUIDE
-                ========================= */}
+                    {/* =========================
+                        PLANTING PLAN
+                    ========================= */}
 
-                {
-                    seasonalGuide && (
+                    {
+                        plantingPlan && (
 
-                        <SeasonalPlantingGuide
-                            seasonalGuide={
-                                seasonalGuide
-                            }
-                        />
+                            <GardenPlantingPlan
+                                plantingPlan={
+                                    plantingPlan
+                                }
+                            />
 
-                    )
-                }
-
-
-                {/* =========================
-                    BED PLANTING MAP
-                ========================= */}
-
-                {
-                    bedPlantingPlan && (
-
-                        <GardenBedPlantingMap
-                            bedPlantingPlan={
-                                bedPlantingPlan
-                            }
-                        />
-
-                    )
-                }
+                        )
+                    }
 
 
-                {/* =========================
-                    MATERIALS
-                ========================= */}
+                    {/* =========================
+                        SEASONAL GUIDE
+                    ========================= */}
 
-                {
-                    materialPlan && (
+                    {
+                        seasonalGuide && (
 
-                        <GardenMaterials
-                            materialPlan={
-                                materialPlan
-                            }
-                        />
+                            <SeasonalPlantingGuide
+                                seasonalGuide={
+                                    seasonalGuide
+                                }
+                            />
 
-                    )
-                }
-
-
-                {/* =========================
-                    BUILD PLAN
-                ========================= */}
-
-                {
-                    buildPlan && (
-
-                        <GardenBuildPlan
-                            buildPlan={
-                                buildPlan
-                            }
-                        />
-
-                    )
-                }
+                        )
+                    }
 
 
-                {
-                    message && (
+                    {/* =========================
+                        BED PLANTING MAP
+                    ========================= */}
 
-                        <p className="designer-message">
-                            {
-                                message
-                            }
-                        </p>
+                    {
+                        bedPlantingPlan && (
 
-                    )
-                }
+                            <GardenBedPlantingMap
+                                bedPlantingPlan={
+                                    bedPlantingPlan
+                                }
+                            />
+
+                        )
+                    }
 
 
-                <button
-                    type="submit"
+                    {/* =========================
+                        MATERIALS
+                    ========================= */}
 
-                    className="garden-save-button designer-save-button"
-                >
+                    {
+                        materialPlan && (
 
-                    Save Garden Project →
+                            <GardenMaterials
+                                materialPlan={
+                                    materialPlan
+                                }
+                            />
 
-                </button>
+                        )
+                    }
+
+
+                    {/* =========================
+                        BUILD PLAN
+                    ========================= */}
+
+                    {
+                        buildPlan && (
+
+                            <GardenBuildPlan
+                                buildPlan={
+                                    buildPlan
+                                }
+                            />
+
+                        )
+                    }
+
+
+                    {
+                        message && (
+
+                            <p className="designer-message">
+
+                                {
+                                    message
+                                }
+
+                            </p>
+
+                        )
+                    }
+
+
+                    <button
+                        type="submit"
+
+                        className="garden-save-button designer-save-button"
+                    >
+
+                        Save Garden Project →
+
+                    </button>
+
+                </div>
 
 
             </form>
@@ -2892,10 +3610,12 @@ function Garden({
                         <div className="garden-plan-title">
 
                             <span>
+
                                 {
                                     selectedDesignGoal?.icon ||
                                     "🌿"
                                 }
+
                             </span>
 
                             <div>
