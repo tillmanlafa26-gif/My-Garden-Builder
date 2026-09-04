@@ -852,6 +852,235 @@ function syncHarvestEventsForPlants(
 
 
 /* =========================
+   SEASONAL PLANTING EVENTS
+========================= */
+
+function createSeasonalPlantingCalendarEvents(
+    gardenProfile
+) {
+
+    const seasonalGuide =
+        gardenProfile
+            ?.designSpace
+            ?.seasonalGuide;
+
+
+    const cropSchedules =
+        Array.isArray(
+            seasonalGuide?.crops
+        )
+            ? seasonalGuide.crops
+            : [];
+
+
+    return cropSchedules.flatMap(
+        (crop) => {
+
+            const events = [];
+
+
+            /* =========================
+               START INDOORS
+            ========================= */
+
+            if (
+                crop.indoorStartDate
+            ) {
+
+                events.push({
+
+                    id:
+                        `seasonal-${crop.cropId}-indoor-${crop.indoorStartDate}`,
+
+                    date:
+                        crop.indoorStartDate,
+
+                    type:
+                        "planting",
+
+                    title:
+                        `Start ${crop.name} Indoors`,
+
+                    cropId:
+                        crop.cropId,
+
+                    cropName:
+                        crop.name,
+
+                    plantingAction:
+                        "start-indoors",
+
+                    automatic:
+                        true,
+
+                    source:
+                        "seasonal-planting-planner"
+
+                });
+
+            }
+
+
+            /* =========================
+               SPRING PLANTING
+            ========================= */
+
+            if (
+                crop.springPlantDate
+            ) {
+
+                let title =
+                    `Plant ${crop.name}`;
+
+
+                let plantingAction =
+                    "plant-outside";
+
+
+                if (
+                    crop.springAction ===
+                    "Direct sow"
+                ) {
+
+                    title =
+                        `Direct Sow ${crop.name}`;
+
+
+                    plantingAction =
+                        "direct-sow";
+
+                }
+
+
+                if (
+                    crop.springAction ===
+                    "Transplant outside"
+                ) {
+
+                    title =
+                        `Transplant ${crop.name} Outside`;
+
+
+                    plantingAction =
+                        "transplant-outside";
+
+                }
+
+
+                events.push({
+
+                    id:
+                        `seasonal-${crop.cropId}-spring-${crop.springPlantDate}`,
+
+                    date:
+                        crop.springPlantDate,
+
+                    type:
+                        "planting",
+
+                    title,
+
+                    cropId:
+                        crop.cropId,
+
+                    cropName:
+                        crop.name,
+
+                    plantingAction,
+
+                    automatic:
+                        true,
+
+                    source:
+                        "seasonal-planting-planner"
+
+                });
+
+            }
+
+
+            /* =========================
+               FALL PLANTING
+            ========================= */
+
+            if (
+                crop.fallPlantDate
+            ) {
+
+                events.push({
+
+                    id:
+                        `seasonal-${crop.cropId}-fall-${crop.fallPlantDate}`,
+
+                    date:
+                        crop.fallPlantDate,
+
+                    type:
+                        "planting",
+
+                    title:
+                        `Fall Plant ${crop.name}`,
+
+                    cropId:
+                        crop.cropId,
+
+                    cropName:
+                        crop.name,
+
+                    plantingAction:
+                        "fall-planting",
+
+                    automatic:
+                        true,
+
+                    source:
+                        "seasonal-planting-planner"
+
+                });
+
+            }
+
+
+            return events;
+
+        }
+    );
+
+}
+
+
+/* =========================
+   SEASONAL EVENT SYNC
+========================= */
+
+function syncSeasonalPlantingEventsForProfile(
+    gardenProfile,
+    currentEvents = []
+) {
+
+    const nonSeasonalEvents =
+        currentEvents.filter(
+            (event) =>
+                event.source !==
+                "seasonal-planting-planner"
+        );
+
+
+    const seasonalEvents =
+        createSeasonalPlantingCalendarEvents(
+            gardenProfile
+        );
+
+
+    return [
+        ...nonSeasonalEvents,
+        ...seasonalEvents
+    ];
+
+}
+
+
+/* =========================
    INITIAL WATERING RECORDS
 ========================= */
 
@@ -885,15 +1114,29 @@ function loadCalendarEvents() {
         loadGardenPlants();
 
 
+    const profile =
+        loadObject(
+            "gardenProfile",
+            null
+        );
+
+
     const events =
         loadArray(
             "calendarEvents"
         );
 
 
-    return syncHarvestEventsForPlants(
-        plants,
-        events
+    const harvestSyncedEvents =
+        syncHarvestEventsForPlants(
+            plants,
+            events
+        );
+
+
+    return syncSeasonalPlantingEventsForProfile(
+        profile,
+        harvestSyncedEvents
     );
 
 }
@@ -1148,7 +1391,7 @@ function App() {
             window.location.reload();
 
         } catch (
-            error
+        error
         ) {
 
             console.error(
@@ -1221,6 +1464,25 @@ function App() {
 
         setGardenProfile(
             newProfile
+        );
+
+
+        /*
+            Rebuild automatic seasonal planting
+            events whenever the garden profile
+            changes.
+
+            If no seasonal guide exists,
+            previously generated seasonal
+            events are removed.
+        */
+
+        setCalendarEvents(
+            (currentEvents) =>
+                syncSeasonalPlantingEventsForProfile(
+                    newProfile,
+                    currentEvents
+                )
         );
 
     }

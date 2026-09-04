@@ -3,41 +3,152 @@ import {
 } from "react";
 
 
+import {
+    useNavigate
+} from "react-router";
+
+
 function AppSettings({
     onResetApp
 }) {
 
+    const navigate =
+        useNavigate();
+
+
     const [
         isOpen,
         setIsOpen
-    ] = useState(false);
+    ] = useState(
+        false
+    );
 
 
     const [
-        confirmingReset,
-        setConfirmingReset
-    ] = useState(false);
+        confirmReset,
+        setConfirmReset
+    ] = useState(
+        false
+    );
 
+
+    /* =====================================================
+       OPEN SETTINGS
+    ===================================================== */
 
     function openSettings() {
 
-        setIsOpen(true);
+        setConfirmReset(
+            false
+        );
+
+
+        setIsOpen(
+            true
+        );
 
     }
 
+
+    /* =====================================================
+       CLOSE SETTINGS
+    ===================================================== */
 
     function closeSettings() {
 
-        setIsOpen(false);
+        setConfirmReset(
+            false
+        );
 
-        setConfirmingReset(false);
+
+        setIsOpen(
+            false
+        );
 
     }
 
+
+    /* =====================================================
+       HOW TO USE
+    ===================================================== */
+
+    function openHowToUse() {
+
+        closeSettings();
+
+
+        navigate(
+            "/"
+        );
+
+
+        window.setTimeout(
+            () => {
+
+                window.dispatchEvent(
+                    new CustomEvent(
+                        "garden-open-onboarding"
+                    )
+                );
+
+            },
+            250
+        );
+
+    }
+
+
+    /* =====================================================
+       RESET
+    ===================================================== */
+
+    function requestReset() {
+
+        setConfirmReset(
+            true
+        );
+
+    }
+
+
+    function cancelReset() {
+
+        setConfirmReset(
+            false
+        );
+
+    }
+
+
+    function confirmResetApp() {
+
+        if (
+            typeof onResetApp !==
+            "function"
+        ) {
+
+            console.error(
+                "App reset handler is unavailable."
+            );
+
+            return;
+
+        }
+
+
+        onResetApp();
+
+    }
+
+
+    /* =====================================================
+       RENDER
+    ===================================================== */
 
     return (
 
         <>
+
 
             {/* =========================
                 SETTINGS BUTTON
@@ -45,12 +156,14 @@ function AppSettings({
 
             <button
                 type="button"
-                className="settings-fab"
+
+                className="app-settings-button"
+
+                aria-label="Open settings"
+
                 onClick={
                     openSettings
                 }
-                aria-label="Open settings"
-                title="Settings"
             >
 
                 ⚙️
@@ -65,41 +178,66 @@ function AppSettings({
             {
                 isOpen && (
 
-                    <>
+                    <div
+                        className="app-settings-overlay"
 
-                        <button
-                            type="button"
-                            className="settings-overlay"
-                            onClick={
-                                closeSettings
+                        onClick={
+                            (event) => {
+
+                                if (
+                                    event.target ===
+                                    event.currentTarget
+                                ) {
+
+                                    closeSettings();
+
+                                }
+
                             }
-                            aria-label="Close settings"
-                        />
+                        }
+                    >
 
+                        <section
+                            className="app-settings-panel"
 
-                        <aside
-                            className="settings-panel"
                             role="dialog"
+
                             aria-modal="true"
-                            aria-labelledby="settings-title"
+
+                            aria-labelledby="app-settings-title"
+
+                            onClick={
+                                (event) =>
+                                    event.stopPropagation()
+                            }
                         >
 
-                            <div className="settings-header">
+                            {/* =========================
+                                HEADER
+                            ========================= */}
 
-                                <div>
+                            <div className="app-settings-header">
 
-                                    <span>
+                                <div className="app-settings-header-info">
+
+                                    <span className="app-settings-header-icon">
                                         ⚙️
                                     </span>
 
+
                                     <div>
 
-                                        <h2 id="settings-title">
+                                        <h2
+                                            id="app-settings-title"
+                                        >
+
                                             Settings
+
                                         </h2>
 
+
                                         <p>
-                                            Manage My Garden Builder
+                                            Manage My Garden Builder.
                                         </p>
 
                                     </div>
@@ -109,11 +247,14 @@ function AppSettings({
 
                                 <button
                                     type="button"
-                                    className="settings-close-button"
+
+                                    className="app-settings-close"
+
+                                    aria-label="Close settings"
+
                                     onClick={
                                         closeSettings
                                     }
-                                    aria-label="Close settings"
                                 >
 
                                     ✕
@@ -124,27 +265,95 @@ function AppSettings({
 
 
                             {/* =========================
-                                RESET SECTION
+                                GETTING STARTED
                             ========================= */}
 
-                            <section className="settings-section">
+                            <section className="app-settings-section">
 
-                                <div className="settings-section-heading">
+                                <div className="app-settings-section-heading">
 
                                     <span>
-                                        ↺
+                                        🌱
                                     </span>
+
 
                                     <div>
 
-                                        <h3>
-                                            Reset App
-                                        </h3>
+                                        <strong>
+                                            Getting Started
+                                        </strong>
 
-                                        <p>
-                                            Return My Garden Builder
-                                            to its original state.
-                                        </p>
+
+                                        <small>
+                                            Learn how to use the Garden Builder.
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+
+                                <button
+                                    type="button"
+
+                                    className="app-settings-action"
+
+                                    onClick={
+                                        openHowToUse
+                                    }
+                                >
+
+                                    <span className="app-settings-action-icon">
+                                        📖
+                                    </span>
+
+
+                                    <div>
+
+                                        <strong>
+                                            How to Use
+                                        </strong>
+
+
+                                        <small>
+                                            Replay the Garden Builder walkthrough.
+                                        </small>
+
+                                    </div>
+
+
+                                    <span className="app-settings-action-arrow">
+                                        →
+                                    </span>
+
+                                </button>
+
+                            </section>
+
+
+                            {/* =========================
+                                APP DATA
+                            ========================= */}
+
+                            <section className="app-settings-section">
+
+                                <div className="app-settings-section-heading">
+
+                                    <span>
+                                        💾
+                                    </span>
+
+
+                                    <div>
+
+                                        <strong>
+                                            App Data
+                                        </strong>
+
+
+                                        <small>
+                                            Manage the garden information stored in this browser.
+                                        </small>
 
                                     </div>
 
@@ -152,52 +361,84 @@ function AppSettings({
 
 
                                 {
-                                    !confirmingReset
+                                    !confirmReset
                                         ? (
 
                                             <button
                                                 type="button"
-                                                className="settings-reset-button"
-                                                onClick={() =>
-                                                    setConfirmingReset(
-                                                        true
-                                                    )
+
+                                                className="app-settings-action danger"
+
+                                                onClick={
+                                                    requestReset
                                                 }
                                             >
 
-                                                ↺ Reset to Original State
+                                                <span className="app-settings-action-icon">
+                                                    ♻️
+                                                </span>
+
+
+                                                <div>
+
+                                                    <strong>
+                                                        Reset to Original State
+                                                    </strong>
+
+
+                                                    <small>
+                                                        Remove saved garden data and start over.
+                                                    </small>
+
+                                                </div>
+
+
+                                                <span className="app-settings-action-arrow">
+                                                    →
+                                                </span>
 
                                             </button>
 
                                         )
                                         : (
 
-                                            <div className="settings-reset-confirmation">
+                                            <div className="app-settings-reset-confirmation">
 
-                                                <strong>
-                                                    Reset everything?
-                                                </strong>
-
-                                                <p>
-                                                    Your garden design,
-                                                    plants, watering
-                                                    history, calendar
-                                                    events, journal,
-                                                    supplies, tasks,
-                                                    and preferences will
-                                                    be reset.
-                                                </p>
+                                                <span className="app-settings-warning-icon">
+                                                    ⚠️
+                                                </span>
 
 
-                                                <div className="settings-reset-actions">
+                                                <div>
+
+                                                    <strong>
+                                                        Reset Everything?
+                                                    </strong>
+
+
+                                                    <p>
+                                                        This removes your saved
+                                                        garden profile, plants,
+                                                        tasks, calendar events,
+                                                        watering history,
+                                                        journal entries,
+                                                        supplies, theme, and
+                                                        onboarding status from
+                                                        this browser.
+                                                    </p>
+
+                                                </div>
+
+
+                                                <div className="app-settings-reset-actions">
 
                                                     <button
                                                         type="button"
-                                                        className="settings-cancel-button"
-                                                        onClick={() =>
-                                                            setConfirmingReset(
-                                                                false
-                                                            )
+
+                                                        className="app-settings-cancel-button"
+
+                                                        onClick={
+                                                            cancelReset
                                                         }
                                                     >
 
@@ -208,9 +449,11 @@ function AppSettings({
 
                                                     <button
                                                         type="button"
-                                                        className="settings-confirm-reset-button"
+
+                                                        className="app-settings-reset-button"
+
                                                         onClick={
-                                                            onResetApp
+                                                            confirmResetApp
                                                         }
                                                     >
 
@@ -228,23 +471,28 @@ function AppSettings({
                             </section>
 
 
-                            <div className="settings-note">
+                            {/* =========================
+                                STORAGE NOTE
+                            ========================= */}
+
+                            <div className="app-settings-storage-note">
 
                                 <span>
-                                    ℹ️
+                                    🔒
                                 </span>
 
+
                                 <p>
-                                    Resetting only affects data
-                                    saved by My Garden Builder in
-                                    this browser.
+                                    My Garden Builder data is
+                                    currently stored locally
+                                    in this browser.
                                 </p>
 
                             </div>
 
-                        </aside>
+                        </section>
 
-                    </>
+                    </div>
 
                 )
             }

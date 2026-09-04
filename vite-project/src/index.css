@@ -12392,3 +12392,3004 @@ html.dark-mode
     }
 
 }
+/* =========================================================
+   HOME GUIDED BUILDER — STEP 6
+========================================================= */
+
+.home-builder-build-stack {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 14px;
+}
+
+
+/* =========================
+   REVIEW HEADING
+========================= */
+
+.home-build-review-heading {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 10px 11px;
+
+    border-radius: 10px;
+
+    background-color: #edf5eb;
+}
+
+
+.home-build-review-heading > span {
+    font-size: 1.15rem;
+}
+
+
+.home-build-review-heading > div {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+
+.home-build-review-heading strong {
+    color: #39543d;
+
+    font-size: 0.7rem;
+}
+
+
+.home-build-review-heading small {
+    color: #6d7b6c;
+
+    font-size: 0.59rem;
+}
+
+
+/* =========================
+   FINISH NOTE
+========================= */
+
+.home-builder-finish-note {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 9px;
+
+    padding: 11px;
+
+    border: 1px solid #d7e5d3;
+
+    border-radius: 11px;
+
+    background-color: #f1f7ef;
+}
+
+
+.home-builder-finish-note > span {
+    flex-shrink: 0;
+
+    font-size: 1.1rem;
+}
+
+
+.home-builder-finish-note > div {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+
+.home-builder-finish-note strong {
+    color: #36553c;
+
+    font-size: 0.69rem;
+}
+
+
+.home-builder-finish-note p {
+    margin: 0;
+
+    color: #687767;
+
+    font-size: 0.62rem;
+
+    line-height: 1.45;
+}
+
+
+/* =========================
+   SUCCESS
+========================= */
+
+.home-builder-success {
+    margin: 0;
+
+    padding: 10px;
+
+    border-radius: 9px;
+
+    background-color: #e4f3e1;
+
+    color: #315c3d;
+
+    font-size: 0.66rem;
+
+    font-weight: bold;
+}
+
+
+/* =========================
+   SECONDARY BUTTON
+========================= */
+
+.home-builder-secondary-button {
+    width: 100%;
+
+    min-height: 44px;
+
+    padding: 9px 12px;
+
+    border: 1px solid #c9d8c6;
+
+    border-radius: 10px;
+
+    background-color: #ffffff;
+
+    color: #46634c;
+
+    font-size: 0.67rem;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    touch-action: manipulation;
+}
+
+
+/* =========================
+   CLEAN UP NESTED RESULT CARDS
+========================= */
+
+.home-builder-build-stack
+.layout-preview-section {
+    margin: 0;
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+html.dark-mode
+.home-build-review-heading {
+    background-color: #304030;
+}
+
+
+html.dark-mode
+.home-build-review-heading strong {
+    color: #d7e8d4;
+}
+
+
+html.dark-mode
+.home-build-review-heading small {
+    color: #afbcad;
+}
+
+
+html.dark-mode
+.home-builder-finish-note {
+    border-color: #405340;
+
+    background-color: #2d3b2d;
+}
+
+
+html.dark-mode
+.home-builder-finish-note strong {
+    color: #d6e7d3;
+}
+
+
+html.dark-mode
+.home-builder-finish-note p {
+    color: #aebbaa;
+}
+
+
+html.dark-mode
+.home-builder-success {
+    background-color: #315037;
+
+    color: #d5ead2;
+}
+
+
+html.dark-mode
+.home-builder-secondary-button {
+    border-color: #4a584a;
+
+    background-color: #293329;
+
+    color: #d4e1d2;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (
+    max-width: 430px
+) {
+
+    .home-builder-build-stack {
+        gap: 12px;
+    }
+
+
+    .home-builder-finish-note {
+        padding: 10px;
+    }
+
+}
+/* =========================================================
+   MY GARDEN PLAN PAGE
+========================================================= */
+
+
+/* =========================
+   STATUS
+========================= */
+
+.garden-plan-status {
+    display: grid;
+
+    grid-template-columns:
+        42px
+        minmax(0, 1fr)
+        auto;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 14px;
+
+    padding: 13px;
+
+    border-radius: 13px;
+}
+
+
+.garden-plan-status > span {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 40px;
+    height: 40px;
+
+    border-radius: 50%;
+
+    font-weight: bold;
+}
+
+
+.garden-plan-status > div {
+    display: flex;
+
+    min-width: 0;
+
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+
+.garden-plan-status strong {
+    font-size: 0.72rem;
+}
+
+
+.garden-plan-status p {
+    margin: 0;
+
+    font-size: 0.61rem;
+
+    line-height: 1.4;
+}
+
+
+.garden-plan-status.ready {
+    border: 1px solid #cce0c8;
+
+    background-color: #edf6ea;
+
+    color: #34543a;
+}
+
+
+.garden-plan-status.ready > span {
+    background-color: #3f704d;
+
+    color: #ffffff;
+}
+
+
+.garden-plan-status.incomplete {
+    border: 1px solid #e1ddc4;
+
+    background-color: #fbf8e9;
+
+    color: #6b613c;
+}
+
+
+.garden-plan-status.incomplete > span {
+    background-color: #f0ead0;
+}
+
+
+.garden-plan-status-link {
+    min-height: 38px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 7px 10px;
+
+    border: 1px solid currentColor;
+
+    border-radius: 9px;
+
+    color: inherit;
+
+    font-size: 0.62rem;
+
+    font-weight: bold;
+
+    text-decoration: none;
+}
+
+
+/* =========================
+   OVERVIEW
+========================= */
+
+.garden-plan-overview,
+.garden-plan-section {
+    margin-bottom: 14px;
+
+    padding: 14px;
+
+    border: 1px solid #dce6d9;
+
+    border-radius: 14px;
+
+    background-color: #ffffff;
+
+    box-shadow:
+        0 4px 12px
+        rgba(36, 53, 36, 0.06);
+}
+
+
+.garden-plan-overview-title,
+.garden-plan-section-heading {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 9px;
+
+    margin-bottom: 12px;
+}
+
+
+.garden-plan-overview-title > span,
+.garden-plan-section-heading > span {
+    font-size: 1.2rem;
+}
+
+
+.garden-plan-overview-title h2,
+.garden-plan-section-heading h2 {
+    margin: 0;
+
+    color: #2f4533;
+
+    font-size: 0.82rem;
+}
+
+
+.garden-plan-overview-title p,
+.garden-plan-section-heading p {
+    margin: 2px 0 0;
+
+    color: #718070;
+
+    font-size: 0.61rem;
+
+    line-height: 1.4;
+}
+
+
+.garden-plan-overview-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap: 7px;
+}
+
+
+.garden-plan-overview-grid > div {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 2px;
+
+    padding: 9px 5px;
+
+    border-radius: 9px;
+
+    background-color: #f5f8f3;
+
+    text-align: center;
+}
+
+
+.garden-plan-overview-grid > div > span {
+    font-size: 1rem;
+}
+
+
+.garden-plan-overview-grid strong {
+    color: #475747;
+
+    font-size: 0.59rem;
+}
+
+
+.garden-plan-overview-grid small {
+    color: #748173;
+
+    font-size: 0.56rem;
+}
+
+
+/* =========================
+   LOCATION
+========================= */
+
+.garden-plan-location-status {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 9px;
+
+    padding: 9px;
+
+    border-radius: 9px;
+
+    background-color: #edf5eb;
+}
+
+
+.garden-plan-location-status > div {
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+.garden-plan-location-status strong {
+    color: #3b583f;
+
+    font-size: 0.63rem;
+}
+
+
+.garden-plan-location-status small {
+    color: #728071;
+
+    font-size: 0.56rem;
+}
+
+
+/* =========================
+   FEATURES
+========================= */
+
+.garden-plan-chip-list {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 6px;
+}
+
+
+.garden-plan-chip-list span {
+    padding: 6px 8px;
+
+    border-radius: 999px;
+
+    background-color: #edf5eb;
+
+    color: #3f6045;
+
+    font-size: 0.59rem;
+
+    font-weight: bold;
+}
+
+
+/* =========================
+   CROPS
+========================= */
+
+.garden-plan-crop-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 7px;
+}
+
+
+.garden-plan-crop {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 9px;
+
+    border-radius: 9px;
+
+    background-color: #f6f9f4;
+}
+
+
+.garden-plan-crop > span {
+    font-size: 1.1rem;
+}
+
+
+.garden-plan-crop > div {
+    display: flex;
+
+    min-width: 0;
+
+    flex-direction: column;
+}
+
+
+.garden-plan-crop strong {
+    color: #405040;
+
+    font-size: 0.62rem;
+}
+
+
+.garden-plan-crop small {
+    color: #778476;
+
+    font-size: 0.54rem;
+}
+
+
+/* =========================
+   STATS
+========================= */
+
+.garden-plan-stat-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            4,
+            minmax(0, 1fr)
+        );
+
+    gap: 7px;
+}
+
+
+.garden-plan-stat-grid > div {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 2px;
+
+    padding: 10px 4px;
+
+    border-radius: 9px;
+
+    background-color: #f4f7f2;
+
+    text-align: center;
+}
+
+
+.garden-plan-stat-grid strong {
+    color: #35503a;
+
+    font-size: 0.8rem;
+}
+
+
+.garden-plan-stat-grid small {
+    color: #758174;
+
+    font-size: 0.53rem;
+}
+
+
+/* =========================
+   EMPTY / COMPLETE
+========================= */
+
+.garden-plan-empty,
+.garden-plan-incomplete,
+.garden-plan-complete {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 14px;
+
+    padding: 20px 16px;
+
+    border: 1px solid #d9e4d6;
+
+    border-radius: 14px;
+
+    background-color: #ffffff;
+
+    text-align: center;
+}
+
+
+.garden-plan-empty-icon,
+.garden-plan-incomplete > span,
+.garden-plan-complete > span {
+    font-size: 1.6rem;
+}
+
+
+.garden-plan-empty h2 {
+    margin: 0;
+
+    color: #334b37;
+
+    font-size: 0.9rem;
+}
+
+
+.garden-plan-empty p,
+.garden-plan-incomplete p,
+.garden-plan-complete p {
+    max-width: 340px;
+
+    margin: 0;
+
+    color: #6f7c6e;
+
+    font-size: 0.64rem;
+
+    line-height: 1.5;
+}
+
+
+.garden-plan-incomplete strong,
+.garden-plan-complete strong {
+    color: #36513b;
+
+    font-size: 0.72rem;
+}
+
+
+.garden-plan-primary-link,
+.garden-plan-secondary-link {
+    display: flex;
+
+    width: 100%;
+
+    min-height: 46px;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 9px 12px;
+
+    border-radius: 10px;
+
+    font-size: 0.68rem;
+
+    font-weight: bold;
+
+    text-decoration: none;
+
+    touch-action: manipulation;
+}
+
+
+.garden-plan-primary-link {
+    background-color: #3f704d;
+
+    color: #ffffff;
+}
+
+
+.garden-plan-secondary-link {
+    border: 1px solid #bfd1bb;
+
+    background-color: #ffffff;
+
+    color: #3f704d;
+}
+
+
+.garden-plan-muted {
+    margin: 0;
+
+    color: #778476;
+
+    font-size: 0.63rem;
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+html.dark-mode
+.garden-plan-overview,
+html.dark-mode
+.garden-plan-section,
+html.dark-mode
+.garden-plan-empty,
+html.dark-mode
+.garden-plan-incomplete,
+html.dark-mode
+.garden-plan-complete {
+    border-color: #3f4b3f;
+
+    background-color: #242e24;
+}
+
+
+html.dark-mode
+.garden-plan-overview-title h2,
+html.dark-mode
+.garden-plan-section-heading h2,
+html.dark-mode
+.garden-plan-empty h2,
+html.dark-mode
+.garden-plan-incomplete strong,
+html.dark-mode
+.garden-plan-complete strong {
+    color: #e3eee1;
+}
+
+
+html.dark-mode
+.garden-plan-overview-title p,
+html.dark-mode
+.garden-plan-section-heading p,
+html.dark-mode
+.garden-plan-empty p,
+html.dark-mode
+.garden-plan-incomplete p,
+html.dark-mode
+.garden-plan-complete p,
+html.dark-mode
+.garden-plan-muted {
+    color: #aebbaa;
+}
+
+
+html.dark-mode
+.garden-plan-overview-grid > div,
+html.dark-mode
+.garden-plan-crop,
+html.dark-mode
+.garden-plan-stat-grid > div {
+    background-color: #2b352b;
+}
+
+
+html.dark-mode
+.garden-plan-overview-grid strong,
+html.dark-mode
+.garden-plan-crop strong,
+html.dark-mode
+.garden-plan-stat-grid strong {
+    color: #dbe7d9;
+}
+
+
+html.dark-mode
+.garden-plan-overview-grid small,
+html.dark-mode
+.garden-plan-crop small,
+html.dark-mode
+.garden-plan-stat-grid small {
+    color: #a9b5a7;
+}
+
+
+html.dark-mode
+.garden-plan-chip-list span,
+html.dark-mode
+.garden-plan-location-status {
+    background-color: #304030;
+
+    color: #d4e5d1;
+}
+
+
+html.dark-mode
+.garden-plan-secondary-link {
+    border-color: #4b5a4b;
+
+    background-color: #293329;
+
+    color: #d3e3d0;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (
+    max-width: 430px
+) {
+
+    .garden-plan-overview-grid {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+    }
+
+
+    .garden-plan-stat-grid {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+    }
+
+
+    .garden-plan-crop-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .garden-plan-status {
+        grid-template-columns:
+            38px
+            minmax(0, 1fr);
+    }
+
+
+    .garden-plan-status-link {
+        grid-column:
+            1 / -1;
+
+        width: 100%;
+    }
+
+}
+/* =========================================================
+   FIRST-LAUNCH ONBOARDING
+========================================================= */
+
+.garden-onboarding-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 10000;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding:
+        max(18px, env(safe-area-inset-top))
+        max(18px, env(safe-area-inset-right))
+        max(18px, env(safe-area-inset-bottom))
+        max(18px, env(safe-area-inset-left));
+
+    background-color:
+        rgba(20, 31, 21, 0.72);
+
+    backdrop-filter:
+        blur(5px);
+
+    -webkit-backdrop-filter:
+        blur(5px);
+}
+
+
+.garden-onboarding-dialog {
+    width: min(
+        100%,
+        430px
+    );
+
+    overflow: hidden;
+
+    border: 1px solid #dbe7d8;
+
+    border-radius: 20px;
+
+    background-color: #ffffff;
+
+    box-shadow:
+        0 22px 55px
+        rgba(20, 31, 21, 0.28);
+}
+
+
+/* =========================
+   TOP BAR
+========================= */
+
+.garden-onboarding-topbar {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 14px 16px 0;
+}
+
+
+.garden-onboarding-step-count {
+    color: #7b8979;
+
+    font-size: 0.62rem;
+
+    font-weight: bold;
+}
+
+
+.garden-onboarding-skip {
+    min-width: 50px;
+    min-height: 36px;
+
+    border: 0;
+
+    background: none;
+
+    color: #5f735f;
+
+    font-size: 0.64rem;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    touch-action: manipulation;
+}
+
+
+/* =========================
+   CONTENT
+========================= */
+
+.garden-onboarding-content {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    padding: 24px 24px 18px;
+
+    text-align: center;
+}
+
+
+.garden-onboarding-icon {
+    display: flex;
+
+    width: 72px;
+    height: 72px;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 14px;
+
+    border-radius: 22px;
+
+    background-color: #edf5eb;
+
+    font-size: 2.1rem;
+}
+
+
+.garden-onboarding-eyebrow {
+    margin-bottom: 5px;
+
+    color: #62806a;
+
+    font-size: 0.57rem;
+
+    font-weight: 800;
+
+    letter-spacing: 0.08em;
+}
+
+
+.garden-onboarding-content h2 {
+    max-width: 330px;
+
+    margin: 0;
+
+    color: #304735;
+
+    font-size: 1.05rem;
+
+    line-height: 1.25;
+}
+
+
+.garden-onboarding-content p {
+    max-width: 345px;
+
+    margin:
+        10px 0
+        0;
+
+    color: #687768;
+
+    font-size: 0.68rem;
+
+    line-height: 1.6;
+}
+
+
+/* =========================
+   PROGRESS DOTS
+========================= */
+
+.garden-onboarding-progress {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 5px;
+
+    padding:
+        0 20px
+        18px;
+}
+
+
+.garden-onboarding-progress span {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 999px;
+
+    background-color: #dce4da;
+
+    transition:
+        width 180ms ease,
+        background-color 180ms ease;
+}
+
+
+.garden-onboarding-progress span.complete {
+    background-color: #91ad94;
+}
+
+
+.garden-onboarding-progress span.active {
+    width: 22px;
+
+    background-color: #487a55;
+}
+
+
+/* =========================
+   ACTIONS
+========================= */
+
+.garden-onboarding-actions {
+    display: flex;
+
+    gap: 8px;
+
+    padding:
+        0 16px
+        16px;
+}
+
+
+.garden-onboarding-back,
+.garden-onboarding-next {
+    min-height: 48px;
+
+    border-radius: 11px;
+
+    font-size: 0.68rem;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    touch-action: manipulation;
+}
+
+
+.garden-onboarding-back {
+    flex: 0 0 92px;
+
+    border: 1px solid #cad8c7;
+
+    background-color: #ffffff;
+
+    color: #52705a;
+}
+
+
+.garden-onboarding-next {
+    flex: 1;
+
+    border: 1px solid #3f704d;
+
+    background-color: #3f704d;
+
+    color: #ffffff;
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+html.dark-mode
+.garden-onboarding-overlay {
+    background-color:
+        rgba(8, 12, 8, 0.8);
+}
+
+
+html.dark-mode
+.garden-onboarding-dialog {
+    border-color: #405040;
+
+    background-color: #242e24;
+}
+
+
+html.dark-mode
+.garden-onboarding-step-count,
+html.dark-mode
+.garden-onboarding-skip {
+    color: #aebbaa;
+}
+
+
+html.dark-mode
+.garden-onboarding-icon {
+    background-color: #304030;
+}
+
+
+html.dark-mode
+.garden-onboarding-eyebrow {
+    color: #9fbea4;
+}
+
+
+html.dark-mode
+.garden-onboarding-content h2 {
+    color: #e2eee0;
+}
+
+
+html.dark-mode
+.garden-onboarding-content p {
+    color: #afbbad;
+}
+
+
+html.dark-mode
+.garden-onboarding-progress span {
+    background-color: #455145;
+}
+
+
+html.dark-mode
+.garden-onboarding-progress span.complete {
+    background-color: #62806a;
+}
+
+
+html.dark-mode
+.garden-onboarding-progress span.active {
+    background-color: #8db994;
+}
+
+
+html.dark-mode
+.garden-onboarding-back {
+    border-color: #4c5b4c;
+
+    background-color: #293329;
+
+    color: #d4e1d2;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (
+    max-width: 430px
+) {
+
+    .garden-onboarding-overlay {
+        align-items: flex-end;
+
+        padding:
+            12px
+            10px
+            max(
+                10px,
+                env(safe-area-inset-bottom)
+            );
+    }
+
+
+    .garden-onboarding-dialog {
+        width: 100%;
+
+        border-radius:
+            20px
+            20px
+            14px
+            14px;
+    }
+
+
+    .garden-onboarding-content {
+        padding:
+            18px
+            20px
+            16px;
+    }
+
+
+    .garden-onboarding-icon {
+        width: 64px;
+        height: 64px;
+
+        font-size: 1.8rem;
+    }
+
+}
+/* =========================================================
+   SETTINGS — MENU SECTIONS / HOW TO USE
+========================================================= */
+
+.app-settings-section {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    margin-bottom: 14px;
+}
+
+
+.app-settings-section-heading {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+.app-settings-section-heading > span {
+    font-size: 0.95rem;
+}
+
+
+.app-settings-section-heading > div {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 1px;
+}
+
+
+.app-settings-section-heading strong {
+    color: #405441;
+
+    font-size: 0.66rem;
+}
+
+
+.app-settings-section-heading small {
+    color: #7a8679;
+
+    font-size: 0.56rem;
+}
+
+
+/* =========================
+   ACTION ROW
+========================= */
+
+.app-settings-action {
+    display: grid;
+
+    width: 100%;
+
+    min-height: 58px;
+
+    grid-template-columns:
+        34px
+        minmax(0, 1fr)
+        auto;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 10px;
+
+    border: 1px solid #dce6da;
+
+    border-radius: 11px;
+
+    background-color: #ffffff;
+
+    color: #344b39;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    touch-action: manipulation;
+}
+
+
+.app-settings-action-icon {
+    display: flex;
+
+    width: 32px;
+    height: 32px;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background-color: #edf5eb;
+
+    font-size: 0.95rem;
+}
+
+
+.app-settings-action > div {
+    display: flex;
+
+    min-width: 0;
+
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+
+.app-settings-action strong {
+    font-size: 0.65rem;
+}
+
+
+.app-settings-action small {
+    color: #748173;
+
+    font-size: 0.56rem;
+
+    line-height: 1.35;
+}
+
+
+.app-settings-action-arrow {
+    color: #748173;
+
+    font-size: 0.8rem;
+}
+
+
+/* =========================
+   DANGER
+========================= */
+
+.app-settings-action.danger {
+    border-color: #ead8d5;
+
+    color: #8a493f;
+}
+
+
+.app-settings-action.danger
+.app-settings-action-icon {
+    background-color: #f8eeee;
+}
+
+
+/* =========================
+   RESET CONFIRMATION
+========================= */
+
+.app-settings-reset-confirmation {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 9px;
+
+    padding: 11px;
+
+    border: 1px solid #e6c7c2;
+
+    border-radius: 11px;
+
+    background-color: #fff5f3;
+}
+
+
+.app-settings-warning-icon {
+    font-size: 1.15rem;
+}
+
+
+.app-settings-reset-confirmation strong {
+    color: #81453c;
+
+    font-size: 0.7rem;
+}
+
+
+.app-settings-reset-confirmation p {
+    margin: 3px 0 0;
+
+    color: #806862;
+
+    font-size: 0.58rem;
+
+    line-height: 1.45;
+}
+
+
+.app-settings-reset-actions {
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1.3fr;
+
+    gap: 7px;
+}
+
+
+.app-settings-cancel-button,
+.app-settings-reset-button {
+    min-height: 42px;
+
+    border-radius: 9px;
+
+    font-size: 0.6rem;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    touch-action: manipulation;
+}
+
+
+.app-settings-cancel-button {
+    border: 1px solid #d7d7d7;
+
+    background-color: #ffffff;
+
+    color: #596459;
+}
+
+
+.app-settings-reset-button {
+    border: 1px solid #a95347;
+
+    background-color: #a95347;
+
+    color: #ffffff;
+}
+
+
+/* =========================
+   STORAGE NOTE
+========================= */
+
+.app-settings-storage-note {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 7px;
+
+    padding: 9px;
+
+    border-radius: 9px;
+
+    background-color: #f4f7f2;
+}
+
+
+.app-settings-storage-note p {
+    margin: 0;
+
+    color: #788477;
+
+    font-size: 0.56rem;
+
+    line-height: 1.4;
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+html.dark-mode
+.app-settings-section-heading strong {
+    color: #d9e6d7;
+}
+
+
+html.dark-mode
+.app-settings-section-heading small {
+    color: #a9b5a7;
+}
+
+
+html.dark-mode
+.app-settings-action {
+    border-color: #414e41;
+
+    background-color: #293329;
+
+    color: #dbe7d9;
+}
+
+
+html.dark-mode
+.app-settings-action-icon {
+    background-color: #344334;
+}
+
+
+html.dark-mode
+.app-settings-action small,
+html.dark-mode
+.app-settings-action-arrow {
+    color: #aab6a8;
+}
+
+
+html.dark-mode
+.app-settings-action.danger {
+    border-color: #66463f;
+
+    color: #e2b0a6;
+}
+
+
+html.dark-mode
+.app-settings-action.danger
+.app-settings-action-icon {
+    background-color: #493632;
+}
+
+
+html.dark-mode
+.app-settings-reset-confirmation {
+    border-color: #704a42;
+
+    background-color: #402f2b;
+}
+
+
+html.dark-mode
+.app-settings-reset-confirmation strong {
+    color: #efbeb4;
+}
+
+
+html.dark-mode
+.app-settings-reset-confirmation p {
+    color: #c9aaa4;
+}
+
+
+html.dark-mode
+.app-settings-cancel-button {
+    border-color: #4d5b4d;
+
+    background-color: #293329;
+
+    color: #d8e4d6;
+}
+
+
+html.dark-mode
+.app-settings-storage-note {
+    background-color: #2c372c;
+}
+
+
+html.dark-mode
+.app-settings-storage-note p {
+    color: #a9b5a7;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (
+    max-width: 430px
+) {
+
+    .app-settings-action {
+        min-height: 62px;
+    }
+
+
+    .app-settings-reset-actions {
+        grid-template-columns: 1fr;
+    }
+
+}
+/* =========================================================
+   SETTINGS FREEZE FIX
+========================================================= */
+
+.app-settings-button {
+    position: fixed;
+
+    top: max(
+        14px,
+        env(safe-area-inset-top)
+    );
+
+    right: max(
+        14px,
+        env(safe-area-inset-right)
+    );
+
+    z-index: 9000;
+
+    display: flex;
+
+    width: 44px;
+    height: 44px;
+
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #d7e3d4;
+
+    border-radius: 50%;
+
+    background-color: #ffffff;
+
+    box-shadow:
+        0 4px 14px
+        rgba(35, 53, 36, 0.16);
+
+    font-size: 1rem;
+
+    cursor: pointer;
+
+    touch-action: manipulation;
+}
+
+
+.app-settings-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9500;
+
+    display: flex;
+
+    align-items: stretch;
+    justify-content: flex-end;
+
+    background-color:
+        rgba(20, 30, 20, 0.48);
+}
+
+
+.app-settings-panel {
+    position: relative;
+
+    z-index: 9501;
+
+    display: flex;
+
+    width: min(
+        92vw,
+        380px
+    );
+
+    height: 100%;
+
+    max-height: 100dvh;
+
+    flex-direction: column;
+
+    gap: 16px;
+
+    overflow-y: auto;
+
+    padding:
+        max(
+            18px,
+            env(safe-area-inset-top)
+        )
+        16px
+        max(
+            20px,
+            env(safe-area-inset-bottom)
+        );
+
+    border-left: 1px solid #dce6d9;
+
+    background-color: #ffffff;
+
+    box-shadow:
+        -12px 0 30px
+        rgba(20, 30, 20, 0.2);
+
+    -webkit-overflow-scrolling: touch;
+}
+
+
+.app-settings-header {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+}
+
+
+.app-settings-header-info {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+}
+
+
+.app-settings-header-icon {
+    font-size: 1.15rem;
+}
+
+
+.app-settings-header h2 {
+    margin: 0;
+
+    color: #354d39;
+
+    font-size: 0.9rem;
+}
+
+
+.app-settings-header p {
+    margin: 2px 0 0;
+
+    color: #778477;
+
+    font-size: 0.59rem;
+}
+
+
+.app-settings-close {
+    display: flex;
+
+    width: 40px;
+    height: 40px;
+
+    flex-shrink: 0;
+
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #dbe4d8;
+
+    border-radius: 50%;
+
+    background-color: #ffffff;
+
+    color: #596859;
+
+    cursor: pointer;
+
+    touch-action: manipulation;
+}
+
+
+html.dark-mode
+.app-settings-button {
+    border-color: #455245;
+
+    background-color: #293329;
+
+    color: #e1ece0;
+}
+
+
+html.dark-mode
+.app-settings-overlay {
+    background-color:
+        rgba(7, 11, 7, 0.68);
+}
+
+
+html.dark-mode
+.app-settings-panel {
+    border-left-color: #414e41;
+
+    background-color: #242e24;
+}
+
+
+html.dark-mode
+.app-settings-header h2 {
+    color: #e2eee0;
+}
+
+
+html.dark-mode
+.app-settings-header p {
+    color: #aab6a8;
+}
+
+
+html.dark-mode
+.app-settings-close {
+    border-color: #455245;
+
+    background-color: #293329;
+
+    color: #dbe7d9;
+}
+
+
+@media (
+    max-width: 600px
+) {
+
+    .app-settings-overlay {
+        align-items: flex-end;
+    }
+
+
+    .app-settings-panel {
+        width: 100%;
+
+        height: auto;
+
+        max-height: 88dvh;
+
+        border-top: 1px solid #dce6d9;
+
+        border-left: 0;
+
+        border-radius:
+            18px
+            18px
+            0
+            0;
+    }
+
+
+    html.dark-mode
+    .app-settings-panel {
+        border-top-color: #414e41;
+    }
+
+}
+/* =========================================================
+   HOME — AUTOMATIC LOCAL GROWING DATA
+========================================================= */
+
+.home-local-growing-card {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    padding: 12px;
+
+    border: 1px solid #d8e5d5;
+
+    border-radius: 12px;
+
+    background-color: #f7faf5;
+}
+
+
+.home-local-growing-heading {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 9px;
+}
+
+
+.home-local-growing-heading > span {
+    font-size: 1.2rem;
+}
+
+
+.home-local-growing-heading > div {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+
+.home-local-growing-heading strong {
+    color: #37523d;
+
+    font-size: 0.7rem;
+}
+
+
+.home-local-growing-heading small {
+    color: #718070;
+
+    font-size: 0.59rem;
+
+    line-height: 1.45;
+}
+
+
+/* =========================
+   LOCATION BUTTON
+========================= */
+
+.home-local-growing-button {
+    width: 100%;
+
+    min-height: 46px;
+
+    padding: 9px 12px;
+
+    border: 1px solid #4d7a57;
+
+    border-radius: 10px;
+
+    background-color: #edf5eb;
+
+    color: #365c40;
+
+    font-size: 0.66rem;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    touch-action: manipulation;
+}
+
+
+.home-local-growing-button:disabled {
+    cursor: wait;
+
+    opacity: 0.7;
+}
+
+
+/* =========================
+   LOCATION SAVED
+========================= */
+
+.home-local-location-saved {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 8px 9px;
+
+    border-radius: 9px;
+
+    background-color: #e9f4e6;
+}
+
+
+.home-local-location-saved > span {
+    display: flex;
+
+    width: 24px;
+    height: 24px;
+
+    flex-shrink: 0;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background-color: #467453;
+
+    color: #ffffff;
+
+    font-size: 0.62rem;
+
+    font-weight: bold;
+}
+
+
+.home-local-location-saved > div {
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+.home-local-location-saved strong {
+    color: #36553d;
+
+    font-size: 0.62rem;
+}
+
+
+.home-local-location-saved small {
+    color: #718070;
+
+    font-size: 0.55rem;
+}
+
+
+/* =========================
+   RESULTS
+========================= */
+
+.home-local-growing-results {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap: 6px;
+}
+
+
+.home-local-growing-results > div {
+    display: flex;
+
+    min-width: 0;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 2px;
+
+    padding: 8px 4px;
+
+    border-radius: 9px;
+
+    background-color: #ffffff;
+
+    text-align: center;
+}
+
+
+.home-local-growing-results > div > span {
+    font-size: 0.95rem;
+}
+
+
+.home-local-growing-results strong {
+    color: #3c563f;
+
+    font-size: 0.59rem;
+}
+
+
+.home-local-growing-results small {
+    color: #758174;
+
+    font-size: 0.5rem;
+}
+
+
+/* =========================
+   MESSAGES
+========================= */
+
+.home-local-growing-message {
+    margin: 0;
+
+    padding: 8px;
+
+    border-radius: 8px;
+
+    font-size: 0.59rem;
+
+    line-height: 1.45;
+}
+
+
+.home-local-growing-message.success {
+    background-color: #e7f4e4;
+
+    color: #356040;
+}
+
+
+.home-local-growing-message.error {
+    background-color: #fff0ed;
+
+    color: #8b4d44;
+}
+
+
+.home-local-growing-disclaimer {
+    margin: 0;
+
+    color: #7a8678;
+
+    font-size: 0.52rem;
+
+    line-height: 1.45;
+}
+
+
+/* =========================
+   FROST DATES
+========================= */
+
+.home-frost-date-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap: 8px;
+}
+
+
+.home-frost-date-grid label {
+    display: flex;
+
+    min-width: 0;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+    color: #526052;
+
+    font-size: 0.6rem;
+
+    font-weight: bold;
+}
+
+
+.home-frost-date-grid input {
+    width: 100%;
+
+    min-height: 44px;
+
+    padding: 8px;
+
+    border: 1px solid #cad7c7;
+
+    border-radius: 9px;
+
+    background-color: #ffffff;
+
+    color: #334733;
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+html.dark-mode
+.home-local-growing-card {
+    border-color: #405040;
+
+    background-color: #293329;
+}
+
+
+html.dark-mode
+.home-local-growing-heading strong {
+    color: #dbe8d9;
+}
+
+
+html.dark-mode
+.home-local-growing-heading small,
+html.dark-mode
+.home-local-growing-disclaimer {
+    color: #aab6a8;
+}
+
+
+html.dark-mode
+.home-local-growing-button {
+    border-color: #709676;
+
+    background-color: #304030;
+
+    color: #d6e7d3;
+}
+
+
+html.dark-mode
+.home-local-location-saved {
+    background-color: #304530;
+}
+
+
+html.dark-mode
+.home-local-location-saved strong {
+    color: #d6e6d3;
+}
+
+
+html.dark-mode
+.home-local-location-saved small {
+    color: #aab7a8;
+}
+
+
+html.dark-mode
+.home-local-growing-results > div {
+    background-color: #242e24;
+}
+
+
+html.dark-mode
+.home-local-growing-results strong {
+    color: #dbe7d9;
+}
+
+
+html.dark-mode
+.home-local-growing-results small {
+    color: #a8b5a6;
+}
+
+
+html.dark-mode
+.home-local-growing-message.success {
+    background-color: #304830;
+
+    color: #d2e8ce;
+}
+
+
+html.dark-mode
+.home-local-growing-message.error {
+    background-color: #49342f;
+
+    color: #efb9af;
+}
+
+
+html.dark-mode
+.home-frost-date-grid label {
+    color: #cbd7c9;
+}
+
+
+html.dark-mode
+.home-frost-date-grid input {
+    border-color: #475547;
+
+    background-color: #293329;
+
+    color: #edf5eb;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (
+    max-width: 430px
+) {
+
+    .home-local-growing-results {
+        grid-template-columns:
+            repeat(
+                3,
+                1fr
+            );
+    }
+
+
+    .home-frost-date-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+/* =========================================================
+   LOCAL SEASONAL PLANTING GUIDE
+========================================================= */
+
+.seasonal-planting-guide {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 14px;
+
+    padding: 14px;
+
+    border: 1px solid #d8e5d5;
+
+    border-radius: 14px;
+
+    background-color: #ffffff;
+}
+
+
+.seasonal-guide-heading,
+.seasonal-guide-subheading {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 9px;
+}
+
+
+.seasonal-guide-heading > span {
+    font-size: 1.2rem;
+}
+
+
+.seasonal-guide-heading h2 {
+    margin: 0;
+
+    color: #304936;
+
+    font-size: 0.82rem;
+}
+
+
+.seasonal-guide-heading p {
+    margin: 2px 0 0;
+
+    color: #718070;
+
+    font-size: 0.6rem;
+
+    line-height: 1.45;
+}
+
+
+/* =========================
+   FROST SUMMARY
+========================= */
+
+.seasonal-frost-summary {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap: 7px;
+}
+
+
+.seasonal-frost-summary > div {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 2px;
+
+    padding: 10px;
+
+    border-radius: 10px;
+
+    background-color: #f3f7f1;
+
+    text-align: center;
+}
+
+
+.seasonal-frost-summary strong {
+    color: #435744;
+
+    font-size: 0.59rem;
+}
+
+
+.seasonal-frost-summary small {
+    color: #667765;
+
+    font-size: 0.61rem;
+}
+
+
+/* =========================
+   SECTIONS
+========================= */
+
+.seasonal-guide-section {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+
+.seasonal-guide-subheading strong {
+    color: #3c563f;
+
+    font-size: 0.68rem;
+}
+
+
+.seasonal-guide-subheading small {
+    display: block;
+
+    margin-top: 1px;
+
+    color: #788576;
+
+    font-size: 0.55rem;
+}
+
+
+.seasonal-guide-list {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap: 7px;
+}
+
+
+/* =========================
+   CROP CARD
+========================= */
+
+.seasonal-crop-card {
+    display: flex;
+
+    min-width: 0;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    padding: 10px;
+
+    border: 1px solid #e0e9dd;
+
+    border-radius: 10px;
+
+    background-color: #f8faf7;
+}
+
+
+.seasonal-crop-card.fall {
+    background-color: #fbf7ee;
+}
+
+
+.seasonal-crop-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+}
+
+
+.seasonal-crop-header > span {
+    font-size: 1.1rem;
+}
+
+
+.seasonal-crop-header > div {
+    display: flex;
+
+    min-width: 0;
+
+    flex-direction: column;
+}
+
+
+.seasonal-crop-header strong {
+    color: #3d513f;
+
+    font-size: 0.63rem;
+}
+
+
+.seasonal-crop-header small {
+    color: #778476;
+
+    font-size: 0.52rem;
+}
+
+
+.seasonal-crop-dates {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+
+.seasonal-crop-dates > div,
+.seasonal-fall-date {
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 6px;
+
+    border-radius: 7px;
+
+    background-color: #ffffff;
+}
+
+
+.seasonal-crop-dates small,
+.seasonal-fall-date small {
+    display: block;
+
+    color: #778376;
+
+    font-size: 0.49rem;
+}
+
+
+.seasonal-crop-dates strong,
+.seasonal-fall-date strong {
+    color: #38523d;
+
+    font-size: 0.59rem;
+}
+
+
+.seasonal-crop-card p {
+    margin: 0;
+
+    color: #778376;
+
+    font-size: 0.52rem;
+
+    line-height: 1.4;
+}
+
+
+/* =========================
+   NOTE
+========================= */
+
+.seasonal-guide-note {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 7px;
+
+    padding: 9px;
+
+    border-radius: 9px;
+
+    background-color: #f4f7f2;
+}
+
+
+.seasonal-guide-note p {
+    margin: 0;
+
+    color: #788477;
+
+    font-size: 0.54rem;
+
+    line-height: 1.45;
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+html.dark-mode
+.seasonal-planting-guide {
+    border-color: #414e41;
+
+    background-color: #242e24;
+}
+
+
+html.dark-mode
+.seasonal-guide-heading h2,
+html.dark-mode
+.seasonal-guide-subheading strong,
+html.dark-mode
+.seasonal-crop-header strong,
+html.dark-mode
+.seasonal-crop-dates strong,
+html.dark-mode
+.seasonal-fall-date strong {
+    color: #dce8da;
+}
+
+
+html.dark-mode
+.seasonal-frost-summary > div,
+html.dark-mode
+.seasonal-guide-note {
+    background-color: #2d382d;
+}
+
+
+html.dark-mode
+.seasonal-crop-card {
+    border-color: #404d40;
+
+    background-color: #293329;
+}
+
+
+html.dark-mode
+.seasonal-crop-card.fall {
+    background-color: #383328;
+}
+
+
+html.dark-mode
+.seasonal-crop-dates > div,
+html.dark-mode
+.seasonal-fall-date {
+    background-color: #242e24;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (
+    max-width: 430px
+) {
+
+    .seasonal-guide-list {
+        grid-template-columns: 1fr;
+    }
+
+}
+/* =========================================================
+   CALENDAR — AUTOMATIC PLANTING PLAN
+========================================================= */
+
+.calendar-planting-plan-card {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin-bottom: 14px;
+
+    padding: 13px;
+
+    border: 1px solid #d8e5d5;
+
+    border-radius: 14px;
+
+    background-color: #f7faf5;
+}
+
+
+.calendar-planting-plan-heading {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 9px;
+}
+
+
+.calendar-planting-plan-heading > span {
+    font-size: 1.15rem;
+}
+
+
+.calendar-planting-plan-heading h2 {
+    margin: 0;
+
+    color: #36513c;
+
+    font-size: 0.76rem;
+}
+
+
+.calendar-planting-plan-heading p {
+    margin: 2px 0 0;
+
+    color: #738172;
+
+    font-size: 0.57rem;
+
+    line-height: 1.4;
+}
+
+
+.calendar-planting-plan-list {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap: 7px;
+}
+
+
+.calendar-planting-plan-item {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    min-width: 0;
+
+    padding: 8px;
+
+    border-radius: 9px;
+
+    background-color: #ffffff;
+}
+
+
+.calendar-planting-plan-item > span {
+    font-size: 0.95rem;
+}
+
+
+.calendar-planting-plan-item > div {
+    display: flex;
+
+    min-width: 0;
+
+    flex-direction: column;
+}
+
+
+.calendar-planting-plan-item strong {
+    color: #3c543f;
+
+    font-size: 0.59rem;
+}
+
+
+.calendar-planting-plan-item small {
+    color: #788576;
+
+    font-size: 0.52rem;
+}
+
+
+/* =========================
+   AUTOMATIC BADGE
+========================= */
+
+.calendar-auto-badge {
+    display: inline-flex;
+
+    min-width: 38px;
+
+    min-height: 28px;
+
+    flex-shrink: 0;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 4px 7px;
+
+    border-radius: 999px;
+
+    background-color: #edf5eb;
+
+    color: #4e7055;
+
+    font-size: 0.5rem;
+
+    font-weight: bold;
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+html.dark-mode
+.calendar-planting-plan-card {
+    border-color: #414e41;
+
+    background-color: #293329;
+}
+
+
+html.dark-mode
+.calendar-planting-plan-heading h2 {
+    color: #dce8da;
+}
+
+
+html.dark-mode
+.calendar-planting-plan-heading p {
+    color: #aab6a8;
+}
+
+
+html.dark-mode
+.calendar-planting-plan-item {
+    background-color: #242e24;
+}
+
+
+html.dark-mode
+.calendar-planting-plan-item strong {
+    color: #dce8da;
+}
+
+
+html.dark-mode
+.calendar-planting-plan-item small {
+    color: #a9b5a7;
+}
+
+
+html.dark-mode
+.calendar-auto-badge {
+    background-color: #344534;
+
+    color: #cae0c6;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (
+    max-width: 430px
+) {
+
+    .calendar-planting-plan-list {
+        grid-template-columns: 1fr;
+    }
+
+}

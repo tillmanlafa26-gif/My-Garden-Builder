@@ -51,6 +51,38 @@ function Calendar({
     }
 
 
+    function formatCalendarDate(
+        dateString
+    ) {
+
+        if (
+            !dateString
+        ) {
+
+            return "";
+
+        }
+
+
+        return new Date(
+            `${dateString}T12:00:00`
+        ).toLocaleDateString(
+            undefined,
+            {
+                month:
+                    "short",
+
+                day:
+                    "numeric",
+
+                year:
+                    "numeric"
+            }
+        );
+
+    }
+
+
     const today =
         getLocalDateString(
             new Date()
@@ -141,8 +173,11 @@ function Calendar({
         currentMonth.toLocaleDateString(
             undefined,
             {
-                month: "long",
-                year: "numeric"
+                month:
+                    "long",
+
+                year:
+                    "numeric"
             }
         );
 
@@ -181,8 +216,11 @@ function Calendar({
                 ) {
 
                     days.push({
-                        type: "blank",
-                        key: `blank-${blank}`
+                        type:
+                            "blank",
+
+                        key:
+                            `blank-${blank}`
                     });
 
                 }
@@ -211,10 +249,8 @@ function Calendar({
                     const events =
                         calendarEvents.filter(
                             (calendarEvent) =>
-
                                 calendarEvent.date ===
                                 dateString
-
                         );
 
 
@@ -265,10 +301,8 @@ function Calendar({
             const plant =
                 gardenPlants.find(
                     (item) =>
-
                         item.plantKey ===
                         calendarEvent.plantKey
-
                 );
 
 
@@ -289,14 +323,12 @@ function Calendar({
 
             return gardenPlants.find(
                 (item) =>
-
                     String(
                         item.id
                     ) ===
                     String(
                         calendarEvent.plantId
                     )
-
             );
 
         }
@@ -386,7 +418,8 @@ function Calendar({
 
 
         if (
-            type === "watering"
+            type ===
+            "watering"
         ) {
 
             return `Water ${plant.name}`;
@@ -395,7 +428,8 @@ function Calendar({
 
 
         if (
-            type === "planting"
+            type ===
+            "planting"
         ) {
 
             return `Plant ${plant.name}`;
@@ -404,7 +438,8 @@ function Calendar({
 
 
         if (
-            type === "harvest"
+            type ===
+            "harvest"
         ) {
 
             return `Harvest ${plant.name}`;
@@ -478,6 +513,7 @@ function Calendar({
                 ""
             );
 
+
             return;
 
         }
@@ -522,6 +558,7 @@ function Calendar({
                 "Please choose a date."
             );
 
+
             return;
 
         }
@@ -534,6 +571,7 @@ function Calendar({
             setMessage(
                 "Please enter an event title."
             );
+
 
             return;
 
@@ -571,7 +609,10 @@ function Calendar({
                 null,
 
             automatic:
-                false
+                false,
+
+            source:
+                "manual"
 
         };
 
@@ -618,11 +659,12 @@ function Calendar({
     ========================= */
 
     function getEventIcon(
-        type
+        calendarEvent
     ) {
 
         if (
-            type === "watering"
+            calendarEvent.type ===
+            "watering"
         ) {
 
             return "💧";
@@ -631,16 +673,8 @@ function Calendar({
 
 
         if (
-            type === "planting"
-        ) {
-
-            return "🌱";
-
-        }
-
-
-        if (
-            type === "harvest"
+            calendarEvent.type ===
+            "harvest"
         ) {
 
             return "🧺";
@@ -648,7 +682,99 @@ function Calendar({
         }
 
 
+        if (
+            calendarEvent.type ===
+            "planting"
+        ) {
+
+            if (
+                calendarEvent.plantingAction ===
+                "start-indoors"
+            ) {
+
+                return "🏠";
+
+            }
+
+
+            if (
+                calendarEvent.plantingAction ===
+                "transplant-outside"
+            ) {
+
+                return "🪴";
+
+            }
+
+
+            if (
+                calendarEvent.plantingAction ===
+                "fall-planting"
+            ) {
+
+                return "🍂";
+
+            }
+
+
+            return "🌱";
+
+        }
+
+
         return "📌";
+
+    }
+
+
+    /* =========================
+       SOURCE LABEL
+    ========================= */
+
+    function getAutomaticLabel(
+        calendarEvent
+    ) {
+
+        if (
+            calendarEvent.source ===
+            "seasonal-planting-planner"
+        ) {
+
+            return "Planting Plan";
+
+        }
+
+
+        if (
+            calendarEvent.source ===
+            "harvest-scheduler"
+        ) {
+
+            return "Harvest Plan";
+
+        }
+
+
+        if (
+            calendarEvent.source ===
+            "watering-scheduler"
+        ) {
+
+            return "Watering Plan";
+
+        }
+
+
+        if (
+            calendarEvent.automatic
+        ) {
+
+            return "Automatic";
+
+        }
+
+
+        return "";
 
     }
 
@@ -661,25 +787,45 @@ function Calendar({
         [...calendarEvents]
             .filter(
                 (calendarEvent) =>
-
                     calendarEvent.date >=
                     today
-
             )
             .sort(
                 (
                     eventA,
                     eventB
                 ) =>
-
                     eventA.date.localeCompare(
                         eventB.date
                     )
-
             )
             .slice(
                 0,
-                8
+                12
+            );
+
+
+    const upcomingPlantingEvents =
+        [...calendarEvents]
+            .filter(
+                (calendarEvent) =>
+                    calendarEvent.date >=
+                    today &&
+                    calendarEvent.source ===
+                    "seasonal-planting-planner"
+            )
+            .sort(
+                (
+                    eventA,
+                    eventB
+                ) =>
+                    eventA.date.localeCompare(
+                        eventB.date
+                    )
+            )
+            .slice(
+                0,
+                4
             );
 
 
@@ -687,19 +833,116 @@ function Calendar({
 
         <div className="app-container">
 
+
             <header className="app-header">
 
                 <h1>
                     📅 Garden Calendar
                 </h1>
 
+
                 <p>
-                    Plan planting, watering,
-                    maintenance, and harvests.
+                    Planting, watering,
+                    maintenance, and harvests
+                    in one place.
                 </p>
 
             </header>
 
+
+            {/* =========================
+                AUTOMATIC PLANTING PLAN
+            ========================= */}
+
+            {
+                upcomingPlantingEvents.length > 0 && (
+
+                    <section className="calendar-planting-plan-card">
+
+                        <div className="calendar-planting-plan-heading">
+
+                            <span>
+                                🌱
+                            </span>
+
+
+                            <div>
+
+                                <h2>
+                                    Local Planting Plan
+                                </h2>
+
+
+                                <p>
+                                    Automatically calculated
+                                    from your crops and local
+                                    frost dates.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div className="calendar-planting-plan-list">
+
+                            {
+                                upcomingPlantingEvents.map(
+                                    (calendarEvent) => (
+
+                                        <div
+                                            key={
+                                                calendarEvent.id
+                                            }
+
+                                            className="calendar-planting-plan-item"
+                                        >
+
+                                            <span>
+                                                {
+                                                    getEventIcon(
+                                                        calendarEvent
+                                                    )
+                                                }
+                                            </span>
+
+
+                                            <div>
+
+                                                <strong>
+                                                    {
+                                                        calendarEvent.title
+                                                    }
+                                                </strong>
+
+
+                                                <small>
+                                                    {
+                                                        formatCalendarDate(
+                                                            calendarEvent.date
+                                                        )
+                                                    }
+                                                </small>
+
+                                            </div>
+
+                                        </div>
+
+                                    )
+                                )
+                            }
+
+                        </div>
+
+                    </section>
+
+                )
+            }
+
+
+            {/* =========================
+                ADD EVENT
+            ========================= */}
 
             <section className="calendar-form-card">
 
@@ -710,7 +953,10 @@ function Calendar({
 
                 <form
                     className="calendar-form"
-                    onSubmit={handleSubmit}
+
+                    onSubmit={
+                        handleSubmit
+                    }
                 >
 
                     <div className="calendar-form-field">
@@ -719,10 +965,16 @@ function Calendar({
                             Date
                         </label>
 
+
                         <input
                             id="calendar-date"
+
                             type="date"
-                            value={eventDate}
+
+                            value={
+                                eventDate
+                            }
+
                             onChange={
                                 (event) =>
                                     setEventDate(
@@ -740,10 +992,17 @@ function Calendar({
                             Event Type
                         </label>
 
+
                         <select
                             id="calendar-type"
-                            value={eventType}
-                            onChange={handleTypeChange}
+
+                            value={
+                                eventType
+                            }
+
+                            onChange={
+                                handleTypeChange
+                            }
                         >
 
                             <option value="watering">
@@ -773,10 +1032,17 @@ function Calendar({
                             Garden Plant
                         </label>
 
+
                         <select
                             id="calendar-plant"
-                            value={selectedPlantKey}
-                            onChange={handlePlantChange}
+
+                            value={
+                                selectedPlantKey
+                            }
+
+                            onChange={
+                                handlePlantChange
+                            }
                         >
 
                             <option value="">
@@ -789,10 +1055,19 @@ function Calendar({
                                     (plant) => (
 
                                         <option
-                                            key={plant.plantKey}
-                                            value={plant.plantKey}
+                                            key={
+                                                plant.plantKey
+                                            }
+
+                                            value={
+                                                plant.plantKey
+                                            }
                                         >
-                                            {plant.name}
+
+                                            {
+                                                plant.name
+                                            }
+
                                         </option>
 
                                     )
@@ -810,11 +1085,18 @@ function Calendar({
                             Event
                         </label>
 
+
                         <input
                             id="calendar-title"
+
                             type="text"
+
                             placeholder="Example: Water tomatoes"
-                            value={eventTitle}
+
+                            value={
+                                eventTitle
+                            }
+
                             onChange={
                                 (event) =>
                                     setEventTitle(
@@ -830,7 +1112,9 @@ function Calendar({
                         message && (
 
                             <p className="calendar-message">
-                                {message}
+                                {
+                                    message
+                                }
                             </p>
 
                         )
@@ -839,9 +1123,12 @@ function Calendar({
 
                     <button
                         type="submit"
+
                         className="calendar-add-button"
                     >
+
                         + Add to Calendar
+
                     </button>
 
                 </form>
@@ -849,31 +1136,50 @@ function Calendar({
             </section>
 
 
+            {/* =========================
+                MONTH CALENDAR
+            ========================= */}
+
             <section className="calendar-card">
 
                 <div className="calendar-header">
 
                     <button
                         type="button"
-                        onClick={previousMonth}
+
+                        onClick={
+                            previousMonth
+                        }
+
                         aria-label="Previous month"
                     >
+
                         ‹
+
                     </button>
 
 
                     <div>
 
                         <h2>
-                            {monthName}
+                            {
+                                monthName
+                            }
                         </h2>
+
 
                         <button
                             type="button"
+
                             className="calendar-today-button"
-                            onClick={goToToday}
+
+                            onClick={
+                                goToToday
+                            }
                         >
+
                             Today
+
                         </button>
 
                     </div>
@@ -881,10 +1187,16 @@ function Calendar({
 
                     <button
                         type="button"
-                        onClick={nextMonth}
+
+                        onClick={
+                            nextMonth
+                        }
+
                         aria-label="Next month"
                     >
+
                         ›
+
                     </button>
 
                 </div>
@@ -917,7 +1229,10 @@ function Calendar({
                                     return (
 
                                         <div
-                                            key={calendarDay.key}
+                                            key={
+                                                calendarDay.key
+                                            }
+
                                             className="calendar-day blank"
                                         />
 
@@ -934,7 +1249,10 @@ function Calendar({
                                 return (
 
                                     <div
-                                        key={calendarDay.key}
+                                        key={
+                                            calendarDay.key
+                                        }
+
                                         className={
                                             isToday
                                                 ? "calendar-day today"
@@ -943,7 +1261,9 @@ function Calendar({
                                     >
 
                                         <span className="calendar-day-number">
-                                            {calendarDay.day}
+                                            {
+                                                calendarDay.day
+                                            }
                                         </span>
 
 
@@ -959,19 +1279,25 @@ function Calendar({
                                                         (calendarEvent) => (
 
                                                             <span
-                                                                key={calendarEvent.id}
+                                                                key={
+                                                                    calendarEvent.id
+                                                                }
+
                                                                 className={
                                                                     `calendar-event-dot ${calendarEvent.type}`
                                                                 }
+
                                                                 title={
                                                                     calendarEvent.title
                                                                 }
                                                             >
+
                                                                 {
                                                                     getEventIcon(
-                                                                        calendarEvent.type
+                                                                        calendarEvent
                                                                     )
                                                                 }
+
                                                             </span>
 
                                                         )
@@ -984,11 +1310,14 @@ function Calendar({
                                                 2 && (
 
                                                     <small>
+
                                                         +
+
                                                         {
                                                             calendarDay.events.length -
                                                             2
                                                         }
+
                                                     </small>
 
                                                 )
@@ -1009,6 +1338,10 @@ function Calendar({
             </section>
 
 
+            {/* =========================
+                UPCOMING
+            ========================= */}
+
             <section className="upcoming-events">
 
                 <div className="upcoming-events-header">
@@ -1017,15 +1350,19 @@ function Calendar({
                         Upcoming
                     </h2>
 
+
                     <span>
-                        {upcomingEvents.length} events
+                        {
+                            upcomingEvents.length
+                        } events
                     </span>
 
                 </div>
 
 
                 {
-                    upcomingEvents.length === 0
+                    upcomingEvents.length ===
+                    0
                         ? (
 
                             <div className="calendar-empty">
@@ -1033,6 +1370,7 @@ function Calendar({
                                 <span>
                                     📅
                                 </span>
+
 
                                 <p>
                                     No upcoming garden
@@ -1058,31 +1396,63 @@ function Calendar({
                                         plant?.plantKey;
 
 
+                                    const automaticLabel =
+                                        getAutomaticLabel(
+                                            calendarEvent
+                                        );
+
+
+                                    const isAutomaticWatering =
+                                        calendarEvent.source ===
+                                        "watering-scheduler" &&
+                                        wateringPlantKey;
+
+
+                                    const isAutomaticPlanningEvent =
+                                        calendarEvent.source ===
+                                            "seasonal-planting-planner" ||
+                                        calendarEvent.source ===
+                                            "harvest-scheduler";
+
+
                                     return (
 
                                         <article
                                             className="upcoming-event-card"
-                                            key={calendarEvent.id}
+
+                                            key={
+                                                calendarEvent.id
+                                            }
                                         >
 
                                             <span className="upcoming-event-icon">
+
                                                 {
                                                     getEventIcon(
-                                                        calendarEvent.type
+                                                        calendarEvent
                                                     )
                                                 }
+
                                             </span>
 
 
                                             <div className="upcoming-event-info">
 
                                                 <strong>
-                                                    {calendarEvent.title}
+                                                    {
+                                                        calendarEvent.title
+                                                    }
                                                 </strong>
+
 
                                                 <small>
 
-                                                    {calendarEvent.date}
+                                                    {
+                                                        formatCalendarDate(
+                                                            calendarEvent.date
+                                                        )
+                                                    }
+
 
                                                     {
                                                         plant
@@ -1090,9 +1460,10 @@ function Calendar({
                                                             : ""
                                                     }
 
+
                                                     {
-                                                        calendarEvent.automatic
-                                                            ? " • Automatic"
+                                                        automaticLabel
+                                                            ? ` • ${automaticLabel}`
                                                             : ""
                                                     }
 
@@ -1102,37 +1473,61 @@ function Calendar({
 
 
                                             {
-                                                calendarEvent.automatic &&
-                                                wateringPlantKey
+                                                isAutomaticWatering
                                                     ? (
 
                                                         <button
                                                             type="button"
+
                                                             className="calendar-watered-button"
+
+                                                            aria-label={`Mark ${calendarEvent.title} complete`}
+
                                                             onClick={() =>
                                                                 onMarkPlantWatered(
                                                                     wateringPlantKey
                                                                 )
                                                             }
                                                         >
+
                                                             ✓
+
                                                         </button>
 
                                                     )
-                                                    : (
+                                                    : isAutomaticPlanningEvent
+                                                        ? (
 
-                                                        <button
-                                                            type="button"
-                                                            onClick={() =>
-                                                                onDeleteCalendarEvent(
-                                                                    calendarEvent.id
-                                                                )
-                                                            }
-                                                        >
-                                                            ✕
-                                                        </button>
+                                                            <span
+                                                                className="calendar-auto-badge"
 
-                                                    )
+                                                                title="Automatically generated from your garden plan"
+                                                            >
+
+                                                                Auto
+
+                                                            </span>
+
+                                                        )
+                                                        : (
+
+                                                            <button
+                                                                type="button"
+
+                                                                aria-label={`Delete ${calendarEvent.title}`}
+
+                                                                onClick={() =>
+                                                                    onDeleteCalendarEvent(
+                                                                        calendarEvent.id
+                                                                    )
+                                                                }
+                                                            >
+
+                                                                ✕
+
+                                                            </button>
+
+                                                        )
                                             }
 
                                         </article>

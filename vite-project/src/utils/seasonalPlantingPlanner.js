@@ -3,16 +3,16 @@ import {
 } from "../data/cropPlanningData";
 
 
-/* =========================
-   PARSE DATE
-========================= */
+/* =========================================================
+   DATE HELPERS
+========================================================= */
 
-function parseDate(
-    value
+function parseLocalDate(
+    dateString
 ) {
 
     if (
-        !value
+        !dateString
     ) {
 
         return null;
@@ -20,61 +20,93 @@ function parseDate(
     }
 
 
-    const date =
-        new Date(
-            `${value}T12:00:00`
-        );
+    const [
+        year,
+        month,
+        day
+    ] =
+        dateString
+            .split("-")
+            .map(Number);
 
 
     if (
+        !year ||
+        !month ||
+        !day
+    ) {
+
+        return null;
+
+    }
+
+
+    return new Date(
+        year,
+        month - 1,
+        day,
+        12,
+        0,
+        0,
+        0
+    );
+
+}
+
+
+function toLocalDateString(
+    date
+) {
+
+    if (
+        !(date instanceof Date) ||
         Number.isNaN(
             date.getTime()
         )
     ) {
 
-        return null;
+        return "";
 
     }
 
 
-    return date;
+    const year =
+        date.getFullYear();
 
-}
 
-
-/* =========================
-   ADD WEEKS
-========================= */
-
-function addWeeks(
-    date,
-    weeks
-) {
-
-    const result =
-        new Date(
-            date
+    const month =
+        String(
+            date.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
         );
 
 
-    result.setDate(
-        result.getDate() +
-        weeks * 7
-    );
+    const day =
+        String(
+            date.getDate()
+        ).padStart(
+            2,
+            "0"
+        );
 
 
-    return result;
+    return `${year}-${month}-${day}`;
 
 }
 
 
-/* =========================
-   FORMAT DATE
-========================= */
-
-function formatDate(
-    date
+function addDays(
+    dateString,
+    days
 ) {
+
+    const date =
+        parseLocalDate(
+            dateString
+        );
+
 
     if (
         !date
@@ -85,426 +117,364 @@ function formatDate(
     }
 
 
-    return date.toLocaleDateString(
-        undefined,
-        {
-            month: "short",
-            day: "numeric"
-        }
+    date.setDate(
+        date.getDate() +
+        Number(
+            days || 0
+        )
+    );
+
+
+    return toLocalDateString(
+        date
     );
 
 }
 
 
-/* =========================
-   WARM SEASON GUIDANCE
-========================= */
+function addWeeks(
+    dateString,
+    weeks
+) {
 
-function getWarmSeasonGuidance({
-    crop,
-    today,
-    lastFrost,
-    firstFrost
-}) {
-
-    const indoorWeeks =
-        crop.startIndoorsWeeksBeforeLastFrost;
-
-
-    const transplantWeeks =
-        crop.transplantWeeksAfterLastFrost ??
-        crop.directSowWeeksAfterLastFrost ??
-        0;
-
-
-    const indoorStart =
-        Number.isFinite(
-            indoorWeeks
-        )
-            ? addWeeks(
-                lastFrost,
-                -indoorWeeks
-            )
-            : null;
-
-
-    const outdoorStart =
-        addWeeks(
-            lastFrost,
-            transplantWeeks
-        );
-
-
-    /* =========================
-       START INDOORS
-    ========================= */
-
-    if (
-        indoorStart &&
-        today >= indoorStart &&
-        today < outdoorStart
-    ) {
-
-        return {
-
-            status:
-                "start-indoors",
-
-            label:
-                "Start Indoors",
-
-            icon:
-                "🌱",
-
-            message:
-                `Outdoor planting is expected around ${formatDate(
-                    outdoorStart
-                )}.`
-
-        };
-
-    }
-
-
-    /* =========================
-       TOO EARLY
-    ========================= */
-
-    if (
-        today < outdoorStart
-    ) {
-
-        return {
-
-            status:
-                "wait",
-
-            label:
-                "Wait",
-
-            icon:
-                "⏳",
-
-            message:
-                `Wait until around ${formatDate(
-                    outdoorStart
-                )} before planting outdoors.`
-
-        };
-
-    }
-
-
-    /* =========================
-       FALL FROST PASSED
-    ========================= */
-
-    if (
-        firstFrost &&
-        today >= firstFrost
-    ) {
-
-        return {
-
-            status:
-                "season-ended",
-
-            label:
-                "Warm Season Ending",
-
-            icon:
-                "🍂",
-
-            message:
-                "The average first fall frost has already arrived or passed."
-
-        };
-
-    }
-
-
-    /* =========================
-       PLANT OUTDOORS
-    ========================= */
-
-    return {
-
-        status:
-            "plant-now",
-
-        label:
-            "Plant Outdoors",
-
-        icon:
-            "✅",
-
-        message:
-            crop.frostSensitive
-                ? "The average frost window supports outdoor planting."
-                : "Conditions are within the expected outdoor planting window."
-
-    };
+    return addDays(
+        dateString,
+        Number(
+            weeks || 0
+        ) * 7
+    );
 
 }
 
 
-/* =========================
-   COOL SEASON GUIDANCE
-========================= */
+/* =========================================================
+   FORMAT METHOD
+========================================================= */
 
-function getCoolSeasonGuidance({
-    crop,
-    today,
-    lastFrost,
-    firstFrost
-}) {
+function getStartMethodLabel(
+    method
+) {
 
-    const springWeeks =
+    if (
+        method === "transplant"
+    ) {
+
+        return "Transplant";
+
+    }
+
+
+    if (
+        method === "seed"
+    ) {
+
+        return "Start from seed";
+
+    }
+
+
+    return "Direct sow";
+
+}
+
+
+/* =========================================================
+   SUPPORT CURRENT + LEGACY CROP FIELDS
+
+   Current fields:
+   - indoorStartWeeks
+   - weeksBeforeLastFrost
+   - weeksAfterLastFrost
+   - weeksBeforeFirstFallFrost
+
+   Legacy fields:
+   - startIndoorsWeeksBeforeLastFrost
+   - directSowWeeksBeforeLastFrost
+   - directSowWeeksAfterLastFrost
+   - transplantWeeksAfterLastFrost
+   - fallWeeksBeforeFirstFrost
+========================================================= */
+
+function getIndoorStartWeeks(
+    crop
+) {
+
+    return Number(
+        crop.indoorStartWeeks ??
+        crop.startIndoorsWeeksBeforeLastFrost ??
+        0
+    );
+
+}
+
+
+function getSpringWeeksBefore(
+    crop
+) {
+
+    return Number(
+        crop.weeksBeforeLastFrost ??
         crop.directSowWeeksBeforeLastFrost ??
-        0;
-
-
-    const springStart =
-        addWeeks(
-            lastFrost,
-            -springWeeks
-        );
-
-
-    const fallWeeks =
-        crop.fallWeeksBeforeFirstFrost;
-
-
-    const fallStart =
-        Number.isFinite(
-            fallWeeks
-        ) &&
-        firstFrost
-            ? addWeeks(
-                firstFrost,
-                -fallWeeks
-            )
-            : null;
-
-
-    /* =========================
-       BEFORE SPRING WINDOW
-    ========================= */
-
-    if (
-        today < springStart
-    ) {
-
-        return {
-
-            status:
-                "wait",
-
-            label:
-                "Wait",
-
-            icon:
-                "⏳",
-
-            message:
-                `Spring planting begins around ${formatDate(
-                    springStart
-                )}.`
-
-        };
-
-    }
-
-
-    /* =========================
-       SPRING WINDOW
-    ========================= */
-
-    if (
-        today <=
-        addWeeks(
-            lastFrost,
-            6
-        )
-    ) {
-
-        return {
-
-            status:
-                "plant-now",
-
-            label:
-                "Plant Now",
-
-            icon:
-                "✅",
-
-            message:
-                "This crop fits the expected cool-season spring planting window."
-
-        };
-
-    }
-
-
-    /* =========================
-       FALL WINDOW
-    ========================= */
-
-    if (
-        fallStart &&
-        firstFrost &&
-        today >= fallStart &&
-        today < firstFrost
-    ) {
-
-        return {
-
-            status:
-                "fall-window",
-
-            label:
-                "Fall Planting Window",
-
-            icon:
-                "🍂",
-
-            message:
-                `The average first fall frost is ${formatDate(
-                    firstFrost
-                )}.`
-
-        };
-
-    }
-
-
-    /* =========================
-       WAIT FOR FALL
-    ========================= */
-
-    if (
-        fallStart &&
-        today < fallStart
-    ) {
-
-        return {
-
-            status:
-                "wait-for-fall",
-
-            label:
-                "Wait for Fall Window",
-
-            icon:
-                "🌤️",
-
-            message:
-                `A fall planting window may begin around ${formatDate(
-                    fallStart
-                )}.`
-
-        };
-
-    }
-
-
-    /* =========================
-       SEASON PASSED
-    ========================= */
-
-    return {
-
-        status:
-            "season-ended",
-
-        label:
-            "Season Window Passed",
-
-        icon:
-            "🍂",
-
-        message:
-            "The calculated spring and fall planting windows have passed."
-
-    };
+        0
+    );
 
 }
 
 
-/* =========================
-   MAIN SEASONAL PLANNER
-========================= */
+function getSpringWeeksAfter(
+    crop
+) {
 
-export function generateSeasonalPlantingGuide({
-    selectedCrops,
+    if (
+        crop.preferredStartMethod ===
+        "transplant"
+    ) {
+
+        return Number(
+            crop.weeksAfterLastFrost ??
+            crop.transplantWeeksAfterLastFrost ??
+            0
+        );
+
+    }
+
+
+    return Number(
+        crop.weeksAfterLastFrost ??
+        crop.directSowWeeksAfterLastFrost ??
+        0
+    );
+
+}
+
+
+function getFallWeeksBefore(
+    crop
+) {
+
+    return Number(
+        crop.weeksBeforeFirstFallFrost ??
+        crop.fallWeeksBeforeFirstFrost ??
+        0
+    );
+
+}
+
+
+/* =========================================================
+   BUILD ONE CROP SCHEDULE
+========================================================= */
+
+function buildCropSchedule({
+    crop,
     lastSpringFrost,
     firstFallFrost
 }) {
 
+    const indoorStartWeeks =
+        getIndoorStartWeeks(
+            crop
+        );
+
+
+    const springWeeksBefore =
+        getSpringWeeksBefore(
+            crop
+        );
+
+
+    const springWeeksAfter =
+        getSpringWeeksAfter(
+            crop
+        );
+
+
+    const fallWeeksBefore =
+        getFallWeeksBefore(
+            crop
+        );
+
+
+    let indoorStartDate =
+        "";
+
+
+    let springPlantDate =
+        "";
+
+
+    let fallPlantDate =
+        "";
+
+
+    /* =====================================================
+       INDOOR START
+    ===================================================== */
+
     if (
-        !Array.isArray(
-            selectedCrops
-        ) ||
-        selectedCrops.length ===
-            0
+        lastSpringFrost &&
+        indoorStartWeeks > 0
     ) {
 
-        return null;
+        indoorStartDate =
+            addWeeks(
+                lastSpringFrost,
+                -indoorStartWeeks
+            );
 
     }
 
 
-    const lastFrost =
-        parseDate(
-            lastSpringFrost
-        );
-
-
-    const firstFrost =
-        parseDate(
-            firstFallFrost
-        );
-
-
-    /*
-        USDA hardiness zone alone
-        is not enough to accurately
-        determine annual vegetable
-        planting dates.
-
-        For now we require a spring
-        frost date.
-
-        Later this can be filled
-        automatically from location.
-    */
+    /* =====================================================
+       SPRING PLANTING
+    ===================================================== */
 
     if (
-        !lastFrost
+        lastSpringFrost
     ) {
 
-        return {
+        if (
+            springWeeksBefore > 0
+        ) {
 
-            ready:
-                false,
+            springPlantDate =
+                addWeeks(
+                    lastSpringFrost,
+                    -springWeeksBefore
+                );
 
-            recommendations:
-                [],
+        } else {
 
-            message:
-                "Add your average last spring frost date to generate seasonal planting guidance."
+            springPlantDate =
+                addWeeks(
+                    lastSpringFrost,
+                    springWeeksAfter
+                );
 
-        };
+        }
 
     }
 
 
-    const today =
-        new Date();
+    /* =====================================================
+       FALL PLANTING
+    ===================================================== */
+
+    if (
+        firstFallFrost &&
+        fallWeeksBefore > 0
+    ) {
+
+        fallPlantDate =
+            addWeeks(
+                firstFallFrost,
+                -fallWeeksBefore
+            );
+
+    }
 
 
-    const recommendations =
+    /* =====================================================
+       DESCRIPTIONS
+    ===================================================== */
+
+    let springAction =
+        "Plant outside";
+
+
+    if (
+        crop.preferredStartMethod ===
+        "direct-sow"
+    ) {
+
+        springAction =
+            "Direct sow";
+
+    }
+
+
+    if (
+        crop.preferredStartMethod ===
+        "transplant"
+    ) {
+
+        springAction =
+            "Transplant outside";
+
+    }
+
+
+    return {
+
+        cropId:
+            crop.id,
+
+        name:
+            crop.name,
+
+        icon:
+            crop.icon,
+
+        seasonType:
+            crop.seasonType,
+
+        frostSensitive:
+            Boolean(
+                crop.frostSensitive
+            ),
+
+        preferredStartMethod:
+            crop.preferredStartMethod ||
+            "direct-sow",
+
+        preferredStartMethodLabel:
+            getStartMethodLabel(
+                crop.preferredStartMethod
+            ),
+
+        indoorStartWeeks,
+
+        springWeeksBefore,
+
+        springWeeksAfter,
+
+        fallWeeksBefore,
+
+        indoorStartDate,
+
+        springPlantDate,
+
+        fallPlantDate,
+
+        springAction,
+
+        daysToMaturity:
+            Number(
+                crop.daysToMaturity ||
+                0
+            ),
+
+        notes:
+            crop.frostSensitive
+                ? "Protect from frost and wait for suitable outdoor temperatures."
+                : "This crop can tolerate cooler conditions better than frost-sensitive crops."
+
+    };
+
+}
+
+
+/* =========================================================
+   GENERATE SEASONAL PLANTING GUIDE
+========================================================= */
+
+export function generateSeasonalPlantingGuide({
+    selectedCrops = [],
+    lastSpringFrost = "",
+    firstFallFrost = ""
+}) {
+
+    const cropSchedules =
         selectedCrops
             .map(
                 (cropId) =>
@@ -516,78 +486,106 @@ export function generateSeasonalPlantingGuide({
                 Boolean
             )
             .map(
-                (crop) => {
-
-                    const guidance =
-                        crop.seasonType ===
-                        "warm"
-                            ? getWarmSeasonGuidance({
-
-                                crop,
-
-                                today,
-
-                                lastFrost,
-
-                                firstFrost
-
-                            })
-                            : getCoolSeasonGuidance({
-
-                                crop,
-
-                                today,
-
-                                lastFrost,
-
-                                firstFrost
-
-                            });
+                (crop) =>
+                    buildCropSchedule({
+                        crop,
+                        lastSpringFrost,
+                        firstFallFrost
+                    })
+            );
 
 
-                    return {
+    const springSchedule =
+        cropSchedules
+            .filter(
+                (schedule) =>
+                    schedule.springPlantDate ||
+                    schedule.indoorStartDate
+            )
+            .sort(
+                (
+                    cropA,
+                    cropB
+                ) => {
 
-                        id:
-                            crop.id,
+                    const dateA =
+                        cropA.indoorStartDate ||
+                        cropA.springPlantDate ||
+                        "9999-12-31";
 
-                        name:
-                            crop.name,
 
-                        icon:
-                            crop.icon,
+                    const dateB =
+                        cropB.indoorStartDate ||
+                        cropB.springPlantDate ||
+                        "9999-12-31";
 
-                        seasonType:
-                            crop.seasonType,
 
-                        ...guidance
-
-                    };
+                    return dateA.localeCompare(
+                        dateB
+                    );
 
                 }
             );
 
 
+    const fallSchedule =
+        cropSchedules
+            .filter(
+                (schedule) =>
+                    schedule.fallPlantDate
+            )
+            .sort(
+                (
+                    cropA,
+                    cropB
+                ) =>
+                    cropA.fallPlantDate.localeCompare(
+                        cropB.fallPlantDate
+                    )
+            );
+
+
     return {
 
-        version:
-            1,
-
-        ready:
-            true,
-
-        today:
-            today.toISOString(),
+        generatedAt:
+            new Date()
+                .toISOString(),
 
         lastSpringFrost,
 
-        firstFallFrost:
-            firstFallFrost ||
-            null,
+        firstFallFrost,
 
-        recommendations,
+        crops:
+            cropSchedules,
 
-        disclaimer:
-            "These are planning windows based on average frost dates. Current weather, soil temperature, crop variety, and local microclimates can shift actual planting timing."
+        springSchedule,
+
+        fallSchedule,
+
+        stats: {
+
+            cropCount:
+                cropSchedules.length,
+
+            indoorStartCount:
+                cropSchedules.filter(
+                    (crop) =>
+                        crop.indoorStartDate
+                ).length,
+
+            springPlantingCount:
+                cropSchedules.filter(
+                    (crop) =>
+                        crop.springPlantDate
+                ).length,
+
+            fallPlantingCount:
+                cropSchedules.filter(
+                    (crop) =>
+                        crop.fallPlantDate
+                ).length
+
+        }
 
     };
 

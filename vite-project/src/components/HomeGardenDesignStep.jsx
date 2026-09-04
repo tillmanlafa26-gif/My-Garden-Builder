@@ -18,9 +18,14 @@ import {
 } from "../utils/bedPlantingPlanner";
 
 
-/* =========================
+import {
+    generateSeasonalPlantingGuide
+} from "../utils/seasonalPlantingPlanner";
+
+
+/* =========================================================
    DESIGN GOALS
-========================= */
+========================================================= */
 
 const designGoals = [
     {
@@ -54,9 +59,9 @@ const designGoals = [
 ];
 
 
-/* =========================
+/* =========================================================
    DEFAULT BUILD OPTIONS
-========================= */
+========================================================= */
 
 const defaultBuildOptions = {
     bedLength: 8,
@@ -69,9 +74,9 @@ const defaultBuildOptions = {
 };
 
 
-/* =========================
+/* =========================================================
    COMPONENT
-========================= */
+========================================================= */
 
 function HomeGardenDesignStep({
     gardenProfile,
@@ -92,9 +97,9 @@ function HomeGardenDesignStep({
     };
 
 
-    /* =========================
+    /* =====================================================
        STATE
-    ========================= */
+    ===================================================== */
 
     const [
         designGoal,
@@ -163,9 +168,9 @@ function HomeGardenDesignStep({
     );
 
 
-    /* =========================
+    /* =====================================================
        SAVED DATA
-    ========================= */
+    ===================================================== */
 
     const selectedFeatures =
         Array.isArray(
@@ -183,6 +188,16 @@ function HomeGardenDesignStep({
             : [];
 
 
+    const lastSpringFrost =
+        designSpace.lastSpringFrost ||
+        "";
+
+
+    const firstFallFrost =
+        designSpace.firstFallFrost ||
+        "";
+
+
     const hasRaisedBeds =
         selectedFeatures.includes(
             "raised-beds"
@@ -197,9 +212,9 @@ function HomeGardenDesignStep({
         );
 
 
-    /* =========================
+    /* =====================================================
        BUILD OPTIONS
-    ========================= */
+    ===================================================== */
 
     function getBuildOptions() {
 
@@ -233,9 +248,9 @@ function HomeGardenDesignStep({
     }
 
 
-    /* =========================
+    /* =====================================================
        GENERATE DESIGN
-    ========================= */
+    ===================================================== */
 
     function generateDesign() {
 
@@ -261,6 +276,7 @@ function HomeGardenDesignStep({
             );
 
             return;
+
         }
 
 
@@ -273,6 +289,7 @@ function HomeGardenDesignStep({
             );
 
             return;
+
         }
 
 
@@ -310,6 +327,7 @@ function HomeGardenDesignStep({
             );
 
             return;
+
         }
 
 
@@ -347,6 +365,24 @@ function HomeGardenDesignStep({
                 : null;
 
 
+        /*
+            Local seasonal recommendations
+            are based on the automatically
+            populated frost dates from Step 2.
+        */
+
+        const seasonalGuide =
+            generateSeasonalPlantingGuide({
+
+                selectedCrops,
+
+                lastSpringFrost,
+
+                firstFallFrost
+
+            });
+
+
         const updatedProfile = {
 
             ...gardenProfile,
@@ -365,14 +401,14 @@ function HomeGardenDesignStep({
 
                 bedPlantingPlan,
 
-                /*
-                    If the user regenerates
-                    the physical layout,
-                    old materials/build
-                    instructions should no
-                    longer count as current.
+                seasonalGuide,
 
-                    Step 6 will recreate them.
+                /*
+                    A regenerated layout makes
+                    old materials/build instructions
+                    stale.
+
+                    Step 6 recalculates them.
                 */
 
                 materials:
@@ -433,9 +469,9 @@ function HomeGardenDesignStep({
     }
 
 
-    /* =========================
-       LOCKED STATE
-    ========================= */
+    /* =====================================================
+       LOCKED
+    ===================================================== */
 
     if (
         selectedCrops.length ===
@@ -497,9 +533,9 @@ function HomeGardenDesignStep({
     }
 
 
-    /* =========================
-       COLLAPSED DESIGN
-    ========================= */
+    /* =====================================================
+       COLLAPSED
+    ===================================================== */
 
     if (
         designSpace.layout &&
@@ -530,8 +566,9 @@ function HomeGardenDesignStep({
 
 
                         <p>
-                            Your garden layout
-                            has been generated.
+                            Your garden layout and
+                            planting schedule have
+                            been generated.
                         </p>
 
                     </div>
@@ -584,6 +621,12 @@ function HomeGardenDesignStep({
                                     : " crops"
                             }
 
+                            {
+                                designSpace.seasonalGuide
+                                    ? " • Planting schedule ✓"
+                                    : ""
+                            }
+
                         </span>
 
                     </div>
@@ -614,9 +657,9 @@ function HomeGardenDesignStep({
     }
 
 
-    /* =========================
-       ACTIVE DESIGN STEP
-    ========================= */
+    /* =====================================================
+       ACTIVE STEP
+    ===================================================== */
 
     return (
 
@@ -658,10 +701,6 @@ function HomeGardenDesignStep({
             </div>
 
 
-            {/* =========================
-                DESIGN GOAL
-            ========================= */}
-
             <div className="home-builder-field-group">
 
                 <h3>
@@ -702,11 +741,9 @@ function HomeGardenDesignStep({
                                 >
 
                                     <span className="design-goal-icon">
-
                                         {
                                             goal.icon
                                         }
-
                                     </span>
 
 
@@ -733,10 +770,6 @@ function HomeGardenDesignStep({
 
             </div>
 
-
-            {/* =========================
-                RAISED BED LAYOUT OPTIONS
-            ========================= */}
 
             {
                 hasRaisedBeds && (
@@ -928,10 +961,6 @@ function HomeGardenDesignStep({
             }
 
 
-            {/* =========================
-                DESIGN INPUT SUMMARY
-            ========================= */}
-
             <div className="home-design-input-summary">
 
                 <div>
@@ -941,6 +970,7 @@ function HomeGardenDesignStep({
                     </span>
 
                     <strong>
+
                         {
                             designSpace.width
                         }
@@ -957,6 +987,7 @@ function HomeGardenDesignStep({
                             designSpace.unit ||
                             "ft"
                         }
+
                     </strong>
 
                     <small>
@@ -1007,14 +1038,46 @@ function HomeGardenDesignStep({
 
 
             {
+                (
+                    lastSpringFrost ||
+                    firstFallFrost
+                ) && (
+
+                    <div className="home-builder-finish-note">
+
+                        <span>
+                            📅
+                        </span>
+
+
+                        <div>
+
+                            <strong>
+                                Local planting schedule enabled
+                            </strong>
+
+
+                            <p>
+                                Your frost dates will be
+                                used to calculate crop-specific
+                                planting windows.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                )
+            }
+
+
+            {
                 message && (
 
                     <p className="home-builder-error">
-
                         {
                             message
                         }
-
                     </p>
 
                 )

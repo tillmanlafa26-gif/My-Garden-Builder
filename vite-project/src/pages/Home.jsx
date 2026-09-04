@@ -31,11 +31,17 @@ import SustainabilityScore
 import BottomNav
     from "../components/BottomNav";
 
-import GardenLocationCard
-    from "../components/GardenLocationCard";
-
 import HomeGardenDesignStep
     from "../components/HomeGardenDesignStep";
+
+import HomeGardenBuildStep
+    from "../components/HomeGardenBuildStep";
+
+import GardenOnboarding
+    from "../components/GardenOnboarding";
+
+import LocalGrowingDataCard
+    from "../components/LocalGrowingDataCard";
 
 
 import {
@@ -228,27 +234,19 @@ const cropCategories = [
 function getGardenSizeFromArea(
     squareFeet
 ) {
-
     if (
         squareFeet <= 50
     ) {
-
         return "small";
-
     }
-
 
     if (
         squareFeet <= 150
     ) {
-
         return "medium";
-
     }
 
-
     return "large";
-
 }
 
 
@@ -270,8 +268,6 @@ function Home({
     onDelayWatering,
     onRainWatered
 }) {
-
-
     const designSpace =
         gardenProfile?.designSpace ||
         {};
@@ -378,6 +374,42 @@ function Home({
     ] = useState(
         designSpace.location ||
         null
+    );
+
+
+    const [
+        lastSpringFrost,
+        setLastSpringFrost
+    ] = useState(
+        designSpace.lastSpringFrost ||
+        ""
+    );
+
+
+    const [
+        firstFallFrost,
+        setFirstFallFrost
+    ] = useState(
+        designSpace.firstFallFrost ||
+        ""
+    );
+
+
+    const [
+        growingDataSource,
+        setGrowingDataSource
+    ] = useState(
+        designSpace.growingDataSource ||
+        ""
+    );
+
+
+    const [
+        growingDataUpdatedAt,
+        setGrowingDataUpdatedAt
+    ] = useState(
+        designSpace.growingDataUpdatedAt ||
+        ""
     );
 
 
@@ -759,7 +791,6 @@ function Home({
     const filteredCrops =
         cropPlanningData.filter(
             (crop) => {
-
                 const matchesCategory =
                     cropCategory === "all" ||
                     crop.placementGroup ===
@@ -784,7 +815,6 @@ function Home({
                     matchesCategory &&
                     matchesSearch
                 );
-
             }
         );
 
@@ -792,13 +822,10 @@ function Home({
     function getCropCategoryCount(
         categoryId
     ) {
-
         if (
             categoryId === "all"
         ) {
-
             return cropPlanningData.length;
-
         }
 
 
@@ -807,7 +834,6 @@ function Home({
                 crop.placementGroup ===
                 categoryId
         ).length;
-
     }
 
 
@@ -818,10 +844,8 @@ function Home({
     function scrollToStep(
         ref
     ) {
-
         window.setTimeout(
             () => {
-
                 const prefersReducedMotion =
                     window.matchMedia?.(
                         "(prefers-reduced-motion: reduce)"
@@ -838,11 +862,9 @@ function Home({
                         block:
                             "start"
                     });
-
             },
             150
         );
-
     }
 
 
@@ -851,17 +873,14 @@ function Home({
     ===================================================== */
 
     function saveSpaceStep() {
-
         if (
             !draftSpaceValid
         ) {
-
             setSpaceMessage(
                 "Enter a valid width and length."
             );
 
             return;
-
         }
 
 
@@ -914,35 +933,95 @@ function Home({
             ""
         );
 
-
         setSpaceExpanded(
             false
         );
-
 
         setEnvironmentExpanded(
             true
         );
 
-
         scrollToStep(
             environmentStepRef
         );
-
     }
 
 
     function editSpaceStep() {
-
         setSpaceMessage(
             ""
         );
 
-
         setSpaceExpanded(
             true
         );
+    }
 
+
+    /* =====================================================
+       AUTOMATIC LOCAL GROWING DATA
+    ===================================================== */
+
+    function handleGrowingDataResolved(
+        data
+    ) {
+        if (
+            data.location
+        ) {
+            setGardenLocation(
+                data.location
+            );
+        }
+
+
+        if (
+            data.hardinessZone
+        ) {
+            setHardinessZone(
+                data.hardinessZone
+            );
+        }
+
+
+        if (
+            data.lastSpringFrost
+        ) {
+            setLastSpringFrost(
+                data.lastSpringFrost
+            );
+        }
+
+
+        if (
+            data.firstFallFrost
+        ) {
+            setFirstFallFrost(
+                data.firstFallFrost
+            );
+        }
+
+
+        if (
+            data.growingDataSource
+        ) {
+            setGrowingDataSource(
+                data.growingDataSource
+            );
+        }
+
+
+        if (
+            data.growingDataUpdatedAt
+        ) {
+            setGrowingDataUpdatedAt(
+                data.growingDataUpdatedAt
+            );
+        }
+
+
+        setEnvironmentMessage(
+            ""
+        );
     }
 
 
@@ -951,43 +1030,36 @@ function Home({
     ===================================================== */
 
     function saveEnvironmentStep() {
-
         if (
             !gardenType
         ) {
-
             setEnvironmentMessage(
                 "Choose a primary garden system."
             );
 
             return;
-
         }
 
 
         if (
             !sunlight
         ) {
-
             setEnvironmentMessage(
                 "Choose the sunlight level."
             );
 
             return;
-
         }
 
 
         if (
             !hardinessZone
         ) {
-
             setEnvironmentMessage(
                 "Choose your USDA growing zone."
             );
 
             return;
-
         }
 
 
@@ -1007,7 +1079,15 @@ function Home({
                 hardinessZone,
 
                 location:
-                    gardenLocation
+                    gardenLocation,
+
+                lastSpringFrost,
+
+                firstFallFrost,
+
+                growingDataSource,
+
+                growingDataUpdatedAt
             }
         };
 
@@ -1021,35 +1101,28 @@ function Home({
             ""
         );
 
-
         setEnvironmentExpanded(
             false
         );
-
 
         setFeaturesExpanded(
             true
         );
 
-
         scrollToStep(
             featuresStepRef
         );
-
     }
 
 
     function editEnvironmentStep() {
-
         setEnvironmentMessage(
             ""
         );
 
-
         setEnvironmentExpanded(
             true
         );
-
     }
 
 
@@ -1060,11 +1133,9 @@ function Home({
     function toggleGardenFeature(
         featureId
     ) {
-
         setNoAdditionalFeatures(
             false
         );
-
 
         setFeaturesMessage(
             ""
@@ -1072,19 +1143,19 @@ function Home({
 
 
         setSelectedFeatures(
-            (currentFeatures) => {
-
+            (
+                currentFeatures
+            ) => {
                 if (
                     currentFeatures.includes(
                         featureId
                     )
                 ) {
-
                     return currentFeatures.filter(
                         (id) =>
-                            id !== featureId
+                            id !==
+                            featureId
                     );
-
                 }
 
 
@@ -1092,29 +1163,23 @@ function Home({
                     ...currentFeatures,
                     featureId
                 ];
-
             }
         );
-
     }
 
 
     function chooseNoAdditionalFeatures() {
-
         setSelectedFeatures(
             []
         );
-
 
         setNoAdditionalFeatures(
             true
         );
 
-
         setFeaturesMessage(
             ""
         );
-
     }
 
 
@@ -1123,18 +1188,15 @@ function Home({
     ===================================================== */
 
     function saveFeaturesStep() {
-
         if (
             selectedFeatures.length === 0 &&
             !noAdditionalFeatures
         ) {
-
             setFeaturesMessage(
                 "Choose at least one feature, or select No Additional Structures."
             );
 
             return;
-
         }
 
 
@@ -1162,35 +1224,28 @@ function Home({
             ""
         );
 
-
         setFeaturesExpanded(
             false
         );
-
 
         setCropsExpanded(
             true
         );
 
-
         scrollToStep(
             cropsStepRef
         );
-
     }
 
 
     function editFeaturesStep() {
-
         setFeaturesMessage(
             ""
         );
 
-
         setFeaturesExpanded(
             true
         );
-
     }
 
 
@@ -1201,26 +1256,25 @@ function Home({
     function toggleCrop(
         cropId
     ) {
-
         setCropsMessage(
             ""
         );
 
 
         setSelectedCrops(
-            (currentCrops) => {
-
+            (
+                currentCrops
+            ) => {
                 if (
                     currentCrops.includes(
                         cropId
                     )
                 ) {
-
                     return currentCrops.filter(
                         (id) =>
-                            id !== cropId
+                            id !==
+                            cropId
                     );
-
                 }
 
 
@@ -1228,10 +1282,8 @@ function Home({
                     ...currentCrops,
                     cropId
                 ];
-
             }
         );
-
     }
 
 
@@ -1240,17 +1292,14 @@ function Home({
     ===================================================== */
 
     function saveCropsStep() {
-
         if (
             selectedCrops.length === 0
         ) {
-
             setCropsMessage(
                 "Choose at least one crop you want to grow."
             );
 
             return;
-
         }
 
 
@@ -1275,30 +1324,24 @@ function Home({
             ""
         );
 
-
         setCropsExpanded(
             false
         );
 
-
         scrollToStep(
             designStepRef
         );
-
     }
 
 
     function editCropsStep() {
-
         setCropsMessage(
             ""
         );
 
-
         setCropsExpanded(
             true
         );
-
     }
 
 
@@ -1373,9 +1416,8 @@ function Home({
     ===================================================== */
 
     return (
-
         <div className="app-container">
-
+            <GardenOnboarding />
 
             <Header />
 
@@ -1385,145 +1427,95 @@ function Home({
             ================================================= */}
 
             <section className="home-build-progress">
-
-
                 <div className="home-build-progress-header">
-
                     <div>
-
                         <span className="home-build-progress-icon">
                             🌱
                         </span>
 
-
                         <div>
-
                             <h2>
                                 Build My Garden
                             </h2>
 
-
                             <p>
-
                                 {
                                     gardenComplete
                                         ? "Your garden plan is ready."
                                         : "Build your garden one step at a time."
                                 }
-
                             </p>
-
                         </div>
-
                     </div>
 
-
                     <span className="home-build-progress-percent">
-
                         {
                             progressPercent
-                        }
-
-                        %
-
+                        }%
                     </span>
-
                 </div>
 
 
                 <div
                     className="home-build-progress-bar"
-
                     role="progressbar"
-
                     aria-label="Garden build progress"
-
                     aria-valuemin="0"
-
                     aria-valuemax="100"
-
                     aria-valuenow={
                         progressPercent
                     }
                 >
-
                     <div
                         className="home-build-progress-fill"
-
                         style={{
                             width:
                                 `${progressPercent}%`
                         }}
                     />
-
                 </div>
 
 
                 <div className="home-build-progress-count">
-
                     <strong>
-
                         {
                             completedStages
-                        }
-
-                        {" of "}
-
-                        {
+                        } of {
                             buildStages.length
-                        }
-
-                        {" steps complete"}
-
+                        } steps complete
                     </strong>
-
 
                     {
                         nextStage && (
-
                             <span>
-
-                                Next:{" "}
-
-                                {
+                                Next: {
                                     nextStage.icon
-                                }
-
-                                {" "}
-
-                                {
+                                } {
                                     nextStage.name
                                 }
-
                             </span>
-
                         )
                     }
-
                 </div>
 
 
                 <div className="home-build-stage-list">
-
                     {
                         buildStages.map(
                             (
                                 stage,
                                 index
                             ) => {
-
                                 const isNext =
                                     nextStage?.id ===
                                     stage.id;
 
 
                                 return (
-
                                     <div
                                         key={
                                             stage.id
                                         }
-
                                         className={
                                             stage.complete
                                                 ? "home-build-stage complete"
@@ -1532,42 +1524,29 @@ function Home({
                                                     : "home-build-stage"
                                         }
                                     >
-
                                         <span className="home-build-stage-status">
-
                                             {
                                                 stage.complete
                                                     ? "✓"
                                                     : stage.icon
                                             }
-
                                         </span>
 
-
                                         <div>
-
                                             <small>
-
-                                                Step{" "}
-
-                                                {
+                                                Step {
                                                     index + 1
                                                 }
-
                                             </small>
-
 
                                             <strong>
                                                 {
                                                     stage.name
                                                 }
                                             </strong>
-
                                         </div>
 
-
                                         <span className="home-build-stage-state">
-
                                             {
                                                 stage.complete
                                                     ? "Complete"
@@ -1575,19 +1554,13 @@ function Home({
                                                         ? "Next"
                                                         : "Pending"
                                             }
-
                                         </span>
-
                                     </div>
-
                                 );
-
                             }
                         )
                     }
-
                 </div>
-
             </section>
 
 
@@ -1603,39 +1576,28 @@ function Home({
                         : "home-builder-step active"
                 }
             >
-
                 <div className="home-builder-step-heading">
-
                     <span className="home-builder-step-number">
-
                         {
                             spaceComplete
                                 ? "✓"
                                 : "1"
                         }
-
                     </span>
 
-
                     <div>
-
                         <small>
                             STEP 1
                         </small>
-
 
                         <h2>
                             📐 Define Your Space
                         </h2>
 
-
                         <p>
-                            Tell us how much usable
-                            growing space you have.
+                            Tell us how much usable growing space you have.
                         </p>
-
                     </div>
-
                 </div>
 
 
@@ -1643,181 +1605,120 @@ function Home({
                     spaceComplete &&
                     !spaceExpanded
                         ? (
-
                             <div className="home-builder-collapsed-content">
-
                                 <div className="home-builder-summary">
-
                                     <strong>
-
                                         {
                                             savedSpace?.icon ||
                                             "📐"
-                                        }
-
-                                        {" "}
-
-                                        {
+                                        } {
                                             savedSpace?.name ||
                                             "Garden Space"
                                         }
-
                                     </strong>
 
-
                                     <span>
-
                                         {
                                             designSpace.width
-                                        }
-
-                                        {" × "}
-
-                                        {
+                                        } × {
                                             designSpace.length
-                                        }
-
-                                        {" "}
-
-                                        {
+                                        } {
                                             designSpace.unit ||
                                             "ft"
-                                        }
-
-                                        {" • "}
-
-                                        {
+                                        } • {
                                             Number(
                                                 designSpace.areaSquareFeet ||
                                                 0
                                             ).toFixed(
                                                 0
                                             )
-                                        }
-
-                                        {" sq ft"}
-
+                                        } sq ft
                                     </span>
-
                                 </div>
-
 
                                 <button
                                     type="button"
-
                                     className="home-builder-edit-button"
-
                                     onClick={
                                         editSpaceStep
                                     }
                                 >
-
                                     Edit
-
                                 </button>
-
                             </div>
-
                         )
                         : (
-
                             <>
-
-
                                 <div className="home-builder-field-group">
-
                                     <h3>
                                         Where is your garden?
                                     </h3>
 
-
                                     <div className="home-builder-choice-grid">
-
                                         {
                                             spaceTypes.map(
                                                 (space) => (
-
                                                     <button
                                                         type="button"
-
                                                         key={
                                                             space.id
                                                         }
-
                                                         className={
                                                             spaceType ===
                                                             space.id
                                                                 ? "home-builder-choice selected"
                                                                 : "home-builder-choice"
                                                         }
-
                                                         onClick={() =>
                                                             setSpaceType(
                                                                 space.id
                                                             )
                                                         }
                                                     >
-
                                                         <span>
                                                             {
                                                                 space.icon
                                                             }
                                                         </span>
 
-
                                                         <strong>
                                                             {
                                                                 space.name
                                                             }
                                                         </strong>
-
                                                     </button>
-
                                                 )
                                             )
                                         }
-
                                     </div>
-
                                 </div>
 
 
                                 <div className="home-builder-field-group">
-
                                     <h3>
                                         Measurements
                                     </h3>
 
-
                                     <div className="home-space-dimensions">
-
                                         <label>
-
                                             Width
 
                                             <input
                                                 type="number"
-
                                                 min="1"
-
                                                 step="0.1"
-
                                                 inputMode="decimal"
-
                                                 value={
                                                     spaceWidth
                                                 }
-
                                                 onChange={
                                                     (event) =>
                                                         setSpaceWidth(
                                                             event.target.value
                                                         )
                                                 }
-
                                                 placeholder="20"
                                             />
-
                                         </label>
 
 
@@ -1827,44 +1728,34 @@ function Home({
 
 
                                         <label>
-
                                             Length
 
                                             <input
                                                 type="number"
-
                                                 min="1"
-
                                                 step="0.1"
-
                                                 inputMode="decimal"
-
                                                 value={
                                                     spaceLength
                                                 }
-
                                                 onChange={
                                                     (event) =>
                                                         setSpaceLength(
                                                             event.target.value
                                                         )
                                                 }
-
                                                 placeholder="14"
                                             />
-
                                         </label>
 
 
                                         <label>
-
                                             Unit
 
                                             <select
                                                 value={
                                                     spaceUnit
                                                 }
-
                                                 onChange={
                                                     (event) =>
                                                         setSpaceUnit(
@@ -1872,7 +1763,6 @@ function Home({
                                                         )
                                                 }
                                             >
-
                                                 <option value="ft">
                                                     Feet
                                                 </option>
@@ -1880,162 +1770,112 @@ function Home({
                                                 <option value="m">
                                                     Meters
                                                 </option>
-
                                             </select>
-
                                         </label>
-
                                     </div>
 
 
                                     {
                                         draftSpaceValid && (
-
                                             <div className="home-space-area-preview">
-
                                                 <span>
                                                     📏
                                                 </span>
 
-
                                                 <div>
-
                                                     <strong>
-
                                                         {
                                                             spaceWidth
-                                                        }
-
-                                                        {" × "}
-
-                                                        {
+                                                        } × {
                                                             spaceLength
-                                                        }
-
-                                                        {" "}
-
-                                                        {
+                                                        } {
                                                             spaceUnit
                                                         }
-
                                                     </strong>
 
-
                                                     <small>
-
                                                         {
                                                             draftSquareFeet
                                                                 .toFixed(
                                                                     1
                                                                 )
-                                                        }
-
-                                                        {" sq ft"}
-
+                                                        } sq ft
                                                     </small>
-
                                                 </div>
-
                                             </div>
-
                                         )
                                     }
-
                                 </div>
 
 
                                 <div className="home-builder-field-group">
-
                                     <h3>
                                         What is underneath it?
                                     </h3>
 
-
                                     <div className="home-builder-choice-grid">
-
                                         {
                                             surfaceTypes.map(
                                                 (surface) => (
-
                                                     <button
                                                         type="button"
-
                                                         key={
                                                             surface.id
                                                         }
-
                                                         className={
                                                             spaceSurface ===
                                                             surface.id
                                                                 ? "home-builder-choice selected"
                                                                 : "home-builder-choice"
                                                         }
-
                                                         onClick={() =>
                                                             setSpaceSurface(
                                                                 surface.id
                                                             )
                                                         }
                                                     >
-
                                                         <span>
                                                             {
                                                                 surface.icon
                                                             }
                                                         </span>
 
-
                                                         <strong>
                                                             {
                                                                 surface.name
                                                             }
                                                         </strong>
-
                                                     </button>
-
                                                 )
                                             )
                                         }
-
                                     </div>
-
                                 </div>
 
 
                                 {
                                     spaceMessage && (
-
                                         <p className="home-builder-error">
-
                                             {
                                                 spaceMessage
                                             }
-
                                         </p>
-
                                     )
                                 }
 
 
                                 <button
                                     type="button"
-
                                     className="home-builder-continue-button"
-
                                     onClick={
                                         saveSpaceStep
                                     }
                                 >
-
                                     Save Space & Continue →
-
                                 </button>
-
                             </>
-
                         )
                 }
-
             </section>
 
 
@@ -2047,7 +1887,6 @@ function Home({
                 ref={
                     environmentStepRef
                 }
-
                 className={
                     environmentComplete &&
                     !environmentExpanded
@@ -2057,143 +1896,99 @@ function Home({
                             : "home-builder-step upcoming"
                 }
             >
-
                 <div className="home-builder-step-heading">
-
                     <span className="home-builder-step-number">
-
                         {
                             environmentComplete
                                 ? "✓"
                                 : "2"
                         }
-
                     </span>
 
-
                     <div>
-
                         <small>
                             STEP 2
                         </small>
-
 
                         <h2>
                             ☀️ Growing Conditions
                         </h2>
 
-
                         <p>
-                            Tell us about sunlight,
-                            growing method, and your
-                            local conditions.
+                            Add sunlight, local growing conditions, and your growing system.
                         </p>
-
                     </div>
-
                 </div>
 
 
                 {
                     !spaceComplete
                         ? (
-
                             <div className="home-builder-locked">
-
                                 <span>
                                     🔒
                                 </span>
 
-
                                 <p>
-                                    Complete Step 1
-                                    before setting your
-                                    growing conditions.
+                                    Complete Step 1 before setting your growing conditions.
                                 </p>
-
                             </div>
-
                         )
                         : environmentComplete &&
                           !environmentExpanded
                             ? (
-
                                 <div className="home-builder-collapsed-content">
-
                                     <div className="home-builder-summary">
-
                                         <strong>
-
                                             {
                                                 savedGardenSystem?.icon ||
                                                 "🌱"
-                                            }
-
-                                            {" "}
-
-                                            {
+                                            } {
                                                 savedGardenSystem?.name ||
                                                 "Garden"
                                             }
-
                                         </strong>
 
-
                                         <span>
-
                                             {
                                                 savedSunlightName
-                                            }
-
-                                            {" • Zone "}
-
-                                            {
+                                            } • Zone {
                                                 gardenProfile
                                                     ?.hardinessZone
                                             }
-
                                             {
                                                 designSpace.location
                                                     ? " • Location ✓"
                                                     : ""
                                             }
-
+                                            {
+                                                designSpace.lastSpringFrost ||
+                                                designSpace.firstFallFrost
+                                                    ? " • Frost data ✓"
+                                                    : ""
+                                            }
                                         </span>
-
                                     </div>
-
 
                                     <button
                                         type="button"
-
                                         className="home-builder-edit-button"
-
                                         onClick={
                                             editEnvironmentStep
                                         }
                                     >
-
                                         Edit
-
                                     </button>
-
                                 </div>
-
                             )
                             : (
-
                                 <>
-
-
                                     <div className="home-builder-field-group">
-
                                         <h3>
                                             Primary Garden System
                                         </h3>
 
-
                                         <div className="home-builder-choice-grid">
-
                                             {
                                                 Object.entries(
                                                     gardenPlans
@@ -2202,61 +1997,48 @@ function Home({
                                                         key,
                                                         garden
                                                     ]) => (
-
                                                         <button
                                                             type="button"
-
                                                             key={
                                                                 key
                                                             }
-
                                                             className={
                                                                 gardenType ===
                                                                 key
                                                                     ? "home-builder-choice selected"
                                                                     : "home-builder-choice"
                                                             }
-
                                                             onClick={() =>
                                                                 setGardenType(
                                                                     key
                                                                 )
                                                             }
                                                         >
-
                                                             <span>
                                                                 {
                                                                     garden.icon
                                                                 }
                                                             </span>
 
-
                                                             <strong>
                                                                 {
                                                                     garden.name
                                                                 }
                                                             </strong>
-
                                                         </button>
-
                                                     )
                                                 )
                                             }
-
                                         </div>
-
                                     </div>
 
 
                                     <div className="home-builder-field-group">
-
                                         <h3>
                                             Daily Sunlight
                                         </h3>
 
-
                                         <div className="home-builder-choice-grid">
-
                                             {
                                                 Object.entries(
                                                     sunlightNames
@@ -2265,30 +2047,24 @@ function Home({
                                                         key,
                                                         name
                                                     ]) => (
-
                                                         <button
                                                             type="button"
-
                                                             key={
                                                                 key
                                                             }
-
                                                             className={
                                                                 sunlight ===
                                                                 key
                                                                     ? "home-builder-choice selected"
                                                                     : "home-builder-choice"
                                                             }
-
                                                             onClick={() =>
                                                                 setSunlight(
                                                                     key
                                                                 )
                                                             }
                                                         >
-
                                                             <span>
-
                                                                 {
                                                                     key ===
                                                                     "full"
@@ -2298,201 +2074,217 @@ function Home({
                                                                             ? "🌤️"
                                                                             : "⛅"
                                                                 }
-
                                                             </span>
-
 
                                                             <strong>
                                                                 {
                                                                     name
                                                                 }
                                                             </strong>
-
                                                         </button>
-
                                                     )
                                                 )
                                             }
-
                                         </div>
-
                                     </div>
 
 
-                                    <div className="home-builder-field-group">
+                                    {/* =========================
+                                        AUTOMATIC LOCAL DATA
+                                    ========================= */}
 
+                                    <div className="home-builder-field-group">
                                         <h3>
-                                            USDA Growing Zone
+                                            Local Growing Data
                                         </h3>
+
+                                        <LocalGrowingDataCard
+                                            location={
+                                                gardenLocation
+                                            }
+                                            hardinessZone={
+                                                hardinessZone
+                                            }
+                                            lastSpringFrost={
+                                                lastSpringFrost
+                                            }
+                                            firstFallFrost={
+                                                firstFallFrost
+                                            }
+                                            onDataResolved={
+                                                handleGrowingDataResolved
+                                            }
+                                        />
+                                    </div>
+
+
+                                    {/* =========================
+                                        HARDINESS ZONE
+                                    ========================= */}
+
+                                    <div className="home-builder-field-group">
+                                        <h3>
+                                            Growing Zone
+                                        </h3>
+
+                                        <p className="home-builder-helper-text">
+                                            Review the automatic result or select the correct zone manually.
+                                        </p>
 
 
                                         <label className="home-builder-select-field">
-
                                             <span>
-                                                🌡️ Growing Zone
+                                                🌡️ Hardiness Zone
                                             </span>
-
 
                                             <select
                                                 value={
                                                     hardinessZone
                                                 }
-
                                                 onChange={
-                                                    (event) =>
+                                                    (event) => {
                                                         setHardinessZone(
                                                             event.target.value
-                                                        )
+                                                        );
+
+                                                        setGrowingDataSource(
+                                                            ""
+                                                        );
+                                                    }
                                                 }
                                             >
-
                                                 <option value="">
                                                     Select your zone
                                                 </option>
 
-
                                                 {
                                                     hardinessZones.map(
                                                         (zone) => (
-
                                                             <option
                                                                 key={
                                                                     zone
                                                                 }
-
                                                                 value={
                                                                     zone
                                                                 }
                                                             >
-
-                                                                Zone {zone} —{" "}
-
-                                                                {
+                                                                Zone {zone} — {
                                                                     hardinessTemperatureRanges[
                                                                         zone
                                                                     ]
                                                                 }
-
                                                             </option>
-
                                                         )
                                                     )
                                                 }
-
                                             </select>
-
                                         </label>
 
 
                                         {
                                             hardinessZone && (
-
                                                 <div className="home-zone-preview">
-
                                                     <span>
                                                         🌡️
                                                     </span>
 
-
                                                     <div>
-
                                                         <strong>
-
-                                                            USDA Zone{" "}
-
-                                                            {
+                                                            Zone {
                                                                 hardinessZone
                                                             }
-
                                                         </strong>
 
-
                                                         <small>
-
                                                             {
                                                                 hardinessTemperatureRanges[
                                                                     hardinessZone
                                                                 ]
                                                             }
-
                                                         </small>
-
                                                     </div>
-
                                                 </div>
-
                                             )
                                         }
-
                                     </div>
 
 
-                                    <div className="home-builder-field-group">
+                                    {/* =========================
+                                        FROST DATES
+                                    ========================= */}
 
+                                    <div className="home-builder-field-group">
                                         <h3>
-                                            Garden Location
+                                            Average Frost Dates
                                         </h3>
 
-
                                         <p className="home-builder-helper-text">
-                                            Optional for now. Location
-                                            will later help automatically
-                                            determine weather, frost
-                                            dates, and local growing data.
+                                            These are planning averages, not weather forecasts. Adjust them if you have better local information.
                                         </p>
 
 
-                                        <div className="home-builder-location-wrapper">
+                                        <div className="home-frost-date-grid">
+                                            <label>
+                                                🌱 Last Spring Frost
 
-                                            <GardenLocationCard
-                                                location={
-                                                    gardenLocation
-                                                }
+                                                <input
+                                                    type="date"
+                                                    value={
+                                                        lastSpringFrost
+                                                    }
+                                                    onChange={
+                                                        (event) =>
+                                                            setLastSpringFrost(
+                                                                event.target.value
+                                                            )
+                                                    }
+                                                />
+                                            </label>
 
-                                                onLocationChange={
-                                                    setGardenLocation
-                                                }
-                                            />
 
+                                            <label>
+                                                🍂 First Fall Frost
+
+                                                <input
+                                                    type="date"
+                                                    value={
+                                                        firstFallFrost
+                                                    }
+                                                    onChange={
+                                                        (event) =>
+                                                            setFirstFallFrost(
+                                                                event.target.value
+                                                            )
+                                                    }
+                                                />
+                                            </label>
                                         </div>
-
                                     </div>
 
 
                                     {
                                         environmentMessage && (
-
                                             <p className="home-builder-error">
-
                                                 {
                                                     environmentMessage
                                                 }
-
                                             </p>
-
                                         )
                                     }
 
 
                                     <button
                                         type="button"
-
                                         className="home-builder-continue-button"
-
                                         onClick={
                                             saveEnvironmentStep
                                         }
                                     >
-
                                         Save Conditions & Continue →
-
                                     </button>
-
                                 </>
-
                             )
                 }
-
             </section>
 
 
@@ -2504,7 +2296,6 @@ function Home({
                 ref={
                     featuresStepRef
                 }
-
                 className={
                     featuresComplete &&
                     !featuresExpanded
@@ -2514,83 +2305,58 @@ function Home({
                             : "home-builder-step upcoming"
                 }
             >
-
                 <div className="home-builder-step-heading">
-
                     <span className="home-builder-step-number">
-
                         {
                             featuresComplete
                                 ? "✓"
                                 : "3"
                         }
-
                     </span>
 
-
                     <div>
-
                         <small>
                             STEP 3
                         </small>
-
 
                         <h2>
                             🧰 Garden Features
                         </h2>
 
-
                         <p>
-                            Choose the structures and
-                            systems you want included
-                            in your garden.
+                            Choose the structures and systems you want included in your garden.
                         </p>
-
                     </div>
-
                 </div>
 
 
                 {
                     !environmentComplete
                         ? (
-
                             <div className="home-builder-locked">
-
                                 <span>
                                     🔒
                                 </span>
 
-
                                 <p>
-                                    Complete your growing
-                                    conditions first.
+                                    Complete your growing conditions first.
                                 </p>
-
                             </div>
-
                         )
                         : featuresComplete &&
                           !featuresExpanded
                             ? (
-
                                 <div className="home-builder-collapsed-content">
-
                                     <div className="home-builder-summary">
-
                                         <strong>
-
                                             {
                                                 savedFeatureNames.length > 0
                                                     ? `${savedFeatureNames.length} garden feature${savedFeatureNames.length === 1 ? "" : "s"}`
                                                     : "No additional structures"
                                             }
-
                                         </strong>
 
-
                                         <span>
-
                                             {
                                                 savedFeatureNames.length > 0
                                                     ? savedFeatureNames
@@ -2603,55 +2369,36 @@ function Home({
                                                         )
                                                     : "Simple garden setup"
                                             }
-
                                         </span>
-
                                     </div>
-
 
                                     <button
                                         type="button"
-
                                         className="home-builder-edit-button"
-
                                         onClick={
                                             editFeaturesStep
                                         }
                                     >
-
                                         Edit
-
                                     </button>
-
                                 </div>
-
                             )
                             : (
-
                                 <>
-
-
                                     <div className="home-builder-field-group">
-
                                         <h3>
                                             What should your garden include?
                                         </h3>
 
-
                                         <p className="home-builder-helper-text">
-                                            Select as many as you want.
-                                            We will use these choices when
-                                            generating the layout and
-                                            materials list.
+                                            Select as many as you want. We will use these choices when generating the layout and materials list.
                                         </p>
 
 
                                         <div className="home-feature-grid">
-
                                             {
                                                 gardenFeatureOptions.map(
                                                     (feature) => {
-
                                                         const selected =
                                                             selectedFeatures.includes(
                                                                 feature.id
@@ -2659,158 +2406,116 @@ function Home({
 
 
                                                         return (
-
                                                             <button
                                                                 type="button"
-
                                                                 key={
                                                                     feature.id
                                                                 }
-
                                                                 className={
                                                                     selected
                                                                         ? "home-feature-card selected"
                                                                         : "home-feature-card"
                                                                 }
-
                                                                 aria-pressed={
                                                                     selected
                                                                 }
-
                                                                 onClick={() =>
                                                                     toggleGardenFeature(
                                                                         feature.id
                                                                     )
                                                                 }
                                                             >
-
                                                                 <span className="home-feature-icon">
-
                                                                     {
                                                                         feature.icon
                                                                     }
-
                                                                 </span>
 
-
                                                                 <div>
-
                                                                     <strong>
                                                                         {
                                                                             feature.name
                                                                         }
                                                                     </strong>
 
-
                                                                     <small>
                                                                         {
                                                                             feature.description
                                                                         }
                                                                     </small>
-
                                                                 </div>
 
-
                                                                 <span className="home-feature-check">
-
                                                                     {
                                                                         selected
                                                                             ? "✓"
                                                                             : "+"
                                                                     }
-
                                                                 </span>
-
                                                             </button>
-
                                                         );
-
                                                     }
                                                 )
                                             }
-
                                         </div>
-
                                     </div>
 
 
                                     <button
                                         type="button"
-
                                         className={
                                             noAdditionalFeatures
                                                 ? "home-no-features-option selected"
                                                 : "home-no-features-option"
                                         }
-
                                         aria-pressed={
                                             noAdditionalFeatures
                                         }
-
                                         onClick={
                                             chooseNoAdditionalFeatures
                                         }
                                     >
-
                                         <span>
                                             🌱
                                         </span>
 
-
                                         <div>
-
                                             <strong>
                                                 No Additional Structures
                                             </strong>
 
-
                                             <small>
-                                                Keep the design simple without
-                                                adding any of the structures above.
+                                                Keep the design simple without adding any of the structures above.
                                             </small>
-
                                         </div>
 
-
                                         <span className="home-feature-check">
-
                                             {
                                                 noAdditionalFeatures
                                                     ? "✓"
                                                     : "+"
                                             }
-
                                         </span>
-
                                     </button>
 
 
                                     {
                                         selectedFeatures.length > 0 && (
-
                                             <div className="home-feature-selection-summary">
-
                                                 <strong>
-
                                                     {
                                                         selectedFeatures.length
-                                                    }
-
-                                                    {
+                                                    } {
                                                         selectedFeatures.length === 1
-                                                            ? " feature selected"
-                                                            : " features selected"
+                                                            ? "feature selected"
+                                                            : "features selected"
                                                     }
-
                                                 </strong>
 
-
                                                 <div>
-
                                                     {
                                                         selectedFeatures.map(
                                                             (featureId) => {
-
                                                                 const feature =
                                                                     gardenFeatureOptions.find(
                                                                         (item) =>
@@ -2822,80 +2527,55 @@ function Home({
                                                                 if (
                                                                     !feature
                                                                 ) {
-
                                                                     return null;
-
                                                                 }
 
 
                                                                 return (
-
                                                                     <span
                                                                         key={
                                                                             feature.id
                                                                         }
                                                                     >
-
                                                                         {
                                                                             feature.icon
-                                                                        }
-
-                                                                        {" "}
-
-                                                                        {
+                                                                        } {
                                                                             feature.name
                                                                         }
-
                                                                     </span>
-
                                                                 );
-
                                                             }
                                                         )
                                                     }
-
                                                 </div>
-
                                             </div>
-
                                         )
                                     }
 
 
                                     {
                                         featuresMessage && (
-
                                             <p className="home-builder-error">
-
                                                 {
                                                     featuresMessage
                                                 }
-
                                             </p>
-
                                         )
                                     }
 
 
                                     <button
                                         type="button"
-
                                         className="home-builder-continue-button"
-
                                         onClick={
                                             saveFeaturesStep
                                         }
                                     >
-
                                         Save Features & Continue →
-
                                     </button>
-
                                 </>
-
                             )
                 }
-
             </section>
 
 
@@ -2907,7 +2587,6 @@ function Home({
                 ref={
                     cropsStepRef
                 }
-
                 className={
                     cropsComplete &&
                     !cropsExpanded
@@ -2917,86 +2596,60 @@ function Home({
                             : "home-builder-step upcoming"
                 }
             >
-
                 <div className="home-builder-step-heading">
-
                     <span className="home-builder-step-number">
-
                         {
                             cropsComplete
                                 ? "✓"
                                 : "4"
                         }
-
                     </span>
 
-
                     <div>
-
                         <small>
                             STEP 4
                         </small>
-
 
                         <h2>
                             🥕 Choose Crops
                         </h2>
 
-
                         <p>
-                            Choose what you want
-                            your garden designed to grow.
+                            Choose what you want your garden designed to grow.
                         </p>
-
                     </div>
-
                 </div>
 
 
                 {
                     !featuresComplete
                         ? (
-
                             <div className="home-builder-locked">
-
                                 <span>
                                     🔒
                                 </span>
 
-
                                 <p>
-                                    Complete your garden
-                                    features first.
+                                    Complete your garden features first.
                                 </p>
-
                             </div>
-
                         )
                         : cropsComplete &&
                           !cropsExpanded
                             ? (
-
                                 <div className="home-builder-collapsed-content">
-
                                     <div className="home-builder-summary">
-
                                         <strong>
-
                                             {
                                                 savedCropData.length
-                                            }
-
-                                            {
+                                            } {
                                                 savedCropData.length === 1
-                                                    ? " crop selected"
-                                                    : " crops selected"
+                                                    ? "crop selected"
+                                                    : "crops selected"
                                             }
-
                                         </strong>
 
-
                                         <span>
-
                                             {
                                                 savedCropData
                                                     .slice(
@@ -3017,168 +2670,122 @@ function Home({
                                                     ? ` • +${savedCropData.length - 5} more`
                                                     : ""
                                             }
-
                                         </span>
-
                                     </div>
-
 
                                     <button
                                         type="button"
-
                                         className="home-builder-edit-button"
-
                                         onClick={
                                             editCropsStep
                                         }
                                     >
-
                                         Edit
-
                                     </button>
-
                                 </div>
-
                             )
                             : (
-
                                 <>
-
-
                                     <div className="home-crop-selection-header">
-
                                         <div>
-
                                             <strong>
-
                                                 {
                                                     selectedCrops.length
-                                                }
-
-                                                {
+                                                } {
                                                     selectedCrops.length === 1
-                                                        ? " crop selected"
-                                                        : " crops selected"
+                                                        ? "crop selected"
+                                                        : "crops selected"
                                                 }
-
                                             </strong>
 
-
                                             <small>
-                                                Choose everything you would
-                                                like the design to consider.
+                                                Choose everything you would like the design to consider.
                                             </small>
-
                                         </div>
-
 
                                         <span>
                                             🌱
                                         </span>
-
                                     </div>
 
 
                                     <label className="home-crop-search">
-
                                         <span>
                                             🔎
                                         </span>
 
-
                                         <input
                                             type="search"
-
                                             value={
                                                 cropSearch
                                             }
-
                                             onChange={
                                                 (event) =>
                                                     setCropSearch(
                                                         event.target.value
                                                     )
                                             }
-
                                             placeholder="Search tomatoes, broccoli, potatoes..."
                                         />
-
                                     </label>
 
 
                                     <div className="home-crop-category-scroll">
-
                                         {
                                             cropCategories.map(
                                                 (category) => (
-
                                                     <button
                                                         type="button"
-
                                                         key={
                                                             category.id
                                                         }
-
                                                         className={
                                                             cropCategory ===
                                                             category.id
                                                                 ? "home-crop-category selected"
                                                                 : "home-crop-category"
                                                         }
-
                                                         aria-pressed={
                                                             cropCategory ===
                                                             category.id
                                                         }
-
                                                         onClick={() =>
                                                             setCropCategory(
                                                                 category.id
                                                             )
                                                         }
                                                     >
-
                                                         <span>
                                                             {
                                                                 category.icon
                                                             }
                                                         </span>
 
-
                                                         {
                                                             category.name
                                                         }
 
-
                                                         <small>
-
                                                             {
                                                                 getCropCategoryCount(
                                                                     category.id
                                                                 )
                                                             }
-
                                                         </small>
-
                                                     </button>
-
                                                 )
                                             )
                                         }
-
                                     </div>
 
 
                                     {
                                         filteredCrops.length > 0
                                             ? (
-
                                                 <div className="home-crop-grid">
-
                                                     {
                                                         filteredCrops.map(
                                                             (crop) => {
-
                                                                 const selected =
                                                                     selectedCrops.includes(
                                                                         crop.id
@@ -3186,63 +2793,48 @@ function Home({
 
 
                                                                 return (
-
                                                                     <button
                                                                         type="button"
-
                                                                         key={
                                                                             crop.id
                                                                         }
-
                                                                         className={
                                                                             selected
                                                                                 ? "home-crop-card selected"
                                                                                 : "home-crop-card"
                                                                         }
-
                                                                         aria-pressed={
                                                                             selected
                                                                         }
-
                                                                         onClick={() =>
                                                                             toggleCrop(
                                                                                 crop.id
                                                                             )
                                                                         }
                                                                     >
-
                                                                         <span className="home-crop-icon">
-
                                                                             {
                                                                                 crop.icon
                                                                             }
-
                                                                         </span>
 
-
                                                                         <div>
-
                                                                             <strong>
                                                                                 {
                                                                                     crop.name
                                                                                 }
                                                                             </strong>
 
-
                                                                             <small>
-
                                                                                 {
                                                                                     crop.seasonType ===
                                                                                     "warm"
                                                                                         ? "Warm season"
                                                                                         : "Cool season"
                                                                                 }
-
                                                                             </small>
 
-
                                                                             <small>
-
                                                                                 {
                                                                                     crop.preferredStartMethod ===
                                                                                     "transplant"
@@ -3252,74 +2844,52 @@ function Home({
                                                                                             ? "Start from seed"
                                                                                             : "Direct sow"
                                                                                 }
-
                                                                             </small>
-
                                                                         </div>
 
-
                                                                         <span className="home-crop-check">
-
                                                                             {
                                                                                 selected
                                                                                     ? "✓"
                                                                                     : "+"
                                                                             }
-
                                                                         </span>
-
                                                                     </button>
-
                                                                 );
-
                                                             }
                                                         )
                                                     }
-
                                                 </div>
-
                                             )
                                             : (
-
                                                 <div className="home-crop-empty">
-
                                                     <span>
                                                         🔎
                                                     </span>
-
 
                                                     <strong>
                                                         No crops found
                                                     </strong>
 
-
                                                     <p>
-                                                        Try another search
-                                                        or crop category.
+                                                        Try another search or crop category.
                                                     </p>
-
                                                 </div>
-
                                             )
                                     }
 
 
                                     {
                                         selectedCrops.length > 0 && (
-
                                             <div className="home-selected-crops">
-
                                                 <strong>
                                                     Your Garden Crops
                                                 </strong>
 
-
                                                 <div>
-
                                                     {
                                                         selectedCrops.map(
                                                             (cropId) => {
-
                                                                 const crop =
                                                                     cropPlanningData.find(
                                                                         (item) =>
@@ -3331,92 +2901,65 @@ function Home({
                                                                 if (
                                                                     !crop
                                                                 ) {
-
                                                                     return null;
-
                                                                 }
 
 
                                                                 return (
-
                                                                     <button
                                                                         type="button"
-
                                                                         key={
                                                                             crop.id
                                                                         }
-
                                                                         onClick={() =>
                                                                             toggleCrop(
                                                                                 crop.id
                                                                             )
                                                                         }
                                                                     >
-
                                                                         {
                                                                             crop.icon
-                                                                        }
-
-                                                                        {" "}
-
-                                                                        {
+                                                                        } {
                                                                             crop.name
                                                                         }
 
                                                                         <span>
                                                                             ×
                                                                         </span>
-
                                                                     </button>
-
                                                                 );
-
                                                             }
                                                         )
                                                     }
-
                                                 </div>
-
                                             </div>
-
                                         )
                                     }
 
 
                                     {
                                         cropsMessage && (
-
                                             <p className="home-builder-error">
-
                                                 {
                                                     cropsMessage
                                                 }
-
                                             </p>
-
                                         )
                                     }
 
 
                                     <button
                                         type="button"
-
                                         className="home-builder-continue-button"
-
                                         onClick={
                                             saveCropsStep
                                         }
                                     >
-
                                         Save Crops & Continue →
-
                                     </button>
-
                                 </>
-
                             )
                 }
-
             </section>
 
 
@@ -3429,133 +2972,29 @@ function Home({
                     designStepRef
                 }
             >
-
                 <HomeGardenDesignStep
-
                     gardenProfile={
                         gardenProfile
                     }
-
                     onSaveGardenProfile={
                         onSaveGardenProfile
                     }
-
                 />
-
             </div>
 
 
             {/* =================================================
-                STEP 6 — MATERIALS / BUILD PREVIEW
+                STEP 6 — MATERIALS & BUILD
             ================================================= */}
 
-            <section
-                id="home-builder-step-build"
-
-                className={
-                    buildComplete
-                        ? "home-builder-step complete collapsed"
-                        : designComplete
-                            ? "home-builder-step upcoming"
-                            : "home-builder-step upcoming"
+            <HomeGardenBuildStep
+                gardenProfile={
+                    gardenProfile
                 }
-            >
-
-                <div className="home-builder-step-heading">
-
-                    <span className="home-builder-step-number">
-
-                        {
-                            buildComplete
-                                ? "✓"
-                                : "6"
-                        }
-
-                    </span>
-
-
-                    <div>
-
-                        <small>
-                            STEP 6
-                        </small>
-
-
-                        <h2>
-                            🔨 Materials & Build Instructions
-                        </h2>
-
-
-                        <p>
-                            Turn your finished layout
-                            into the materials and
-                            instructions needed to
-                            build it.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                {
-                    !designComplete
-                        ? (
-
-                            <div className="home-builder-locked">
-
-                                <span>
-                                    🔒
-                                </span>
-
-
-                                <p>
-                                    Generate your garden
-                                    design first.
-                                </p>
-
-                            </div>
-
-                        )
-                        : buildComplete
-                            ? (
-
-                                <div className="home-builder-summary">
-
-                                    <strong>
-                                        Build plan ready
-                                    </strong>
-
-
-                                    <span>
-                                        Materials and instructions saved
-                                    </span>
-
-                                </div>
-
-                            )
-                            : (
-
-                                <div className="home-builder-next-preview">
-
-                                    <span>
-                                        🔨
-                                    </span>
-
-
-                                    <p>
-                                        Your layout is ready.
-                                        Materials, quantities,
-                                        and step-by-step build
-                                        instructions come next.
-                                    </p>
-
-                                </div>
-
-                            )
+                onSaveGardenProfile={
+                    onSaveGardenProfile
                 }
-
-            </section>
+            />
 
 
             {/* =================================================
@@ -3576,7 +3015,6 @@ function Home({
                 gardenPlants={
                     gardenPlants
                 }
-
                 onRemoveGardenPlant={
                     onRemoveGardenPlant
                 }
@@ -3587,23 +3025,18 @@ function Home({
                 gardenProfile={
                     gardenProfile
                 }
-
                 gardenPlants={
                     gardenPlants
                 }
-
                 wateringRecords={
                     wateringRecords
                 }
-
                 onMarkPlantWatered={
                     onMarkPlantWatered
                 }
-
                 onDelayWatering={
                     onDelayWatering
                 }
-
                 onRainWatered={
                     onRainWatered
                 }
@@ -3621,7 +3054,6 @@ function Home({
                 tasks={
                     tasks
                 }
-
                 onToggle={
                     onToggleTask
                 }
@@ -3636,12 +3068,8 @@ function Home({
 
 
             <BottomNav />
-
-
         </div>
-
     );
-
 }
 
 
