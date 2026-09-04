@@ -3,6 +3,9 @@ import {
 } from "react-router";
 
 
+import Icon from "./Icon";
+
+
 function MyGardenPlants({
     gardenPlants = [],
     onRemoveGardenPlant
@@ -156,7 +159,10 @@ function MyGardenPlants({
                                                     `Remove ${plant.name} from garden`
                                                 }
                                             >
-                                                ✕
+                                                <Icon
+                                                    name="close"
+                                                    size={16}
+                                                />
                                             </button>
 
                                         </div>

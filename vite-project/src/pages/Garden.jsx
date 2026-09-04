@@ -7,6 +7,10 @@ import BottomNav
     from "../components/BottomNav";
 
 
+import Icon
+    from "../components/Icon";
+
+
 import GardenLayoutPreview
     from "../components/GardenLayoutPreview";
 
@@ -189,7 +193,8 @@ const gardenFeatures = [
 ========================================================= */
 
 function Garden({
-    gardenProfile
+    gardenProfile,
+    onSaveGardenProfile
 }) {
 
 
@@ -406,6 +411,96 @@ function Garden({
         buildReady;
 
 
+    const gardenActive =
+        gardenReady &&
+        Boolean(
+            designSpace.isActive
+        );
+
+
+    const activatedAt =
+        designSpace.activatedAt ||
+        null;
+
+
+    function activateGarden() {
+
+        if (
+            !gardenReady ||
+            typeof onSaveGardenProfile !==
+                "function"
+        ) {
+
+            return;
+
+        }
+
+
+        onSaveGardenProfile({
+
+            ...gardenProfile,
+
+            designSpace: {
+
+                ...designSpace,
+
+                isActive:
+                    true,
+
+                activatedAt:
+                    new Date()
+                        .toISOString()
+
+            }
+
+        });
+
+    }
+
+
+    function formatActivationDate(
+        value
+    ) {
+
+        if (
+            !value
+        ) {
+
+            return "";
+
+        }
+
+
+        const date =
+            new Date(
+                value
+            );
+
+
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
+
+            return "";
+
+        }
+
+
+        return date
+            .toLocaleDateString(
+                undefined,
+                {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric"
+                }
+            );
+
+    }
+
+
     /* =====================================================
        STATS
     ===================================================== */
@@ -478,18 +573,27 @@ function Garden({
 
             <section
                 className={
-                    gardenReady
-                        ? "garden-plan-status ready"
-                        : "garden-plan-status incomplete"
+                    gardenActive
+                        ? "garden-plan-status active"
+                        : gardenReady
+                            ? "garden-plan-status ready"
+                            : "garden-plan-status incomplete"
                 }
             >
 
                 <span>
 
                     {
-                        gardenReady
-                            ? "✓"
-                            : "🌱"
+                        gardenActive
+                            ? (
+                                <Icon
+                                    name="check"
+                                    size={20}
+                                />
+                            )
+                            : gardenReady
+                                ? "✓"
+                                : "🌱"
                     }
 
                 </span>
@@ -500,9 +604,11 @@ function Garden({
                     <strong>
 
                         {
-                            gardenReady
-                                ? "Garden Plan Complete"
-                                : "Garden Plan In Progress"
+                            gardenActive
+                                ? "Garden Active"
+                                : gardenReady
+                                    ? "Garden Plan Ready"
+                                    : "Garden Plan In Progress"
                         }
 
                     </strong>
@@ -511,9 +617,11 @@ function Garden({
                     <p>
 
                         {
-                            gardenReady
-                                ? "Your saved design and build instructions are ready."
-                                : "Return to Home to finish the remaining Garden Builder steps."
+                            gardenActive
+                                ? "Your plan is active. Use Plants, Calendar, and Journal to manage the garden as you grow."
+                                : gardenReady
+                                    ? "Your design and build plan are complete. Activate the garden when you are ready to start growing."
+                                    : "Return to Home to finish the remaining Garden Builder steps."
                         }
 
                     </p>
@@ -523,19 +631,211 @@ function Garden({
 
                 <Link
                     to="/"
-
                     className="garden-plan-status-link"
                 >
 
                     {
                         gardenReady
-                            ? "Edit"
+                            ? "Edit Plan"
                             : "Continue"
                     }
 
                 </Link>
 
             </section>
+
+
+            {/* =================================================
+                ACTIVATE GARDEN
+            ================================================= */}
+
+            {
+                gardenReady &&
+                !gardenActive && (
+
+                    <section className="garden-activation-card">
+
+                        <div className="garden-activation-heading">
+
+                            <span className="garden-activation-icon">
+                                <Icon
+                                    name="sprout"
+                                    size={24}
+                                />
+                            </span>
+
+
+                            <div>
+
+                                <h2>
+                                    Ready to Start Growing?
+                                </h2>
+
+
+                                <p>
+                                    Activate this plan to make it your working garden. Your planting schedule will stay on the Calendar, and you can begin adding the plants you actually sow or transplant.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            className="garden-activate-button"
+                            onClick={activateGarden}
+                        >
+
+                            <Icon
+                                name="sprout"
+                                size={18}
+                            />
+
+                            Activate My Garden
+
+                        </button>
+
+
+                        <small className="garden-activation-note">
+                            Activating the plan does not automatically mark every crop as planted. Add a crop to My Plants when you actually start it so watering and harvest tracking remain accurate.
+                        </small>
+
+                    </section>
+
+                )
+            }
+
+
+            {
+                gardenActive && (
+
+                    <section className="garden-activation-card active">
+
+                        <div className="garden-activation-heading">
+
+                            <span className="garden-activation-icon active">
+                                <Icon
+                                    name="check"
+                                    size={22}
+                                />
+                            </span>
+
+
+                            <div>
+
+                                <h2>
+                                    Your Garden Is Active
+                                </h2>
+
+
+                                <p>
+                                    Move from planning into day-to-day growing. Add plants when they are started, follow your local planting calendar, and record progress in the journal.
+                                </p>
+
+                            </div>
+
+
+                            <span className="garden-active-badge">
+                                Active
+                            </span>
+
+                        </div>
+
+
+                        <div className="garden-active-actions">
+
+                            <Link
+                                to="/plants"
+                                className="garden-active-action"
+                            >
+
+                                <Icon
+                                    name="leaf"
+                                    size={20}
+                                />
+
+                                <span>
+                                    <strong>
+                                        Add Plants
+                                    </strong>
+
+                                    <small>
+                                        Track what you actually plant
+                                    </small>
+                                </span>
+
+                            </Link>
+
+
+                            <Link
+                                to="/calendar"
+                                className="garden-active-action"
+                            >
+
+                                <Icon
+                                    name="calendar"
+                                    size={20}
+                                />
+
+                                <span>
+                                    <strong>
+                                        Calendar
+                                    </strong>
+
+                                    <small>
+                                        Follow planting and harvest dates
+                                    </small>
+                                </span>
+
+                            </Link>
+
+
+                            <Link
+                                to="/journal"
+                                className="garden-active-action"
+                            >
+
+                                <Icon
+                                    name="journal"
+                                    size={20}
+                                />
+
+                                <span>
+                                    <strong>
+                                        Journal
+                                    </strong>
+
+                                    <small>
+                                        Record growth and observations
+                                    </small>
+                                </span>
+
+                            </Link>
+
+                        </div>
+
+
+                        {
+                            formatActivationDate(
+                                activatedAt
+                            ) && (
+
+                                <small className="garden-activation-note">
+                                    Activated {
+                                        formatActivationDate(
+                                            activatedAt
+                                        )
+                                    }
+                                </small>
+
+                            )
+                        }
+
+                    </section>
+
+                )
+            }
 
 
             {/* =================================================

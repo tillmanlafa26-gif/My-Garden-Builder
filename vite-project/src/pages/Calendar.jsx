@@ -7,13 +7,18 @@ import {
 import BottomNav
     from "../components/BottomNav";
 
+import Icon
+    from "../components/Icon";
+
 
 function Calendar({
     calendarEvents = [],
     gardenPlants = [],
     onAddCalendarEvent,
     onDeleteCalendarEvent,
-    onMarkPlantWatered
+    onMarkPlantWatered,
+    gardenActive = false,
+    onCompletePlantingEvent
 }) {
 
     /* =========================
@@ -78,6 +83,30 @@ function Calendar({
                 year:
                     "numeric"
             }
+        );
+
+    }
+
+
+    function addDaysToDateString(
+        dateString,
+        numberOfDays
+    ) {
+
+        const date =
+            new Date(
+                `${dateString}T12:00:00`
+            );
+
+
+        date.setDate(
+            date.getDate() +
+            numberOfDays
+        );
+
+
+        return getLocalDateString(
+            date
         );
 
     }
@@ -152,6 +181,14 @@ function Calendar({
     const [
         message,
         setMessage
+    ] = useState(
+        ""
+    );
+
+
+    const [
+        plantingMessage,
+        setPlantingMessage
     ] = useState(
         ""
     );
@@ -728,6 +765,89 @@ function Calendar({
 
 
     /* =========================
+       PLANTING ACTIONS
+    ========================= */
+
+    function getPlantingActionLabel(
+        calendarEvent
+    ) {
+
+        if (
+            calendarEvent.plantingAction ===
+            "start-indoors"
+        ) {
+
+            return "I Started This";
+
+        }
+
+
+        if (
+            calendarEvent.plantingAction ===
+            "direct-sow"
+        ) {
+
+            return "I Sowed This";
+
+        }
+
+
+        if (
+            calendarEvent.plantingAction ===
+            "transplant-outside"
+        ) {
+
+            return "I Transplanted This";
+
+        }
+
+
+        return "I Planted This";
+
+    }
+
+
+    function handlePlantingComplete(
+        calendarEvent
+    ) {
+
+        if (
+            !gardenActive
+        ) {
+
+            setPlantingMessage(
+                "Activate your garden first so planting actions can be tracked."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            calendarEvent.completed ||
+            typeof onCompletePlantingEvent !==
+                "function"
+        ) {
+
+            return;
+
+        }
+
+
+        onCompletePlantingEvent(
+            calendarEvent
+        );
+
+
+        setPlantingMessage(
+            `✓ ${calendarEvent.cropName || "Crop"} is now being tracked in My Plants.`
+        );
+
+    }
+
+
+    /* =========================
        SOURCE LABEL
     ========================= */
 
@@ -805,23 +925,49 @@ function Calendar({
             );
 
 
-    const upcomingPlantingEvents =
+    const recentPlantingCutoff =
+        addDaysToDateString(
+            today,
+            -45
+        );
+
+
+    const plantingPlanEvents =
         [...calendarEvents]
             .filter(
                 (calendarEvent) =>
-                    calendarEvent.date >=
-                    today &&
                     calendarEvent.source ===
-                    "seasonal-planting-planner"
+                        "seasonal-planting-planner" &&
+                    calendarEvent.date >=
+                        recentPlantingCutoff
             )
             .sort(
                 (
                     eventA,
                     eventB
-                ) =>
-                    eventA.date.localeCompare(
+                ) => {
+
+                    if (
+                        Boolean(
+                            eventA.completed
+                        ) !==
+                        Boolean(
+                            eventB.completed
+                        )
+                    ) {
+
+                        return eventA.completed
+                            ? 1
+                            : -1;
+
+                    }
+
+
+                    return eventA.date.localeCompare(
                         eventB.date
-                    )
+                    );
+
+                }
             )
             .slice(
                 0,
@@ -836,8 +982,15 @@ function Calendar({
 
             <header className="app-header">
 
-                <h1>
-                    📅 Garden Calendar
+                <h1 className="calendar-page-title">
+                    <Icon
+                        name="calendar"
+                        size={28}
+                    />
+
+                    <span>
+                        Garden Calendar
+                    </span>
                 </h1>
 
 
@@ -855,14 +1008,17 @@ function Calendar({
             ========================= */}
 
             {
-                upcomingPlantingEvents.length > 0 && (
+                plantingPlanEvents.length > 0 && (
 
                     <section className="calendar-planting-plan-card">
 
                         <div className="calendar-planting-plan-heading">
 
-                            <span>
-                                🌱
+                            <span className="calendar-planting-plan-icon">
+                                <Icon
+                                    name="sprout"
+                                    size={20}
+                                />
                             </span>
 
 
@@ -874,9 +1030,10 @@ function Calendar({
 
 
                                 <p>
-                                    Automatically calculated
-                                    from your crops and local
-                                    frost dates.
+                                    Confirm planting actions as
+                                    you complete them. The crop
+                                    will automatically begin tracking
+                                    in My Plants.
                                 </p>
 
                             </div>
@@ -884,51 +1041,141 @@ function Calendar({
                         </div>
 
 
+                        {
+                            plantingMessage && (
+
+                                <p className="calendar-planting-message">
+                                    {plantingMessage}
+                                </p>
+
+                            )
+                        }
+
+
+                        {
+                            !gardenActive && (
+
+                                <p className="calendar-planting-message neutral">
+                                    Activate your garden from My Garden
+                                    to turn these recommendations into
+                                    tracked planting actions.
+                                </p>
+
+                            )
+                        }
+
+
                         <div className="calendar-planting-plan-list">
 
                             {
-                                upcomingPlantingEvents.map(
-                                    (calendarEvent) => (
+                                plantingPlanEvents.map(
+                                    (calendarEvent) => {
 
-                                        <div
-                                            key={
-                                                calendarEvent.id
-                                            }
+                                        const isOverdue =
+                                            !calendarEvent.completed &&
+                                            calendarEvent.date <
+                                                today;
 
-                                            className="calendar-planting-plan-item"
-                                        >
 
-                                            <span>
-                                                {
-                                                    getEventIcon(
-                                                        calendarEvent
-                                                    )
+                                        return (
+
+                                            <article
+                                                key={calendarEvent.id}
+                                                className={
+                                                    `calendar-planting-plan-item${
+                                                        calendarEvent.completed
+                                                            ? " completed"
+                                                            : isOverdue
+                                                                ? " overdue"
+                                                                : ""
+                                                    }`
                                                 }
-                                            </span>
+                                            >
 
-
-                                            <div>
-
-                                                <strong>
+                                                <span className="calendar-planting-event-icon">
                                                     {
-                                                        calendarEvent.title
-                                                    }
-                                                </strong>
-
-
-                                                <small>
-                                                    {
-                                                        formatCalendarDate(
-                                                            calendarEvent.date
+                                                        getEventIcon(
+                                                            calendarEvent
                                                         )
                                                     }
-                                                </small>
+                                                </span>
 
-                                            </div>
 
-                                        </div>
+                                                <div className="calendar-planting-plan-copy">
 
-                                    )
+                                                    <strong>
+                                                        {calendarEvent.title}
+                                                    </strong>
+
+
+                                                    <small>
+                                                        {
+                                                            formatCalendarDate(
+                                                                calendarEvent.date
+                                                            )
+                                                        }
+
+                                                        {
+                                                            isOverdue
+                                                                ? " • Due"
+                                                                : ""
+                                                        }
+                                                    </small>
+
+                                                </div>
+
+
+                                                <div className="calendar-planting-plan-actions">
+
+                                                    {
+                                                        calendarEvent.completed
+                                                            ? (
+
+                                                                <span className="calendar-plan-status completed">
+                                                                    <Icon
+                                                                        name="check"
+                                                                        size={13}
+                                                                    />
+                                                                    Tracked
+                                                                </span>
+
+                                                            )
+                                                            : gardenActive
+                                                                ? (
+
+                                                                    <button
+                                                                        type="button"
+                                                                        className="calendar-plant-action-button"
+                                                                        onClick={() =>
+                                                                            handlePlantingComplete(
+                                                                                calendarEvent
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            getPlantingActionLabel(
+                                                                                calendarEvent
+                                                                            )
+                                                                        }
+                                                                    </button>
+
+                                                                )
+                                                                : (
+
+                                                                    <span className="calendar-plan-status">
+                                                                        Scheduled
+                                                                    </span>
+
+                                                                )
+                                                    }
+
+                                                </div>
+
+                                            </article>
+
+                                        );
+
+                                    }
                                 )
                             }
 
@@ -1368,7 +1615,10 @@ function Calendar({
                             <div className="calendar-empty">
 
                                 <span>
-                                    📅
+                                    <Icon
+                                        name="calendar"
+                                        size={28}
+                                    />
                                 </span>
 
 
@@ -1408,11 +1658,14 @@ function Calendar({
                                         wateringPlantKey;
 
 
-                                    const isAutomaticPlanningEvent =
+                                    const isSeasonalPlantingEvent =
                                         calendarEvent.source ===
-                                            "seasonal-planting-planner" ||
+                                        "seasonal-planting-planner";
+
+
+                                    const isAutomaticHarvest =
                                         calendarEvent.source ===
-                                            "harvest-scheduler";
+                                        "harvest-scheduler";
 
 
                                     return (
@@ -1495,21 +1748,60 @@ function Calendar({
                                                         </button>
 
                                                     )
-                                                    : isAutomaticPlanningEvent
-                                                        ? (
+                                                    : isSeasonalPlantingEvent
+                                                        ? calendarEvent.completed
+                                                            ? (
 
-                                                            <span
-                                                                className="calendar-auto-badge"
+                                                                <span
+                                                                    className="calendar-plan-status completed compact"
+                                                                    title="This planting action is being tracked"
+                                                                >
+                                                                    <Icon
+                                                                        name="check"
+                                                                        size={12}
+                                                                    />
+                                                                    Done
+                                                                </span>
 
-                                                                title="Automatically generated from your garden plan"
-                                                            >
+                                                            )
+                                                            : gardenActive
+                                                                ? (
 
-                                                                Auto
+                                                                    <button
+                                                                        type="button"
+                                                                        className="calendar-plant-action-button compact"
+                                                                        onClick={() =>
+                                                                            handlePlantingComplete(
+                                                                                calendarEvent
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        Track
+                                                                    </button>
 
-                                                            </span>
+                                                                )
+                                                                : (
 
-                                                        )
-                                                        : (
+                                                                    <span
+                                                                        className="calendar-auto-badge"
+                                                                        title="Activate your garden to track this planting action"
+                                                                    >
+                                                                        Auto
+                                                                    </span>
+
+                                                                )
+                                                        : isAutomaticHarvest
+                                                            ? (
+
+                                                                <span
+                                                                    className="calendar-auto-badge"
+                                                                    title="Automatically generated from your harvest plan"
+                                                                >
+                                                                    Auto
+                                                                </span>
+
+                                                            )
+                                                            : (
 
                                                             <button
                                                                 type="button"

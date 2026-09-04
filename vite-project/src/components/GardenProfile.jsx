@@ -2,16 +2,16 @@ import {
     Link
 } from "react-router";
 
-
 import {
     gardenPlans,
     sunlightNames
 } from "../data/gardenPlans";
 
-
 import {
     hardinessTemperatureRanges
 } from "../data/hardinessZones";
+
+import Icon from "./Icon";
 
 
 function GardenProfile({
@@ -25,292 +25,198 @@ function GardenProfile({
             ]
             : null;
 
-
     const designSpace =
         gardenProfile?.designSpace ||
         null;
 
+    const hardinessZone =
+        gardenProfile?.hardinessZone ||
+        designSpace?.hardinessZone ||
+        "";
+
 
     return (
-
         <section className="garden-profile-card">
-
-
             <div className="garden-profile-header">
+                <div className="garden-profile-title">
+                    <span className="garden-profile-title-icon">
+                        <Icon
+                            name="garden"
+                            size={20}
+                        />
+                    </span>
 
-                <h2>
-                    📐 My Garden Design
-                </h2>
+                    <div>
+                        <h2>
+                            My Garden Design
+                        </h2>
 
+                        <p>
+                            Your saved space and growing setup.
+                        </p>
+                    </div>
+                </div>
 
                 <Link
-                    to="/garden"
-                    className="garden-profile-link"
-                >
-
-                    {
+                    to={
                         gardenProfile
-                            ? "Edit Design"
-                            : "Design My Garden"
+                            ? "/garden"
+                            : "/"
                     }
-
+                    className="garden-profile-link garden-profile-link-compact"
+                >
+                    {gardenProfile
+                        ? "View Plan"
+                        : "Start Builder"}
                 </Link>
-
             </div>
 
 
-            {
-                !gardenProfile
-                    ? (
+            {!gardenProfile ? (
+                <div className="garden-profile-empty">
+                    <span className="garden-profile-empty-icon">
+                        <Icon
+                            name="sprout"
+                            size={28}
+                        />
+                    </span>
 
-                        <div className="garden-profile-empty">
+                    <p>
+                        Enter the dimensions of your space to start
+                        designing your garden.
+                    </p>
+                </div>
+            ) : (
+                <div className="garden-profile-content">
+                    <div className="garden-profile-main">
+                        <span className="garden-profile-icon">
+                            {selectedGarden?.icon || "🌱"}
+                        </span>
 
-                            <span>
-                                🌱
-                            </span>
+                        <div>
+                            <strong>
+                                {selectedGarden?.name || "My Garden"}
+                            </strong>
 
                             <p>
-                                Enter the dimensions
-                                of your space to start
-                                designing your garden.
+                                {sunlightNames[
+                                    gardenProfile.sunlight
+                                ] || "Sunlight not set"}
                             </p>
-
                         </div>
-
-                    )
-                    : (
-
-                        <div className="garden-profile-content">
+                    </div>
 
 
-                            <div className="garden-profile-main">
-
-                                <span className="garden-profile-icon">
-
-                                    {
-                                        selectedGarden
-                                            ?.icon ||
-                                        "🌱"
-                                    }
-
+                    {designSpace && (
+                        <div className="garden-space-summary">
+                            <div>
+                                <span>
+                                    <Icon
+                                        name="garden"
+                                        size={18}
+                                    />
                                 </span>
 
+                                <strong>
+                                    Dimensions
+                                </strong>
 
-                                <div>
-
-                                    <strong>
-
-                                        {
-                                            selectedGarden
-                                                ?.name ||
-                                            "My Garden"
-                                        }
-
-                                    </strong>
-
-
-                                    <p>
-
-                                        {
-                                            sunlightNames[
-                                                gardenProfile.sunlight
-                                            ] ||
-                                            "Sunlight not set"
-                                        }
-
-                                    </p>
-
-                                </div>
-
+                                <small>
+                                    {designSpace.width}
+                                    {" × "}
+                                    {designSpace.length}
+                                    {" "}
+                                    {designSpace.unit}
+                                </small>
                             </div>
 
+                            <div>
+                                <span>
+                                    <Icon
+                                        name="leaf"
+                                        size={18}
+                                    />
+                                </span>
 
-                            {
-                                designSpace && (
+                                <strong>
+                                    Area
+                                </strong>
 
-                                    <div className="garden-space-summary">
+                                <small>
+                                    {Math.round(
+                                        Number(
+                                            designSpace.areaSquareFeet ||
+                                            0
+                                        )
+                                    )}
+                                    {" sq ft"}
+                                </small>
+                            </div>
 
+                            <div>
+                                <span>
+                                    <Icon
+                                        name="thermometer"
+                                        size={18}
+                                    />
+                                </span>
 
-                                        <div>
+                                <strong>
+                                    Growing Zone
+                                </strong>
 
-                                            <span>
-                                                📏
-                                            </span>
-
-                                            <strong>
-                                                Dimensions
-                                            </strong>
-
-                                            <small>
-
-                                                {
-                                                    designSpace.width
-                                                }
-
-                                                {" × "}
-
-                                                {
-                                                    designSpace.length
-                                                }
-
-                                                {" "}
-
-                                                {
-                                                    designSpace.unit
-                                                }
-
-                                            </small>
-
-                                        </div>
-
-
-                                        <div>
-
-                                            <span>
-                                                📐
-                                            </span>
-
-                                            <strong>
-                                                Area
-                                            </strong>
-
-                                            <small>
-
-                                                {
-                                                    Math.round(
-                                                        designSpace
-                                                            .areaSquareFeet
-                                                    )
-                                                }
-
-                                                {" sq ft"}
-
-                                            </small>
-
-                                        </div>
-
-
-                                        <div>
-
-                                            <span>
-                                                💵
-                                            </span>
-
-                                            <strong>
-                                                Budget
-                                            </strong>
-
-                                            <small>
-
-                                                {
-                                                    designSpace.budget
-                                                        ? `$${Number(
-                                                            designSpace.budget
-                                                        ).toLocaleString()}`
-                                                        : "Not set"
-                                                }
-
-                                            </small>
-
-                                        </div>
-
-
-                                    </div>
-
-                                )
-                            }
-
-
-                            {
-                                gardenProfile.hardinessZone && (
-
-                                    <div className="garden-zone-card">
-
-                                        <span>
-                                            🌡️
-                                        </span>
-
-
-                                        <div>
-
-                                            <strong>
-
-                                                USDA Zone{" "}
-
-                                                {
-                                                    gardenProfile
-                                                        .hardinessZone
-                                                }
-
-                                            </strong>
-
-
-                                            <small>
-
-                                                {
-                                                    hardinessTemperatureRanges[
-                                                        gardenProfile
-                                                            .hardinessZone
-                                                    ]
-                                                }
-
-                                            </small>
-
-                                        </div>
-
-                                    </div>
-
-                                )
-                            }
-
-
-                            {
-                                designSpace?.features
-                                    ?.length >
-                                0 && (
-
-                                    <div className="garden-design-features">
-
-                                        {
-                                            designSpace.features.map(
-                                                (feature) => (
-
-                                                    <span
-                                                        key={
-                                                            feature
-                                                        }
-                                                    >
-
-                                                        {
-                                                            feature
-                                                                .replaceAll(
-                                                                    "-",
-                                                                    " "
-                                                                )
-                                                        }
-
-                                                    </span>
-
-                                                )
-                                            )
-                                        }
-
-                                    </div>
-
-                                )
-                            }
-
-
+                                <small>
+                                    {hardinessZone
+                                        ? `Zone ${hardinessZone}`
+                                        : "Not set"}
+                                </small>
+                            </div>
                         </div>
-
-                    )
-            }
+                    )}
 
 
+                    {hardinessZone && (
+                        <div className="garden-zone-card">
+                            <span>
+                                <Icon
+                                    name="thermometer"
+                                    size={18}
+                                />
+                            </span>
+
+                            <div>
+                                <strong>
+                                    USDA-style Zone {hardinessZone}
+                                </strong>
+
+                                <small>
+                                    {hardinessTemperatureRanges[
+                                        hardinessZone
+                                    ] || "Temperature range unavailable"}
+                                </small>
+                            </div>
+                        </div>
+                    )}
+
+
+                    {designSpace?.features?.length > 0 && (
+                        <div className="garden-design-features">
+                            {designSpace.features.map(
+                                (feature) => (
+                                    <span key={feature}>
+                                        {feature.replaceAll(
+                                            "-",
+                                            " "
+                                        )}
+                                    </span>
+                                )
+                            )}
+                        </div>
+                    )}
+                </div>
+            )}
         </section>
-
     );
-
 }
 
 

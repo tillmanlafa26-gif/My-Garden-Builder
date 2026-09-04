@@ -8,6 +8,9 @@ import {
 } from "../services/gardenClimateApi";
 
 
+import Icon from "./Icon";
+
+
 /* =========================================================
    FORMAT DATE
 ========================================================= */
@@ -451,8 +454,11 @@ function LocalGrowingDataCard({
 
             <div className="home-local-growing-heading">
 
-                <span>
-                    📍
+                <span className="home-local-growing-icon">
+                    <Icon
+                        name="mapPin"
+                        size={20}
+                    />
                 </span>
 
 
@@ -486,13 +492,26 @@ function LocalGrowingDataCard({
                 }
             >
 
-                {
-                    isLoading
-                        ? "Calculating Local Growing Data..."
-                        : location
-                            ? "↻ Update Garden Location"
-                            : "📍 Enable Garden Location"
-                }
+                <span className="home-local-growing-button-icon">
+                    <Icon
+                        name={
+                            isLoading
+                                ? "rotate"
+                                : "mapPin"
+                        }
+                        size={17}
+                    />
+                </span>
+
+                <span>
+                    {
+                        isLoading
+                            ? "Calculating Local Growing Data..."
+                            : location
+                                ? "Update Garden Location"
+                                : "Enable Garden Location"
+                    }
+                </span>
 
             </button>
 
@@ -502,8 +521,11 @@ function LocalGrowingDataCard({
 
                     <div className="home-local-location-saved">
 
-                        <span>
-                            ✓
+                        <span className="home-local-growing-check">
+                            <Icon
+                                name="check"
+                                size={17}
+                            />
                         </span>
 
 
@@ -539,7 +561,10 @@ function LocalGrowingDataCard({
                         <div>
 
                             <span>
-                                🌡️
+                                <Icon
+                                    name="thermometer"
+                                    size={18}
+                                />
                             </span>
 
 
@@ -564,7 +589,10 @@ function LocalGrowingDataCard({
                         <div>
 
                             <span>
-                                🌱
+                                <Icon
+                                    name="sprout"
+                                    size={18}
+                                />
                             </span>
 
 
@@ -589,7 +617,10 @@ function LocalGrowingDataCard({
                         <div>
 
                             <span>
-                                🍂
+                                <Icon
+                                    name="leaf"
+                                    size={18}
+                                />
                             </span>
 
 

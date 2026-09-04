@@ -82,7 +82,7 @@ const soilStrategies = {
 
     },
 
-    budget: {
+    basic: {
 
         soil:
             70,
@@ -96,6 +96,24 @@ const soilStrategies = {
     }
 
 };
+
+
+function normalizeSoilStrategy(
+    value
+) {
+    if (
+        value ===
+        "budget"
+    ) {
+        return "basic";
+    }
+
+
+    return (
+        value ||
+        "balanced"
+    );
+}
 
 
 /* =========================
@@ -163,8 +181,9 @@ function calculateRaisedBedMaterials(
 
 
     const soilStrategy =
-        buildOptions.soilStrategy ||
-        "balanced";
+        normalizeSoilStrategy(
+            buildOptions.soilStrategy
+        );
 
 
     const soilMix =
@@ -1133,8 +1152,9 @@ export function calculateGardenMaterials(
                 3,
 
             soilStrategy:
-                buildOptions.soilStrategy ||
-                "balanced",
+                normalizeSoilStrategy(
+                    buildOptions.soilStrategy
+                ),
 
             wasteAllowancePercent:
                 10

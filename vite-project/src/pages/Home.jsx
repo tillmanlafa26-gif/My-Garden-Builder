@@ -251,6 +251,87 @@ function getGardenSizeFromArea(
 
 
 /* =========================================================
+   GENERATED PLAN INVALIDATION
+========================================================= */
+
+function clearGeneratedPlan(
+    designSpace = {}
+) {
+    return {
+        ...designSpace,
+        layout: null,
+        plantingPlan: null,
+        bedPlantingPlan: null,
+        seasonalGuide: null,
+        materials: null,
+        buildPlan: null
+    };
+}
+
+
+function sameStringArray(
+    first = [],
+    second = []
+) {
+    const left = [...first].sort();
+    const right = [...second].sort();
+
+    return (
+        left.length === right.length &&
+        left.every(
+            (value, index) =>
+                value === right[index]
+        )
+    );
+}
+
+
+function sameLocation(
+    first,
+    second
+) {
+    if (!first && !second) {
+        return true;
+    }
+
+    if (!first || !second) {
+        return false;
+    }
+
+    const firstLatitude =
+        Number(
+            first.latitude ??
+            first.lat
+        );
+
+    const firstLongitude =
+        Number(
+            first.longitude ??
+            first.lng ??
+            first.lon
+        );
+
+    const secondLatitude =
+        Number(
+            second.latitude ??
+            second.lat
+        );
+
+    const secondLongitude =
+        Number(
+            second.longitude ??
+            second.lng ??
+            second.lon
+        );
+
+    return (
+        firstLatitude === secondLatitude &&
+        firstLongitude === secondLongitude
+    );
+}
+
+
+/* =========================================================
    HOME PAGE
 ========================================================= */
 
@@ -884,6 +965,22 @@ function Home({
         }
 
 
+        const spaceChanged =
+            designSpace.spaceType !== spaceType ||
+            Number(designSpace.width) !== numericWidth ||
+            Number(designSpace.length) !== numericLength ||
+            (designSpace.unit || "ft") !== spaceUnit ||
+            (designSpace.surface || "grass") !== spaceSurface;
+
+
+        const nextDesignSpace =
+            spaceChanged
+                ? clearGeneratedPlan(
+                    designSpace
+                )
+                : designSpace;
+
+
         const updatedProfile = {
             ...(gardenProfile || {}),
 
@@ -893,7 +990,7 @@ function Home({
                 ),
 
             designSpace: {
-                ...designSpace,
+                ...nextDesignSpace,
 
                 mode:
                     designSpace.mode ||
@@ -966,55 +1063,79 @@ function Home({
         data
     ) {
         if (
-            data.location
+            Object.prototype.hasOwnProperty.call(
+                data,
+                "location"
+            )
         ) {
             setGardenLocation(
-                data.location
+                data.location ||
+                null
             );
         }
 
 
         if (
-            data.hardinessZone
+            Object.prototype.hasOwnProperty.call(
+                data,
+                "hardinessZone"
+            )
         ) {
             setHardinessZone(
-                data.hardinessZone
+                data.hardinessZone ||
+                ""
             );
         }
 
 
         if (
-            data.lastSpringFrost
+            Object.prototype.hasOwnProperty.call(
+                data,
+                "lastSpringFrost"
+            )
         ) {
             setLastSpringFrost(
-                data.lastSpringFrost
+                data.lastSpringFrost ||
+                ""
             );
         }
 
 
         if (
-            data.firstFallFrost
+            Object.prototype.hasOwnProperty.call(
+                data,
+                "firstFallFrost"
+            )
         ) {
             setFirstFallFrost(
-                data.firstFallFrost
+                data.firstFallFrost ||
+                ""
             );
         }
 
 
         if (
-            data.growingDataSource
+            Object.prototype.hasOwnProperty.call(
+                data,
+                "growingDataSource"
+            )
         ) {
             setGrowingDataSource(
-                data.growingDataSource
+                data.growingDataSource ||
+                ""
             );
         }
 
 
         if (
-            data.growingDataUpdatedAt
+            Object.prototype.hasOwnProperty.call(
+                data,
+                "growingDataUpdatedAt"
+            )
         ) {
             setGrowingDataUpdatedAt(
-                data.growingDataUpdatedAt
+                data.growingDataUpdatedAt ||
+                ""
             );
         }
 
@@ -1063,6 +1184,30 @@ function Home({
         }
 
 
+        const environmentChanged =
+            gardenProfile?.type !== gardenType ||
+            gardenProfile?.sunlight !== sunlight ||
+            (
+                gardenProfile?.hardinessZone ||
+                designSpace.hardinessZone ||
+                ""
+            ) !== hardinessZone ||
+            (designSpace.lastSpringFrost || "") !== lastSpringFrost ||
+            (designSpace.firstFallFrost || "") !== firstFallFrost ||
+            !sameLocation(
+                designSpace.location,
+                gardenLocation
+            );
+
+
+        const nextDesignSpace =
+            environmentChanged
+                ? clearGeneratedPlan(
+                    designSpace
+                )
+                : designSpace;
+
+
         const updatedProfile = {
             ...(gardenProfile || {}),
 
@@ -1074,7 +1219,7 @@ function Home({
             hardinessZone,
 
             designSpace: {
-                ...designSpace,
+                ...nextDesignSpace,
 
                 hardinessZone,
 
@@ -1200,11 +1345,26 @@ function Home({
         }
 
 
+        const featuresChanged =
+            !sameStringArray(
+                designSpace.features || [],
+                selectedFeatures
+            );
+
+
+        const nextDesignSpace =
+            featuresChanged
+                ? clearGeneratedPlan(
+                    designSpace
+                )
+                : designSpace;
+
+
         const updatedProfile = {
             ...(gardenProfile || {}),
 
             designSpace: {
-                ...designSpace,
+                ...nextDesignSpace,
 
                 features:
                     selectedFeatures,
@@ -1303,11 +1463,26 @@ function Home({
         }
 
 
+        const cropsChanged =
+            !sameStringArray(
+                designSpace.growGoals || [],
+                selectedCrops
+            );
+
+
+        const nextDesignSpace =
+            cropsChanged
+                ? clearGeneratedPlan(
+                    designSpace
+                )
+                : designSpace;
+
+
         const updatedProfile = {
             ...(gardenProfile || {}),
 
             designSpace: {
-                ...designSpace,
+                ...nextDesignSpace,
 
                 growGoals:
                     selectedCrops

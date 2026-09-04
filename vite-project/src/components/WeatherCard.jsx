@@ -3,6 +3,9 @@ import {
 } from "../context/WeatherContext";
 
 
+import Icon from "./Icon";
+
+
 function WeatherCard() {
 
     const {
@@ -190,8 +193,12 @@ function WeatherCard() {
 
                     <div>
 
-                        <h2>
-                            🌤️ Local Weather
+                        <h2 className="weather-title">
+                            <Icon
+                                name="cloudSun"
+                                size={19}
+                            />
+                            <span>Local Weather</span>
                         </h2>
 
                         <p>
@@ -207,7 +214,10 @@ function WeatherCard() {
                 <div className="weather-error">
 
                     <span>
-                        📍
+                        <Icon
+                            name="mapPin"
+                            size={22}
+                        />
                     </span>
 
                     <p>
@@ -216,8 +226,8 @@ function WeatherCard() {
 
                     <button
                         type="button"
-                        onClick={
-                            refreshWeather
+                        onClick={() =>
+                            refreshWeather()
                         }
                     >
                         Try Location Again
@@ -254,8 +264,12 @@ function WeatherCard() {
 
                 <div>
 
-                    <h2>
-                        🌤️ Local Weather
+                    <h2 className="weather-title">
+                        <Icon
+                            name="cloudSun"
+                            size={19}
+                        />
+                        <span>Local Weather</span>
                     </h2>
 
                     <p>
@@ -269,13 +283,16 @@ function WeatherCard() {
                 <button
                     type="button"
                     className="weather-refresh-button"
-                    onClick={
-                        refreshWeather
+                    onClick={() =>
+                        refreshWeather()
                     }
                     aria-label="Refresh weather"
                     title="Refresh weather"
                 >
-                    ↻
+                    <Icon
+                        name="rotate"
+                        size={17}
+                    />
                 </button>
 
             </div>

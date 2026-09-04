@@ -741,7 +741,7 @@ function WateringReminder({
                         </p>
 
                         <Link
-                            to="/garden"
+                            to="/"
                         >
                             Build Garden
                         </Link>

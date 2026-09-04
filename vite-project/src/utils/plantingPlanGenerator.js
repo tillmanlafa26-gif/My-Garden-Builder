@@ -1,6 +1,6 @@
 import {
     getCropById
-} from "../data/cropplanningData";
+} from "../data/cropPlanningData";
 
 
 const sunlightLevels = {

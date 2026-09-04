@@ -657,7 +657,7 @@ function Plants({
 
 
                         <Link
-                            to="/garden"
+                            to="/"
 
                             className="garden-profile-link"
                         >

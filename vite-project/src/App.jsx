@@ -23,6 +23,10 @@ import {
 } from "./data/tasks";
 
 import {
+    getCropById
+} from "./data/cropPlanningData";
+
+import {
     createHarvestCalendarEvents
 } from "./utils/harvestScheduleGenerator";
 
@@ -852,6 +856,283 @@ function syncHarvestEventsForPlants(
 
 
 /* =========================
+   PLANTING EVENT HELPERS
+========================= */
+
+function getPlantingCompletion(
+    gardenProfile,
+    eventId
+) {
+
+    const completions =
+        gardenProfile
+            ?.designSpace
+            ?.completedPlantingEvents;
+
+
+    if (
+        !Array.isArray(
+            completions
+        )
+    ) {
+
+        return null;
+
+    }
+
+
+    return completions.find(
+        (completion) => {
+
+            if (
+                typeof completion ===
+                "string"
+            ) {
+
+                return completion ===
+                    eventId;
+
+            }
+
+
+            return completion?.eventId ===
+                eventId;
+
+        }
+    ) || null;
+
+}
+
+
+function getStartMethodForPlantingEvent(
+    calendarEvent,
+    crop
+) {
+
+    if (
+        calendarEvent?.plantingAction ===
+        "start-indoors"
+    ) {
+
+        return "seed";
+
+    }
+
+
+    if (
+        calendarEvent?.plantingAction ===
+        "direct-sow"
+    ) {
+
+        return "direct-sow";
+
+    }
+
+
+    if (
+        calendarEvent?.plantingAction ===
+        "transplant-outside"
+    ) {
+
+        return "transplant";
+
+    }
+
+
+    return (
+        crop?.preferredStartMethod ||
+        "direct-sow"
+    );
+
+}
+
+
+function getPlantStageForAction(
+    plantingAction
+) {
+
+    if (
+        plantingAction ===
+        "start-indoors"
+    ) {
+
+        return "seedling";
+
+    }
+
+
+    if (
+        plantingAction ===
+        "transplant-outside"
+    ) {
+
+        return "transplanted";
+
+    }
+
+
+    return "planted";
+
+}
+
+
+function applyPlantingEventToPlant(
+    plant,
+    calendarEvent,
+    crop
+) {
+
+    const startMethod =
+        getStartMethodForPlantingEvent(
+            calendarEvent,
+            crop
+        );
+
+
+    const eventDate =
+        calendarEvent.date;
+
+
+    const nextPlant = {
+
+        ...plant,
+
+        cropId:
+            crop.id,
+
+        startDate:
+            eventDate,
+
+        startMethod,
+
+        currentStage:
+            getPlantStageForAction(
+                calendarEvent.plantingAction
+            ),
+
+        lastPlantingAction:
+            calendarEvent.plantingAction,
+
+        lastPlantingActionDate:
+            eventDate,
+
+        lastPlantingEventId:
+            calendarEvent.id
+
+    };
+
+
+    if (
+        calendarEvent.plantingAction ===
+        "start-indoors"
+    ) {
+
+        nextPlant.seedStartDate =
+            eventDate;
+
+    }
+
+
+    if (
+        calendarEvent.plantingAction ===
+        "direct-sow"
+    ) {
+
+        nextPlant.directSowDate =
+            eventDate;
+
+    }
+
+
+    if (
+        calendarEvent.plantingAction ===
+        "transplant-outside"
+    ) {
+
+        nextPlant.transplantDate =
+            eventDate;
+
+    }
+
+
+    if (
+        calendarEvent.plantingAction ===
+        "fall-planting"
+    ) {
+
+        nextPlant.fallPlantDate =
+            eventDate;
+
+    }
+
+
+    return nextPlant;
+
+}
+
+
+function createCorePlantFromPlantingEvent(
+    calendarEvent,
+    crop
+) {
+
+    const addedAt =
+        new Date()
+            .toISOString();
+
+
+    return normalizeGardenPlant(
+        applyPlantingEventToPlant(
+            {
+
+                id:
+                    `core-${crop.id}`,
+
+                cropId:
+                    crop.id,
+
+                plantKey:
+                    `core:${crop.id}`,
+
+                source:
+                    "core",
+
+                name:
+                    crop.name,
+
+                common_name:
+                    crop.name,
+
+                icon:
+                    crop.icon,
+
+                category:
+                    "Garden Crop",
+
+                sunlight:
+                    crop.minimumSunlight,
+
+                watering:
+                    "Average",
+
+                water:
+                    "Average",
+
+                addedAt,
+
+                addedFrom:
+                    "seasonal-calendar"
+
+            },
+            calendarEvent,
+            crop
+        )
+    );
+
+}
+
+
+/* =========================
    SEASONAL PLANTING EVENTS
 ========================= */
 
@@ -873,6 +1154,64 @@ function createSeasonalPlantingCalendarEvents(
             : [];
 
 
+    function createEvent({
+        id,
+        date,
+        title,
+        crop,
+        plantingAction
+    }) {
+
+        const completion =
+            getPlantingCompletion(
+                gardenProfile,
+                id
+            );
+
+
+        return {
+
+            id,
+
+            date,
+
+            type:
+                "planting",
+
+            title,
+
+            cropId:
+                crop.cropId,
+
+            cropName:
+                crop.name,
+
+            plantingAction,
+
+            automatic:
+                true,
+
+            completed:
+                Boolean(
+                    completion
+                ),
+
+            completedAt:
+                completion &&
+                typeof completion ===
+                    "object"
+                    ? completion.completedAt ||
+                      null
+                    : null,
+
+            source:
+                "seasonal-planting-planner"
+
+        };
+
+    }
+
+
     return cropSchedules.flatMap(
         (crop) => {
 
@@ -887,36 +1226,29 @@ function createSeasonalPlantingCalendarEvents(
                 crop.indoorStartDate
             ) {
 
-                events.push({
+                const eventId =
+                    `seasonal-${crop.cropId}-indoor-${crop.indoorStartDate}`;
 
-                    id:
-                        `seasonal-${crop.cropId}-indoor-${crop.indoorStartDate}`,
 
-                    date:
-                        crop.indoorStartDate,
+                events.push(
+                    createEvent({
 
-                    type:
-                        "planting",
+                        id:
+                            eventId,
 
-                    title:
-                        `Start ${crop.name} Indoors`,
+                        date:
+                            crop.indoorStartDate,
 
-                    cropId:
-                        crop.cropId,
+                        title:
+                            `Start ${crop.name} Indoors`,
 
-                    cropName:
-                        crop.name,
+                        crop,
 
-                    plantingAction:
-                        "start-indoors",
+                        plantingAction:
+                            "start-indoors"
 
-                    automatic:
-                        true,
-
-                    source:
-                        "seasonal-planting-planner"
-
-                });
+                    })
+                );
 
             }
 
@@ -967,34 +1299,27 @@ function createSeasonalPlantingCalendarEvents(
                 }
 
 
-                events.push({
+                const eventId =
+                    `seasonal-${crop.cropId}-spring-${crop.springPlantDate}`;
 
-                    id:
-                        `seasonal-${crop.cropId}-spring-${crop.springPlantDate}`,
 
-                    date:
-                        crop.springPlantDate,
+                events.push(
+                    createEvent({
 
-                    type:
-                        "planting",
+                        id:
+                            eventId,
 
-                    title,
+                        date:
+                            crop.springPlantDate,
 
-                    cropId:
-                        crop.cropId,
+                        title,
 
-                    cropName:
-                        crop.name,
+                        crop,
 
-                    plantingAction,
+                        plantingAction
 
-                    automatic:
-                        true,
-
-                    source:
-                        "seasonal-planting-planner"
-
-                });
+                    })
+                );
 
             }
 
@@ -1007,36 +1332,29 @@ function createSeasonalPlantingCalendarEvents(
                 crop.fallPlantDate
             ) {
 
-                events.push({
+                const eventId =
+                    `seasonal-${crop.cropId}-fall-${crop.fallPlantDate}`;
 
-                    id:
-                        `seasonal-${crop.cropId}-fall-${crop.fallPlantDate}`,
 
-                    date:
-                        crop.fallPlantDate,
+                events.push(
+                    createEvent({
 
-                    type:
-                        "planting",
+                        id:
+                            eventId,
 
-                    title:
-                        `Fall Plant ${crop.name}`,
+                        date:
+                            crop.fallPlantDate,
 
-                    cropId:
-                        crop.cropId,
+                        title:
+                            `Fall Plant ${crop.name}`,
 
-                    cropName:
-                        crop.name,
+                        crop,
 
-                    plantingAction:
-                        "fall-planting",
+                        plantingAction:
+                            "fall-planting"
 
-                    automatic:
-                        true,
-
-                    source:
-                        "seasonal-planting-planner"
-
-                });
+                    })
+                );
 
             }
 
@@ -2033,6 +2351,225 @@ function App() {
 
 
     /* =========================
+       COMPLETE PLANTING EVENT
+    ========================= */
+
+    function completeSeasonalPlantingEvent(
+        calendarEvent
+    ) {
+
+        if (
+            !calendarEvent ||
+            calendarEvent.source !==
+                "seasonal-planting-planner" ||
+            !calendarEvent.cropId ||
+            !calendarEvent.date ||
+            !gardenProfile
+                ?.designSpace
+                ?.isActive
+        ) {
+
+            return;
+
+        }
+
+
+        const crop =
+            getCropById(
+                calendarEvent.cropId
+            );
+
+
+        if (
+            !crop
+        ) {
+
+            console.error(
+                "Unable to track planting event because the crop could not be found:",
+                calendarEvent.cropId
+            );
+
+            return;
+
+        }
+
+
+        const existingPlant =
+            gardenPlants.find(
+                (plant) =>
+                    plant.cropId ===
+                        crop.id ||
+                    plant.plantKey ===
+                        `core:${crop.id}`
+            );
+
+
+        let nextPlants;
+
+
+        if (
+            existingPlant
+        ) {
+
+            nextPlants =
+                gardenPlants.map(
+                    (plant) => {
+
+                        if (
+                            plant.plantKey !==
+                            existingPlant.plantKey
+                        ) {
+
+                            return plant;
+
+                        }
+
+
+                        return normalizeGardenPlant(
+                            applyPlantingEventToPlant(
+                                plant,
+                                calendarEvent,
+                                crop
+                            )
+                        );
+
+                    }
+                );
+
+        } else {
+
+            const newPlant =
+                createCorePlantFromPlantingEvent(
+                    calendarEvent,
+                    crop
+                );
+
+
+            if (
+                !newPlant
+            ) {
+
+                return;
+
+            }
+
+
+            nextPlants = [
+                ...gardenPlants,
+                newPlant
+            ];
+
+        }
+
+
+        const currentCompletions =
+            Array.isArray(
+                gardenProfile
+                    ?.designSpace
+                    ?.completedPlantingEvents
+            )
+                ? gardenProfile
+                    .designSpace
+                    .completedPlantingEvents
+                : [];
+
+
+        const nextCompletions = [
+
+            ...currentCompletions.filter(
+                (completion) => {
+
+                    const completionId =
+                        typeof completion ===
+                            "string"
+                            ? completion
+                            : completion?.eventId;
+
+
+                    return completionId !==
+                        calendarEvent.id;
+
+                }
+            ),
+
+            {
+                eventId:
+                    calendarEvent.id,
+
+                cropId:
+                    crop.id,
+
+                date:
+                    calendarEvent.date,
+
+                plantingAction:
+                    calendarEvent.plantingAction,
+
+                completedAt:
+                    new Date()
+                        .toISOString()
+            }
+
+        ];
+
+
+        const nextProfile = {
+
+            ...gardenProfile,
+
+            designSpace: {
+
+                ...gardenProfile.designSpace,
+
+                completedPlantingEvents:
+                    nextCompletions
+
+            }
+
+        };
+
+
+        setGardenProfile(
+            nextProfile
+        );
+
+
+        setGardenPlants(
+            nextPlants
+        );
+
+
+        setWateringRecords(
+            (currentRecords) =>
+                syncWateringRecordsForPlants(
+                    nextPlants,
+                    currentRecords
+                )
+        );
+
+
+        setCalendarEvents(
+            (currentEvents) => {
+
+                const harvestSyncedEvents =
+                    syncHarvestEventsForPlants(
+                        nextPlants,
+                        currentEvents
+                    );
+
+
+                return syncSeasonalPlantingEventsForProfile(
+                    nextProfile,
+                    harvestSyncedEvents
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =========================
        JOURNAL
     ========================= */
 
@@ -2349,6 +2886,18 @@ function App() {
 
                             onMarkPlantWatered={
                                 markPlantWatered
+                            }
+
+                            gardenActive={
+                                Boolean(
+                                    gardenProfile
+                                        ?.designSpace
+                                        ?.isActive
+                                )
+                            }
+
+                            onCompletePlantingEvent={
+                                completeSeasonalPlantingEvent
                             }
                         />
 

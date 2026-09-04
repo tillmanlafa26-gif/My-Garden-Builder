@@ -194,7 +194,20 @@ function HomeGardenBuildStep({
                 materials:
                     materialPlan,
 
-                buildPlan
+                buildPlan,
+
+                isActive:
+                    buildAlreadySaved
+                        ? Boolean(
+                            designSpace.isActive
+                        )
+                        : false,
+
+                activatedAt:
+                    buildAlreadySaved
+                        ? designSpace.activatedAt ||
+                          null
+                        : null
 
             }
 
