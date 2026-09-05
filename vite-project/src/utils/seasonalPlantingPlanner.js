@@ -308,25 +308,13 @@ function buildCropSchedule({
 
 
     /* =====================================================
-       INDOOR START
-    ===================================================== */
-
-    if (
-        lastSpringFrost &&
-        indoorStartWeeks > 0
-    ) {
-
-        indoorStartDate =
-            addWeeks(
-                lastSpringFrost,
-                -indoorStartWeeks
-            );
-
-    }
-
-
-    /* =====================================================
        SPRING PLANTING
+
+       Calculate the outdoor planting date first. Indoor
+       starts are based on how many weeks the seedling
+       needs before that outdoor date, not directly on the
+       frost date. This keeps seed-start and transplant
+       dates in the correct chronological order.
     ===================================================== */
 
     if (
@@ -352,6 +340,24 @@ function buildCropSchedule({
                 );
 
         }
+
+    }
+
+
+    /* =====================================================
+       INDOOR START
+    ===================================================== */
+
+    if (
+        springPlantDate &&
+        indoorStartWeeks > 0
+    ) {
+
+        indoorStartDate =
+            addWeeks(
+                springPlantDate,
+                -indoorStartWeeks
+            );
 
     }
 

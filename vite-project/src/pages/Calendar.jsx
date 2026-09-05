@@ -3,6 +3,10 @@ import {
     useState
 } from "react";
 
+import {
+    Link
+} from "react-router";
+
 
 import BottomNav
     from "../components/BottomNav";
@@ -1791,16 +1795,45 @@ function Calendar({
 
                                                                 )
                                                         : isAutomaticHarvest
-                                                            ? (
+                                                            ? calendarEvent.completed
+                                                                ? (
 
-                                                                <span
-                                                                    className="calendar-auto-badge"
-                                                                    title="Automatically generated from your harvest plan"
-                                                                >
-                                                                    Auto
-                                                                </span>
+                                                                    <span
+                                                                        className="calendar-plan-status completed compact"
+                                                                        title="A harvest has been recorded"
+                                                                    >
+                                                                        <Icon
+                                                                            name="check"
+                                                                            size={12}
+                                                                        />
+                                                                        Done
+                                                                    </span>
 
-                                                            )
+                                                                )
+                                                                : calendarEvent.type ===
+                                                                    "harvest" &&
+                                                                    gardenActive
+                                                                    ? (
+
+                                                                        <Link
+                                                                            to="/plants"
+                                                                            className="calendar-harvest-action-link"
+                                                                            title="Record this harvest in My Plants"
+                                                                        >
+                                                                            Record
+                                                                        </Link>
+
+                                                                    )
+                                                                    : (
+
+                                                                        <span
+                                                                            className="calendar-auto-badge"
+                                                                            title="Automatically generated from your harvest plan"
+                                                                        >
+                                                                            Auto
+                                                                        </span>
+
+                                                                    )
                                                             : (
 
                                                             <button

@@ -624,7 +624,11 @@ function WateringReminder({
             )
             .filter(
                 (plant) =>
-                    plant.nextWatering
+                    plant.nextWatering &&
+                    plant.growthStageOverride !==
+                        "harvested" &&
+                    plant.currentStage !==
+                        "harvested"
             )
             .sort(
                 (

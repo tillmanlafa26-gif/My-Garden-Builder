@@ -5,6 +5,10 @@ import {
 
 import Icon from "./Icon";
 
+import {
+    getPlantGrowthStage
+} from "../utils/plantGrowthStage";
+
 
 function MyGardenPlants({
     gardenPlants = [],
@@ -77,7 +81,15 @@ function MyGardenPlants({
 
                             {
                                 gardenPlants.map(
-                                    (plant) => (
+                                    (plant) => {
+
+                                        const growthStage =
+                                            getPlantGrowthStage(
+                                                plant
+                                            );
+
+
+                                        return (
 
                                         <div
                                             className="my-garden-plant"
@@ -134,6 +146,27 @@ function MyGardenPlants({
                                                 </small>
 
 
+                                                <span className="my-garden-growth-stage">
+                                                    <Icon
+                                                        name={
+                                                            growthStage.icon
+                                                        }
+                                                        size={13}
+                                                    />
+
+                                                    {
+                                                        growthStage.label
+                                                    }
+
+                                                    {
+                                                        growthStage.source ===
+                                                        "manual"
+                                                            ? " • Manual"
+                                                            : ""
+                                                    }
+                                                </span>
+
+
                                                 {
                                                     plant.source ===
                                                     "perenual" && (
@@ -167,7 +200,9 @@ function MyGardenPlants({
 
                                         </div>
 
-                                    )
+                                        );
+
+                                    }
                                 )
                             }
 

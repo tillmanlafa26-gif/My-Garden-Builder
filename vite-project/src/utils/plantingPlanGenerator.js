@@ -94,8 +94,16 @@ export function generatePlantingPlan({
         ] || 1;
 
 
+    const selectedFeatures =
+        Array.isArray(
+            features
+        )
+            ? features
+            : [];
+
+
     const hasTrellis =
-        features.includes(
+        selectedFeatures.includes(
             "trellis"
         );
 

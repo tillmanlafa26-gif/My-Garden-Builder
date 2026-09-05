@@ -680,23 +680,67 @@ function calculateIrrigationMaterials(
         );
 
 
-    const dripLine =
+    const dripLayout =
         raisedBeds.reduce(
             (
-                total,
+                totals,
                 bed
-            ) =>
-                total +
-                bed.width *
-                2,
-            0
+            ) => {
+
+                const longSide =
+                    Math.max(
+                        bed.width,
+                        bed.length
+                    );
+
+
+                const shortSide =
+                    Math.min(
+                        bed.width,
+                        bed.length
+                    );
+
+
+                /*
+                    Approximate one drip run every
+                    18 inches across the short side,
+                    with each run following the long
+                    side of the bed.
+                */
+
+                const lineCount =
+                    Math.max(
+                        1,
+                        Math.ceil(
+                            shortSide /
+                            1.5
+                        )
+                    );
+
+
+                totals.linearFeet +=
+                    longSide *
+                    lineCount;
+
+
+                totals.lineCount +=
+                    lineCount;
+
+
+                return totals;
+
+            },
+            {
+                linearFeet: 0,
+                lineCount: 0
+            }
         );
 
 
     const tubing =
         (
             mainLine +
-            dripLine
+            dripLayout.linearFeet
         ) *
         1.1;
 
@@ -741,7 +785,7 @@ function calculateIrrigationMaterials(
             quantity:
                 Math.max(
                     2,
-                    raisedBeds.length *
+                    dripLayout.lineCount *
                         2
                 ),
 
@@ -749,7 +793,7 @@ function calculateIrrigationMaterials(
                 "fittings",
 
             note:
-                "Starter estimate for bed connections."
+                "Starter estimate for drip-line starts and ends at approximately 18 in spacing."
 
         }),
 

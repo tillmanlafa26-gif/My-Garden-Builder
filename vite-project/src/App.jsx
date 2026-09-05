@@ -820,6 +820,44 @@ function syncHarvestEventsForPlants(
                 }
 
 
+                const harvestHistory =
+                    Array.isArray(
+                        plant.harvestHistory
+                    )
+                        ? plant.harvestHistory
+                        : [];
+
+
+                const firstHarvest =
+                    [...harvestHistory]
+                        .sort(
+                            (
+                                recordA,
+                                recordB
+                            ) =>
+                                String(
+                                    recordA.date ||
+                                    ""
+                                ).localeCompare(
+                                    String(
+                                        recordB.date ||
+                                        ""
+                                    )
+                                )
+                        )[0] ||
+                    null;
+
+
+                const finalHarvest =
+                    harvestHistory.find(
+                        (record) =>
+                            Boolean(
+                                record.finalHarvest
+                            )
+                    ) ||
+                    null;
+
+
                 return createHarvestCalendarEvents({
 
                     plantKey:
@@ -841,7 +879,51 @@ function syncHarvestEventsForPlants(
                     startMethod:
                         plant.startMethod
 
-                });
+                }).map(
+                    (event) => {
+
+                        if (
+                            event.type ===
+                                "harvest" &&
+                            firstHarvest
+                        ) {
+
+                            return {
+                                ...event,
+                                completed:
+                                    true,
+                                completedAt:
+                                    firstHarvest.recordedAt ||
+                                    firstHarvest.date ||
+                                    null
+                            };
+
+                        }
+
+
+                        if (
+                            event.type ===
+                                "harvest-window-end" &&
+                            finalHarvest
+                        ) {
+
+                            return {
+                                ...event,
+                                completed:
+                                    true,
+                                completedAt:
+                                    finalHarvest.recordedAt ||
+                                    finalHarvest.date ||
+                                    null
+                            };
+
+                        }
+
+
+                        return event;
+
+                    }
+                );
 
             }
         );
@@ -1009,6 +1091,13 @@ function applyPlantingEventToPlant(
             getPlantStageForAction(
                 calendarEvent.plantingAction
             ),
+
+        growthStageOverride:
+            null,
+
+        growthStageUpdatedAt:
+            new Date()
+                .toISOString(),
 
         lastPlantingAction:
             calendarEvent.plantingAction,
@@ -2060,6 +2149,142 @@ function App() {
 
 
     /* =========================
+       UPDATE GROWTH STAGE
+    ========================= */
+
+    function updateGardenPlantGrowthStage({
+        plantKey,
+        stage
+    }) {
+
+        if (
+            !plantKey
+        ) {
+
+            return;
+
+        }
+
+
+        const nextPlants =
+            gardenPlants.map(
+                (plant) => {
+
+                    if (
+                        plant.plantKey !==
+                        plantKey
+                    ) {
+
+                        return plant;
+
+                    }
+
+
+                    const resolvedStage =
+                        stage ||
+                        null;
+
+
+                    return {
+
+                        ...plant,
+
+                        growthStageOverride:
+                            resolvedStage,
+
+                        currentStage:
+                            resolvedStage ||
+                            (
+                                plant.startMethod ===
+                                "seed"
+                                    ? "seedling"
+                                    : plant.startMethod ===
+                                      "transplant"
+                                        ? "transplanted"
+                                        : "planted"
+                            ),
+
+                        growthStageUpdatedAt:
+                            new Date()
+                                .toISOString()
+
+                    };
+
+                }
+            );
+
+
+        setGardenPlants(
+            nextPlants
+        );
+
+
+        setWateringRecords(
+            (currentRecords) =>
+                currentRecords.map(
+                    (record) => {
+
+                        if (
+                            record.plantKey !==
+                            plantKey
+                        ) {
+
+                            return record;
+
+                        }
+
+
+                        if (
+                            stage ===
+                            "harvested"
+                        ) {
+
+                            return {
+                                ...record,
+                                nextWatering:
+                                    null,
+                                lastScheduleAction:
+                                    "harvested",
+                                lastScheduleActionDate:
+                                    getLocalDateString(
+                                        new Date()
+                                    )
+                            };
+
+                        }
+
+
+                        if (
+                            !record.nextWatering
+                        ) {
+
+                            return {
+                                ...record,
+                                nextWatering:
+                                    getLocalDateString(
+                                        new Date()
+                                    ),
+                                lastScheduleAction:
+                                    "resumed",
+                                lastScheduleActionDate:
+                                    getLocalDateString(
+                                        new Date()
+                                    )
+                            };
+
+                        }
+
+
+                        return record;
+
+                    }
+                )
+        );
+
+    }
+
+
+    /* =========================
        WATER PLANT
     ========================= */
 
@@ -2584,6 +2809,411 @@ function App() {
             ]
         );
 
+
+        if (
+            newEntry?.type !==
+                "harvest" ||
+            !newEntry?.plantKey
+        ) {
+
+            return;
+
+        }
+
+
+        const targetPlant =
+            gardenPlants.find(
+                (plant) =>
+                    plant.plantKey ===
+                    newEntry.plantKey
+            );
+
+
+        if (
+            !targetPlant
+        ) {
+
+            return;
+
+        }
+
+
+        const recordedAt =
+            new Date()
+                .toISOString();
+
+
+        const harvestRecord = {
+            id:
+                `journal-harvest-${newEntry.id}`,
+            journalEntryId:
+                newEntry.id,
+            date:
+                newEntry.date,
+            amount:
+                String(
+                    newEntry.harvestAmount ||
+                    ""
+                ).trim(),
+            notes:
+                String(
+                    newEntry.notes ||
+                    ""
+                ).trim(),
+            finalHarvest:
+                Boolean(
+                    newEntry.finalHarvest
+                ),
+            recordedAt,
+            source:
+                "journal"
+        };
+
+
+        const nextPlants =
+            gardenPlants.map(
+                (plant) => {
+
+                    if (
+                        plant.plantKey !==
+                        targetPlant.plantKey
+                    ) {
+
+                        return plant;
+
+                    }
+
+
+                    const currentHistory =
+                        Array.isArray(
+                            plant.harvestHistory
+                        )
+                            ? plant.harvestHistory
+                            : [];
+
+
+                    const nextHistory = [
+                        ...currentHistory,
+                        harvestRecord
+                    ];
+
+
+                    return {
+                        ...plant,
+                        harvestHistory:
+                            nextHistory,
+                        harvestCount:
+                            nextHistory.length,
+                        lastHarvestDate:
+                            newEntry.date,
+                        lastHarvestAmount:
+                            harvestRecord.amount,
+                        ...(
+                            harvestRecord.finalHarvest
+                                ? {
+                                    growthStageOverride:
+                                        "harvested",
+                                    currentStage:
+                                        "harvested",
+                                    growthStageUpdatedAt:
+                                        recordedAt,
+                                    harvestedAt:
+                                        newEntry.date
+                                }
+                                : {}
+                        )
+                    };
+
+                }
+            );
+
+
+        setGardenPlants(
+            nextPlants
+        );
+
+
+        if (
+            harvestRecord.finalHarvest
+        ) {
+
+            setWateringRecords(
+                (currentRecords) =>
+                    currentRecords.map(
+                        (record) => {
+
+                            if (
+                                record.plantKey !==
+                                targetPlant.plantKey
+                            ) {
+
+                                return record;
+
+                            }
+
+
+                            return {
+                                ...record,
+                                nextWatering:
+                                    null,
+                                lastScheduleAction:
+                                    "harvested",
+                                lastScheduleActionDate:
+                                    newEntry.date
+                            };
+
+                        }
+                    )
+            );
+
+        }
+
+
+        setCalendarEvents(
+            (currentEvents) =>
+                syncHarvestEventsForPlants(
+                    nextPlants,
+                    currentEvents
+                )
+        );
+
+    }
+
+
+    /* =========================
+       RECORD HARVEST
+    ========================= */
+
+    function recordGardenHarvest({
+        plantKey,
+        date,
+        amount,
+        notes,
+        finalHarvest = false
+    }) {
+
+        const cleanAmount =
+            String(
+                amount ||
+                ""
+            ).trim();
+
+
+        const cleanNotes =
+            String(
+                notes ||
+                ""
+            ).trim();
+
+
+        if (
+            !plantKey ||
+            !date ||
+            !cleanAmount
+        ) {
+
+            return false;
+
+        }
+
+
+        const targetPlant =
+            gardenPlants.find(
+                (plant) =>
+                    plant.plantKey ===
+                    plantKey
+            );
+
+
+        if (
+            !targetPlant
+        ) {
+
+            return false;
+
+        }
+
+
+        const recordedAt =
+            new Date()
+                .toISOString();
+
+
+        const recordId =
+            `harvest-${plantKey}-${Date.now()}`;
+
+
+        const harvestRecord = {
+            id:
+                recordId,
+            date,
+            amount:
+                cleanAmount,
+            notes:
+                cleanNotes,
+            finalHarvest:
+                Boolean(
+                    finalHarvest
+                ),
+            recordedAt,
+            source:
+                "plant-tracker"
+        };
+
+
+        const nextPlants =
+            gardenPlants.map(
+                (plant) => {
+
+                    if (
+                        plant.plantKey !==
+                        plantKey
+                    ) {
+
+                        return plant;
+
+                    }
+
+
+                    const currentHistory =
+                        Array.isArray(
+                            plant.harvestHistory
+                        )
+                            ? plant.harvestHistory
+                            : [];
+
+
+                    const nextHistory = [
+                        ...currentHistory,
+                        harvestRecord
+                    ];
+
+
+                    return {
+                        ...plant,
+                        harvestHistory:
+                            nextHistory,
+                        harvestCount:
+                            nextHistory.length,
+                        lastHarvestDate:
+                            date,
+                        lastHarvestAmount:
+                            cleanAmount,
+                        ...(
+                            finalHarvest
+                                ? {
+                                    growthStageOverride:
+                                        "harvested",
+                                    currentStage:
+                                        "harvested",
+                                    growthStageUpdatedAt:
+                                        recordedAt,
+                                    harvestedAt:
+                                        date
+                                }
+                                : {}
+                        )
+                    };
+
+                }
+            );
+
+
+        setGardenPlants(
+            nextPlants
+        );
+
+
+        if (
+            finalHarvest
+        ) {
+
+            setWateringRecords(
+                (currentRecords) =>
+                    currentRecords.map(
+                        (record) => {
+
+                            if (
+                                record.plantKey !==
+                                plantKey
+                            ) {
+
+                                return record;
+
+                            }
+
+
+                            return {
+                                ...record,
+                                nextWatering:
+                                    null,
+                                lastScheduleAction:
+                                    "harvested",
+                                lastScheduleActionDate:
+                                    date
+                            };
+
+                        }
+                    )
+            );
+
+        }
+
+
+        setCalendarEvents(
+            (currentEvents) =>
+                syncHarvestEventsForPlants(
+                    nextPlants,
+                    currentEvents
+                )
+        );
+
+
+        const plantName =
+            targetPlant.name ||
+            targetPlant.common_name ||
+            "Plant";
+
+
+        setJournalEntries(
+            (currentEntries) => [
+                ...currentEntries,
+                {
+                    id:
+                        `journal-${recordId}`,
+                    date,
+                    type:
+                        "harvest",
+                    plantKey:
+                        targetPlant.plantKey,
+                    plantId:
+                        targetPlant.id,
+                    title:
+                        `Harvested ${plantName}`,
+                    notes:
+                        cleanNotes ||
+                        (
+                            finalHarvest
+                                ? "Final harvest recorded from My Plants."
+                                : "Harvest recorded from My Plants."
+                        ),
+                    harvestAmount:
+                        cleanAmount,
+                    finalHarvest:
+                        Boolean(
+                            finalHarvest
+                        ),
+                    source:
+                        "harvest-tracker",
+                    harvestRecordId:
+                        recordId
+                }
+            ]
+        );
+
+
+        return true;
+
     }
 
 
@@ -2610,6 +3240,18 @@ function App() {
     const automaticWateringEvents =
         gardenPlants.flatMap(
             (plant) => {
+
+                if (
+                    plant.growthStageOverride ===
+                        "harvested" ||
+                    plant.currentStage ===
+                        "harvested"
+                ) {
+
+                    return [];
+
+                }
+
 
                 const wateringRecord =
                     wateringRecords.find(
@@ -2836,6 +3478,14 @@ function App() {
 
                             onUpdatePlantStart={
                                 updateGardenPlantStart
+                            }
+
+                            onUpdateGrowthStage={
+                                updateGardenPlantGrowthStage
+                            }
+
+                            onRecordHarvest={
+                                recordGardenHarvest
                             }
                         />
 

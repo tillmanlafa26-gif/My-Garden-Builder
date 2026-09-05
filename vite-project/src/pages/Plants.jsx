@@ -14,6 +14,12 @@ import VegetableLibrary
 import BottomNav
     from "../components/BottomNav";
 
+import Icon
+    from "../components/Icon";
+
+import PlantHarvestTracker
+    from "../components/PlantHarvestTracker";
+
 
 import {
     gardenPlans,
@@ -30,6 +36,11 @@ import {
 import {
     calculateHarvestSchedule
 } from "../utils/harvestScheduleGenerator";
+
+import {
+    getAvailableGrowthStages,
+    getPlantGrowthStage
+} from "../utils/plantGrowthStage";
 
 
 /* =========================
@@ -261,7 +272,11 @@ function Plants({
 
     onRemovePlant,
 
-    onUpdatePlantStart
+    onUpdatePlantStart,
+
+    onUpdateGrowthStage,
+
+    onRecordHarvest
 
 }) {
 
@@ -756,6 +771,296 @@ function Plants({
                 </span>
 
             </section>
+
+
+            {/* =========================
+                GROWTH STAGES
+            ========================= */}
+
+            {
+                gardenPlants.length >
+                0 && (
+
+                    <section className="designer-card plant-growth-section">
+
+                        <div className="designer-section-heading">
+
+                            <span className="plant-growth-heading-icon">
+                                <Icon
+                                    name="sprout"
+                                    size={18}
+                                />
+                            </span>
+
+
+                            <div>
+
+                                <h2>
+                                    Growth Stages
+                                </h2>
+
+
+                                <p>
+                                    Track where each crop is
+                                    in its lifecycle. Estimates
+                                    update automatically from
+                                    planting dates and maturity.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div className="plant-growth-list">
+
+                            {
+                                gardenPlants.map(
+                                    (plant) => {
+
+                                        const growthStage =
+                                            getPlantGrowthStage(
+                                                plant
+                                            );
+
+
+                                        const stageOptions =
+                                            getAvailableGrowthStages(
+                                                plant
+                                            );
+
+
+                                        return (
+
+                                            <article
+                                                key={
+                                                    plant.plantKey
+                                                }
+                                                className="plant-growth-card"
+                                            >
+
+                                                <div className="plant-growth-card-header">
+
+                                                    <span className="plant-growth-crop-icon">
+                                                        {
+                                                            getPlantIcon(
+                                                                plant
+                                                            )
+                                                        }
+                                                    </span>
+
+
+                                                    <div>
+
+                                                        <strong>
+                                                            {
+                                                                getPlantName(
+                                                                    plant
+                                                                )
+                                                            }
+                                                        </strong>
+
+                                                        <small>
+                                                            {
+                                                                growthStage.source ===
+                                                                "manual"
+                                                                    ? "Manual stage"
+                                                                    : "Automatic estimate"
+                                                            }
+                                                        </small>
+
+                                                    </div>
+
+
+                                                    <span className="plant-growth-stage-badge">
+                                                        <Icon
+                                                            name={
+                                                                growthStage.icon
+                                                            }
+                                                            size={14}
+                                                        />
+
+                                                        {
+                                                            growthStage.label
+                                                        }
+                                                    </span>
+
+                                                </div>
+
+
+                                                {
+                                                    growthStage.progress !==
+                                                    null &&
+                                                    growthStage.progress !==
+                                                    undefined && (
+
+                                                        <div className="plant-growth-progress-wrap">
+
+                                                            <div className="plant-growth-progress-label">
+
+                                                                <span>
+                                                                    Estimated maturity progress
+                                                                </span>
+
+                                                                <strong>
+                                                                    {
+                                                                        growthStage.progress
+                                                                    }%
+                                                                </strong>
+
+                                                            </div>
+
+
+                                                            <div className="plant-growth-progress-bar">
+
+                                                                <div
+                                                                    className="plant-growth-progress-fill"
+                                                                    style={{
+                                                                        width:
+                                                                            `${growthStage.progress}%`
+                                                                    }}
+                                                                />
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    )
+                                                }
+
+
+                                                <p className="plant-growth-next-step">
+                                                    {
+                                                        growthStage.nextLabel
+                                                    }
+                                                </p>
+
+
+                                                <div className="plant-growth-controls">
+
+                                                    <label>
+
+                                                        <span>
+                                                            Stage
+                                                        </span>
+
+                                                        <select
+                                                            value={
+                                                                plant.growthStageOverride ||
+                                                                "automatic"
+                                                            }
+                                                            onChange={
+                                                                (event) =>
+                                                                    onUpdateGrowthStage?.({
+                                                                        plantKey:
+                                                                            plant.plantKey,
+                                                                        stage:
+                                                                            event.target.value ===
+                                                                            "automatic"
+                                                                                ? null
+                                                                                : event.target.value
+                                                                    })
+                                                            }
+                                                        >
+
+                                                            <option value="automatic">
+                                                                Automatic
+                                                            </option>
+
+                                                            {
+                                                                stageOptions.map(
+                                                                    (stage) => (
+
+                                                                        <option
+                                                                            key={
+                                                                                stage.id
+                                                                            }
+                                                                            value={
+                                                                                stage.id
+                                                                            }
+                                                                        >
+                                                                            {
+                                                                                stage.label
+                                                                            }
+                                                                        </option>
+
+                                                                    )
+                                                                )
+                                                            }
+
+                                                        </select>
+
+                                                    </label>
+
+
+                                                    {
+                                                        plant.growthStageOverride && (
+
+                                                            <button
+                                                                type="button"
+                                                                className="plant-growth-auto-button"
+                                                                onClick={() =>
+                                                                    onUpdateGrowthStage?.({
+                                                                        plantKey:
+                                                                            plant.plantKey,
+                                                                        stage:
+                                                                            null
+                                                                    })
+                                                                }
+                                                            >
+                                                                Use Automatic
+                                                            </button>
+
+                                                        )
+                                                    }
+
+                                                </div>
+
+
+                                                <PlantHarvestTracker
+                                                    plant={
+                                                        plant
+                                                    }
+                                                    growthStage={
+                                                        growthStage
+                                                    }
+                                                    onRecordHarvest={
+                                                        onRecordHarvest
+                                                    }
+                                                />
+
+                                            </article>
+
+                                        );
+
+                                    }
+                                )
+                            }
+
+                        </div>
+
+
+                        <div className="plant-growth-note">
+
+                            <Icon
+                                name="leaf"
+                                size={16}
+                            />
+
+                            <p>
+                                Growth stages are estimates.
+                                Weather, variety, soil, light,
+                                and local conditions can shift
+                                actual development, so you can
+                                correct any stage manually.
+                            </p>
+
+                        </div>
+
+                    </section>
+
+                )
+            }
 
 
             {/* =========================

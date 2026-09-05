@@ -144,7 +144,6 @@ function AppSettings({
                 <Icon
                     name="settings"
                     size={20}
-                    className="app-settings-button-icon"
                 />
             </button>
 

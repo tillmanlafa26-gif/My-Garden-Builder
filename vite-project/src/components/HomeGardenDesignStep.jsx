@@ -415,6 +415,20 @@ function HomeGardenDesignStep({
                     null,
 
                 buildPlan:
+                    null,
+
+                /*
+                    Regenerating the design changes
+                    the physical plan. An active
+                    garden must be reviewed, rebuilt,
+                    and activated again before planned
+                    planting actions can be tracked.
+                */
+
+                isActive:
+                    false,
+
+                activatedAt:
                     null
 
             }

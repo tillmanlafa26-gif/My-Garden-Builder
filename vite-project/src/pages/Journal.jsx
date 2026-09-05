@@ -108,6 +108,14 @@ function Journal({
 
 
     const [
+        finalHarvest,
+        setFinalHarvest
+    ] = useState(
+        false
+    );
+
+
+    const [
         message,
         setMessage
     ] = useState(
@@ -365,7 +373,16 @@ function Journal({
                 entryType ===
                 "harvest"
                     ? harvestAmount.trim()
-                    : ""
+                    : "",
+
+            finalHarvest:
+                entryType ===
+                    "harvest" &&
+                Boolean(
+                    selectedPlant
+                )
+                    ? finalHarvest
+                    : false
 
         };
 
@@ -392,6 +409,11 @@ function Journal({
 
         setHarvestAmount(
             ""
+        );
+
+
+        setFinalHarvest(
+            false
         );
 
 
@@ -643,6 +665,43 @@ function Journal({
 
 
                     {
+                        entryType ===
+                            "harvest" &&
+                        selectedPlantKey && (
+
+                            <label className="journal-final-harvest-option">
+
+                                <input
+                                    type="checkbox"
+                                    checked={finalHarvest}
+                                    onChange={
+                                        (event) =>
+                                            setFinalHarvest(
+                                                event.target.checked
+                                            )
+                                    }
+                                />
+
+
+                                <span>
+
+                                    <strong>
+                                        Final harvest for this plant
+                                    </strong>
+
+                                    <small>
+                                        This marks the crop complete and stops future watering reminders.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
+                        )
+                    }
+
+
+                    {
                         message && (
 
                             <p className="journal-message">
@@ -842,6 +901,17 @@ function Journal({
                                                                         entry.harvestAmount
                                                                     }
                                                                 </strong>
+
+
+                                                                {
+                                                                    entry.finalHarvest && (
+
+                                                                        <span>
+                                                                            {" "}• Final harvest
+                                                                        </span>
+
+                                                                    )
+                                                                }
 
                                                             </div>
 

@@ -73,7 +73,8 @@ function createBedRecord(
 
         totalArea:
             roundNumber(
-                area
+                area,
+                3
             ),
 
         usedArea:
@@ -81,7 +82,8 @@ function createBedRecord(
 
         remainingArea:
             roundNumber(
-                area
+                area,
+                3
             ),
 
         hasTrellis:
@@ -136,7 +138,10 @@ function addCropToBed(
 
     const capacity =
         Math.floor(
-            bed.remainingArea /
+            (
+                bed.remainingArea +
+                0.000001
+            ) /
             crop.squareFeetPerPlant
         );
 
@@ -177,7 +182,8 @@ function addCropToBed(
         existingCrop.areaUsed =
             roundNumber(
                 existingCrop.areaUsed +
-                areaUsed
+                areaUsed,
+                3
             );
     } else {
         bed.crops.push({
@@ -198,7 +204,8 @@ function addCropToBed(
 
             areaUsed:
                 roundNumber(
-                    areaUsed
+                    areaUsed,
+                    3
                 ),
 
             support:
@@ -226,7 +233,8 @@ function addCropToBed(
     bed.usedArea =
         roundNumber(
             bed.usedArea +
-            areaUsed
+            areaUsed,
+            3
         );
 
 
@@ -236,7 +244,8 @@ function addCropToBed(
                 0,
                 bed.totalArea -
                 bed.usedArea
-            )
+            ),
+            3
         );
 
 
@@ -260,7 +269,10 @@ function getBedCropCapacity(
 
 
     return Math.floor(
-        bed.remainingArea /
+        (
+            bed.remainingArea +
+            0.000001
+        ) /
         crop.squareFeetPerPlant
     );
 }
@@ -1084,7 +1096,33 @@ export function generateBedPlantingPlan({
 
     /* =========================
        CROP TARGETS
+
+       plantingPlan.growingArea can include containers.
+       This planner renders raised beds only, so its target
+       quantities must be based on raised-bed area rather
+       than trying to force container capacity into beds.
     ========================= */
+
+    const totalRaisedBedArea =
+        raisedBeds.reduce(
+            (total, bed) =>
+                total +
+                bed.width *
+                    bed.length,
+            0
+        );
+
+
+    const recommendationCount =
+        plantingPlan.recommendations.length;
+
+
+    const raisedBedAreaPerCrop =
+        recommendationCount > 0
+            ? totalRaisedBedArea /
+                recommendationCount
+            : 0;
+
 
     const cropTargets =
         plantingPlan
@@ -1106,16 +1144,35 @@ export function generateBedPlantingPlan({
                     }
 
 
+                    const raisedBedQuantity =
+                        raisedBedAreaPerCrop > 0
+                            ? Math.max(
+                                1,
+                                Math.floor(
+                                    raisedBedAreaPerCrop /
+                                    crop.squareFeetPerPlant
+                                )
+                            )
+                            : 0;
+
+
+                    const targetQuantity =
+                        Math.min(
+                            Number(
+                                recommendation
+                                    .suggestedQuantity
+                            ) || 0,
+                            raisedBedQuantity
+                        );
+
+
                     return {
                         ...crop,
 
-                        targetQuantity:
-                            recommendation
-                                .suggestedQuantity,
+                        targetQuantity,
 
                         remainingQuantity:
-                            recommendation
-                                .suggestedQuantity
+                            targetQuantity
                     };
                 }
             )

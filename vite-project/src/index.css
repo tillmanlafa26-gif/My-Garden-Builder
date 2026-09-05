@@ -215,3 +215,564 @@ html.dark-mode
 ========================================================= */
 
 .calendar-page-title{display:flex;align-items:center;justify-content:center;gap:9px}.calendar-page-title .ui-icon{color:#3f704d}.calendar-planting-plan-icon{display:flex;width:34px;height:34px;flex-shrink:0;align-items:center;justify-content:center;border-radius:10px;background-color:#e8f2e5;color:#3f704d}.calendar-planting-message{margin:0;padding:9px 10px;border-radius:9px;background-color:#e8f4e5;color:#365b3f;font-size:.58rem;line-height:1.45}.calendar-planting-message.neutral{background-color:#f1f4ef;color:#697668}.calendar-planting-plan-item{display:grid;grid-template-columns:28px minmax(0,1fr);align-items:center;gap:8px}.calendar-planting-plan-item.completed{border:1px solid #d4e4d0;background-color:#f1f7ef}.calendar-planting-plan-item.overdue{border:1px solid #ead9ae;background-color:#fffaf0}.calendar-planting-event-icon{display:flex;align-items:center;justify-content:center;font-size:1rem}.calendar-planting-plan-copy{display:flex;min-width:0;flex-direction:column}.calendar-planting-plan-actions{grid-column:1/-1;display:flex;justify-content:flex-end}.calendar-plant-action-button{min-height:36px;padding:7px 10px;border:1px solid #3f704d;border-radius:9px;background-color:#3f704d;color:#fff;font-size:.58rem;font-weight:700;cursor:pointer;touch-action:manipulation}.calendar-plant-action-button:hover{background-color:#315c3d}.calendar-plant-action-button.compact{min-width:52px;min-height:32px;padding:5px 8px}.calendar-plan-status{display:inline-flex;min-height:30px;align-items:center;justify-content:center;gap:4px;padding:5px 8px;border-radius:999px;background-color:#edf1eb;color:#687568;font-size:.52rem;font-weight:700}.calendar-plan-status.completed{background-color:#dfeedd;color:#315c3d}.calendar-plan-status.compact{min-width:52px;min-height:28px;padding:4px 7px}html.dark-mode .calendar-page-title .ui-icon{color:#a9d2a8}html.dark-mode .calendar-planting-plan-icon{background-color:#304030;color:#cbe0c8}html.dark-mode .calendar-planting-message{background-color:#304830;color:#d2e8ce}html.dark-mode .calendar-planting-message.neutral{background-color:#303a30;color:#aebbaa}html.dark-mode .calendar-planting-plan-item.completed{border-color:#456047;background-color:#293929}html.dark-mode .calendar-planting-plan-item.overdue{border-color:#6b5b38;background-color:#3d3526}html.dark-mode .calendar-plan-status{background-color:#303a30;color:#aebbaa}html.dark-mode .calendar-plan-status.completed{background-color:#35533a;color:#d3e7d1}@media (max-width:430px){.calendar-planting-plan-item{grid-template-columns:28px minmax(0,1fr)}.calendar-planting-plan-actions{justify-content:stretch}.calendar-plant-action-button{width:100%;min-height:42px}.calendar-page-title{gap:7px}}
+
+/* =========================================================
+   PLANT GROWTH STAGE TRACKING
+========================================================= */
+
+.plant-growth-section {
+    margin-bottom: 18px;
+}
+
+.plant-growth-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.plant-growth-card {
+    padding: 12px;
+    border: 1px solid #dce6d9;
+    border-radius: 12px;
+    background-color: #fbfdf9;
+}
+
+.plant-growth-card-header {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 10px;
+}
+
+.plant-growth-crop-icon {
+    display: flex;
+    width: 42px;
+    height: 42px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+    background-color: #edf5eb;
+    font-size: 1.35rem;
+}
+
+.plant-growth-card-header > div {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.plant-growth-card-header > div > strong {
+    color: #344b39;
+    font-size: 0.76rem;
+}
+
+.plant-growth-card-header > div > small {
+    color: #728071;
+    font-size: 0.56rem;
+}
+
+.plant-growth-stage-badge {
+    display: inline-flex;
+    min-height: 30px;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 5px 8px;
+    border-radius: 999px;
+    background-color: #e8f2e5;
+    color: #365c40;
+    font-size: 0.56rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.plant-growth-progress-wrap {
+    margin-bottom: 9px;
+}
+
+.plant-growth-progress-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 5px;
+    color: #6d7a6c;
+    font-size: 0.54rem;
+}
+
+.plant-growth-progress-label strong {
+    color: #46634c;
+    font-size: 0.58rem;
+}
+
+.plant-growth-progress-bar {
+    width: 100%;
+    height: 7px;
+    overflow: hidden;
+    border-radius: 999px;
+    background-color: #e3ebe0;
+}
+
+.plant-growth-progress-fill {
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #3f704d, #7fa56c);
+    transition: width 0.25s ease;
+}
+
+.plant-growth-next-step {
+    margin: 0 0 10px;
+    padding: 8px 9px;
+    border-radius: 9px;
+    background-color: #f1f6ef;
+    color: #657364;
+    font-size: 0.58rem;
+    line-height: 1.4;
+}
+
+.plant-growth-controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 8px;
+}
+
+.plant-growth-controls label {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.plant-growth-controls label > span {
+    color: #5d6b5c;
+    font-size: 0.55rem;
+    font-weight: 800;
+}
+
+.plant-growth-controls select {
+    width: 100%;
+    min-height: 42px;
+    padding: 8px 9px;
+    border: 1px solid #cbd7c8;
+    border-radius: 9px;
+    background-color: #ffffff;
+    color: #344b39;
+    font: inherit;
+    font-size: 0.62rem;
+}
+
+.plant-growth-auto-button {
+    min-height: 42px;
+    padding: 8px 10px;
+    border: 1px solid #bfd0bb;
+    border-radius: 9px;
+    background-color: #ffffff;
+    color: #3f704d;
+    font-size: 0.58rem;
+    font-weight: 800;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.plant-growth-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 11px;
+    padding: 9px;
+    border-radius: 9px;
+    background-color: #f3f7f1;
+    color: #657364;
+}
+
+.plant-growth-note .ui-icon {
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.plant-growth-note p {
+    margin: 0;
+    font-size: 0.55rem;
+    line-height: 1.45;
+}
+
+.my-garden-growth-stage {
+    display: inline-flex;
+    width: fit-content;
+    align-items: center;
+    gap: 4px;
+    margin-top: 2px;
+    padding: 4px 7px;
+    border-radius: 999px;
+    background-color: #eaf3e7;
+    color: #3d6245;
+    font-size: 0.56rem;
+    font-weight: 800;
+}
+
+html.dark-mode .plant-growth-card {
+    border-color: #404d40;
+    background-color: #293329;
+}
+
+html.dark-mode .plant-growth-crop-icon,
+html.dark-mode .plant-growth-next-step,
+html.dark-mode .plant-growth-note {
+    background-color: #304030;
+}
+
+html.dark-mode .plant-growth-card-header > div > strong {
+    color: #e2ece0;
+}
+
+html.dark-mode .plant-growth-card-header > div > small,
+html.dark-mode .plant-growth-next-step,
+html.dark-mode .plant-growth-note {
+    color: #aebbaa;
+}
+
+html.dark-mode .plant-growth-stage-badge,
+html.dark-mode .my-garden-growth-stage {
+    background-color: #35533a;
+    color: #d6e7d3;
+}
+
+html.dark-mode .plant-growth-progress-label {
+    color: #aab6a8;
+}
+
+html.dark-mode .plant-growth-progress-label strong {
+    color: #cfe3cc;
+}
+
+html.dark-mode .plant-growth-progress-bar {
+    background-color: #384338;
+}
+
+html.dark-mode .plant-growth-controls label > span {
+    color: #c7d2c5;
+}
+
+html.dark-mode .plant-growth-controls select,
+html.dark-mode .plant-growth-auto-button {
+    border-color: #465246;
+    background-color: #283228;
+    color: #dbe7d9;
+}
+
+@media (max-width: 430px) {
+    .plant-growth-card-header {
+        grid-template-columns: 40px minmax(0, 1fr);
+    }
+
+    .plant-growth-stage-badge {
+        grid-column: 1 / -1;
+        justify-self: start;
+        margin-left: 49px;
+    }
+
+    .plant-growth-controls {
+        grid-template-columns: 1fr;
+    }
+
+    .plant-growth-auto-button {
+        width: 100%;
+    }
+}
+
+/* =========================================================
+   HARVEST TRACKING
+========================================================= */
+
+.plant-harvest-tracker {
+    margin-top: 12px;
+    padding: 11px;
+    border: 1px solid #d8e5d4;
+    border-radius: 11px;
+    background-color: #f7faf5;
+}
+
+.plant-harvest-tracker-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.plant-harvest-tracker-title {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 8px;
+}
+
+.plant-harvest-tracker-title > span {
+    display: flex;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9px;
+    background-color: #e8f2e5;
+    color: #3f704d;
+}
+
+.plant-harvest-tracker-title > div {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.plant-harvest-tracker-title strong {
+    color: #3b503f;
+    font-size: 0.65rem;
+}
+
+.plant-harvest-tracker-title small {
+    color: #738172;
+    font-size: 0.55rem;
+}
+
+.plant-harvest-record-button,
+.plant-harvest-save-button {
+    min-height: 40px;
+    padding: 8px 10px;
+    border: 1px solid #3f704d;
+    border-radius: 9px;
+    background-color: #3f704d;
+    color: #ffffff;
+    font-size: 0.58rem;
+    font-weight: 800;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.plant-harvest-latest {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 9px;
+    padding: 8px 9px;
+    border-radius: 9px;
+    background-color: #edf5eb;
+}
+
+.plant-harvest-latest > div {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.plant-harvest-latest span,
+.plant-harvest-latest small {
+    color: #718070;
+    font-size: 0.53rem;
+}
+
+.plant-harvest-latest strong {
+    color: #36543c;
+    font-size: 0.64rem;
+}
+
+.plant-harvest-form {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-top: 10px;
+}
+
+.plant-harvest-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.plant-harvest-form label,
+.plant-harvest-notes-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    color: #526052;
+    font-size: 0.57rem;
+    font-weight: 800;
+}
+
+.plant-harvest-form input[type="date"],
+.plant-harvest-form input[type="text"],
+.plant-harvest-form textarea {
+    width: 100%;
+    min-height: 42px;
+    padding: 8px 9px;
+    border: 1px solid #cbd7c8;
+    border-radius: 9px;
+    background-color: #ffffff;
+    color: #243524;
+    font: inherit;
+}
+
+.plant-harvest-form textarea {
+    min-height: 76px;
+    resize: vertical;
+}
+
+.plant-harvest-form input:focus,
+.plant-harvest-form textarea:focus {
+    outline: none;
+    border-color: #5f8c62;
+    box-shadow: 0 0 0 3px rgba(63, 112, 77, 0.12);
+}
+
+.plant-harvest-final-option,
+.journal-final-harvest-option {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: flex-start;
+    gap: 8px;
+    padding: 9px;
+    border-radius: 9px;
+    background-color: #f1f6ef;
+    cursor: pointer;
+}
+
+.plant-harvest-final-option input,
+.journal-final-harvest-option input {
+    width: 17px;
+    height: 17px;
+    margin-top: 1px;
+    accent-color: #3f704d;
+}
+
+.plant-harvest-final-option > span,
+.journal-final-harvest-option > span {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.plant-harvest-final-option strong,
+.journal-final-harvest-option strong {
+    color: #415341;
+    font-size: 0.58rem;
+}
+
+.plant-harvest-final-option small,
+.journal-final-harvest-option small {
+    color: #718070;
+    font-size: 0.52rem;
+    line-height: 1.4;
+}
+
+.plant-harvest-actions {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 7px;
+}
+
+.plant-harvest-cancel-button {
+    min-height: 40px;
+    padding: 8px 10px;
+    border: 1px solid #d4ddd1;
+    border-radius: 9px;
+    background-color: #ffffff;
+    color: #596759;
+    font-size: 0.58rem;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.plant-harvest-message {
+    margin: 9px 0 0;
+    padding: 8px 9px;
+    border-radius: 8px;
+    background-color: #e7f3e4;
+    color: #315c3d;
+    font-size: 0.56rem;
+    font-weight: 800;
+    line-height: 1.4;
+}
+
+.calendar-harvest-action-link {
+    display: inline-flex;
+    min-height: 30px;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 8px;
+    border: 1px solid #bfd1bb;
+    border-radius: 999px;
+    background-color: #ffffff;
+    color: #3f704d;
+    font-size: 0.52rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+html.dark-mode .plant-harvest-tracker {
+    border-color: #405040;
+    background-color: #273127;
+}
+
+html.dark-mode .plant-harvest-tracker-title > span,
+html.dark-mode .plant-harvest-latest,
+html.dark-mode .plant-harvest-final-option,
+html.dark-mode .journal-final-harvest-option {
+    background-color: #304030;
+}
+
+html.dark-mode .plant-harvest-tracker-title strong,
+html.dark-mode .plant-harvest-latest strong,
+html.dark-mode .plant-harvest-final-option strong,
+html.dark-mode .journal-final-harvest-option strong {
+    color: #dbe8d8;
+}
+
+html.dark-mode .plant-harvest-tracker-title small,
+html.dark-mode .plant-harvest-latest span,
+html.dark-mode .plant-harvest-latest small,
+html.dark-mode .plant-harvest-final-option small,
+html.dark-mode .journal-final-harvest-option small,
+html.dark-mode .plant-harvest-form label,
+html.dark-mode .plant-harvest-notes-field {
+    color: #aebbaa;
+}
+
+html.dark-mode .plant-harvest-form input[type="date"],
+html.dark-mode .plant-harvest-form input[type="text"],
+html.dark-mode .plant-harvest-form textarea,
+html.dark-mode .plant-harvest-cancel-button,
+html.dark-mode .calendar-harvest-action-link {
+    border-color: #465246;
+    background-color: #283228;
+    color: #dbe7d9;
+}
+
+html.dark-mode .plant-harvest-message {
+    background-color: #315037;
+    color: #d5ead2;
+}
+
+@media (max-width: 430px) {
+    .plant-harvest-tracker-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .plant-harvest-record-button {
+        width: 100%;
+    }
+
+    .plant-harvest-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .plant-harvest-latest {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}

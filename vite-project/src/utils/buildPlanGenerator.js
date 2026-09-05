@@ -178,7 +178,7 @@ export function generateBuildPlan({
                 "prepare-site",
 
             number:
-                stageNumber,
+                stageNumber++,
 
             icon:
                 "🧹",
@@ -207,7 +207,7 @@ export function generateBuildPlan({
                 "mark-layout",
 
             number:
-                stageNumber,
+                stageNumber++,
 
             icon:
                 "📐",
@@ -747,7 +747,7 @@ export function generateBuildPlan({
                 "final-check",
 
             number:
-                stageNumber,
+                stageNumber++,
 
             icon:
                 "✅",
