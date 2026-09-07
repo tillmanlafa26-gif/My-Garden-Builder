@@ -37,9 +37,6 @@ import HomeGardenDesignStep
 import HomeGardenBuildStep
     from "../components/HomeGardenBuildStep";
 
-import GardenOnboarding
-    from "../components/GardenOnboarding";
-
 import LocalGrowingDataCard
     from "../components/LocalGrowingDataCard";
 
@@ -1592,8 +1589,6 @@ function Home({
 
     return (
         <div className="app-container">
-            <GardenOnboarding />
-
             <Header />
 
 

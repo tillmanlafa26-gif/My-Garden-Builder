@@ -2448,3 +2448,239 @@ html.dark-mode
     }
 }
 
+/* =========================================================
+   FIRST-LAUNCH HOW TO PROMPT
+========================================================= */
+
+.garden-onboarding-welcome {
+    padding-top: 0;
+}
+
+.garden-onboarding-welcome-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 28px 24px 18px;
+
+    text-align: center;
+}
+
+.garden-onboarding-welcome-logo {
+    display: grid;
+    place-items: center;
+
+    width: 78px;
+    height: 78px;
+
+    margin-bottom: 15px;
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #e8f4e5,
+            #f6faf4
+        );
+
+    font-size: 2.3rem;
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(73, 116, 81, 0.08);
+}
+
+.garden-onboarding-welcome-content h2 {
+    margin: 0;
+
+    color: #304735;
+
+    font-size: 1.12rem;
+    line-height: 1.25;
+}
+
+.garden-onboarding-welcome-content > p {
+    max-width: 350px;
+
+    margin: 10px 0 0;
+
+    color: #687768;
+
+    font-size: 0.68rem;
+    line-height: 1.6;
+}
+
+.garden-onboarding-welcome-points {
+    display: grid;
+
+    width: 100%;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap: 8px;
+
+    margin-top: 20px;
+}
+
+.garden-onboarding-welcome-points > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+
+    min-width: 0;
+
+    padding: 11px 7px;
+
+    border: 1px solid #e0e9dd;
+    border-radius: 12px;
+
+    background-color: #f8faf7;
+}
+
+.garden-onboarding-welcome-points > div > span:first-child {
+    font-size: 1.25rem;
+}
+
+.garden-onboarding-welcome-points > div > span:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.garden-onboarding-welcome-points strong {
+    color: #3c563f;
+
+    font-size: 0.61rem;
+}
+
+.garden-onboarding-welcome-points small {
+    color: #788576;
+
+    font-size: 0.5rem;
+    line-height: 1.35;
+}
+
+.garden-onboarding-welcome-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    padding:
+        0
+        16px
+        10px;
+}
+
+.garden-onboarding-welcome-actions
+.garden-onboarding-next {
+    width: 100%;
+}
+
+.garden-onboarding-not-now {
+    width: 100%;
+    min-height: 44px;
+
+    border: 1px solid #cad8c7;
+    border-radius: 11px;
+
+    background-color: #ffffff;
+    color: #52705a;
+
+    font-size: 0.65rem;
+    font-weight: 700;
+
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.garden-onboarding-welcome-note {
+    margin:
+        0
+        16px
+        16px;
+
+    color: #7d897c;
+
+    font-size: 0.53rem;
+    line-height: 1.45;
+
+    text-align: center;
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+html.dark-mode
+.garden-onboarding-welcome-logo {
+    background:
+        linear-gradient(
+            145deg,
+            #304030,
+            #293629
+        );
+}
+
+html.dark-mode
+.garden-onboarding-welcome-content h2 {
+    color: #e2eee0;
+}
+
+html.dark-mode
+.garden-onboarding-welcome-content > p,
+html.dark-mode
+.garden-onboarding-welcome-points small,
+html.dark-mode
+.garden-onboarding-welcome-note {
+    color: #aebbaa;
+}
+
+html.dark-mode
+.garden-onboarding-welcome-points > div {
+    border-color: #404d40;
+    background-color: #293329;
+}
+
+html.dark-mode
+.garden-onboarding-welcome-points strong {
+    color: #dce8da;
+}
+
+html.dark-mode
+.garden-onboarding-not-now {
+    border-color: #4c5b4c;
+    background-color: #293329;
+    color: #d4e1d2;
+}
+
+
+/* =========================
+   SMALL SCREENS
+========================= */
+
+@media (max-width: 430px) {
+    .garden-onboarding-welcome-content {
+        padding:
+            22px
+            18px
+            16px;
+    }
+
+    .garden-onboarding-welcome-points {
+        gap: 6px;
+    }
+
+    .garden-onboarding-welcome-points > div {
+        padding:
+            9px
+            5px;
+    }
+}
+

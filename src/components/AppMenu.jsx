@@ -119,7 +119,6 @@ function AppMenu() {
 
     function openHowToUse() {
         setIsOpen(false);
-        navigate("/");
 
         window.setTimeout(
             () => {
@@ -129,7 +128,7 @@ function AppMenu() {
                     )
                 );
             },
-            250
+            0
         );
     }
 

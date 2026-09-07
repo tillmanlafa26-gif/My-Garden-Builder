@@ -294,7 +294,6 @@ function AppSettings({
 
     function openHowToUse() {
         closeSettings();
-        navigate("/");
 
         window.setTimeout(
             () => {
@@ -304,7 +303,7 @@ function AppSettings({
                     )
                 );
             },
-            250
+            0
         );
     }
 

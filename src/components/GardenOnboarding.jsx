@@ -15,9 +15,9 @@ const onboardingSteps = [
         id: "welcome",
         icon: "🌱",
         eyebrow: "WELCOME",
-        title: "Build a Garden That Fits Your Space",
+        title: "Build a Garden That Fits Your Real Space",
         description:
-            "My Garden Builder walks you from an empty space to a complete garden design, crop plan, materials list, and build instructions."
+            "My Garden Builder takes you from an empty space to a practical garden layout, crop plan, materials checklist, seasonal schedule, and ongoing garden management."
     },
     {
         id: "space",
@@ -25,15 +25,15 @@ const onboardingSteps = [
         eyebrow: "STEP 1",
         title: "Define Your Space",
         description:
-            "Start with the real area you have available. Choose where the garden will go, enter its dimensions, and tell us what surface is underneath it."
+            "Choose where your garden will go, enter the usable dimensions, and select the surface underneath it. These measurements become the foundation for the design."
     },
     {
         id: "conditions",
         icon: "☀️",
         eyebrow: "STEP 2",
-        title: "Add Growing Conditions",
+        title: "Add Your Growing Conditions",
         description:
-            "Choose your garden system, sunlight level, USDA growing zone, and optional location so future recommendations can match your local conditions."
+            "Choose the garden system and sunlight level. You can also enable location to estimate your USDA-style growing zone and frost dates for local planting guidance."
     },
     {
         id: "features",
@@ -41,7 +41,7 @@ const onboardingSteps = [
         eyebrow: "STEP 3",
         title: "Choose Garden Features",
         description:
-            "Select raised beds, containers, trellises, vertical growing, composting, irrigation, hydroponics, or keep the setup simple."
+            "Select the features you actually want to build, including raised beds, containers, trellises, vertical growing, composting, irrigation, or hydroponics."
     },
     {
         id: "crops",
@@ -49,7 +49,7 @@ const onboardingSteps = [
         eyebrow: "STEP 4",
         title: "Choose What You Want to Grow",
         description:
-            "Search the crop library and select the vegetables, herbs, fruits, and root crops you want the garden design to support."
+            "Select crops from the garden library. Your crop choices are used when calculating planting space, seasonal timing, and the generated garden plan."
     },
     {
         id: "design",
@@ -57,154 +57,124 @@ const onboardingSteps = [
         eyebrow: "STEP 5",
         title: "Generate Your Garden Design",
         description:
-            "Choose a design priority such as balanced, maximum growing, easy access, or simple build. My Garden Builder then creates a layout for your actual space."
+            "Choose a design priority such as balanced, maximum growing, easy access, or simple build. The app then generates a layout sized to your actual space."
     },
     {
         id: "build",
         icon: "🔨",
         eyebrow: "STEP 6",
-        title: "Build Your Garden",
+        title: "Review the Build Plan",
         description:
-            "Review your layout, recommended materials, quantities, planting plan, and step-by-step build instructions. Your finished plan is saved under My Garden."
+            "Review the layout, planting plan, recommended materials and quantities, seasonal guide, and build instructions. Finishing this step completes the initial setup."
+    },
+    {
+        id: "garden",
+        icon: "🏡",
+        eyebrow: "MY GARDEN",
+        title: "Activate the Garden and Prepare Your Supplies",
+        description:
+            "After setup, open My Garden to review the finished plan. Your My Supplies checklist appears there so you can track what you have before building. Activate the garden when the plan is ready to use."
     },
     {
         id: "manage",
         icon: "🪴",
-        eyebrow: "AFTER BUILDING",
-        title: "Grow and Manage Your Garden",
+        eyebrow: "KEEP GROWING",
+        title: "Track the Garden Over Time",
         description:
-            "Use My Garden, Plants, Calendar, watering reminders, weather, tasks, and your journal as you move from planning into actually growing your garden."
+            "Use Plants for growth stages and harvests, Calendar for planting and watering events, Journal for garden history, and Weather for current growing conditions."
     }
 ];
 
 
 function GardenOnboarding() {
-
     const dialogRef =
         useRef(null);
 
-    const skipButtonRef =
+    const firstActionRef =
         useRef(null);
 
     const [
         isOpen,
         setIsOpen
     ] = useState(
-        () => {
-
-            return (
-                readText(
-                    "gardenOnboardingSeen",
-                    null
-                ) !== "true"
-            );
-
-        }
+        () =>
+            readText(
+                "gardenOnboardingSeen",
+                null
+            ) !== "true"
     );
 
+    const [
+        view,
+        setView
+    ] = useState(
+        () =>
+            readText(
+                "gardenOnboardingSeen",
+                null
+            ) === "true"
+                ? "tour"
+                : "prompt"
+    );
 
     const [
         currentStep,
         setCurrentStep
-    ] = useState(
-        0
-    );
+    ] = useState(0);
 
 
     const step =
-        onboardingSteps[
-            currentStep
-        ];
-
+        onboardingSteps[currentStep];
 
     const isFirstStep =
         currentStep === 0;
-
 
     const isLastStep =
         currentStep ===
         onboardingSteps.length - 1;
 
 
-    /* =====================================================
-       SAVE SEEN STATE
-    ===================================================== */
-
     function rememberOnboarding() {
-
         writeText(
             "gardenOnboardingSeen",
             "true"
         );
-
     }
 
 
-    /* =====================================================
-       OPEN
-    ===================================================== */
-
-    function openOnboarding() {
-
-        setCurrentStep(
-            0
-        );
-
-
-        setIsOpen(
-            true
-        );
-
+    function openTour() {
+        setCurrentStep(0);
+        setView("tour");
+        setIsOpen(true);
     }
 
 
-    /* =====================================================
-       CLOSE
-    ===================================================== */
+    function beginFirstTour() {
+        setCurrentStep(0);
+        setView("tour");
+    }
+
 
     function closeOnboarding() {
-
         rememberOnboarding();
-
-
-        setIsOpen(
-            false
-        );
-
+        setIsOpen(false);
     }
 
 
-    /* =====================================================
-       NEXT
-    ===================================================== */
-
     function goNext() {
-
-        if (
-            isLastStep
-        ) {
-
+        if (isLastStep) {
             closeOnboarding();
-
             return;
-
         }
-
 
         setCurrentStep(
             (current) =>
                 current + 1
         );
-
     }
 
 
-    /* =====================================================
-       BACK
-    ===================================================== */
-
     function goBack() {
-
         setCurrentStep(
             (current) =>
                 Math.max(
@@ -212,94 +182,62 @@ function GardenOnboarding() {
                     current - 1
                 )
         );
-
     }
 
 
     /* =====================================================
-       SETTINGS EVENT
-
-       AppSettings dispatches this event when
-       the user selects "How to Use".
+       OPEN HOW TO USE FROM THE HAMBURGER / SETTINGS
     ===================================================== */
 
     useEffect(
         () => {
-
             function handleOpenOnboarding() {
-
-                openOnboarding();
-
+                openTour();
             }
-
 
             window.addEventListener(
                 "garden-open-onboarding",
                 handleOpenOnboarding
             );
 
-
             return () => {
-
                 window.removeEventListener(
                     "garden-open-onboarding",
                     handleOpenOnboarding
                 );
-
             };
-
         },
         []
     );
 
 
     /* =====================================================
-       ESCAPE KEY
+       ESCAPE
     ===================================================== */
 
     useEffect(
         () => {
-
-            if (
-                !isOpen
-            ) {
-
+            if (!isOpen) {
                 return undefined;
-
             }
 
-
-            function handleKeyDown(
-                event
-            ) {
-
-                if (
-                    event.key ===
-                    "Escape"
-                ) {
-
+            function handleKeyDown(event) {
+                if (event.key === "Escape") {
                     closeOnboarding();
-
                 }
-
             }
-
 
             window.addEventListener(
                 "keydown",
                 handleKeyDown
             );
 
-
             return () => {
-
                 window.removeEventListener(
                     "keydown",
                     handleKeyDown
                 );
-
             };
-
         },
         [
             isOpen
@@ -313,23 +251,19 @@ function GardenOnboarding() {
 
     useEffect(
         () => {
-            if (
-                !isOpen
-            ) {
+            if (!isOpen) {
                 return undefined;
             }
 
             const focusTimer =
                 window.setTimeout(
                     () =>
-                        skipButtonRef.current
+                        firstActionRef.current
                             ?.focus(),
                     0
                 );
 
-            function trapFocus(
-                event
-            ) {
+            function trapFocus(event) {
                 if (
                     event.key !== "Tab" ||
                     !dialogRef.current
@@ -342,9 +276,7 @@ function GardenOnboarding() {
                         'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
                     );
 
-                if (
-                    !focusable.length
-                ) {
+                if (!focusable.length) {
                     return;
                 }
 
@@ -387,7 +319,11 @@ function GardenOnboarding() {
                 );
             };
         },
-        [isOpen]
+        [
+            isOpen,
+            view,
+            currentStep
+        ]
     );
 
 
@@ -397,31 +333,20 @@ function GardenOnboarding() {
 
     useEffect(
         () => {
-
-            if (
-                !isOpen
-            ) {
-
+            if (!isOpen) {
                 return undefined;
-
             }
-
 
             const previousOverflow =
                 document.body.style.overflow;
 
-
             document.body.style.overflow =
                 "hidden";
 
-
             return () => {
-
                 document.body.style.overflow =
                     previousOverflow;
-
             };
-
         },
         [
             isOpen
@@ -429,52 +354,147 @@ function GardenOnboarding() {
     );
 
 
-    /* =====================================================
-       CLOSED
-    ===================================================== */
-
-    if (
-        !isOpen
-    ) {
-
+    if (!isOpen) {
         return null;
-
     }
 
 
     /* =====================================================
-       RENDER
+       FIRST-LAUNCH PROMPT
+    ===================================================== */
+
+    if (view === "prompt") {
+        return (
+            <div
+                className="garden-onboarding-overlay"
+                role="presentation"
+            >
+                <section
+                    ref={dialogRef}
+                    className="garden-onboarding-dialog garden-onboarding-welcome"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="garden-welcome-title"
+                    aria-describedby="garden-welcome-description"
+                >
+                    <div className="garden-onboarding-welcome-content">
+                        <div
+                            className="garden-onboarding-welcome-logo"
+                            aria-hidden="true"
+                        >
+                            🌱
+                        </div>
+
+                        <small className="garden-onboarding-eyebrow">
+                            WELCOME TO MY GARDEN BUILDER
+                        </small>
+
+                        <h2 id="garden-welcome-title">
+                            Ready to build your garden?
+                        </h2>
+
+                        <p id="garden-welcome-description">
+                            Before you start, would you like a quick walkthrough of how the app works?
+                        </p>
+
+                        <div className="garden-onboarding-welcome-points">
+                            <div>
+                                <span aria-hidden="true">
+                                    📐
+                                </span>
+
+                                <span>
+                                    <strong>
+                                        Design
+                                    </strong>
+
+                                    <small>
+                                        Build around your real available space.
+                                    </small>
+                                </span>
+                            </div>
+
+                            <div>
+                                <span aria-hidden="true">
+                                    🔨
+                                </span>
+
+                                <span>
+                                    <strong>
+                                        Build
+                                    </strong>
+
+                                    <small>
+                                        Get layouts, materials, and instructions.
+                                    </small>
+                                </span>
+                            </div>
+
+                            <div>
+                                <span aria-hidden="true">
+                                    🪴
+                                </span>
+
+                                <span>
+                                    <strong>
+                                        Grow
+                                    </strong>
+
+                                    <small>
+                                        Track planting, watering, growth, and harvests.
+                                    </small>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="garden-onboarding-welcome-actions">
+                        <button
+                            ref={firstActionRef}
+                            type="button"
+                            className="garden-onboarding-next"
+                            onClick={beginFirstTour}
+                        >
+                            Take the Quick Tour →
+                        </button>
+
+                        <button
+                            type="button"
+                            className="garden-onboarding-not-now"
+                            onClick={closeOnboarding}
+                        >
+                            Skip for Now
+                        </button>
+                    </div>
+
+                    <p className="garden-onboarding-welcome-note">
+                        You can reopen this guide anytime from ☰ → How to Use.
+                    </p>
+                </section>
+            </div>
+        );
+    }
+
+
+    /* =====================================================
+       HOW TO USE TOUR
     ===================================================== */
 
     return (
-
         <div
             className="garden-onboarding-overlay"
-
             role="presentation"
         >
-
             <section
                 ref={dialogRef}
                 className="garden-onboarding-dialog"
-
                 role="dialog"
-
                 aria-modal="true"
-
                 aria-labelledby="garden-onboarding-title"
-
                 aria-describedby="garden-onboarding-description"
             >
-
-                {/* =========================
-                    TOP BAR
-                ========================= */}
-
                 <div className="garden-onboarding-topbar">
-
                     <span className="garden-onboarding-step-count">
-
                         {
                             currentStep + 1
                         }
@@ -484,171 +504,99 @@ function GardenOnboarding() {
                         {
                             onboardingSteps.length
                         }
-
                     </span>
 
-
                     <button
-                        ref={skipButtonRef}
+                        ref={firstActionRef}
                         type="button"
-
                         className="garden-onboarding-skip"
-
-                        onClick={
-                            closeOnboarding
-                        }
+                        onClick={closeOnboarding}
                     >
-
                         Skip
-
                     </button>
-
                 </div>
 
-
-                {/* =========================
-                    CONTENT
-                ========================= */}
-
                 <div className="garden-onboarding-content">
-
                     <div className="garden-onboarding-icon">
-
                         {
                             step.icon
                         }
-
                     </div>
 
-
                     <small className="garden-onboarding-eyebrow">
-
                         {
                             step.eyebrow
                         }
-
                     </small>
 
-
-                    <h2
-                        id="garden-onboarding-title"
-                    >
-
+                    <h2 id="garden-onboarding-title">
                         {
                             step.title
                         }
-
                     </h2>
 
-
-                    <p
-                        id="garden-onboarding-description"
-                    >
-
+                    <p id="garden-onboarding-description">
                         {
                             step.description
                         }
-
                     </p>
-
                 </div>
-
-
-                {/* =========================
-                    PROGRESS
-                ========================= */}
 
                 <div
                     className="garden-onboarding-progress"
-
                     aria-hidden="true"
                 >
-
                     {
                         onboardingSteps.map(
                             (
                                 onboardingStep,
                                 index
                             ) => (
-
                                 <span
                                     key={
                                         onboardingStep.id
                                     }
-
                                     className={
-                                        index ===
-                                        currentStep
+                                        index === currentStep
                                             ? "active"
-                                            : index <
-                                              currentStep
+                                            : index < currentStep
                                                 ? "complete"
                                                 : ""
                                     }
                                 />
-
                             )
                         )
                     }
-
                 </div>
 
-
-                {/* =========================
-                    ACTIONS
-                ========================= */}
-
                 <div className="garden-onboarding-actions">
-
                     {
                         !isFirstStep && (
-
                             <button
                                 type="button"
-
                                 className="garden-onboarding-back"
-
-                                onClick={
-                                    goBack
-                                }
+                                onClick={goBack}
                             >
-
                                 ← Back
-
                             </button>
-
                         )
                     }
 
-
                     <button
                         type="button"
-
                         className="garden-onboarding-next"
-
-                        onClick={
-                            goNext
-                        }
+                        onClick={goNext}
                     >
-
                         {
                             isLastStep
-                                ? "Start My Garden 🌱"
-                                : isFirstStep
-                                    ? "Show Me How →"
-                                    : "Continue →"
+                                ? "Start Building 🌱"
+                                : "Continue →"
                         }
-
                     </button>
-
                 </div>
-
             </section>
-
         </div>
-
     );
-
 }
 
 

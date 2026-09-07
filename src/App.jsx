@@ -65,6 +65,7 @@ import AppMenu from "./components/AppMenu";
 import AppSettings from "./components/AppSettings";
 import NetworkStatusBanner from "./components/NetworkStatusBanner";
 import RouteFocusManager from "./components/RouteFocusManager";
+import GardenOnboarding from "./components/GardenOnboarding";
 
 import {
     defaultTasks
@@ -3423,6 +3424,8 @@ function App() {
             </a>
 
             <NetworkStatusBanner />
+
+            <GardenOnboarding />
 
             <main
                 id="main-content"
