@@ -348,27 +348,13 @@ function HomeGardenDesignStep({
             });
 
 
-        const bedPlantingPlan =
-            plantingPlan
-                ? generateBedPlantingPlan({
-
-                    layout,
-
-                    plantingPlan,
-
-                    selectedCrops,
-
-                    features:
-                        selectedFeatures
-
-                })
-                : null;
-
-
         /*
             Local seasonal recommendations
-            are based on the automatically
-            populated frost dates from Step 2.
+            are generated before bed allocation
+            so the pairing engine can recognize
+            succession opportunities and avoid
+            treating every crop as if it occupies
+            the bed at peak size at the same time.
         */
 
         const seasonalGuide =
@@ -381,6 +367,25 @@ function HomeGardenDesignStep({
                 firstFallFrost
 
             });
+
+
+        const bedPlantingPlan =
+            plantingPlan
+                ? generateBedPlantingPlan({
+
+                    layout,
+
+                    plantingPlan,
+
+                    selectedCrops,
+
+                    features:
+                        selectedFeatures,
+
+                    seasonalGuide
+
+                })
+                : null;
 
 
         const updatedProfile = {

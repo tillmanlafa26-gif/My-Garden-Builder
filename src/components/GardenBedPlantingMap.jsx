@@ -241,6 +241,152 @@ function GardenBedPlantingMap({
 
 
                                 {
+                                    bed.spatialLayout
+                                        ?.zones
+                                        ?.length >
+                                    0 && (
+
+                                    <div className="bed-scaled-plan-section">
+
+                                        <div className="bed-scaled-plan-heading">
+
+                                            <strong>
+                                                Scaled Pairing Space
+                                            </strong>
+
+
+                                            <small>
+                                                Crop blocks are proportional to the physical bed area assigned by the planner.
+                                            </small>
+
+                                        </div>
+
+
+                                        <div
+                                            className="bed-scaled-plan"
+                                            style={{
+                                                aspectRatio:
+                                                    `${bed.width} / ${bed.length}`
+                                            }}
+                                            aria-label={
+                                                `${bed.name} scaled planting plan`
+                                            }
+                                        >
+
+                                            {
+                                                bed.hasTrellis && (
+
+                                                    <div className="bed-scaled-trellis-edge">
+                                                        Trellis
+                                                    </div>
+
+                                                )
+                                            }
+
+
+                                            {
+                                                bed.spatialLayout
+                                                    .zones
+                                                    .map(
+                                                        (zone) => (
+
+                                                            <div
+                                                                key={
+                                                                    zone.id
+                                                                }
+                                                                className={
+                                                                    `bed-scaled-zone crop-zone-${zone.zoneIndex % 4}`
+                                                                }
+                                                                style={{
+                                                                    left:
+                                                                        `${zone.xPercent}%`,
+
+                                                                    top:
+                                                                        `${zone.yPercent}%`,
+
+                                                                    width:
+                                                                        `${zone.widthPercent}%`,
+
+                                                                    height:
+                                                                        `${zone.lengthPercent}%`
+                                                                }}
+                                                            >
+
+                                                                <strong>
+                                                                    {
+                                                                        zone.icon
+                                                                    }
+
+                                                                    {" "}
+
+                                                                    {
+                                                                        zone.name
+                                                                    }
+                                                                </strong>
+
+
+                                                                <small>
+                                                                    {
+                                                                        zone.quantity
+                                                                    }
+
+                                                                    {" plant"}
+
+                                                                    {
+                                                                        zone.quantity ===
+                                                                        1
+                                                                            ? ""
+                                                                            : "s"
+                                                                    }
+
+                                                                    {" • "}
+
+                                                                    {
+                                                                        zone.spacingInches
+                                                                    }
+
+                                                                    {" in spacing"}
+                                                                </small>
+
+                                                            </div>
+
+                                                        )
+                                                    )
+                                            }
+
+                                        </div>
+
+
+                                        <div className="bed-scaled-plan-meta">
+
+                                            <span>
+                                                {
+                                                    bed.spatialLayout
+                                                        .edgeBufferInches
+                                                }
+
+                                                {" in perimeter reserve"}
+                                            </span>
+
+
+                                            <span>
+                                                {
+                                                    bed.spatialLayout
+                                                        .internalOpenArea
+                                                }
+
+                                                {" sq ft open inside"}
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                )
+                                }
+
+
+                                {
                                     bed.crops.length >
                                     0
                                         ? (
@@ -283,6 +429,25 @@ function GardenBedPlantingMap({
                                                                         }
 
                                                                         {" sq ft used"}
+
+                                                                    </small>
+
+
+                                                                    <small>
+
+                                                                        {
+                                                                            crop.squareFeetPerPlant
+                                                                                ? `${Math.max(
+                                                                                    1,
+                                                                                    Math.round(
+                                                                                        Math.sqrt(
+                                                                                            crop.squareFeetPerPlant
+                                                                                        ) *
+                                                                                            12
+                                                                                    )
+                                                                                )} in planning spacing`
+                                                                                : "Spacing varies"
+                                                                        }
 
                                                                     </small>
 
@@ -538,15 +703,7 @@ function GardenBedPlantingMap({
                 </strong>
 
                 <p>
-                    Pairing suggestions here are
-                    primarily used to organize
-                    physical space, plant height,
-                    trellis access, and growth
-                    habits. They should not be
-                    interpreted as a guarantee
-                    that one crop improves the
-                    biological performance of
-                    another.
+                    The scaled blocks represent the physical area reserved by the planner for each crop group. The spacing number is derived from the crop's existing square-foot requirement, while pairing logic also considers plant height, growth habit, trellis access, and seasonal overlap. Pairing does not override normal plant spacing.
                 </p>
 
             </div>

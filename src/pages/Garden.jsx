@@ -31,6 +31,10 @@ import GardenBedPlantingMap
     from "../components/GardenBedPlantingMap";
 
 
+import PlantPairingGuide
+    from "../components/PlantPairingGuide";
+
+
 import SeasonalPlantingGuide
     from "../components/SeasonalPlantingGuide";
 
@@ -1602,6 +1606,26 @@ function Garden({
                 bedPlantingPlan && (
 
                     <GardenBedPlantingMap
+
+                        bedPlantingPlan={
+                            bedPlantingPlan
+                        }
+
+                    />
+
+                )
+            }
+
+
+            {/* =================================================
+                PLANT PAIRING + BED LOAD
+            ================================================= */}
+
+            {
+                bedPlantingPlan
+                    ?.pairingGuide && (
+
+                    <PlantPairingGuide
 
                         bedPlantingPlan={
                             bedPlantingPlan

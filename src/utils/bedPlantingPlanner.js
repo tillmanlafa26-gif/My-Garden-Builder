@@ -3,6 +3,14 @@ import {
 } from "../data/cropPlanningData";
 
 
+import {
+    BED_SAFE_UTILIZATION,
+    canAddCropToBed,
+    createPlantPairingGuide,
+    getPairCompatibility
+} from "./plantPairingPlanner";
+
+
 /* =========================
    HELPERS
 ========================= */
@@ -45,6 +53,885 @@ function getCanopyRank(
 
 
 /* =========================
+   SPATIAL PLANTING HELPERS
+========================= */
+
+function getCropSpacingFeet(
+    crop
+) {
+    return Math.sqrt(
+        Math.max(
+            0.01,
+            Number(
+                crop.squareFeetPerPlant ||
+                0
+            )
+        )
+    );
+}
+
+
+function getCropSpacingInches(
+    crop
+) {
+    return Math.max(
+        1,
+        Math.round(
+            getCropSpacingFeet(
+                crop
+            ) *
+            12
+        )
+    );
+}
+
+
+function getUniformEdgeBuffer(
+    width,
+    length
+) {
+    const safeFraction =
+        BED_SAFE_UTILIZATION;
+
+
+    const sum =
+        width +
+        length;
+
+
+    const discriminant =
+        Math.max(
+            0,
+            sum ** 2 -
+                4 *
+                    (
+                        1 -
+                        safeFraction
+                    ) *
+                    width *
+                    length
+        );
+
+
+    const buffer =
+        (
+            sum -
+            Math.sqrt(
+                discriminant
+            )
+        ) /
+        4;
+
+
+    return Math.max(
+        0,
+        Math.min(
+            buffer,
+            Math.min(
+                width,
+                length
+            ) /
+                4
+        )
+    );
+}
+
+
+function createSliceCandidates({
+    rectangle,
+    crop,
+    forceTrellisEdge = false
+}) {
+    const area =
+        Math.max(
+            0,
+            Number(
+                crop.areaUsed ||
+                0
+            )
+        );
+
+
+    if (
+        area <= 0 ||
+        rectangle.width <= 0 ||
+        rectangle.length <= 0
+    ) {
+        return [];
+    }
+
+
+    const spacing =
+        getCropSpacingFeet(
+            crop
+        );
+
+
+    const candidates =
+        [];
+
+
+    const horizontalLength =
+        area /
+        rectangle.width;
+
+
+    if (
+        horizontalLength <=
+        rectangle.length +
+            0.000001
+    ) {
+        const width =
+            rectangle.width;
+
+
+        const length =
+            horizontalLength;
+
+
+        const minimumDimension =
+            Math.min(
+                width,
+                length
+            );
+
+
+        candidates.push({
+            orientation:
+                "horizontal",
+
+            x:
+                rectangle.x,
+
+            y:
+                rectangle.y,
+
+            width,
+
+            length,
+
+            remaining: {
+                x:
+                    rectangle.x,
+
+                y:
+                    rectangle.y +
+                    length,
+
+                width:
+                    rectangle.width,
+
+                length:
+                    Math.max(
+                        0,
+                        rectangle.length -
+                            length
+                    )
+            },
+
+            score:
+                (
+                    Math.min(
+                        1.25,
+                        minimumDimension /
+                            Math.max(
+                                spacing,
+                                0.01
+                            )
+                    ) *
+                    10
+                ) +
+                (
+                    crop.support &&
+                    forceTrellisEdge
+                        ? 8
+                        : 0
+                ) +
+                (
+                    Math.min(
+                        width,
+                        length
+                    ) /
+                    Math.max(
+                        width,
+                        length,
+                        0.01
+                    )
+                )
+        });
+    }
+
+
+    const verticalWidth =
+        area /
+        rectangle.length;
+
+
+    if (
+        !forceTrellisEdge &&
+        verticalWidth <=
+        rectangle.width +
+            0.000001
+    ) {
+        const width =
+            verticalWidth;
+
+
+        const length =
+            rectangle.length;
+
+
+        const minimumDimension =
+            Math.min(
+                width,
+                length
+            );
+
+
+        candidates.push({
+            orientation:
+                "vertical",
+
+            x:
+                rectangle.x,
+
+            y:
+                rectangle.y,
+
+            width,
+
+            length,
+
+            remaining: {
+                x:
+                    rectangle.x +
+                    width,
+
+                y:
+                    rectangle.y,
+
+                width:
+                    Math.max(
+                        0,
+                        rectangle.width -
+                            width
+                    ),
+
+                length:
+                    rectangle.length
+            },
+
+            score:
+                (
+                    Math.min(
+                        1.25,
+                        minimumDimension /
+                            Math.max(
+                                spacing,
+                                0.01
+                            )
+                    ) *
+                    10
+                ) +
+                (
+                    Math.min(
+                        width,
+                        length
+                    ) /
+                    Math.max(
+                        width,
+                        length,
+                        0.01
+                    )
+                )
+        });
+    }
+
+
+    return candidates;
+}
+
+
+function chooseSpatialSlices({
+    crops,
+    rectangle,
+    bedHasTrellis,
+    index = 0
+}) {
+    if (
+        index >=
+        crops.length
+    ) {
+        return {
+            score:
+                0,
+
+            zones:
+                [],
+
+            remaining:
+                rectangle
+        };
+    }
+
+
+    const crop =
+        crops[index];
+
+
+    const forceTrellisEdge =
+        Boolean(
+            bedHasTrellis &&
+            crop.support &&
+            index === 0
+        );
+
+
+    const candidates =
+        createSliceCandidates({
+            rectangle,
+            crop,
+            forceTrellisEdge
+        });
+
+
+    if (
+        candidates.length ===
+        0
+    ) {
+        return {
+            score:
+                -1000,
+
+            zones:
+                [],
+
+            remaining:
+                rectangle
+        };
+    }
+
+
+    let best =
+        null;
+
+
+    candidates.forEach(
+        (candidate) => {
+            const rest =
+                chooseSpatialSlices({
+                    crops,
+                    rectangle:
+                        candidate.remaining,
+                    bedHasTrellis,
+                    index:
+                        index + 1
+                });
+
+
+            const totalScore =
+                candidate.score +
+                rest.score;
+
+
+            if (
+                !best ||
+                totalScore >
+                    best.score
+            ) {
+                best = {
+                    score:
+                        totalScore,
+
+                    zones: [
+                        {
+                            crop,
+                            candidate
+                        },
+                        ...rest.zones
+                    ],
+
+                    remaining:
+                        rest.remaining
+                };
+            }
+        }
+    );
+
+
+    return best;
+}
+
+
+function createZoneMarkers({
+    crop,
+    width,
+    length
+}) {
+    const quantity =
+        Math.max(
+            0,
+            Number(
+                crop.quantity ||
+                0
+            )
+        );
+
+
+    if (
+        quantity <= 0
+    ) {
+        return [];
+    }
+
+
+    const markerLimit =
+        24;
+
+
+    const markerCount =
+        Math.min(
+            quantity,
+            markerLimit
+        );
+
+
+    const aspect =
+        width /
+        Math.max(
+            length,
+            0.01
+        );
+
+
+    const columns =
+        Math.max(
+            1,
+            Math.ceil(
+                Math.sqrt(
+                    markerCount *
+                    Math.max(
+                        aspect,
+                        0.1
+                    )
+                )
+            )
+        );
+
+
+    const rows =
+        Math.max(
+            1,
+            Math.ceil(
+                markerCount /
+                    columns
+            )
+        );
+
+
+    return Array.from(
+        {
+            length:
+                markerCount
+        },
+        (
+            _,
+            index
+        ) => {
+            const column =
+                index %
+                columns;
+
+
+            const row =
+                Math.floor(
+                    index /
+                    columns
+                );
+
+
+            return {
+                id:
+                    `${crop.id}-marker-${index}`,
+
+                xPercent:
+                    roundNumber(
+                        (
+                            (
+                                column +
+                                0.5
+                            ) /
+                            columns
+                        ) *
+                            100,
+                        2
+                    ),
+
+                yPercent:
+                    roundNumber(
+                        (
+                            (
+                                row +
+                                0.5
+                            ) /
+                            rows
+                        ) *
+                            100,
+                        2
+                    )
+            };
+        }
+    );
+}
+
+
+function createPlantingZones(
+    bed
+) {
+    if (
+        !bed ||
+        !Array.isArray(
+            bed.crops
+        ) ||
+        bed.crops.length ===
+            0
+    ) {
+        return {
+            edgeBufferFeet:
+                0,
+
+            usableWidth:
+                bed?.width ||
+                0,
+
+            usableLength:
+                bed?.length ||
+                0,
+
+            zones:
+                [],
+
+            internalOpenArea:
+                bed?.totalArea ||
+                0
+        };
+    }
+
+
+    const edgeBuffer =
+        getUniformEdgeBuffer(
+            bed.width,
+            bed.length
+        );
+
+
+    const usableRectangle = {
+        x:
+            edgeBuffer,
+
+        y:
+            edgeBuffer,
+
+        width:
+            Math.max(
+                0,
+                bed.width -
+                    edgeBuffer *
+                        2
+            ),
+
+        length:
+            Math.max(
+                0,
+                bed.length -
+                    edgeBuffer *
+                        2
+            )
+    };
+
+
+    const orderedCrops =
+        [
+            ...bed.crops
+        ].sort(
+            (
+                first,
+                second
+            ) => {
+                if (
+                    first.support !==
+                    second.support
+                ) {
+                    return first.support
+                        ? -1
+                        : 1;
+                }
+
+
+                const canopyDifference =
+                    getCanopyRank(
+                        second.canopy
+                    ) -
+                    getCanopyRank(
+                        first.canopy
+                    );
+
+
+                if (
+                    canopyDifference !==
+                    0
+                ) {
+                    return canopyDifference;
+                }
+
+
+                return (
+                    second.areaUsed -
+                    first.areaUsed
+                );
+            }
+        );
+
+
+    const result =
+        chooseSpatialSlices({
+            crops:
+                orderedCrops,
+
+            rectangle:
+                usableRectangle,
+
+            bedHasTrellis:
+                Boolean(
+                    bed.hasTrellis
+                )
+        });
+
+
+    const zones =
+        result.zones.map(
+            (
+                zone,
+                index
+            ) => {
+                const crop =
+                    zone.crop;
+
+
+                const candidate =
+                    zone.candidate;
+
+
+                const spacingFeet =
+                    getCropSpacingFeet(
+                        crop
+                    );
+
+
+                const spacingInches =
+                    getCropSpacingInches(
+                        crop
+                    );
+
+
+                const minimumZoneDimension =
+                    Math.min(
+                        candidate.width,
+                        candidate.length
+                    );
+
+
+                return {
+                    id:
+                        `${bed.id}-${crop.id}-zone`,
+
+                    cropId:
+                        crop.id,
+
+                    name:
+                        crop.name,
+
+                    icon:
+                        crop.icon,
+
+                    quantity:
+                        crop.quantity,
+
+                    areaUsed:
+                        crop.areaUsed,
+
+                    squareFeetPerPlant:
+                        crop.squareFeetPerPlant,
+
+                    spacingFeet:
+                        roundNumber(
+                            spacingFeet,
+                            2
+                        ),
+
+                    spacingInches,
+
+                    support:
+                        crop.support,
+
+                    canopy:
+                        crop.canopy,
+
+                    placementGroup:
+                        crop.placementGroup,
+
+                    zoneIndex:
+                        index,
+
+                    orientation:
+                        candidate.orientation,
+
+                    x:
+                        roundNumber(
+                            candidate.x,
+                            3
+                        ),
+
+                    y:
+                        roundNumber(
+                            candidate.y,
+                            3
+                        ),
+
+                    width:
+                        roundNumber(
+                            candidate.width,
+                            3
+                        ),
+
+                    length:
+                        roundNumber(
+                            candidate.length,
+                            3
+                        ),
+
+                    xPercent:
+                        roundNumber(
+                            (
+                                candidate.x /
+                                bed.width
+                            ) *
+                                100,
+                            2
+                        ),
+
+                    yPercent:
+                        roundNumber(
+                            (
+                                candidate.y /
+                                bed.length
+                            ) *
+                                100,
+                            2
+                        ),
+
+                    widthPercent:
+                        roundNumber(
+                            (
+                                candidate.width /
+                                bed.width
+                            ) *
+                                100,
+                            2
+                        ),
+
+                    lengthPercent:
+                        roundNumber(
+                            (
+                                candidate.length /
+                                bed.length
+                            ) *
+                                100,
+                            2
+                        ),
+
+                    geometryNote:
+                        minimumZoneDimension <
+                        spacingFeet *
+                            0.75
+                            ? "This crop block is narrow. Keep the full recommended plant spacing when placing individual plants."
+                            : null,
+
+                    markers:
+                        createZoneMarkers({
+                            crop,
+                            width:
+                                candidate.width,
+
+                            length:
+                                candidate.length
+                        })
+                };
+            }
+        );
+
+
+    const usableArea =
+        usableRectangle.width *
+        usableRectangle.length;
+
+
+    const cropArea =
+        zones.reduce(
+            (
+                total,
+                zone
+            ) =>
+                total +
+                zone.areaUsed,
+            0
+        );
+
+
+    return {
+        edgeBufferFeet:
+            roundNumber(
+                edgeBuffer,
+                3
+            ),
+
+        edgeBufferInches:
+            Math.max(
+                0,
+                Math.round(
+                    edgeBuffer *
+                    12
+                )
+            ),
+
+        usableWidth:
+            roundNumber(
+                usableRectangle.width,
+                3
+            ),
+
+        usableLength:
+            roundNumber(
+                usableRectangle.length,
+                3
+            ),
+
+        zones,
+
+        internalOpenArea:
+            roundNumber(
+                Math.max(
+                    0,
+                    usableArea -
+                        cropArea
+                ),
+                3
+            )
+    };
+}
+
+
+/* =========================
    CREATE BED
 ========================= */
 
@@ -56,6 +943,11 @@ function createBedRecord(
     const area =
         bed.width *
         bed.length;
+
+
+    const plantableArea =
+        area *
+        BED_SAFE_UTILIZATION;
 
 
     return {
@@ -77,12 +969,28 @@ function createBedRecord(
                 3
             ),
 
+        plantableArea:
+            roundNumber(
+                plantableArea,
+                3
+            ),
+
+        reservedArea:
+            roundNumber(
+                Math.max(
+                    0,
+                    area -
+                        plantableArea
+                ),
+                3
+            ),
+
         usedArea:
             0,
 
         remainingArea:
             roundNumber(
-                area,
+                plantableArea,
                 3
             ),
 
@@ -242,7 +1150,10 @@ function addCropToBed(
         roundNumber(
             Math.max(
                 0,
-                bed.totalArea -
+                (
+                    bed.plantableArea ??
+                    bed.totalArea
+                ) -
                 bed.usedArea
             ),
             3
@@ -284,96 +1195,22 @@ function getBedCropCapacity(
 
 function getPairingScore(
     crop,
-    existingCrop
+    existingCrop,
+    bed,
+    seasonalGuide
 ) {
-    let score =
-        0;
+    return getPairCompatibility(
+        crop,
+        existingCrop,
+        {
+            bedHasTrellis:
+                Boolean(
+                    bed?.hasTrellis
+                ),
 
-
-    if (
-        crop.preferredNeighbors
-            ?.includes(
-                existingCrop.id
-            )
-    ) {
-        score +=
-            5;
-    }
-
-
-    if (
-        existingCrop.preferredNeighbors
-            ?.includes(
-                crop.id
-            )
-    ) {
-        score +=
-            5;
-    }
-
-
-    /*
-        Mixing vertical structure
-        can make better use of bed
-        space than identical canopy
-        heights.
-    */
-
-    if (
-        crop.canopy !==
-        existingCrop.canopy
-    ) {
-        score +=
-            2;
-    }
-
-
-    /*
-        Root + leafy/fruiting crops
-        occupy somewhat different
-        physical zones.
-    */
-
-    if (
-        crop.placementGroup ===
-            "root" &&
-        existingCrop.placementGroup !==
-            "root"
-    ) {
-        score +=
-            2;
-    }
-
-
-    if (
-        existingCrop.placementGroup ===
-            "root" &&
-        crop.placementGroup !==
-            "root"
-    ) {
-        score +=
-            2;
-    }
-
-
-    /*
-        Avoid putting several
-        spreading crops together
-        when another bed is available.
-    */
-
-    if (
-        crop.growthStyle ===
-            "spreading" &&
-        existingCrop.growthStyle ===
-            "spreading"
-    ) {
-        score -=
-            5;
-    }
-
-
-    return score;
+            seasonalGuide
+        }
+    ).score;
 }
 
 
@@ -384,7 +1221,8 @@ function getPairingScore(
 function scoreBedForCrop(
     bed,
     crop,
-    hasTrellis
+    hasTrellis,
+    seasonalGuide
 ) {
     const capacity =
         getBedCropCapacity(
@@ -395,6 +1233,17 @@ function scoreBedForCrop(
 
     if (
         capacity <= 0
+    ) {
+        return -Infinity;
+    }
+
+
+    if (
+        !canAddCropToBed({
+            bed,
+            crop,
+            seasonalGuide
+        })
     ) {
         return -Infinity;
     }
@@ -452,7 +1301,9 @@ function scoreBedForCrop(
             score +=
                 getPairingScore(
                     crop,
-                    existingCrop
+                    existingCrop,
+                    bed,
+                    seasonalGuide
                 );
         }
     );
@@ -501,7 +1352,8 @@ function scoreBedForCrop(
 function findBestBed(
     beds,
     crop,
-    hasTrellis
+    hasTrellis,
+    seasonalGuide
 ) {
     const candidates =
         beds
@@ -513,7 +1365,8 @@ function findBestBed(
                         scoreBedForCrop(
                             bed,
                             crop,
-                            hasTrellis
+                            hasTrellis,
+                            seasonalGuide
                         )
                 })
             )
@@ -548,7 +1401,8 @@ function findBestBed(
 function distributeCrop({
     crop,
     beds,
-    hasTrellis
+    hasTrellis,
+    seasonalGuide
 }) {
     let safetyCounter =
         0;
@@ -568,7 +1422,8 @@ function distributeCrop({
             findBestBed(
                 beds,
                 crop,
-                hasTrellis
+                hasTrellis,
+                seasonalGuide
             );
 
 
@@ -1042,7 +1897,8 @@ export function generateBedPlantingPlan({
     layout,
     plantingPlan,
     selectedCrops,
-    features
+    features,
+    seasonalGuide = null
 }) {
     if (
         !layout ||
@@ -1239,7 +2095,8 @@ export function generateBedPlantingPlan({
             distributeCrop({
                 crop,
                 beds,
-                hasTrellis
+                hasTrellis,
+                seasonalGuide
             });
         }
     );
@@ -1251,6 +2108,18 @@ export function generateBedPlantingPlan({
 
     beds.forEach(
         (bed) => {
+            bed.spatialLayout =
+                createPlantingZones(
+                    bed
+                );
+
+
+            /*
+                Keep visualMarkers for backward
+                compatibility. New layout views use
+                spatialLayout.zones instead.
+            */
+
             bed.visualMarkers =
                 createVisualMarkers(
                     bed
@@ -1261,8 +2130,45 @@ export function generateBedPlantingPlan({
                 createPlacementNotes(
                     bed
                 );
+
+
+            if (
+                bed.spatialLayout
+                    .edgeBufferInches >
+                0
+            ) {
+                bed.placementNotes.push(
+                    `${bed.spatialLayout.edgeBufferInches} in perimeter spacing is reserved around the scaled planting area.`
+                );
+            }
+
+
+            bed.spatialLayout
+                .zones
+                .filter(
+                    (zone) =>
+                        zone.geometryNote
+                )
+                .forEach(
+                    (zone) => {
+                        bed.placementNotes.push(
+                            `${zone.name}: ${zone.geometryNote}`
+                        );
+                    }
+                );
         }
     );
+
+
+    /* =========================
+       PAIRING + BED LOAD GUIDE
+    ========================= */
+
+    const pairingGuide =
+        createPlantPairingGuide({
+            beds,
+            seasonalGuide
+        });
 
 
     /* =========================
@@ -1270,7 +2176,9 @@ export function generateBedPlantingPlan({
     ========================= */
 
     const warnings =
-        [];
+        [
+            ...pairingGuide.warnings
+        ];
 
 
     const unplacedCrops =
@@ -1421,25 +2329,15 @@ export function generateBedPlantingPlan({
 
 
     const pairingCount =
-        beds.reduce(
-            (
-                total,
-                bed
-            ) =>
-                total +
-                bed.placementNotes.filter(
-                    (note) =>
-                        note.startsWith(
-                            "Useful layout pairing"
-                        )
-                ).length,
-            0
-        );
+        pairingGuide.stats
+            .positivePairings;
 
 
     return {
         version:
-            3,
+            5,
+
+        pairingGuide,
 
         bedCount:
             beds.length,
@@ -1469,6 +2367,12 @@ export function generateBedPlantingPlan({
             totalBedArea:
                 roundNumber(
                     totalBedArea
+                ),
+
+            safeUtilizationTarget:
+                Math.round(
+                    BED_SAFE_UTILIZATION *
+                        100
                 ),
 
             usedArea:

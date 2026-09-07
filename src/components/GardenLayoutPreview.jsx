@@ -1,7 +1,70 @@
+import {
+    useState
+} from "react";
+
+
 function GardenLayoutPreview({
     layout,
     bedPlantingPlan
 }) {
+
+    const [
+        zoomPercent,
+        setZoomPercent
+    ] = useState(100);
+
+
+    const minimumZoom =
+        75;
+
+
+    const maximumZoom =
+        200;
+
+
+    const zoomStep =
+        25;
+
+
+    function clampZoom(
+        nextZoom
+    ) {
+        return Math.min(
+            maximumZoom,
+            Math.max(
+                minimumZoom,
+                nextZoom
+            )
+        );
+    }
+
+
+    function zoomIn() {
+        setZoomPercent(
+            (current) =>
+                clampZoom(
+                    current +
+                    zoomStep
+                )
+        );
+    }
+
+
+    function zoomOut() {
+        setZoomPercent(
+            (current) =>
+                clampZoom(
+                    current -
+                    zoomStep
+                )
+        );
+    }
+
+
+    function resetZoom() {
+        setZoomPercent(100);
+    }
+
 
     if (
         !layout ||
@@ -123,206 +186,172 @@ function GardenLayoutPreview({
     function renderRaisedBed(
         item
     ) {
-
         const plantingBed =
             getPlantingBed(
                 item.id
             );
 
 
-        const markers =
+        const zones =
             plantingBed
-                ?.visualMarkers ||
+                ?.spatialLayout
+                ?.zones ||
             [];
 
 
-        return (
+        if (
+            zones.length ===
+            0
+        ) {
+            return (
+                <>
+                    <span>
+                        {
+                            item.icon
+                        }
+                    </span>
 
-            <>
+                    <strong>
+                        {
+                            item.name
+                        }
+                    </strong>
+
+                    <small>
+                        {
+                            item.width
+                        }
+
+                        {" × "}
+
+                        {
+                            item.length
+                        }
+
+                        {" ft"}
+                    </small>
+                </>
+            );
+        }
+
+
+        return (
+            <div className="layout-bed-spatial-plan">
 
                 {
-                    markers.length >
-                    0
-                        ? (
+                    plantingBed
+                        ?.hasTrellis && (
 
-                            <>
-                                {
-                                    markers.map(
-                                        (marker) => (
+                        <div className="layout-bed-trellis-edge">
+                            Trellis edge
+                        </div>
 
-                                            <span
-                                                key={
-                                                    marker.id
-                                                }
+                    )
+                }
 
-                                                title={
-                                                    marker.name
-                                                }
 
-                                                style={{
+                {
+                    zones.map(
+                        (zone) => (
 
-                                                    position:
-                                                        "absolute",
-
-                                                    left:
-                                                        `${marker.xPercent}%`,
-
-                                                    top:
-                                                        `${marker.yPercent}%`,
-
-                                                    transform:
-                                                        "translate(-50%, -50%)",
-
-                                                    display:
-                                                        "flex",
-
-                                                    alignItems:
-                                                        "center",
-
-                                                    justifyContent:
-                                                        "center",
-
-                                                    width:
-                                                        "18px",
-
-                                                    height:
-                                                        "18px",
-
-                                                    borderRadius:
-                                                        "50%",
-
-                                                    background:
-                                                        "rgba(255,255,255,0.82)",
-
-                                                    fontSize:
-                                                        "11px",
-
-                                                    lineHeight:
-                                                        1,
-
-                                                    boxShadow:
-                                                        "0 1px 3px rgba(0,0,0,0.18)",
-
-                                                    pointerEvents:
-                                                        "none"
-
-                                                }}
-                                            >
-
-                                                {
-                                                    marker.icon
-                                                }
-
-                                            </span>
-
-                                        )
-                                    )
+                            <div
+                                key={
+                                    zone.id
                                 }
+                                className={
+                                    `layout-crop-zone crop-zone-${zone.zoneIndex % 4}`
+                                }
+                                style={{
+                                    left:
+                                        `${zone.xPercent}%`,
 
+                                    top:
+                                        `${zone.yPercent}%`,
 
-                                <small
-                                    style={{
+                                    width:
+                                        `${zone.widthPercent}%`,
 
-                                        position:
-                                            "absolute",
+                                    height:
+                                        `${zone.lengthPercent}%`
+                                }}
+                                title={
+                                    `${zone.name}: ${zone.quantity} plant${zone.quantity === 1 ? "" : "s"}, about ${zone.spacingInches} in spacing`
+                                }
+                            >
 
-                                        left:
-                                            "50%",
-
-                                        bottom:
-                                            "2px",
-
-                                        transform:
-                                            "translateX(-50%)",
-
-                                        maxWidth:
-                                            "90%",
-
-                                        padding:
-                                            "1px 4px",
-
-                                        borderRadius:
-                                            "5px",
-
-                                        background:
-                                            "rgba(60,40,20,0.72)",
-
-                                        color:
-                                            "white",
-
-                                        fontSize:
-                                            "8px",
-
-                                        whiteSpace:
-                                            "nowrap",
-
-                                        overflow:
-                                            "hidden",
-
-                                        textOverflow:
-                                            "ellipsis"
-
-                                    }}
-                                >
-
+                                <span className="layout-crop-zone-name">
                                     {
-                                        plantingBed
-                                            .crops
-                                            .map(
-                                                (crop) =>
-                                                    `${crop.icon} ${crop.quantity}`
-                                            )
-                                            .join(
-                                                " • "
-                                            )
+                                        zone.icon
                                     }
 
-                                </small>
+                                    {" "}
 
-                            </>
-
-                        )
-                        : (
-
-                            <>
-
-                                <span>
                                     {
-                                        item.icon
+                                        zone.name
                                     }
                                 </span>
 
-                                <strong>
-                                    {
-                                        item.name
-                                    }
-                                </strong>
 
                                 <small>
-
                                     {
-                                        item.width
+                                        zone.quantity
                                     }
 
                                     {" × "}
 
                                     {
-                                        item.length
+                                        zone.spacingInches
                                     }
 
-                                    {" ft"}
-
+                                    {" in"}
                                 </small>
 
-                            </>
+
+                                {
+                                    zone.markers.map(
+                                        (marker) => (
+
+                                            <i
+                                                key={
+                                                    `${zone.id}-${marker.id}`
+                                                }
+                                                className="layout-crop-marker"
+                                                style={{
+                                                    left:
+                                                        `${marker.xPercent}%`,
+
+                                                    top:
+                                                        `${marker.yPercent}%`
+                                                }}
+                                                aria-hidden="true"
+                                            />
+
+                                        )
+                                    )
+                                }
+
+                            </div>
 
                         )
+                    )
                 }
 
-            </>
 
+                {
+                    plantingBed
+                        ?.spatialLayout
+                        ?.internalOpenArea >
+                    0.1 && (
+
+                    <span className="layout-bed-open-space-label">
+                        Open spacing
+                    </span>
+
+                )
+                }
+
+            </div>
         );
-
     }
 
 
@@ -414,8 +443,7 @@ function GardenLayoutPreview({
 
 
                     <p>
-                        A scaled planning view of
-                        your available garden space.
+                        A scaled planning view of your garden space. Raised beds now show the physical area reserved for each crop pairing instead of decorative plant markers.
                     </p>
 
                 </div>
@@ -423,7 +451,106 @@ function GardenLayoutPreview({
             </div>
 
 
-            <div className="garden-layout-wrapper">
+            <div className="garden-layout-zoom-controls">
+
+                <button
+                    type="button"
+                    className="garden-layout-zoom-button"
+                    aria-label="Zoom garden layout out"
+                    onClick={zoomOut}
+                    disabled={
+                        zoomPercent <=
+                        minimumZoom
+                    }
+                >
+                    −
+                </button>
+
+
+                <div className="garden-layout-zoom-status">
+
+                    <strong>
+                        {
+                            zoomPercent
+                        }
+
+                        {"%"}
+                    </strong>
+
+
+                    <span>
+                        Zoom
+                    </span>
+
+                </div>
+
+
+                <input
+                    className="garden-layout-zoom-slider"
+                    type="range"
+                    min={minimumZoom}
+                    max={maximumZoom}
+                    step={zoomStep}
+                    value={zoomPercent}
+                    aria-label="Garden layout zoom level"
+                    onChange={
+                        (event) =>
+                            setZoomPercent(
+                                clampZoom(
+                                    Number(
+                                        event.target.value
+                                    )
+                                )
+                            )
+                    }
+                />
+
+
+                <button
+                    type="button"
+                    className="garden-layout-zoom-button"
+                    aria-label="Zoom garden layout in"
+                    onClick={zoomIn}
+                    disabled={
+                        zoomPercent >=
+                        maximumZoom
+                    }
+                >
+                    +
+                </button>
+
+
+                <button
+                    type="button"
+                    className="garden-layout-zoom-reset"
+                    onClick={resetZoom}
+                    disabled={
+                        zoomPercent ===
+                        100
+                    }
+                >
+                    Fit
+                </button>
+
+            </div>
+
+
+            <p className="garden-layout-zoom-help">
+                Zoom in to inspect crop pairing zones and spacing. When enlarged, drag or scroll inside the diagram to move around.
+            </p>
+
+
+            <div className="garden-layout-viewport">
+
+                <div
+                    className="garden-layout-zoom-stage"
+                    style={{
+                        width:
+                            `${zoomPercent}%`
+                    }}
+                >
+
+                    <div className="garden-layout-wrapper">
 
 
                 <div className="layout-width-label">
@@ -541,6 +668,10 @@ function GardenLayoutPreview({
 
                 </div>
 
+
+                    </div>
+
+                </div>
 
             </div>
 
