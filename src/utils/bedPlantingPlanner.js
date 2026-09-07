@@ -11,6 +11,12 @@ import {
 } from "./plantPairingPlanner";
 
 
+import {
+    getCropLayoutSquareFeet,
+    getCropPlantSpacingInches
+} from "./cropSpacing";
+
+
 /* =========================
    HELPERS
 ========================= */
@@ -59,14 +65,11 @@ function getCanopyRank(
 function getCropSpacingFeet(
     crop
 ) {
-    return Math.sqrt(
-        Math.max(
-            0.01,
-            Number(
-                crop.squareFeetPerPlant ||
-                0
-            )
-        )
+    return (
+        getCropPlantSpacingInches(
+            crop
+        ) /
+        12
     );
 }
 
@@ -74,14 +77,8 @@ function getCropSpacingFeet(
 function getCropSpacingInches(
     crop
 ) {
-    return Math.max(
-        1,
-        Math.round(
-            getCropSpacingFeet(
-                crop
-            ) *
-            12
-        )
+    return getCropPlantSpacingInches(
+        crop
     );
 }
 
@@ -763,6 +760,25 @@ function createPlantingZones(
                     squareFeetPerPlant:
                         crop.squareFeetPerPlant,
 
+                    layoutSquareFeetPerPlant:
+                        crop.layoutSquareFeetPerPlant ??
+                        crop.squareFeetPerPlant,
+
+                    layoutWidthInches:
+                        crop.layoutWidthInches,
+
+                    layoutDepthInches:
+                        crop.layoutDepthInches,
+
+                    matureWidthInches:
+                        crop.matureWidthInches,
+
+                    matureHeightInches:
+                        crop.matureHeightInches,
+
+                    spacingBasis:
+                        crop.spacingBasis,
+
                     spacingFeet:
                         roundNumber(
                             spacingFeet,
@@ -1050,7 +1066,9 @@ function addCropToBed(
                 bed.remainingArea +
                 0.000001
             ) /
-            crop.squareFeetPerPlant
+            getCropLayoutSquareFeet(
+                crop
+            )
         );
 
 
@@ -1068,9 +1086,15 @@ function addCropToBed(
     }
 
 
+    const layoutSquareFeetPerPlant =
+        getCropLayoutSquareFeet(
+            crop
+        );
+
+
     const areaUsed =
         actualQuantity *
-        crop.squareFeetPerPlant;
+        layoutSquareFeetPerPlant;
 
 
     const existingCrop =
@@ -1109,6 +1133,32 @@ function addCropToBed(
 
             squareFeetPerPlant:
                 crop.squareFeetPerPlant,
+
+            layoutSquareFeetPerPlant,
+
+            plantSpacingInches:
+                crop.plantSpacingInches,
+
+            rowSpacingInches:
+                crop.rowSpacingInches,
+
+            layoutWidthInches:
+                crop.layoutWidthInches,
+
+            layoutDepthInches:
+                crop.layoutDepthInches,
+
+            matureWidthInches:
+                crop.matureWidthInches,
+
+            matureHeightInches:
+                crop.matureHeightInches,
+
+            supportStyle:
+                crop.supportStyle,
+
+            spacingBasis:
+                crop.spacingBasis,
 
             areaUsed:
                 roundNumber(
@@ -1172,8 +1222,14 @@ function getBedCropCapacity(
     bed,
     crop
 ) {
+    const layoutSquareFeetPerPlant =
+        getCropLayoutSquareFeet(
+            crop
+        );
+
+
     if (
-        !crop.squareFeetPerPlant
+        layoutSquareFeetPerPlant <= 0
     ) {
         return 0;
     }
@@ -1184,7 +1240,7 @@ function getBedCropCapacity(
             bed.remainingArea +
             0.000001
         ) /
-        crop.squareFeetPerPlant
+        layoutSquareFeetPerPlant
     );
 }
 
@@ -2006,7 +2062,9 @@ export function generateBedPlantingPlan({
                                 1,
                                 Math.floor(
                                     raisedBedAreaPerCrop /
-                                    crop.squareFeetPerPlant
+                                    getCropLayoutSquareFeet(
+                                        crop
+                                    )
                                 )
                             )
                             : 0;
@@ -2079,8 +2137,12 @@ export function generateBedPlantingPlan({
 
 
             return (
-                second.squareFeetPerPlant -
-                first.squareFeetPerPlant
+                getCropLayoutSquareFeet(
+                    second
+                ) -
+                getCropLayoutSquareFeet(
+                    first
+                )
             );
         }
     );

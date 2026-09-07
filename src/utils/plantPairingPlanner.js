@@ -3,6 +3,11 @@ import {
 } from "../data/cropPlanningData";
 
 
+import {
+    getCropLayoutSquareFeet
+} from "./cropSpacing";
+
+
 export const BED_SAFE_UTILIZATION =
     0.85;
 
@@ -484,17 +489,15 @@ export function getPairCompatibility(
     ========================= */
 
     const firstLarge =
-        Number(
-            firstCrop.squareFeetPerPlant ||
-            0
+        getCropLayoutSquareFeet(
+            firstCrop
         ) >=
         2;
 
 
     const secondLarge =
-        Number(
-            secondCrop.squareFeetPerPlant ||
-            0
+        getCropLayoutSquareFeet(
+            secondCrop
         ) >=
         2;
 

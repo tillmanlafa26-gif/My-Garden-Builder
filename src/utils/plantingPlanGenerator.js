@@ -3,6 +3,11 @@ import {
 } from "../data/cropPlanningData";
 
 
+import {
+    getCropLayoutSquareFeet
+} from "./cropSpacing";
+
+
 const sunlightLevels = {
     shade: 1,
     partial: 2,
@@ -118,13 +123,20 @@ export function generatePlantingPlan({
                     ] || 1;
 
 
+                const layoutSquareFeetPerPlant =
+                    getCropLayoutSquareFeet(
+                        crop
+                    );
+
+
                 const suggestedQuantity =
-                    growingArea > 0
+                    growingArea > 0 &&
+                    layoutSquareFeetPerPlant > 0
                         ? Math.max(
                             1,
                             Math.floor(
                                 areaPerCrop /
-                                crop.squareFeetPerPlant
+                                layoutSquareFeetPerPlant
                             )
                         )
                         : 0;
@@ -160,6 +172,20 @@ export function generatePlantingPlan({
 
                     squareFeetPerPlant:
                         crop.squareFeetPerPlant,
+
+                    layoutSquareFeetPerPlant,
+
+                    plantSpacingInches:
+                        crop.plantSpacingInches,
+
+                    rowSpacingInches:
+                        crop.rowSpacingInches,
+
+                    layoutWidthInches:
+                        crop.layoutWidthInches,
+
+                    layoutDepthInches:
+                        crop.layoutDepthInches,
 
                     sunlightMatch,
 

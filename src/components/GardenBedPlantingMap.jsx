@@ -436,16 +436,8 @@ function GardenBedPlantingMap({
                                                                     <small>
 
                                                                         {
-                                                                            crop.squareFeetPerPlant
-                                                                                ? `${Math.max(
-                                                                                    1,
-                                                                                    Math.round(
-                                                                                        Math.sqrt(
-                                                                                            crop.squareFeetPerPlant
-                                                                                        ) *
-                                                                                            12
-                                                                                    )
-                                                                                )} in planning spacing`
+                                                                            crop.plantSpacingInches
+                                                                                ? `${crop.plantSpacingInches} in plant spacing`
                                                                                 : "Spacing varies"
                                                                         }
 

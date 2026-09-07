@@ -29,6 +29,24 @@ export const cropPlanningData = [
 
         squareFeetPerPlant: 4,
 
+        layoutSquareFeetPerPlant: 4.0,
+
+        plantSpacingInches: 24,
+
+        rowSpacingInches: 48,
+
+        layoutWidthInches: 24,
+
+        layoutDepthInches: 24,
+
+        matureWidthInches: 30,
+
+        matureHeightInches: 72,
+
+        supportStyle: "stake-or-trellis",
+
+        spacingBasis: "trellised home-garden tomato",
+
         minimumSunlight: "full",
 
         support: true,
@@ -83,6 +101,24 @@ export const cropPlanningData = [
 
         squareFeetPerPlant: 2,
 
+        layoutSquareFeetPerPlant: 2.25,
+
+        plantSpacingInches: 18,
+
+        rowSpacingInches: 30,
+
+        layoutWidthInches: 18,
+
+        layoutDepthInches: 18,
+
+        matureWidthInches: 20,
+
+        matureHeightInches: 30,
+
+        supportStyle: "optional-stake",
+
+        spacingBasis: "compact home-garden pepper",
+
         minimumSunlight: "full",
 
         support: false,
@@ -136,6 +172,24 @@ export const cropPlanningData = [
 
         squareFeetPerPlant: 2,
 
+        layoutSquareFeetPerPlant: 1.5,
+
+        plantSpacingInches: 12,
+
+        rowSpacingInches: 36,
+
+        layoutWidthInches: 12,
+
+        layoutDepthInches: 18,
+
+        matureWidthInches: 18,
+
+        matureHeightInches: 72,
+
+        supportStyle: "trellis",
+
+        spacingBasis: "trellised cucumber",
+
         minimumSunlight: "full",
 
         support: true,
@@ -188,6 +242,24 @@ export const cropPlanningData = [
         icon: "🫘",
 
         squareFeetPerPlant: 1,
+
+        layoutSquareFeetPerPlant: 0.5,
+
+        plantSpacingInches: 6,
+
+        rowSpacingInches: 24,
+
+        layoutWidthInches: 6,
+
+        layoutDepthInches: 12,
+
+        matureWidthInches: 12,
+
+        matureHeightInches: 72,
+
+        supportStyle: "trellis",
+
+        spacingBasis: "pole bean on support",
 
         minimumSunlight: "full",
 
@@ -243,6 +315,24 @@ export const cropPlanningData = [
 
         squareFeetPerPlant: 0.35,
 
+        layoutSquareFeetPerPlant: 0.694,
+
+        plantSpacingInches: 10,
+
+        rowSpacingInches: 18,
+
+        layoutWidthInches: 10,
+
+        layoutDepthInches: 10,
+
+        matureWidthInches: 10,
+
+        matureHeightInches: 10,
+
+        supportStyle: "none",
+
+        spacingBasis: "head/romaine lettuce",
+
         minimumSunlight: "partial",
 
         support: false,
@@ -297,6 +387,24 @@ export const cropPlanningData = [
 
         squareFeetPerPlant: 1,
 
+        layoutSquareFeetPerPlant: 2.25,
+
+        plantSpacingInches: 18,
+
+        rowSpacingInches: 24,
+
+        layoutWidthInches: 18,
+
+        layoutDepthInches: 18,
+
+        matureWidthInches: 18,
+
+        matureHeightInches: 30,
+
+        supportStyle: "none",
+
+        spacingBasis: "mature kale",
+
         minimumSunlight: "partial",
 
         support: false,
@@ -349,6 +457,24 @@ export const cropPlanningData = [
         icon: "🥕",
 
         squareFeetPerPlant: 0.2,
+
+        layoutSquareFeetPerPlant: 0.062,
+
+        plantSpacingInches: 2,
+
+        rowSpacingInches: 12,
+
+        layoutWidthInches: 3,
+
+        layoutDepthInches: 3,
+
+        matureWidthInches: 4,
+
+        matureHeightInches: 12,
+
+        supportStyle: "none",
+
+        spacingBasis: "thinned carrot",
 
         minimumSunlight: "partial",
 
@@ -404,6 +530,24 @@ export const cropPlanningData = [
 
         squareFeetPerPlant: 0.15,
 
+        layoutSquareFeetPerPlant: 0.028,
+
+        plantSpacingInches: 1,
+
+        rowSpacingInches: 8,
+
+        layoutWidthInches: 2,
+
+        layoutDepthInches: 2,
+
+        matureWidthInches: 3,
+
+        matureHeightInches: 8,
+
+        supportStyle: "none",
+
+        spacingBasis: "thinned radish",
+
         minimumSunlight: "partial",
 
         support: false,
@@ -457,6 +601,24 @@ export const cropPlanningData = [
 
         squareFeetPerPlant: 0.5,
 
+        layoutSquareFeetPerPlant: 1.0,
+
+        plantSpacingInches: 12,
+
+        rowSpacingInches: 18,
+
+        layoutWidthInches: 12,
+
+        layoutDepthInches: 12,
+
+        matureWidthInches: 16,
+
+        matureHeightInches: 24,
+
+        supportStyle: "none",
+
+        spacingBasis: "garden basil",
+
         minimumSunlight: "full",
 
         support: false,
@@ -508,6 +670,24 @@ export const cropPlanningData = [
         icon: "🍓",
 
         squareFeetPerPlant: 0.75,
+
+        layoutSquareFeetPerPlant: 1.0,
+
+        plantSpacingInches: 12,
+
+        rowSpacingInches: 12,
+
+        layoutWidthInches: 12,
+
+        layoutDepthInches: 12,
+
+        matureWidthInches: 12,
+
+        matureHeightInches: 8,
+
+        supportStyle: "none",
+
+        spacingBasis: "annual-hill strawberry",
 
         minimumSunlight: "full",
 
@@ -562,6 +742,24 @@ export const cropPlanningData = [
 
         squareFeetPerPlant: 1.5,
 
+        layoutSquareFeetPerPlant: 2.25,
+
+        plantSpacingInches: 18,
+
+        rowSpacingInches: 24,
+
+        layoutWidthInches: 18,
+
+        layoutDepthInches: 18,
+
+        matureWidthInches: 24,
+
+        matureHeightInches: 30,
+
+        supportStyle: "none",
+
+        spacingBasis: "mature broccoli",
+
         minimumSunlight: "full",
 
         support: false,
@@ -615,6 +813,24 @@ export const cropPlanningData = [
 
         squareFeetPerPlant: 1.5,
 
+        layoutSquareFeetPerPlant: 2.25,
+
+        plantSpacingInches: 18,
+
+        rowSpacingInches: 24,
+
+        layoutWidthInches: 18,
+
+        layoutDepthInches: 18,
+
+        matureWidthInches: 24,
+
+        matureHeightInches: 24,
+
+        supportStyle: "none",
+
+        spacingBasis: "mature cauliflower",
+
         minimumSunlight: "full",
 
         support: false,
@@ -667,6 +883,24 @@ export const cropPlanningData = [
         icon: "🥬",
 
         squareFeetPerPlant: 1.5,
+
+        layoutSquareFeetPerPlant: 2.25,
+
+        plantSpacingInches: 18,
+
+        rowSpacingInches: 24,
+
+        layoutWidthInches: 18,
+
+        layoutDepthInches: 18,
+
+        matureWidthInches: 24,
+
+        matureHeightInches: 18,
+
+        supportStyle: "none",
+
+        spacingBasis: "medium-head cabbage",
 
         minimumSunlight: "full",
 
@@ -722,6 +956,24 @@ export const cropPlanningData = [
 
         squareFeetPerPlant: 0.25,
 
+        layoutSquareFeetPerPlant: 0.111,
+
+        plantSpacingInches: 4,
+
+        rowSpacingInches: 8,
+
+        layoutWidthInches: 4,
+
+        layoutDepthInches: 4,
+
+        matureWidthInches: 6,
+
+        matureHeightInches: 8,
+
+        supportStyle: "none",
+
+        spacingBasis: "mature leaf spinach",
+
         minimumSunlight: "partial",
 
         support: false,
@@ -774,6 +1026,24 @@ export const cropPlanningData = [
         icon: "🫛",
 
         squareFeetPerPlant: 0.25,
+
+        layoutSquareFeetPerPlant: 0.125,
+
+        plantSpacingInches: 2,
+
+        rowSpacingInches: 18,
+
+        layoutWidthInches: 3,
+
+        layoutDepthInches: 6,
+
+        matureWidthInches: 8,
+
+        matureHeightInches: 60,
+
+        supportStyle: "trellis",
+
+        spacingBasis: "trellised garden pea",
 
         minimumSunlight: "full",
 
@@ -828,6 +1098,26 @@ export const cropPlanningData = [
 
         squareFeetPerPlant: 1,
 
+        layoutSquareFeetPerPlant: 1.0,
+
+        plantSpacingInches: 12,
+
+        rowSpacingInches: 30,
+
+        layoutWidthInches: 12,
+
+        layoutDepthInches: 12,
+
+        matureWidthInches: 12,
+
+        matureHeightInches: 72,
+
+        supportStyle: "none",
+
+        spacingBasis: "block-planted sweet corn",
+
+        blockPlantingRequired: true,
+
         minimumSunlight: "full",
 
         support: false,
@@ -880,6 +1170,24 @@ export const cropPlanningData = [
         icon: "🥒",
 
         squareFeetPerPlant: 9,
+
+        layoutSquareFeetPerPlant: 9.0,
+
+        plantSpacingInches: 24,
+
+        rowSpacingInches: 36,
+
+        layoutWidthInches: 36,
+
+        layoutDepthInches: 36,
+
+        matureWidthInches: 42,
+
+        matureHeightInches: 24,
+
+        supportStyle: "none",
+
+        spacingBasis: "full-size bush zucchini",
 
         minimumSunlight: "full",
 
@@ -934,6 +1242,24 @@ export const cropPlanningData = [
 
         squareFeetPerPlant: 2,
 
+        layoutSquareFeetPerPlant: 4.0,
+
+        plantSpacingInches: 24,
+
+        rowSpacingInches: 30,
+
+        layoutWidthInches: 24,
+
+        layoutDepthInches: 24,
+
+        matureWidthInches: 24,
+
+        matureHeightInches: 36,
+
+        supportStyle: "optional-stake",
+
+        spacingBasis: "mature eggplant",
+
         minimumSunlight: "full",
 
         support: false,
@@ -986,6 +1312,24 @@ export const cropPlanningData = [
         icon: "🧅",
 
         squareFeetPerPlant: 0.15,
+
+        layoutSquareFeetPerPlant: 0.111,
+
+        plantSpacingInches: 4,
+
+        rowSpacingInches: 12,
+
+        layoutWidthInches: 4,
+
+        layoutDepthInches: 4,
+
+        matureWidthInches: 4,
+
+        matureHeightInches: 18,
+
+        supportStyle: "none",
+
+        spacingBasis: "dry-bulb onion",
 
         minimumSunlight: "full",
 
@@ -1041,6 +1385,24 @@ export const cropPlanningData = [
 
         squareFeetPerPlant: 3,
 
+        layoutSquareFeetPerPlant: 2.25,
+
+        plantSpacingInches: 12,
+
+        rowSpacingInches: 36,
+
+        layoutWidthInches: 18,
+
+        layoutDepthInches: 18,
+
+        matureWidthInches: 48,
+
+        matureHeightInches: 12,
+
+        supportStyle: "none",
+
+        spacingBasis: "sweet potato with vines allowed to spill",
+
         minimumSunlight: "full",
 
         support: false,
@@ -1092,6 +1454,24 @@ export const cropPlanningData = [
         icon: "🥔",
 
         squareFeetPerPlant: 1,
+
+        layoutSquareFeetPerPlant: 1.0,
+
+        plantSpacingInches: 12,
+
+        rowSpacingInches: 30,
+
+        layoutWidthInches: 12,
+
+        layoutDepthInches: 12,
+
+        matureWidthInches: 18,
+
+        matureHeightInches: 30,
+
+        supportStyle: "none",
+
+        spacingBasis: "Irish potato",
 
         minimumSunlight: "full",
 
@@ -1146,6 +1526,24 @@ export const cropPlanningData = [
 
         squareFeetPerPlant: 0.2,
 
+        layoutSquareFeetPerPlant: 0.111,
+
+        plantSpacingInches: 4,
+
+        rowSpacingInches: 12,
+
+        layoutWidthInches: 4,
+
+        layoutDepthInches: 4,
+
+        matureWidthInches: 6,
+
+        matureHeightInches: 12,
+
+        supportStyle: "none",
+
+        spacingBasis: "thinned beet",
+
         minimumSunlight: "partial",
 
         support: false,
@@ -1199,6 +1597,24 @@ export const cropPlanningData = [
 
         squareFeetPerPlant: 0.5,
 
+        layoutSquareFeetPerPlant: 1.0,
+
+        plantSpacingInches: 12,
+
+        rowSpacingInches: 24,
+
+        layoutWidthInches: 12,
+
+        layoutDepthInches: 12,
+
+        matureWidthInches: 12,
+
+        matureHeightInches: 24,
+
+        supportStyle: "none",
+
+        spacingBasis: "home-garden celery",
+
         minimumSunlight: "partial",
 
         support: false,
@@ -1251,6 +1667,24 @@ export const cropPlanningData = [
         icon: "🥬",
 
         squareFeetPerPlant: 1.5,
+
+        layoutSquareFeetPerPlant: 2.25,
+
+        plantSpacingInches: 18,
+
+        rowSpacingInches: 24,
+
+        layoutWidthInches: 18,
+
+        layoutDepthInches: 18,
+
+        matureWidthInches: 24,
+
+        matureHeightInches: 36,
+
+        supportStyle: "none",
+
+        spacingBasis: "mature Brussels sprouts",
 
         minimumSunlight: "full",
 
