@@ -38,9 +38,6 @@ function AppSettings({
     const navigate =
         useNavigate();
 
-    const openButtonRef =
-        useRef(null);
-
     const panelRef =
         useRef(null);
 
@@ -129,6 +126,28 @@ function AppSettings({
         },
         [darkMode]
     );
+
+    useEffect(
+        () => {
+            function handleOpenSettings() {
+                openSettings();
+            }
+
+            window.addEventListener(
+                "garden-open-settings",
+                handleOpenSettings
+            );
+
+            return () => {
+                window.removeEventListener(
+                    "garden-open-settings",
+                    handleOpenSettings
+                );
+            };
+        },
+        []
+    );
+
 
     useEffect(() => {
         function handleInstallPrompt(event) {
@@ -255,9 +274,13 @@ function AppSettings({
         setIsOpen(false);
 
         window.setTimeout(
-            () =>
-                openButtonRef.current
-                    ?.focus(),
+            () => {
+                window.dispatchEvent(
+                    new CustomEvent(
+                        "garden-focus-app-menu"
+                    )
+                );
+            },
             0
         );
     }
@@ -358,21 +381,6 @@ function AppSettings({
 
     return (
         <>
-            <button
-                ref={openButtonRef}
-                type="button"
-                className="app-settings-button"
-                aria-label="Open settings"
-                aria-haspopup="dialog"
-                aria-expanded={isOpen}
-                onClick={openSettings}
-            >
-                <Icon
-                    name="settings"
-                    size={20}
-                />
-            </button>
-
             {isOpen && (
                 <div
                     className="app-settings-overlay"

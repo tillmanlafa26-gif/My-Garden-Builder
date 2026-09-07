@@ -1,4 +1,6 @@
 import {
+    lazy,
+    Suspense,
     useEffect,
     useState
 } from "react";
@@ -9,13 +11,54 @@ import {
     Routes
 } from "react-router";
 
-import Home from "./pages/Home";
-import Garden from "./pages/Garden";
-import Plants from "./pages/Plants";
-import Calendar from "./pages/Calendar";
-import Journal from "./pages/Journal";
-import Privacy from "./pages/Privacy";
-import Terms from "./pages/Terms";
+const Home = lazy(
+    () =>
+        import(
+            "./pages/Home"
+        )
+);
+
+const Garden = lazy(
+    () =>
+        import(
+            "./pages/Garden"
+        )
+);
+
+const Plants = lazy(
+    () =>
+        import(
+            "./pages/Plants"
+        )
+);
+
+const Calendar = lazy(
+    () =>
+        import(
+            "./pages/Calendar"
+        )
+);
+
+const Journal = lazy(
+    () =>
+        import(
+            "./pages/Journal"
+        )
+);
+
+const Privacy = lazy(
+    () =>
+        import(
+            "./pages/Privacy"
+        )
+);
+
+const Terms = lazy(
+    () =>
+        import(
+            "./pages/Terms"
+        )
+);
 
 import SuppliesMenu from "./components/SuppliesMenu";
 import AppMenu from "./components/AppMenu";
@@ -45,6 +88,60 @@ import {
 import {
     RUNTIME_CACHE_PREFIX
 } from "./utils/runtimeCache";
+
+
+/* =========================
+   ROUTE LOADING FALLBACK
+========================= */
+
+function RouteLoadingFallback() {
+
+    return (
+
+        <section
+            className="route-loading-card"
+            role="status"
+            aria-live="polite"
+            aria-label="Loading page"
+        >
+
+            <div
+                className="route-loading-sprout"
+                aria-hidden="true"
+            >
+                🌱
+            </div>
+
+
+            <div
+                className="route-loading-copy"
+            >
+
+                <strong>
+                    Loading your garden...
+                </strong>
+
+                <span>
+                    Getting this section ready.
+                </span>
+
+            </div>
+
+
+            <div
+                className="route-loading-bar"
+                aria-hidden="true"
+            >
+
+                <span />
+
+            </div>
+
+        </section>
+
+    );
+
+}
 
 
 /* =========================
@@ -3335,7 +3432,13 @@ function App() {
 
                 <RouteFocusManager />
 
-                <Routes>
+                <Suspense
+                    fallback={
+                        <RouteLoadingFallback />
+                    }
+                >
+
+                    <Routes>
 
 
                 <Route
@@ -3449,6 +3552,16 @@ function App() {
                             onSaveGardenProfile={
                                 saveGardenProfile
                             }
+
+                            ownedSupplies={
+                                ownedSupplies
+                            }
+
+                            onOpenSupplies={() =>
+                                setSuppliesOpen(
+                                    true
+                                )
+                            }
                         />
 
                     }
@@ -3553,18 +3666,14 @@ function App() {
                 />
 
 
-                </Routes>
+                    </Routes>
+
+                </Suspense>
 
             </main>
 
 
-            <AppMenu
-                onOpenSupplies={() =>
-                    setSuppliesOpen(
-                        true
-                    )
-                }
-            />
+            <AppMenu />
 
 
             <SuppliesMenu

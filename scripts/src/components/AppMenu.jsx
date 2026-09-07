@@ -11,19 +11,43 @@ import {
 import Icon from "./Icon";
 
 
-function AppMenu({
-    onOpenSupplies
-}) {
+function AppMenu() {
     const navigate =
         useNavigate();
 
     const menuRootRef =
         useRef(null);
 
+    const triggerRef =
+        useRef(null);
+
     const [
         isOpen,
         setIsOpen
     ] = useState(false);
+
+
+    useEffect(
+        () => {
+            function focusMenuTrigger() {
+                triggerRef.current
+                    ?.focus();
+            }
+
+            window.addEventListener(
+                "garden-focus-app-menu",
+                focusMenuTrigger
+            );
+
+            return () => {
+                window.removeEventListener(
+                    "garden-focus-app-menu",
+                    focusMenuTrigger
+                );
+            };
+        },
+        []
+    );
 
 
     useEffect(
@@ -77,15 +101,19 @@ function AppMenu({
     );
 
 
-    function openSupplies() {
+    function openSettings() {
         setIsOpen(false);
 
-        if (
-            typeof onOpenSupplies ===
-            "function"
-        ) {
-            onOpenSupplies();
-        }
+        window.setTimeout(
+            () => {
+                window.dispatchEvent(
+                    new CustomEvent(
+                        "garden-open-settings"
+                    )
+                );
+            },
+            0
+        );
     }
 
 
@@ -124,6 +152,7 @@ function AppMenu({
             className="app-menu"
         >
             <button
+                ref={triggerRef}
                 type="button"
                 className="app-menu-trigger"
                 aria-label={
@@ -170,22 +199,22 @@ function AppMenu({
                         type="button"
                         className="app-menu-item"
                         role="menuitem"
-                        onClick={openSupplies}
+                        onClick={openSettings}
                     >
                         <span className="app-menu-item-icon">
                             <Icon
-                                name="toolbox"
+                                name="settings"
                                 size={18}
                             />
                         </span>
 
                         <span>
                             <strong>
-                                My Supplies
+                                Settings
                             </strong>
 
                             <small>
-                                View your garden checklist.
+                                Appearance, install, and app controls.
                             </small>
                         </span>
                     </button>

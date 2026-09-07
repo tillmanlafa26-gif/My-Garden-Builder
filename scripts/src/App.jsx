@@ -3449,6 +3449,16 @@ function App() {
                             onSaveGardenProfile={
                                 saveGardenProfile
                             }
+
+                            ownedSupplies={
+                                ownedSupplies
+                            }
+
+                            onOpenSupplies={() =>
+                                setSuppliesOpen(
+                                    true
+                                )
+                            }
                         />
 
                     }
@@ -3558,13 +3568,7 @@ function App() {
             </main>
 
 
-            <AppMenu
-                onOpenSupplies={() =>
-                    setSuppliesOpen(
-                        true
-                    )
-                }
-            />
+            <AppMenu />
 
 
             <SuppliesMenu

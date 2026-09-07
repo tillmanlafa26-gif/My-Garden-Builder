@@ -15,7 +15,8 @@ function SuppliesMenu({
     onClose,
     gardenProfile,
     ownedSupplies,
-    onToggleSupply
+    onToggleSupply,
+    showTrigger = true
 }) {
 
     const filteredSupplies =
@@ -49,7 +50,7 @@ function SuppliesMenu({
 
     return (
         <>
-            {!isOpen && (
+            {showTrigger && !isOpen && (
                 <button
                     type="button"
                     className="supplies-menu-button"

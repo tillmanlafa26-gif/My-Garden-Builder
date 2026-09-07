@@ -46,6 +46,11 @@ import {
 } from "../data/cropPlanningData";
 
 
+import {
+    supplies
+} from "../data/supplies";
+
+
 /* =========================================================
    SPACE TYPES
 ========================================================= */
@@ -194,7 +199,9 @@ const gardenFeatures = [
 
 function Garden({
     gardenProfile,
-    onSaveGardenProfile
+    onSaveGardenProfile,
+    ownedSupplies = [],
+    onOpenSupplies
 }) {
 
 
@@ -416,6 +423,37 @@ function Garden({
         Boolean(
             designSpace.isActive
         );
+
+
+    const recommendedSupplies =
+        gardenProfile?.type
+            ? supplies.filter(
+                (supply) =>
+                    supply.gardenTypes.includes(
+                        gardenProfile.type
+                    )
+            )
+            : [];
+
+
+    const ownedSupplyCount =
+        recommendedSupplies.filter(
+            (supply) =>
+                ownedSupplies.includes(
+                    supply.id
+                )
+        ).length;
+
+
+    const supplyProgressPercent =
+        recommendedSupplies.length > 0
+            ? Math.round(
+                (
+                    ownedSupplyCount /
+                    recommendedSupplies.length
+                ) * 100
+            )
+            : 0;
 
 
     const activatedAt =
@@ -831,6 +869,126 @@ function Garden({
 
                             )
                         }
+
+                    </section>
+
+                )
+            }
+
+
+            {/* =================================================
+                MY SUPPLIES
+                Appears only after Steps 1-6 are complete.
+            ================================================= */}
+
+            {
+                gardenReady && (
+
+                    <section className="garden-supplies-card">
+
+                        <div className="garden-supplies-card-heading">
+
+                            <span className="garden-supplies-card-icon">
+                                <Icon
+                                    name="toolbox"
+                                    size={22}
+                                />
+                            </span>
+
+
+                            <div>
+
+                                <h2>
+                                    My Supplies
+                                </h2>
+
+
+                                <p>
+                                    Your garden setup is complete. Use this checklist to track the supplies you have before you start building and planting.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div className="garden-supplies-progress-row">
+
+                            <div>
+
+                                <strong>
+                                    Setup Checklist
+                                </strong>
+
+
+                                <small>
+                                    {
+                                        recommendedSupplies.length > 0
+                                            ? `${ownedSupplyCount} of ${recommendedSupplies.length} supplies ready`
+                                            : "Open your checklist to review supplies"
+                                    }
+                                </small>
+
+                            </div>
+
+
+                            <span>
+                                {
+                                    recommendedSupplies.length > 0
+                                        ? `${supplyProgressPercent}%`
+                                        : "Ready"
+                                }
+                            </span>
+
+                        </div>
+
+
+                        {
+                            recommendedSupplies.length > 0 && (
+
+                                <div
+                                    className="garden-supplies-progress-bar"
+                                    aria-label={
+                                        `Supply checklist ${supplyProgressPercent}% complete`
+                                    }
+                                >
+
+                                    <div
+                                        className="garden-supplies-progress-fill"
+                                        style={{
+                                            width:
+                                                `${supplyProgressPercent}%`
+                                        }}
+                                    />
+
+                                </div>
+
+                            )
+                        }
+
+
+                        <button
+                            type="button"
+                            className="garden-supplies-open-button"
+                            onClick={onOpenSupplies}
+                            disabled={
+                                typeof onOpenSupplies !==
+                                "function"
+                            }
+                        >
+
+                            <Icon
+                                name="toolbox"
+                                size={18}
+                            />
+
+                            {
+                                ownedSupplyCount > 0
+                                    ? "Open My Supplies"
+                                    : "View My Supplies"
+                            }
+
+                        </button>
 
                     </section>
 

@@ -11,9 +11,7 @@ import {
 import Icon from "./Icon";
 
 
-function AppMenu({
-    onOpenSupplies
-}) {
+function AppMenu() {
     const navigate =
         useNavigate();
 
@@ -119,18 +117,6 @@ function AppMenu({
     }
 
 
-    function openSupplies() {
-        setIsOpen(false);
-
-        if (
-            typeof onOpenSupplies ===
-            "function"
-        ) {
-            onOpenSupplies();
-        }
-    }
-
-
     function openHowToUse() {
         setIsOpen(false);
         navigate("/");
@@ -229,30 +215,6 @@ function AppMenu({
 
                             <small>
                                 Appearance, install, and app controls.
-                            </small>
-                        </span>
-                    </button>
-
-                    <button
-                        type="button"
-                        className="app-menu-item"
-                        role="menuitem"
-                        onClick={openSupplies}
-                    >
-                        <span className="app-menu-item-icon">
-                            <Icon
-                                name="toolbox"
-                                size={18}
-                            />
-                        </span>
-
-                        <span>
-                            <strong>
-                                My Supplies
-                            </strong>
-
-                            <small>
-                                View your garden checklist.
                             </small>
                         </span>
                     </button>
