@@ -1113,3 +1113,324 @@ export function parseGardenAssistantRequest(
             ).length
     };
 }
+
+const allowedAssistantFeatures =
+    new Set([
+        "raised-beds",
+        "containers",
+        "vertical-growing",
+        "trellis",
+        "compost",
+        "irrigation",
+        "hydroponics"
+    ]);
+
+
+function normalizeAssistantDimensions(
+    dimensions
+) {
+    if (
+        !dimensions ||
+        typeof dimensions !==
+            "object"
+    ) {
+        return null;
+    }
+
+
+    const width =
+        Number(
+            dimensions.width
+        );
+
+
+    const length =
+        Number(
+            dimensions.length
+        );
+
+
+    const height =
+        dimensions.height ===
+            null ||
+        dimensions.height ===
+            undefined ||
+        dimensions.height ===
+            ""
+            ? null
+            : Number(
+                dimensions.height
+            );
+
+
+    const validWidth =
+        Number.isFinite(
+            width
+        ) &&
+        width > 0
+            ? width
+            : null;
+
+
+    const validLength =
+        Number.isFinite(
+            length
+        ) &&
+        length > 0
+            ? length
+            : null;
+
+
+    const validHeight =
+        height ===
+            null
+            ? null
+            : (
+                Number.isFinite(
+                    height
+                ) &&
+                height > 0
+                    ? height
+                    : null
+            );
+
+
+    if (
+        !validWidth &&
+        !validLength &&
+        !validHeight
+    ) {
+        return null;
+    }
+
+
+    return {
+        width:
+            validWidth,
+
+        length:
+            validLength,
+
+        height:
+            validHeight,
+
+        unit:
+            dimensions.unit ===
+            "m"
+                ? "m"
+                : "ft",
+
+        sourceUnit:
+            dimensions.sourceUnit ||
+            dimensions.unit ||
+            "ft"
+    };
+}
+
+
+export function enrichGardenAssistantProposal(
+    rawProposal,
+    requestText = ""
+) {
+    const raw =
+        rawProposal &&
+        typeof rawProposal ===
+            "object"
+            ? rawProposal
+            : {};
+
+
+    const environment =
+        [
+            "indoor",
+            "outdoor"
+        ].includes(
+            raw.environment
+        )
+            ? raw.environment
+            : null;
+
+
+    const dimensions =
+        normalizeAssistantDimensions(
+            raw.dimensions
+        );
+
+
+    const spaceType =
+        environment ===
+        "indoor"
+            ? "indoor"
+            : (
+                [
+                    "backyard",
+                    "patio",
+                    "balcony",
+                    "other"
+                ].includes(
+                    raw.spaceType
+                )
+                    ? raw.spaceType
+                    : null
+            );
+
+
+    const indoorSpaceType =
+        environment ===
+        "indoor" &&
+        [
+            "windowsill",
+            "countertop",
+            "shelf",
+            "plant-rack",
+            "floor",
+            "grow-tent"
+        ].includes(
+            raw.indoorSpaceType
+        )
+            ? raw.indoorSpaceType
+            : null;
+
+
+    const sunlight =
+        [
+            "full",
+            "partial",
+            "shade"
+        ].includes(
+            raw.sunlight
+        )
+            ? raw.sunlight
+            : null;
+
+
+    const gardenType =
+        [
+            "container",
+            "raised",
+            "backyard",
+            "balcony",
+            "hydroponic"
+        ].includes(
+            raw.gardenType
+        )
+            ? raw.gardenType
+            : null;
+
+
+    const features =
+        unique(
+            (
+                Array.isArray(
+                    raw.features
+                )
+                    ? raw.features
+                    : []
+            ).filter(
+                (feature) =>
+                    allowedAssistantFeatures.has(
+                        feature
+                    )
+            )
+        );
+
+
+    const catalog =
+        environment ===
+        "indoor"
+            ? indoorPlantData
+            : cropPlanningData;
+
+
+    const allowedSelectionIds =
+        new Set(
+            catalog.map(
+                (item) =>
+                    item.id
+            )
+        );
+
+
+    const selections =
+        unique(
+            (
+                Array.isArray(
+                    raw.selections
+                )
+                    ? raw.selections
+                    : []
+            ).filter(
+                (selectionId) =>
+                    allowedSelectionIds.has(
+                        selectionId
+                    )
+            )
+        );
+
+
+    const selectionNames =
+        getSelectionNames(
+            selections,
+            catalog
+        );
+
+
+    const proposal = {
+        environment,
+        spaceType,
+        indoorSpaceType,
+        dimensions,
+        sunlight,
+        gardenType,
+        features,
+        selections,
+        selectionNames,
+        sourceText:
+            String(
+                requestText ||
+                raw.sourceText ||
+                ""
+            ).trim(),
+
+        notes:
+            Array.isArray(
+                raw.notes
+            )
+                ? raw.notes
+                    .filter(
+                        (note) =>
+                            typeof note ===
+                            "string" &&
+                            note.trim()
+                    )
+                    .slice(
+                        0,
+                        4
+                    )
+                : []
+    };
+
+
+    return {
+        ...proposal,
+
+        missingFields:
+            buildMissingFields(
+                proposal
+            ),
+
+        detectedFieldCount:
+            [
+                environment,
+                dimensions?.width,
+                dimensions?.length,
+                sunlight,
+                gardenType,
+                selections.length >
+                    0
+            ].filter(
+                Boolean
+            ).length
+    };
+}
+

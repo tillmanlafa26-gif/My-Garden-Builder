@@ -4,8 +4,9 @@ import {
 
 
 import {
-    parseGardenAssistantRequest
-} from "../utils/gardenAssistantParser";
+    analyzeGardenAssistantFollowUp,
+    analyzeGardenAssistantRequest
+} from "../utils/gardenAssistantApi";
 
 
 function getSunlightLabel(
@@ -150,6 +151,59 @@ function getFeatureLabel(
 }
 
 
+function getFollowUpQuestion(
+    proposal
+) {
+    const missingField =
+        proposal?.missingFields?.[0];
+
+
+    if (
+        !missingField
+    ) {
+        return null;
+    }
+
+
+    const questions = {
+        "Indoor or outdoor space":
+            "Is this garden space indoors or outdoors?",
+
+        "Width × depth/length":
+            proposal.environment ===
+            "indoor"
+                ? "What are the usable width and depth of the indoor growing space? For example: 4 x 2 feet."
+                : "What are the width and length of the garden area? For example: 10 x 12 feet.",
+
+        "Usable indoor height":
+            "How much usable vertical height do you have? For example: 6 feet or 72 inches.",
+
+        "Available light":
+            "What light does the indoor space receive: bright, medium/indirect, or low light?",
+
+        "Daily sunlight":
+            "How much sunlight does the outdoor space receive: full sun, partial sun, or mostly shade?",
+
+        "Indoor plant selections":
+            "Which indoor plants would you like to grow? You can list several, such as pothos, basil, lettuce, or snake plant.",
+
+        "Crop selections":
+            "Which crops would you like to grow? You can list several, such as tomatoes, peppers, basil, or carrots."
+    };
+
+
+    return {
+        missingField,
+
+        question:
+            questions[
+                missingField
+            ] ||
+            `Tell me more about: ${missingField}.`
+    };
+}
+
+
 function GardenAssistant({
     onApplyProposal
 }) {
@@ -177,7 +231,31 @@ function GardenAssistant({
     );
 
 
-    function analyzeRequest() {
+    const [
+        analyzing,
+        setAnalyzing
+    ] = useState(
+        false
+    );
+
+
+    const [
+        followUpAnswer,
+        setFollowUpAnswer
+    ] = useState(
+        ""
+    );
+
+
+    const [
+        followUpHistory,
+        setFollowUpHistory
+    ] = useState(
+        []
+    );
+
+
+    async function analyzeRequest() {
         const trimmed =
             requestText.trim();
 
@@ -197,20 +275,145 @@ function GardenAssistant({
         }
 
 
-        const nextProposal =
-            parseGardenAssistantRequest(
-                trimmed
-            );
-
-
-        setProposal(
-            nextProposal
+        setAnalyzing(
+            true
         );
 
 
         setMessage(
             ""
         );
+
+
+        try {
+            const nextProposal =
+                await analyzeGardenAssistantRequest(
+                    trimmed
+                );
+
+
+            setProposal(
+                nextProposal
+            );
+
+
+            setFollowUpHistory(
+                []
+            );
+
+
+            setFollowUpAnswer(
+                ""
+            );
+
+
+            if (
+                nextProposal.analysisSource ===
+                    "local" &&
+                nextProposal.analysisNotice
+            ) {
+                setMessage(
+                    nextProposal.analysisNotice
+                );
+            }
+        } finally {
+            setAnalyzing(
+                false
+            );
+        }
+    }
+
+
+    async function submitFollowUp() {
+        const followUp =
+            getFollowUpQuestion(
+                proposal
+            );
+
+
+        const trimmed =
+            followUpAnswer.trim();
+
+
+        if (
+            !proposal ||
+            !followUp ||
+            !trimmed
+        ) {
+            setMessage(
+                "Enter an answer to the follow-up question."
+            );
+
+            return;
+        }
+
+
+        setAnalyzing(
+            true
+        );
+
+
+        setMessage(
+            ""
+        );
+
+
+        try {
+            const nextProposal =
+                await analyzeGardenAssistantFollowUp({
+                    originalRequest:
+                        requestText,
+
+                    currentProposal:
+                        proposal,
+
+                    missingField:
+                        followUp.missingField,
+
+                    answer:
+                        trimmed
+                });
+
+
+            setFollowUpHistory(
+                (current) => [
+                    ...current,
+
+                    {
+                        question:
+                            followUp.question,
+
+                        answer:
+                            trimmed
+                    }
+                ]
+            );
+
+
+            setProposal(
+                nextProposal
+            );
+
+
+            setFollowUpAnswer(
+                ""
+            );
+
+
+            if (
+                nextProposal.analysisSource ===
+                    "local" &&
+                nextProposal.analysisNotice
+            ) {
+                setMessage(
+                    nextProposal.analysisNotice
+                );
+            }
+        } finally {
+            setAnalyzing(
+                false
+            );
+        }
     }
 
 
@@ -248,7 +451,7 @@ function GardenAssistant({
                 <div>
 
                     <small>
-                        AI GARDEN ASSISTANT — PHASE 1
+                        AI GARDEN ASSISTANT — PHASE 3
                     </small>
 
 
@@ -258,7 +461,7 @@ function GardenAssistant({
 
 
                     <p>
-                        Write naturally. This first phase converts your description into structured Garden Builder inputs locally so you can review them before a model connection is added.
+                        Write naturally. The assistant interprets the request, validates it against My Garden Builder, and asks one focused follow-up question at a time when important information is missing.
                     </p>
 
                 </div>
@@ -277,6 +480,9 @@ function GardenAssistant({
                     value={
                         requestText
                     }
+                    disabled={
+                        analyzing
+                    }
                     onChange={
                         (event) =>
                             setRequestText(
@@ -294,6 +500,9 @@ function GardenAssistant({
 
                 <button
                     type="button"
+                    disabled={
+                        analyzing
+                    }
                     onClick={() =>
                         setRequestText(
                             "I have a 10 x 12 backyard with full sun. I want raised beds with tomatoes, peppers, basil, carrots, and drip irrigation."
@@ -306,6 +515,9 @@ function GardenAssistant({
 
                 <button
                     type="button"
+                    disabled={
+                        analyzing
+                    }
                     onClick={() =>
                         setRequestText(
                             "I have a 4 x 2 x 6 foot indoor plant rack with medium light. I want pothos, basil, lettuce, and a snake plant with grow lights."
@@ -324,8 +536,18 @@ function GardenAssistant({
                 onClick={
                     analyzeRequest
                 }
+                disabled={
+                    analyzing
+                }
+                aria-busy={
+                    analyzing
+                }
             >
-                Analyze My Description
+                {
+                    analyzing
+                        ? "Analyzing Garden…"
+                        : "Analyze My Description"
+                }
             </button>
 
 
@@ -338,7 +560,11 @@ function GardenAssistant({
                                 "✓"
                             )
                                 ? "garden-assistant-success"
-                                : "garden-assistant-error"
+                                : message.includes(
+                                    "built-in parser"
+                                )
+                                    ? "garden-assistant-notice"
+                                    : "garden-assistant-error"
                         }
                     >
                         {
@@ -371,11 +597,32 @@ function GardenAssistant({
                             </div>
 
 
-                            <span>
-                                {
-                                    proposal.detectedFieldCount
-                                } fields detected
-                            </span>
+                            <div className="garden-assistant-result-badges">
+
+                                <span>
+                                    {
+                                        proposal.detectedFieldCount
+                                    } fields detected
+                                </span>
+
+
+                                <span
+                                    className={
+                                        proposal.analysisSource ===
+                                        "ai"
+                                            ? "ai-source"
+                                            : "local-source"
+                                    }
+                                >
+                                    {
+                                        proposal.analysisSource ===
+                                        "ai"
+                                            ? "✨ AI interpreted"
+                                            : "⚙ Local parser"
+                                    }
+                                </span>
+
+                            </div>
 
                         </div>
 
@@ -574,6 +821,198 @@ function GardenAssistant({
 
 
                         {
+                            Array.isArray(
+                                proposal.notes
+                            ) &&
+                            proposal.notes.length >
+                            0 && (
+
+                                <div className="garden-assistant-notes">
+
+                                    <strong>
+                                        Assistant notes
+                                    </strong>
+
+
+                                    {
+                                        proposal.notes.map(
+                                            (
+                                                note,
+                                                index
+                                            ) => (
+
+                                                <p
+                                                    key={
+                                                        `assistant-note-${index}`
+                                                    }
+                                                >
+                                                    {
+                                                        note
+                                                    }
+                                                </p>
+
+                                            )
+                                        )
+                                    }
+
+                                </div>
+
+                            )
+                        }
+
+
+                        {
+                            followUpHistory.length >
+                            0 && (
+
+                                <div className="garden-assistant-conversation-history">
+
+                                    <strong>
+                                        Conversation
+                                    </strong>
+
+
+                                    {
+                                        followUpHistory.map(
+                                            (
+                                                item,
+                                                index
+                                            ) => (
+
+                                                <div
+                                                    key={
+                                                        `assistant-history-${index}`
+                                                    }
+                                                    className="garden-assistant-history-item"
+                                                >
+
+                                                    <span>
+                                                        Assistant
+                                                    </span>
+
+
+                                                    <p>
+                                                        {
+                                                            item.question
+                                                        }
+                                                    </p>
+
+
+                                                    <span>
+                                                        You
+                                                    </span>
+
+
+                                                    <p>
+                                                        {
+                                                            item.answer
+                                                        }
+                                                    </p>
+
+                                                </div>
+
+                                            )
+                                        )
+                                    }
+
+                                </div>
+
+                            )
+                        }
+
+
+                        {
+                            proposal.missingFields.length >
+                            0 && (
+
+                                <div className="garden-assistant-followup">
+
+                                    <div className="garden-assistant-followup-heading">
+
+                                        <span>
+                                            💬
+                                        </span>
+
+
+                                        <div>
+
+                                            <strong>
+                                                One more detail
+                                            </strong>
+
+
+                                            <p>
+                                                {
+                                                    getFollowUpQuestion(
+                                                        proposal
+                                                    )?.question
+                                                }
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div className="garden-assistant-followup-input-row">
+
+                                        <input
+                                            type="text"
+                                            value={
+                                                followUpAnswer
+                                            }
+                                            disabled={
+                                                analyzing
+                                            }
+                                            onChange={
+                                                (event) =>
+                                                    setFollowUpAnswer(
+                                                        event.target.value
+                                                    )
+                                            }
+                                            onKeyDown={
+                                                (event) => {
+                                                    if (
+                                                        event.key ===
+                                                        "Enter"
+                                                    ) {
+                                                        event.preventDefault();
+
+                                                        submitFollowUp();
+                                                    }
+                                                }
+                                            }
+                                            placeholder="Type your answer…"
+                                            aria-label="Answer the assistant follow-up question"
+                                        />
+
+
+                                        <button
+                                            type="button"
+                                            onClick={
+                                                submitFollowUp
+                                            }
+                                            disabled={
+                                                analyzing ||
+                                                !followUpAnswer.trim()
+                                            }
+                                        >
+                                            {
+                                                analyzing
+                                                    ? "Checking…"
+                                                    : "Add Answer"
+                                            }
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            )
+                        }
+
+
+                        {
                             proposal.missingFields.length >
                             0 && (
 
@@ -598,6 +1037,36 @@ function GardenAssistant({
                         }
 
 
+                        {
+                            proposal.missingFields.length ===
+                            0 && (
+
+                                <div className="garden-assistant-ready">
+
+                                    <span>
+                                        ✓
+                                    </span>
+
+
+                                    <div>
+
+                                        <strong>
+                                            Enough information to continue
+                                        </strong>
+
+
+                                        <p>
+                                            The structured draft is ready to send into the Garden Builder for your review.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            )
+                        }
+
+
                         <button
                             type="button"
                             className="garden-assistant-apply-button"
@@ -610,7 +1079,7 @@ function GardenAssistant({
 
 
                         <small className="garden-assistant-disclaimer">
-                            The assistant never generates the final layout directly. Your existing garden engines still handle spacing, fit, pairing, materials, and indoor placement.
+                            AI interprets the description only. Your deterministic garden engines remain responsible for dimensions, spacing, fit, plant pairing, indoor placement, materials, and build calculations.
                         </small>
 
                     </div>

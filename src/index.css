@@ -6191,3 +6191,943 @@ html.dark-mode
     }
 }
 
+/* =========================================================
+   AI GARDEN ASSISTANT — PHASE 2
+========================================================= */
+
+.garden-assistant-analyze-button:disabled,
+.garden-assistant-example-row button:disabled,
+.garden-assistant-input textarea:disabled {
+    cursor: wait;
+    opacity: 0.68;
+}
+
+
+.garden-assistant-notice {
+    margin: 0;
+
+    padding:
+        8px
+        10px;
+
+    border: 1px solid #dce5cf;
+    border-radius: 9px;
+
+    background-color: #f8faef;
+    color: #68704c;
+
+    font-size: 0.5rem;
+    line-height: 1.4;
+}
+
+
+.garden-assistant-result-badges {
+    display: flex;
+
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
+
+    flex-wrap: wrap;
+}
+
+
+.garden-assistant-result-badges > span {
+    flex: 0 0 auto;
+
+    padding:
+        5px
+        8px;
+
+    border-radius: 999px;
+
+    background-color: #e7f1e4;
+    color: #506c56;
+
+    font-size: 0.46rem;
+    font-weight: 800;
+}
+
+
+.garden-assistant-result-badges > span.ai-source {
+    background-color: #eeeaf8;
+    color: #62557a;
+}
+
+
+.garden-assistant-result-badges > span.local-source {
+    background-color: #edf1ed;
+    color: #697269;
+}
+
+
+.garden-assistant-notes {
+    padding: 9px;
+
+    border: 1px solid #dcd7eb;
+    border-radius: 10px;
+
+    background-color: #f8f6fc;
+}
+
+
+.garden-assistant-notes strong {
+    color: #5c5272;
+
+    font-size: 0.52rem;
+}
+
+
+.garden-assistant-notes p {
+    margin:
+        4px
+        0
+        0;
+
+    color: #716882;
+
+    font-size: 0.47rem;
+    line-height: 1.45;
+}
+
+
+html.dark-mode
+.garden-assistant-notice {
+    border-color: #50563d;
+
+    background-color: #353824;
+    color: #d5d7b5;
+}
+
+
+html.dark-mode
+.garden-assistant-result-badges > span {
+    background-color: #344434;
+    color: #d2dfcf;
+}
+
+
+html.dark-mode
+.garden-assistant-result-badges > span.ai-source {
+    background-color: #423b55;
+    color: #ded4ef;
+}
+
+
+html.dark-mode
+.garden-assistant-result-badges > span.local-source {
+    background-color: #3b423b;
+    color: #d0d8d0;
+}
+
+
+html.dark-mode
+.garden-assistant-notes {
+    border-color: #4e475f;
+
+    background-color: #302d3a;
+}
+
+
+html.dark-mode
+.garden-assistant-notes strong,
+html.dark-mode
+.garden-assistant-notes p {
+    color: #ddd3eb;
+}
+
+
+@media (max-width: 430px) {
+    .garden-assistant-results-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+
+    .garden-assistant-result-badges {
+        justify-content: flex-start;
+    }
+}
+
+/* =========================================================
+   AI GARDEN ASSISTANT — CONVERSATIONAL FOLLOW-UP
+========================================================= */
+
+.garden-assistant-followup,
+.garden-assistant-conversation-history,
+.garden-assistant-ready {
+    padding: 10px;
+
+    border: 1px solid #dbe6d8;
+    border-radius: 11px;
+
+    background-color: #f8fbf6;
+}
+
+
+.garden-assistant-followup {
+    display: flex;
+
+    flex-direction: column;
+    gap: 9px;
+}
+
+
+.garden-assistant-followup-heading {
+    display: grid;
+
+    grid-template-columns:
+        34px
+        minmax(0, 1fr);
+
+    align-items: start;
+    gap: 8px;
+}
+
+
+.garden-assistant-followup-heading > span,
+.garden-assistant-ready > span {
+    display: grid;
+
+    width: 34px;
+    height: 34px;
+
+    place-items: center;
+
+    border-radius: 9px;
+
+    background-color: #e9f2e6;
+}
+
+
+.garden-assistant-followup-heading > div {
+    display: flex;
+
+    min-width: 0;
+
+    flex-direction: column;
+    gap: 3px;
+}
+
+
+.garden-assistant-followup-heading strong,
+.garden-assistant-ready strong,
+.garden-assistant-conversation-history > strong {
+    color: #3d5943;
+
+    font-size: 0.55rem;
+}
+
+
+.garden-assistant-followup-heading p,
+.garden-assistant-ready p {
+    margin: 0;
+
+    color: #697668;
+
+    font-size: 0.49rem;
+    line-height: 1.5;
+}
+
+
+.garden-assistant-followup-input-row {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        auto;
+
+    gap: 7px;
+}
+
+
+.garden-assistant-followup-input-row input {
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+
+    box-sizing: border-box;
+
+    padding:
+        8px
+        10px;
+
+    border: 1px solid #cfdccc;
+    border-radius: 10px;
+
+    background-color: #ffffff;
+    color: #344638;
+
+    font: inherit;
+    font-size: 0.55rem;
+}
+
+
+.garden-assistant-followup-input-row button {
+    min-height: 42px;
+
+    padding:
+        8px
+        11px;
+
+    border: 0;
+    border-radius: 10px;
+
+    background-color: #426f4e;
+    color: #ffffff;
+
+    font-size: 0.51rem;
+    font-weight: 900;
+
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+
+.garden-assistant-followup-input-row button:disabled,
+.garden-assistant-followup-input-row input:disabled {
+    cursor: wait;
+    opacity: 0.65;
+}
+
+
+.garden-assistant-conversation-history {
+    display: flex;
+
+    flex-direction: column;
+    gap: 7px;
+}
+
+
+.garden-assistant-history-item {
+    display: grid;
+
+    grid-template-columns:
+        54px
+        minmax(0, 1fr);
+
+    gap:
+        4px
+        7px;
+
+    padding-top: 7px;
+
+    border-top: 1px solid #e2eae0;
+}
+
+
+.garden-assistant-history-item:first-of-type {
+    padding-top: 0;
+
+    border-top: 0;
+}
+
+
+.garden-assistant-history-item span {
+    color: #6d7d6d;
+
+    font-size: 0.44rem;
+    font-weight: 900;
+
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+
+.garden-assistant-history-item p {
+    margin: 0;
+
+    color: #4f6152;
+
+    font-size: 0.49rem;
+    line-height: 1.45;
+}
+
+
+.garden-assistant-ready {
+    display: grid;
+
+    grid-template-columns:
+        34px
+        minmax(0, 1fr);
+
+    align-items: start;
+    gap: 8px;
+
+    border-color: #cfe0ca;
+
+    background-color: #f2f8ef;
+}
+
+
+.garden-assistant-ready > span {
+    background-color: #dfeedd;
+    color: #386c43;
+
+    font-weight: 900;
+}
+
+
+.garden-assistant-ready > div {
+    display: flex;
+
+    flex-direction: column;
+    gap: 3px;
+}
+
+
+html.dark-mode
+.garden-assistant-followup,
+html.dark-mode
+.garden-assistant-conversation-history,
+html.dark-mode
+.garden-assistant-ready {
+    border-color: #414f41;
+
+    background-color: #293429;
+}
+
+
+html.dark-mode
+.garden-assistant-followup-heading > span,
+html.dark-mode
+.garden-assistant-ready > span {
+    background-color: #354335;
+}
+
+
+html.dark-mode
+.garden-assistant-followup-heading strong,
+html.dark-mode
+.garden-assistant-ready strong,
+html.dark-mode
+.garden-assistant-conversation-history > strong {
+    color: #dce9da;
+}
+
+
+html.dark-mode
+.garden-assistant-followup-heading p,
+html.dark-mode
+.garden-assistant-ready p,
+html.dark-mode
+.garden-assistant-history-item p {
+    color: #aebaaa;
+}
+
+
+html.dark-mode
+.garden-assistant-history-item {
+    border-top-color: #3e4b3e;
+}
+
+
+html.dark-mode
+.garden-assistant-history-item span {
+    color: #93a392;
+}
+
+
+html.dark-mode
+.garden-assistant-followup-input-row input {
+    border-color: #455545;
+
+    background-color: #222c22;
+    color: #dce8da;
+}
+
+
+@media (max-width: 430px) {
+    .garden-assistant-followup-input-row {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .garden-assistant-followup-input-row button {
+        width: 100%;
+    }
+
+
+    .garden-assistant-history-item {
+        grid-template-columns:
+            46px
+            minmax(0, 1fr);
+    }
+}
+
+/* =========================================================
+   CAMERA PHASE 1
+========================================================= */
+
+.garden-space-photo {
+    display: flex;
+
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+.garden-space-photo-heading {
+    display: grid;
+
+    grid-template-columns:
+        38px
+        minmax(0, 1fr);
+
+    align-items: start;
+    gap: 9px;
+}
+
+
+.garden-space-photo-heading > span {
+    display: grid;
+
+    width: 38px;
+    height: 38px;
+
+    place-items: center;
+
+    border-radius: 10px;
+
+    background-color: #eaf3e7;
+
+    font-size: 1rem;
+}
+
+
+.garden-space-photo-heading > div {
+    display: flex;
+
+    min-width: 0;
+
+    flex-direction: column;
+    gap: 3px;
+}
+
+
+.garden-space-photo-heading strong {
+    color: #3e5844;
+
+    font-size: 0.6rem;
+}
+
+
+.garden-space-photo-heading p {
+    margin: 0;
+
+    color: #718070;
+
+    font-size: 0.5rem;
+    line-height: 1.5;
+}
+
+
+.garden-space-photo-hidden-input {
+    position: absolute;
+
+    width: 1px;
+    height: 1px;
+
+    overflow: hidden;
+
+    clip: rect(
+        0,
+        0,
+        0,
+        0
+    );
+
+    white-space: nowrap;
+}
+
+
+.garden-space-photo-actions {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 8px;
+}
+
+
+.garden-space-photo-actions > button {
+    display: grid;
+
+    min-width: 0;
+    min-height: 72px;
+
+    grid-template-columns:
+        34px
+        minmax(0, 1fr);
+
+    align-items: center;
+    gap: 8px;
+
+    padding: 10px;
+
+    border: 1px solid #d6e2d3;
+    border-radius: 12px;
+
+    background-color: #ffffff;
+    color: #405945;
+
+    text-align: left;
+
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+
+.garden-space-photo-actions > button > span {
+    display: grid;
+
+    width: 34px;
+    height: 34px;
+
+    place-items: center;
+
+    border-radius: 9px;
+
+    background-color: #edf5ea;
+
+    font-size: 0.95rem;
+}
+
+
+.garden-space-photo-actions > button > div {
+    display: flex;
+
+    min-width: 0;
+
+    flex-direction: column;
+    gap: 2px;
+}
+
+
+.garden-space-photo-actions strong {
+    font-size: 0.54rem;
+}
+
+
+.garden-space-photo-actions small {
+    color: #7a8778;
+
+    font-size: 0.43rem;
+    line-height: 1.35;
+}
+
+
+.garden-space-photo-preview {
+    display: flex;
+
+    flex-direction: column;
+    gap: 8px;
+}
+
+
+.garden-space-photo-image-wrap {
+    position: relative;
+
+    overflow: hidden;
+
+    border: 1px solid #d7e2d4;
+    border-radius: 13px;
+
+    background-color: #eef2ec;
+}
+
+
+.garden-space-photo-image-wrap img {
+    display: block;
+
+    width: 100%;
+    max-height: 360px;
+
+    object-fit: cover;
+}
+
+
+.garden-space-photo-used-badge {
+    position: absolute;
+
+    top: 8px;
+    left: 8px;
+
+    padding:
+        5px
+        8px;
+
+    border-radius: 999px;
+
+    background-color:
+        rgba(
+            239,
+            248,
+            236,
+            0.94
+        );
+
+    color: #3d6b47;
+
+    font-size: 0.46rem;
+    font-weight: 900;
+}
+
+
+.garden-space-photo-meta {
+    display: flex;
+
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+
+.garden-space-photo-meta span {
+    padding:
+        4px
+        7px;
+
+    border-radius: 999px;
+
+    background-color: #edf3ea;
+    color: #5c705f;
+
+    font-size: 0.44rem;
+    font-weight: 800;
+}
+
+
+.garden-space-photo-use-button {
+    min-height: 44px;
+
+    border: 0;
+    border-radius: 11px;
+
+    background-color: #3f704d;
+    color: #ffffff;
+
+    font-size: 0.56rem;
+    font-weight: 900;
+
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+
+.garden-space-photo-secondary-actions {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap: 6px;
+}
+
+
+.garden-space-photo-secondary-actions button {
+    min-height: 40px;
+
+    padding:
+        7px
+        8px;
+
+    border: 1px solid #d2ded0;
+    border-radius: 9px;
+
+    background-color: #ffffff;
+    color: #5b6d5d;
+
+    font-size: 0.47rem;
+    font-weight: 800;
+
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+
+.garden-space-photo-secondary-actions button.danger {
+    color: #8a4a45;
+}
+
+
+.garden-space-photo-processing {
+    display: flex;
+
+    align-items: center;
+    gap: 7px;
+
+    padding: 9px;
+
+    border-radius: 10px;
+
+    background-color: #f4f7f2;
+}
+
+
+.garden-space-photo-processing p {
+    margin: 0;
+
+    color: #697568;
+
+    font-size: 0.49rem;
+}
+
+
+.garden-space-photo-success,
+.garden-space-photo-error {
+    margin: 0;
+
+    padding:
+        8px
+        10px;
+
+    border-radius: 9px;
+
+    font-size: 0.49rem;
+    line-height: 1.4;
+}
+
+
+.garden-space-photo-success {
+    background-color: #edf7ea;
+    color: #3d6846;
+}
+
+
+.garden-space-photo-error {
+    background-color: #fff0ec;
+    color: #8d4b3c;
+}
+
+
+.garden-space-photo-storage-note {
+    color: #849082;
+
+    font-size: 0.43rem;
+    line-height: 1.45;
+}
+
+
+.home-space-photo-thumbnail {
+    width: 46px;
+    height: 46px;
+
+    flex: 0 0 46px;
+
+    border: 1px solid #d5e0d2;
+    border-radius: 9px;
+
+    object-fit: cover;
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+html.dark-mode
+.garden-space-photo-heading > span,
+html.dark-mode
+.garden-space-photo-actions > button > span,
+html.dark-mode
+.garden-space-photo-meta span {
+    background-color: #344234;
+}
+
+
+html.dark-mode
+.garden-space-photo-heading strong,
+html.dark-mode
+.garden-space-photo-actions > button {
+    color: #dbe8d9;
+}
+
+
+html.dark-mode
+.garden-space-photo-heading p,
+html.dark-mode
+.garden-space-photo-actions small,
+html.dark-mode
+.garden-space-photo-processing p,
+html.dark-mode
+.garden-space-photo-storage-note {
+    color: #aebaaa;
+}
+
+
+html.dark-mode
+.garden-space-photo-actions > button,
+html.dark-mode
+.garden-space-photo-secondary-actions button {
+    border-color: #455445;
+
+    background-color: #253025;
+}
+
+
+html.dark-mode
+.garden-space-photo-image-wrap,
+html.dark-mode
+.home-space-photo-thumbnail {
+    border-color: #455445;
+
+    background-color: #242d24;
+}
+
+
+html.dark-mode
+.garden-space-photo-meta span {
+    color: #d0ddce;
+}
+
+
+html.dark-mode
+.garden-space-photo-processing {
+    background-color: #293429;
+}
+
+
+html.dark-mode
+.garden-space-photo-secondary-actions button {
+    color: #d2ded0;
+}
+
+
+html.dark-mode
+.garden-space-photo-secondary-actions button.danger {
+    color: #e2aaa4;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 430px) {
+    .garden-space-photo-actions {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .garden-space-photo-secondary-actions {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .garden-space-photo-actions > button,
+    .garden-space-photo-use-button,
+    .garden-space-photo-secondary-actions button {
+        min-height: 44px;
+    }
+}
+

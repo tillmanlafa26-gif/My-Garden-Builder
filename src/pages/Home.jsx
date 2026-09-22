@@ -45,6 +45,10 @@ import LocalGrowingDataCard
     from "../components/LocalGrowingDataCard";
 
 
+import GardenSpacePhoto
+    from "../components/GardenSpacePhoto";
+
+
 import {
     gardenPlans,
     sunlightNames
@@ -483,6 +487,15 @@ function Home({
     ] = useState(
         designSpace.surface ||
         "grass"
+    );
+
+
+    const [
+        spacePhoto,
+        setSpacePhoto
+    ] = useState(
+        designSpace.spacePhoto ||
+        null
     );
 
 
@@ -1313,7 +1326,11 @@ function Home({
                             .toFixed(
                                 2
                             )
-                    )
+                    ),
+
+                spacePhoto:
+                    spacePhoto ||
+                    null
             }
         };
 
@@ -1678,6 +1695,11 @@ function Home({
                             )
                         )
                         : null,
+
+                spacePhoto:
+                    spacePhoto ||
+                    currentDesignSpace.spacePhoto ||
+                    null,
 
                 features:
                     nextFeatures,
@@ -2585,6 +2607,21 @@ function Home({
                                     </span>
                                 </div>
 
+                                {
+                                    designSpace.spacePhoto?.dataUrl && (
+
+                                        <img
+                                            className="home-space-photo-thumbnail"
+                                            src={
+                                                designSpace.spacePhoto.dataUrl
+                                            }
+                                            alt="Saved garden space"
+                                        />
+
+                                    )
+                                }
+
+
                                 <button
                                     type="button"
                                     className="home-builder-edit-button"
@@ -2921,6 +2958,20 @@ function Home({
                                             )
                                         }
                                     </div>
+                                </div>
+
+
+                                <div className="home-builder-field-group">
+
+                                    <GardenSpacePhoto
+                                        photo={
+                                            spacePhoto
+                                        }
+                                        onChange={
+                                            setSpacePhoto
+                                        }
+                                    />
+
                                 </div>
 
 
