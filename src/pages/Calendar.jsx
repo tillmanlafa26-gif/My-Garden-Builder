@@ -21,6 +21,8 @@ function Calendar({
     onAddCalendarEvent,
     onDeleteCalendarEvent,
     onMarkPlantWatered,
+    onDelayWatering,
+    onCompleteIndoorCare,
     gardenActive = false,
     onCompletePlantingEvent
 }) {
@@ -195,6 +197,22 @@ function Calendar({
         setPlantingMessage
     ] = useState(
         ""
+    );
+
+
+    const [
+        careMessage,
+        setCareMessage
+    ] = useState(
+        ""
+    );
+
+
+    const [
+        selectedCalendarEvent,
+        setSelectedCalendarEvent
+    ] = useState(
+        null
     );
 
 
@@ -725,6 +743,38 @@ function Calendar({
 
         if (
             calendarEvent.type ===
+            "indoor-care"
+        ) {
+            if (
+                calendarEvent.careType ===
+                "rotate"
+            ) {
+                return "🔄";
+            }
+
+
+            if (
+                calendarEvent.careType ===
+                "light-check"
+            ) {
+                return "💡";
+            }
+
+
+            if (
+                calendarEvent.careType ===
+                "repot-check"
+            ) {
+                return "🪴";
+            }
+
+
+            return "🏠";
+        }
+
+
+        if (
+            calendarEvent.type ===
             "planting"
         ) {
 
@@ -765,6 +815,275 @@ function Calendar({
 
         return "📌";
 
+    }
+
+
+    /* =========================
+       CALENDAR ICON DETAILS
+    ========================= */
+
+    function getEventTypeLabel(
+        calendarEvent
+    ) {
+        if (
+            calendarEvent.type ===
+            "watering"
+        ) {
+            const plant =
+                findGardenPlant(
+                    calendarEvent
+                );
+
+
+            return plant?.source ===
+                "indoor"
+                    ? "Moisture Check"
+                    : "Watering";
+        }
+
+
+        if (
+            calendarEvent.type ===
+            "harvest"
+        ) {
+            return "Harvest";
+        }
+
+
+        if (
+            calendarEvent.type ===
+            "indoor-care"
+        ) {
+            if (
+                calendarEvent.careType ===
+                "rotate"
+            ) {
+                return "Plant Rotation";
+            }
+
+
+            if (
+                calendarEvent.careType ===
+                "light-check"
+            ) {
+                return "Light Check";
+            }
+
+
+            if (
+                calendarEvent.careType ===
+                "repot-check"
+            ) {
+                return "Repot Assessment";
+            }
+
+
+            return "Indoor Plant Care";
+        }
+
+
+        if (
+            calendarEvent.type ===
+            "planting"
+        ) {
+            if (
+                calendarEvent.plantingAction ===
+                "start-indoors"
+            ) {
+                return "Start Indoors";
+            }
+
+
+            if (
+                calendarEvent.plantingAction ===
+                "direct-sow"
+            ) {
+                return "Direct Sow";
+            }
+
+
+            if (
+                calendarEvent.plantingAction ===
+                "transplant-outside"
+            ) {
+                return "Transplant Outside";
+            }
+
+
+            if (
+                calendarEvent.plantingAction ===
+                "fall-planting"
+            ) {
+                return "Fall Planting";
+            }
+
+
+            return "Planting";
+        }
+
+
+        if (
+            calendarEvent.type ===
+            "general"
+        ) {
+            return "General Garden Event";
+        }
+
+
+        return "Garden Event";
+    }
+
+
+    function getEventTypeDescription(
+        calendarEvent
+    ) {
+        const plant =
+            findGardenPlant(
+                calendarEvent
+            );
+
+
+        if (
+            calendarEvent.type ===
+            "watering"
+        ) {
+            if (
+                plant?.source ===
+                "indoor"
+            ) {
+                return "Check the potting mix before watering. If it is still moist, delay the reminder instead of watering automatically.";
+            }
+
+
+            return "A watering reminder for a tracked garden plant. Adjust watering to current soil moisture and weather conditions.";
+        }
+
+
+        if (
+            calendarEvent.type ===
+            "harvest"
+        ) {
+            return calendarEvent.description ||
+                "A projected or recorded harvest event based on the plant's growing timeline.";
+        }
+
+
+        if (
+            calendarEvent.type ===
+            "indoor-care"
+        ) {
+            if (
+                calendarEvent.careType ===
+                "rotate"
+            ) {
+                return "Rotate the plant or review its orientation so growth stays balanced when light comes strongly from one direction.";
+            }
+
+
+            if (
+                calendarEvent.careType ===
+                "light-check"
+            ) {
+                return "Review the plant's light exposure or grow-light position, coverage, and distance from the foliage.";
+            }
+
+
+            if (
+                calendarEvent.careType ===
+                "repot-check"
+            ) {
+                return "Inspect root crowding, drainage, growth rate, and container stability before deciding whether the plant needs repotting.";
+            }
+
+
+            return calendarEvent.description ||
+                "A scheduled indoor-plant care task.";
+        }
+
+
+        if (
+            calendarEvent.type ===
+            "planting"
+        ) {
+            if (
+                calendarEvent.plantingAction ===
+                "start-indoors"
+            ) {
+                return "This is the recommended time to start the crop indoors before moving it outside later.";
+            }
+
+
+            if (
+                calendarEvent.plantingAction ===
+                "direct-sow"
+            ) {
+                return "This is the recommended time to sow the crop directly in its outdoor growing location.";
+            }
+
+
+            if (
+                calendarEvent.plantingAction ===
+                "transplant-outside"
+            ) {
+                return "This is the recommended time to move a previously started plant into its outdoor growing location.";
+            }
+
+
+            if (
+                calendarEvent.plantingAction ===
+                "fall-planting"
+            ) {
+                return "This is a recommended fall planting window based on the garden's seasonal plan.";
+            }
+
+
+            return calendarEvent.description ||
+                "A planting event from your garden plan or a manually created calendar entry.";
+        }
+
+
+        if (
+            calendarEvent.type ===
+            "general"
+        ) {
+            return calendarEvent.description ||
+                "A general garden reminder or task that you added to the calendar.";
+        }
+
+
+        return calendarEvent.description ||
+            "A scheduled garden event.";
+    }
+
+
+    function getEventSourceDescription(
+        calendarEvent
+    ) {
+        const automaticLabel =
+            getAutomaticLabel(
+                calendarEvent
+            );
+
+
+        if (
+            automaticLabel
+        ) {
+            return automaticLabel;
+        }
+
+
+        return calendarEvent.automatic
+            ? "Automatic"
+            : "Manual Event";
+    }
+
+
+    function handleCalendarIconClick(
+        calendarEvent
+    ) {
+        setSelectedCalendarEvent(
+            calendarEvent
+        );
     }
 
 
@@ -852,6 +1171,38 @@ function Calendar({
 
 
     /* =========================
+       INDOOR CARE ACTIONS
+    ========================= */
+
+    function handleIndoorCareComplete(
+        calendarEvent
+    ) {
+        if (
+            calendarEvent.source !==
+                "indoor-care-scheduler" ||
+            typeof onCompleteIndoorCare !==
+                "function"
+        ) {
+            return;
+        }
+
+
+        onCompleteIndoorCare({
+            plantKey:
+                calendarEvent.plantKey,
+
+            action:
+                calendarEvent.careType
+        });
+
+
+        setCareMessage(
+            `✓ ${calendarEvent.title} completed.`
+        );
+    }
+
+
+    /* =========================
        SOURCE LABEL
     ========================= */
 
@@ -885,6 +1236,16 @@ function Calendar({
         ) {
 
             return "Watering Plan";
+
+        }
+
+
+        if (
+            calendarEvent.source ===
+            "indoor-care-scheduler"
+        ) {
+
+            return "Indoor Care";
 
         }
 
@@ -1529,17 +1890,41 @@ function Calendar({
                                                     .map(
                                                         (calendarEvent) => (
 
-                                                            <span
+                                                            <button
+                                                                type="button"
+
                                                                 key={
                                                                     calendarEvent.id
                                                                 }
 
                                                                 className={
-                                                                    `calendar-event-dot ${calendarEvent.type}`
+                                                                    selectedCalendarEvent?.id ===
+                                                                    calendarEvent.id
+                                                                        ? `calendar-event-dot ${calendarEvent.type} selected`
+                                                                        : `calendar-event-dot ${calendarEvent.type}`
                                                                 }
 
-                                                                title={
+                                                                title={`${getEventTypeLabel(
+                                                                    calendarEvent
+                                                                )}: ${calendarEvent.title}`}
+
+                                                                aria-label={`${
+                                                                    getEventTypeLabel(
+                                                                        calendarEvent
+                                                                    )
+                                                                }: ${
                                                                     calendarEvent.title
+                                                                }. Show event details.`}
+
+                                                                aria-pressed={
+                                                                    selectedCalendarEvent?.id ===
+                                                                    calendarEvent.id
+                                                                }
+
+                                                                onClick={() =>
+                                                                    handleCalendarIconClick(
+                                                                        calendarEvent
+                                                                    )
                                                                 }
                                                             >
 
@@ -1549,7 +1934,7 @@ function Calendar({
                                                                     )
                                                                 }
 
-                                                            </span>
+                                                            </button>
 
                                                         )
                                                     )
@@ -1586,6 +1971,126 @@ function Calendar({
 
                 </div>
 
+
+                {
+                    selectedCalendarEvent && (
+
+                        <div
+                            className="calendar-event-detail-panel"
+                            role="status"
+                            aria-live="polite"
+                        >
+
+                            <div className="calendar-event-detail-header">
+
+                                <span className="calendar-event-detail-icon">
+                                    {
+                                        getEventIcon(
+                                            selectedCalendarEvent
+                                        )
+                                    }
+                                </span>
+
+
+                                <div>
+
+                                    <small>
+                                        {
+                                            getEventTypeLabel(
+                                                selectedCalendarEvent
+                                            )
+                                        }
+                                    </small>
+
+
+                                    <h3>
+                                        {
+                                            selectedCalendarEvent.title
+                                        }
+                                    </h3>
+
+
+                                    <span>
+                                        {
+                                            formatCalendarDate(
+                                                selectedCalendarEvent.date
+                                            )
+                                        }
+                                    </span>
+
+                                </div>
+
+
+                                <button
+                                    type="button"
+                                    className="calendar-event-detail-close"
+                                    aria-label="Close event details"
+                                    onClick={() =>
+                                        setSelectedCalendarEvent(
+                                            null
+                                        )
+                                    }
+                                >
+                                    ×
+                                </button>
+
+                            </div>
+
+
+                            <p>
+                                {
+                                    getEventTypeDescription(
+                                        selectedCalendarEvent
+                                    )
+                                }
+                            </p>
+
+
+                            <div className="calendar-event-detail-meta">
+
+                                <span>
+                                    {
+                                        getEventSourceDescription(
+                                            selectedCalendarEvent
+                                        )
+                                    }
+                                </span>
+
+
+                                {
+                                    findGardenPlant(
+                                        selectedCalendarEvent
+                                    ) && (
+
+                                        <span>
+                                            {
+                                                findGardenPlant(
+                                                    selectedCalendarEvent
+                                                ).name
+                                            }
+                                        </span>
+
+                                    )
+                                }
+
+
+                                {
+                                    selectedCalendarEvent.overdue && (
+
+                                        <span className="overdue">
+                                            Due now
+                                        </span>
+
+                                    )
+                                }
+
+                            </div>
+
+                        </div>
+
+                    )
+                }
+
             </section>
 
 
@@ -1609,6 +2114,19 @@ function Calendar({
                     </span>
 
                 </div>
+
+
+                {
+                    careMessage && (
+
+                        <p className="calendar-care-message">
+                            {
+                                careMessage
+                            }
+                        </p>
+
+                    )
+                }
 
 
                 {
@@ -1672,6 +2190,17 @@ function Calendar({
                                         "harvest-scheduler";
 
 
+                                    const isIndoorCareEvent =
+                                        calendarEvent.source ===
+                                        "indoor-care-scheduler";
+
+
+                                    const isIndoorWatering =
+                                        isAutomaticWatering &&
+                                        plant?.source ===
+                                        "indoor";
+
+
                                     return (
 
                                         <article
@@ -1731,27 +2260,77 @@ function Calendar({
 
                                             {
                                                 isAutomaticWatering
-                                                    ? (
+                                                    ? isIndoorWatering
+                                                        ? (
 
-                                                        <button
-                                                            type="button"
+                                                            <div className="calendar-indoor-water-actions">
 
-                                                            className="calendar-watered-button"
+                                                                <button
+                                                                    type="button"
+                                                                    className="calendar-watered-button indoor"
+                                                                    onClick={() =>
+                                                                        onMarkPlantWatered(
+                                                                            wateringPlantKey
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    Watered
+                                                                </button>
 
-                                                            aria-label={`Mark ${calendarEvent.title} complete`}
 
-                                                            onClick={() =>
-                                                                onMarkPlantWatered(
-                                                                    wateringPlantKey
-                                                                )
-                                                            }
-                                                        >
+                                                                <button
+                                                                    type="button"
+                                                                    className="calendar-moist-delay-button"
+                                                                    title="Soil is still moist — check again tomorrow"
+                                                                    onClick={() =>
+                                                                        onDelayWatering?.(
+                                                                            wateringPlantKey
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    +1d
+                                                                </button>
 
-                                                            ✓
+                                                            </div>
 
-                                                        </button>
+                                                        )
+                                                        : (
 
-                                                    )
+                                                            <button
+                                                                type="button"
+
+                                                                className="calendar-watered-button"
+
+                                                                aria-label={`Mark ${calendarEvent.title} complete`}
+
+                                                                onClick={() =>
+                                                                    onMarkPlantWatered(
+                                                                        wateringPlantKey
+                                                                    )
+                                                                }
+                                                            >
+
+                                                                ✓
+
+                                                            </button>
+
+                                                        )
+                                                    : isIndoorCareEvent
+                                                        ? (
+
+                                                            <button
+                                                                type="button"
+                                                                className="calendar-care-done-button"
+                                                                onClick={() =>
+                                                                    handleIndoorCareComplete(
+                                                                        calendarEvent
+                                                                    )
+                                                                }
+                                                            >
+                                                                Done
+                                                            </button>
+
+                                                        )
                                                     : isSeasonalPlantingEvent
                                                         ? calendarEvent.completed
                                                             ? (

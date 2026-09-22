@@ -3753,3 +3753,2441 @@ html.dark-mode
     }
 }
 
+/* =========================================================
+   APP FOOTER — COPYRIGHT + N LOGO
+========================================================= */
+
+.app-footer {
+    display: flex;
+
+    width:
+        min(
+            calc(100% - 28px),
+            500px
+        );
+
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    box-sizing: border-box;
+
+    margin:
+        22px
+        auto
+        calc(
+            92px +
+            env(safe-area-inset-bottom)
+        );
+
+    padding:
+        14px
+        16px;
+
+    border-top:
+        1px solid
+        rgba(
+            63,
+            96,
+            69,
+            0.14
+        );
+
+    color: #667365;
+
+    text-align: left;
+}
+
+
+.app-footer-logo {
+    display: grid;
+
+    flex:
+        0
+        0
+        38px;
+
+    width: 38px;
+    height: 38px;
+
+    place-items: center;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #315f3d,
+            #527b59
+        );
+
+    color: #ffffff;
+
+    font-size: 0.88rem;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+
+    line-height: 1;
+
+    box-shadow:
+        0 5px 14px
+        rgba(
+            49,
+            95,
+            61,
+            0.16
+        );
+}
+
+
+.app-footer-copy {
+    display: flex;
+
+    min-width: 0;
+
+    flex-direction: column;
+    gap: 2px;
+}
+
+
+.app-footer-copy strong {
+    color: #3d5542;
+
+    font-size: 0.6rem;
+    font-weight: 800;
+}
+
+
+.app-footer-copy small {
+    color: #7b8679;
+
+    font-size: 0.5rem;
+    line-height: 1.4;
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+html.dark-mode
+.app-footer {
+    border-top-color:
+        rgba(
+            214,
+            228,
+            212,
+            0.12
+        );
+
+    color: #aab6a8;
+}
+
+
+html.dark-mode
+.app-footer-logo {
+    background:
+        linear-gradient(
+            145deg,
+            #5f8d68,
+            #3f6c4a
+        );
+
+    color: #f7fbf6;
+}
+
+
+html.dark-mode
+.app-footer-copy strong {
+    color: #d9e6d7;
+}
+
+
+html.dark-mode
+.app-footer-copy small {
+    color: #aeb8ac;
+}
+
+
+/* =========================
+   SMALL SCREENS
+========================= */
+
+@media (max-width: 380px) {
+    .app-footer {
+        gap: 8px;
+
+        padding:
+            12px
+            10px;
+    }
+
+
+    .app-footer-logo {
+        flex-basis: 34px;
+
+        width: 34px;
+        height: 34px;
+
+        border-radius: 10px;
+
+        font-size: 0.8rem;
+    }
+
+
+    .app-footer-copy strong {
+        font-size: 0.56rem;
+    }
+
+
+    .app-footer-copy small {
+        font-size: 0.47rem;
+    }
+}
+
+/* =========================================================
+   INDOOR PLANT SELECTION
+========================================================= */
+
+.home-indoor-design-handoff {
+    display: grid;
+
+    grid-template-columns:
+        44px
+        minmax(0, 1fr);
+
+    align-items: start;
+    gap: 10px;
+
+    margin-top: 12px;
+    padding: 13px;
+
+    border: 1px solid #dce8d9;
+    border-radius: 13px;
+
+    background-color: #f7faf5;
+}
+
+
+.home-indoor-design-handoff > span {
+    display: grid;
+    place-items: center;
+
+    width: 44px;
+    height: 44px;
+
+    border-radius: 12px;
+
+    background-color: #e9f3e6;
+
+    font-size: 1.25rem;
+}
+
+
+.home-indoor-design-handoff strong {
+    color: #38513d;
+
+    font-size: 0.66rem;
+}
+
+
+.home-indoor-design-handoff p {
+    margin:
+        5px
+        0
+        0;
+
+    color: #6f7d6e;
+
+    font-size: 0.55rem;
+    line-height: 1.5;
+}
+
+
+html.dark-mode
+.home-indoor-design-handoff {
+    border-color: #414e41;
+
+    background-color: #293329;
+}
+
+
+html.dark-mode
+.home-indoor-design-handoff > span {
+    background-color: #344234;
+}
+
+
+html.dark-mode
+.home-indoor-design-handoff strong {
+    color: #dce9da;
+}
+
+
+html.dark-mode
+.home-indoor-design-handoff p {
+    color: #aeb9ac;
+}
+
+/* =========================================================
+   INDOOR LAYOUT ENGINE
+========================================================= */
+
+.home-indoor-design-input-summary {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap: 8px;
+}
+
+
+.home-indoor-design-input-summary > div {
+    display: flex;
+    min-width: 0;
+
+    flex-direction: column;
+    gap: 3px;
+
+    padding: 10px;
+
+    border: 1px solid #dfe8dc;
+    border-radius: 12px;
+
+    background-color: #f8faf7;
+}
+
+
+.home-indoor-design-input-summary strong {
+    overflow: hidden;
+
+    color: #3b5841;
+
+    font-size: 0.62rem;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.home-indoor-design-input-summary small {
+    color: #788576;
+
+    font-size: 0.51rem;
+    line-height: 1.35;
+}
+
+
+.indoor-layout-preview {
+    overflow: hidden;
+}
+
+
+.indoor-layout-summary {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 8px;
+
+    margin:
+        12px
+        0;
+}
+
+
+.indoor-layout-summary > div {
+    display: flex;
+    min-width: 0;
+
+    flex-direction: column;
+    gap: 3px;
+
+    padding: 9px;
+
+    border: 1px solid #e0e9dd;
+    border-radius: 11px;
+
+    background-color: #f8faf7;
+}
+
+
+.indoor-layout-summary strong {
+    color: #36553e;
+
+    font-size: 0.62rem;
+}
+
+
+.indoor-layout-summary span {
+    color: #788576;
+
+    font-size: 0.49rem;
+}
+
+
+.indoor-rack-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    padding: 10px;
+
+    border: 2px solid #75614b;
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #f2ece2,
+            #e7dccd
+        );
+}
+
+
+.indoor-rack-level {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+
+.indoor-rack-level-label {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+
+    color: #66533e;
+}
+
+
+.indoor-rack-level-label strong {
+    font-size: 0.55rem;
+}
+
+
+.indoor-rack-level-label small {
+    font-size: 0.46rem;
+}
+
+
+.indoor-grow-light-bar {
+    display: flex;
+
+    min-height: 22px;
+
+    align-items: center;
+    gap: 5px;
+
+    padding:
+        3px
+        7px;
+
+    border-radius: 7px;
+
+    background-color: #fff8d9;
+    color: #735f24;
+}
+
+
+.indoor-grow-light-bar strong {
+    font-size: 0.51rem;
+}
+
+
+.indoor-grow-light-bar small {
+    margin-left: auto;
+
+    font-size: 0.44rem;
+}
+
+
+.indoor-rack-surface {
+    position: relative;
+
+    width: 100%;
+    height: 86px;
+
+    overflow: hidden;
+
+    border: 1px solid #9a8061;
+    border-bottom-width: 6px;
+    border-radius: 8px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #eef4ea,
+            #dce8d8
+        );
+}
+
+
+.indoor-linear-plant {
+    position: absolute;
+
+    bottom: 4px;
+
+    display: flex;
+
+    min-width: 42px;
+    height: 72px;
+
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1px;
+
+    padding: 3px;
+
+    overflow: hidden;
+
+    border-left:
+        1px dashed
+        rgba(
+            56,
+            86,
+            61,
+            0.24
+        );
+
+    color: #35563d;
+
+    text-align: center;
+}
+
+
+.indoor-linear-plant > span {
+    font-size: 1rem;
+}
+
+
+.indoor-linear-plant strong {
+    max-width: 100%;
+
+    overflow: hidden;
+
+    font-size: 0.47rem;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.indoor-linear-plant small {
+    font-size: 0.4rem;
+}
+
+
+.indoor-layout-empty-level {
+    position: absolute;
+
+    inset: 0;
+
+    display: grid;
+    place-items: center;
+
+    color: #7c887a;
+
+    font-size: 0.5rem;
+}
+
+
+.indoor-floor-preview {
+    position: relative;
+
+    width: 100%;
+    max-height: 420px;
+
+    overflow: hidden;
+
+    border: 2px solid #8e8170;
+    border-radius: 12px;
+
+    background:
+        repeating-linear-gradient(
+            0deg,
+            rgba(76, 92, 75, 0.05) 0,
+            rgba(76, 92, 75, 0.05) 1px,
+            transparent 1px,
+            transparent 18px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            rgba(76, 92, 75, 0.05) 0,
+            rgba(76, 92, 75, 0.05) 1px,
+            transparent 1px,
+            transparent 18px
+        ),
+        #f2f4ef;
+}
+
+
+.indoor-floor-light-label {
+    position: absolute;
+
+    top: 6px;
+    right: 6px;
+
+    z-index: 5;
+
+    padding:
+        4px
+        7px;
+
+    border-radius: 999px;
+
+    background-color:
+        rgba(
+            255,
+            248,
+            217,
+            0.94
+        );
+
+    color: #705c22;
+
+    font-size: 0.46rem;
+    font-weight: 800;
+}
+
+
+.indoor-floor-plant {
+    position: absolute;
+
+    display: flex;
+
+    min-width: 38px;
+    min-height: 38px;
+
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        rgba(
+            57,
+            91,
+            63,
+            0.26
+        );
+
+    border-radius: 50%;
+
+    background-color:
+        rgba(
+            221,
+            237,
+            218,
+            0.94
+        );
+
+    color: #34563d;
+
+    text-align: center;
+}
+
+
+.indoor-floor-plant > span {
+    font-size: 0.95rem;
+}
+
+
+.indoor-floor-plant strong {
+    max-width: 90%;
+
+    overflow: hidden;
+
+    font-size: 0.43rem;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.indoor-floor-plant small {
+    font-size: 0.37rem;
+}
+
+
+.indoor-layout-detail-list {
+    display: grid;
+    gap: 7px;
+
+    margin-top: 12px;
+}
+
+
+.indoor-layout-detail-list > div {
+    display: grid;
+
+    grid-template-columns:
+        32px
+        minmax(0, 1fr);
+
+    align-items: start;
+    gap: 8px;
+
+    padding: 8px;
+
+    border-radius: 10px;
+
+    background-color: #f7faf6;
+}
+
+
+.indoor-layout-detail-list > div > span {
+    display: grid;
+
+    width: 32px;
+    height: 32px;
+
+    place-items: center;
+
+    border-radius: 9px;
+
+    background-color: #eaf3e7;
+}
+
+
+.indoor-layout-detail-list > div > div {
+    display: flex;
+
+    min-width: 0;
+
+    flex-direction: column;
+    gap: 2px;
+}
+
+
+.indoor-layout-detail-list strong {
+    color: #3b5741;
+
+    font-size: 0.55rem;
+}
+
+
+.indoor-layout-detail-list small {
+    color: #778475;
+
+    font-size: 0.47rem;
+    line-height: 1.4;
+}
+
+
+.indoor-layout-warning,
+.indoor-layout-note,
+.home-indoor-next-step-note {
+    margin-top: 12px;
+    padding: 11px;
+
+    border-radius: 12px;
+}
+
+
+.indoor-layout-warning {
+    border: 1px solid #ead3a7;
+    background-color: #fff8e6;
+}
+
+
+.indoor-layout-warning strong {
+    color: #755d22;
+
+    font-size: 0.58rem;
+}
+
+
+.indoor-layout-warning p {
+    margin:
+        5px
+        0
+        0;
+
+    color: #7b6841;
+
+    font-size: 0.49rem;
+    line-height: 1.45;
+}
+
+
+.indoor-layout-note {
+    border: 1px solid #dce7d9;
+    background-color: #f4f8f2;
+}
+
+
+.indoor-layout-note strong {
+    color: #455d49;
+
+    font-size: 0.57rem;
+}
+
+
+.indoor-layout-note p {
+    margin:
+        5px
+        0
+        0;
+
+    color: #6f7c6d;
+
+    font-size: 0.49rem;
+    line-height: 1.5;
+}
+
+
+.home-indoor-next-step-note {
+    display: grid;
+
+    grid-template-columns:
+        40px
+        minmax(0, 1fr);
+
+    align-items: start;
+    gap: 9px;
+
+    border: 1px solid #dce7d9;
+    background-color: #f5f9f3;
+}
+
+
+.home-indoor-next-step-note > span {
+    display: grid;
+
+    width: 40px;
+    height: 40px;
+
+    place-items: center;
+
+    border-radius: 11px;
+
+    background-color: #eaf3e7;
+
+    font-size: 1.1rem;
+}
+
+
+.home-indoor-next-step-note strong {
+    color: #3d5842;
+
+    font-size: 0.6rem;
+}
+
+
+.home-indoor-next-step-note p {
+    margin:
+        4px
+        0
+        0;
+
+    color: #6d7a6b;
+
+    font-size: 0.51rem;
+    line-height: 1.5;
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+html.dark-mode
+.home-indoor-design-input-summary > div,
+html.dark-mode
+.indoor-layout-summary > div,
+html.dark-mode
+.indoor-layout-detail-list > div,
+html.dark-mode
+.home-indoor-next-step-note,
+html.dark-mode
+.indoor-layout-note {
+    border-color: #414f41;
+    background-color: #293429;
+}
+
+
+html.dark-mode
+.home-indoor-design-input-summary strong,
+html.dark-mode
+.indoor-layout-summary strong,
+html.dark-mode
+.indoor-layout-detail-list strong,
+html.dark-mode
+.home-indoor-next-step-note strong,
+html.dark-mode
+.indoor-layout-note strong {
+    color: #dce9da;
+}
+
+
+html.dark-mode
+.home-indoor-design-input-summary small,
+html.dark-mode
+.indoor-layout-summary span,
+html.dark-mode
+.indoor-layout-detail-list small,
+html.dark-mode
+.home-indoor-next-step-note p,
+html.dark-mode
+.indoor-layout-note p {
+    color: #aebaaa;
+}
+
+
+html.dark-mode
+.indoor-rack-preview {
+    border-color: #6d5a45;
+
+    background:
+        linear-gradient(
+            180deg,
+            #40372c,
+            #352e26
+        );
+}
+
+
+html.dark-mode
+.indoor-rack-level-label {
+    color: #d7c8b4;
+}
+
+
+html.dark-mode
+.indoor-rack-surface {
+    border-color: #746047;
+
+    background:
+        linear-gradient(
+            180deg,
+            #344334,
+            #2b382b
+        );
+}
+
+
+html.dark-mode
+.indoor-linear-plant,
+html.dark-mode
+.indoor-floor-plant {
+    color: #dceadb;
+}
+
+
+html.dark-mode
+.indoor-floor-preview {
+    border-color: #5b6759;
+
+    background:
+        repeating-linear-gradient(
+            0deg,
+            rgba(225, 235, 222, 0.04) 0,
+            rgba(225, 235, 222, 0.04) 1px,
+            transparent 1px,
+            transparent 18px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            rgba(225, 235, 222, 0.04) 0,
+            rgba(225, 235, 222, 0.04) 1px,
+            transparent 1px,
+            transparent 18px
+        ),
+        #252f25;
+}
+
+
+html.dark-mode
+.indoor-floor-plant {
+    border-color:
+        rgba(
+            205,
+            225,
+            201,
+            0.2
+        );
+
+    background-color:
+        rgba(
+            54,
+            73,
+            54,
+            0.96
+        );
+}
+
+
+html.dark-mode
+.indoor-layout-detail-list > div > span,
+html.dark-mode
+.home-indoor-next-step-note > span {
+    background-color: #344234;
+}
+
+
+html.dark-mode
+.indoor-layout-warning {
+    border-color: #655a3c;
+    background-color: #403923;
+}
+
+
+html.dark-mode
+.indoor-layout-warning strong,
+html.dark-mode
+.indoor-layout-warning p {
+    color: #e0d0a2;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 430px) {
+    .home-indoor-design-input-summary {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .indoor-layout-summary {
+        grid-template-columns:
+            1fr
+            1fr;
+    }
+
+
+    .indoor-rack-surface {
+        height: 78px;
+    }
+}
+
+/* =========================================================
+   INDOOR MATERIALS + SETUP
+========================================================= */
+
+.indoor-materials-section {
+    overflow: hidden;
+}
+
+
+.indoor-materials-summary {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap: 8px;
+
+    margin:
+        12px
+        0;
+}
+
+
+.indoor-materials-summary > div {
+    display: flex;
+    min-width: 0;
+
+    flex-direction: column;
+    gap: 3px;
+
+    padding: 10px;
+
+    border: 1px solid #dfe8dc;
+    border-radius: 12px;
+
+    background-color: #f8faf7;
+}
+
+
+.indoor-materials-summary strong {
+    color: #3b5a42;
+
+    font-size: 0.72rem;
+}
+
+
+.indoor-materials-summary span {
+    color: #778476;
+
+    font-size: 0.5rem;
+}
+
+
+.indoor-setup-stage-description {
+    margin:
+        0
+        0
+        8px;
+
+    color: var(
+        --text-muted,
+        #667566
+    );
+
+    font-size: 0.56rem;
+    line-height: 1.5;
+}
+
+
+html.dark-mode
+.indoor-materials-summary > div {
+    border-color: #414f41;
+
+    background-color: #293429;
+}
+
+
+html.dark-mode
+.indoor-materials-summary strong {
+    color: #dce9da;
+}
+
+
+html.dark-mode
+.indoor-materials-summary span,
+html.dark-mode
+.indoor-setup-stage-description {
+    color: #aebaaa;
+}
+
+
+@media (max-width: 430px) {
+    .indoor-materials-summary {
+        grid-template-columns:
+            1fr;
+    }
+}
+
+/* =========================================================
+   INDOOR PLANT CARE TRACKING
+========================================================= */
+
+.indoor-care-section {
+    overflow: hidden;
+}
+
+.indoor-care-list {
+    display: grid;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.indoor-care-card {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    padding: 12px;
+    border: 1px solid #dfe8dc;
+    border-radius: 14px;
+    background-color: #ffffff;
+}
+
+.indoor-care-card.tracked {
+    border-color: #bfd3ba;
+    background: linear-gradient(180deg, #fbfdf9, #f5faf3);
+}
+
+.indoor-care-card-heading {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 9px;
+}
+
+.indoor-care-plant-icon {
+    display: grid;
+    width: 40px;
+    height: 40px;
+    place-items: center;
+    border-radius: 11px;
+    background-color: #edf5ea;
+    font-size: 1.2rem;
+}
+
+.indoor-care-card-heading > div {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.indoor-care-card-heading strong {
+    color: #38513e;
+    font-size: 0.64rem;
+}
+
+.indoor-care-card-heading small {
+    color: #778475;
+    font-size: 0.5rem;
+}
+
+.indoor-care-pot-badge,
+.indoor-care-tracked-badge {
+    padding: 5px 8px;
+    border-radius: 999px;
+    font-size: 0.49rem;
+    font-weight: 800;
+}
+
+.indoor-care-pot-badge {
+    background-color: #edf3ea;
+    color: #56705b;
+}
+
+.indoor-care-tracked-badge {
+    background-color: #e5f2e2;
+    color: #3e7049;
+}
+
+.indoor-care-facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+}
+
+.indoor-care-facts > div {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px;
+    border-radius: 10px;
+    background-color: #f7faf6;
+}
+
+.indoor-care-facts strong {
+    color: #455f4a;
+    font-size: 0.5rem;
+    line-height: 1.35;
+}
+
+.indoor-care-facts small {
+    color: #7c887a;
+    font-size: 0.44rem;
+    line-height: 1.35;
+}
+
+.indoor-care-tip {
+    margin: 0;
+    color: #667565;
+    font-size: 0.53rem;
+    line-height: 1.5;
+}
+
+.indoor-care-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 9px;
+    flex-wrap: wrap;
+}
+
+.indoor-care-track-button,
+.indoor-care-remove-button {
+    min-height: 42px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 0.54rem;
+    font-weight: 800;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.indoor-care-track-button {
+    width: 100%;
+    border: 0;
+    background-color: #3f704d;
+    color: #ffffff;
+}
+
+.indoor-care-remove-button {
+    border: 1px solid #cdd9ca;
+    background-color: #ffffff;
+    color: #607060;
+}
+
+.indoor-care-note {
+    margin-top: 12px;
+    padding: 11px;
+    border: 1px solid #d8e5d4;
+    border-radius: 12px;
+    background-color: #f5f9f3;
+}
+
+.indoor-care-note strong {
+    color: #3f5d45;
+    font-size: 0.58rem;
+}
+
+.indoor-care-note p {
+    margin: 4px 0 0;
+    color: #6c796a;
+    font-size: 0.5rem;
+    line-height: 1.5;
+}
+
+html.dark-mode .indoor-care-card,
+html.dark-mode .indoor-care-card.tracked,
+html.dark-mode .indoor-care-note {
+    border-color: #414f41;
+    background-color: #293429;
+    background-image: none;
+}
+
+html.dark-mode .indoor-care-plant-icon,
+html.dark-mode .indoor-care-pot-badge,
+html.dark-mode .indoor-care-facts > div {
+    background-color: #344234;
+}
+
+html.dark-mode .indoor-care-card-heading strong,
+html.dark-mode .indoor-care-facts strong,
+html.dark-mode .indoor-care-note strong {
+    color: #dce9da;
+}
+
+html.dark-mode .indoor-care-card-heading small,
+html.dark-mode .indoor-care-facts small,
+html.dark-mode .indoor-care-tip,
+html.dark-mode .indoor-care-note p {
+    color: #aebaaa;
+}
+
+html.dark-mode .indoor-care-pot-badge {
+    color: #c9d7c6;
+}
+
+html.dark-mode .indoor-care-tracked-badge {
+    background-color: #355039;
+    color: #d5ead2;
+}
+
+html.dark-mode .indoor-care-remove-button {
+    border-color: #4c5b4c;
+    background-color: #252f25;
+    color: #d1ded0;
+}
+
+@media (max-width: 430px) {
+    .indoor-care-facts {
+        grid-template-columns: 1fr;
+    }
+
+    .indoor-care-card-heading {
+        grid-template-columns: 40px minmax(0, 1fr);
+    }
+
+    .indoor-care-pot-badge {
+        grid-column: 2;
+        justify-self: start;
+    }
+}
+
+/* =========================================================
+   INDOOR LIGHT + REPOTTING CARE
+========================================================= */
+
+.indoor-care-schedule {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    padding: 10px;
+
+    border: 1px solid #dce7d8;
+    border-radius: 12px;
+
+    background-color: #f7faf5;
+}
+
+
+.indoor-care-schedule > strong {
+    color: #3d5943;
+
+    font-size: 0.57rem;
+}
+
+
+.indoor-care-schedule-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap: 6px;
+}
+
+
+.indoor-care-schedule-grid > div {
+    display: flex;
+    min-width: 0;
+
+    flex-direction: column;
+    gap: 2px;
+
+    padding: 8px;
+
+    border-radius: 9px;
+
+    background-color: #ffffff;
+}
+
+
+.indoor-care-schedule-grid > div > span {
+    font-size: 0.78rem;
+}
+
+
+.indoor-care-schedule-grid strong {
+    color: #48614d;
+
+    font-size: 0.46rem;
+    line-height: 1.35;
+}
+
+
+.indoor-care-schedule-grid small {
+    color: #778575;
+
+    font-size: 0.43rem;
+}
+
+
+.indoor-care-quick-actions {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap: 6px;
+}
+
+
+.indoor-care-quick-actions button {
+    min-height: 38px;
+
+    padding:
+        7px
+        6px;
+
+    border: 1px solid #cfdbcc;
+    border-radius: 9px;
+
+    background-color: #ffffff;
+    color: #526b57;
+
+    font-size: 0.46rem;
+    font-weight: 800;
+
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+
+.calendar-event-dot.indoor-care {
+    background-color: #eee9ff;
+}
+
+
+.calendar-care-message {
+    margin:
+        0
+        0
+        10px;
+
+    padding:
+        8px
+        10px;
+
+    border-radius: 10px;
+
+    background-color: #edf6ea;
+    color: #47614b;
+
+    font-size: 0.53rem;
+    line-height: 1.4;
+}
+
+
+.calendar-care-done-button,
+.calendar-moist-delay-button {
+    min-height: 34px;
+
+    padding:
+        6px
+        9px;
+
+    border-radius: 9px;
+
+    font-size: 0.48rem;
+    font-weight: 800;
+
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+
+.calendar-care-done-button {
+    border: 0;
+
+    background-color: #496d50;
+    color: #ffffff;
+}
+
+
+.calendar-indoor-water-actions {
+    display: flex;
+
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
+
+    flex-wrap: wrap;
+}
+
+
+.calendar-watered-button.indoor {
+    width: auto;
+
+    padding:
+        6px
+        9px;
+
+    font-size: 0.47rem;
+}
+
+
+.calendar-moist-delay-button {
+    border: 1px solid #cfdbcc;
+
+    background-color: #ffffff;
+    color: #5e705f;
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+html.dark-mode
+.indoor-care-schedule {
+    border-color: #414f41;
+
+    background-color: #293429;
+}
+
+
+html.dark-mode
+.indoor-care-schedule > strong,
+html.dark-mode
+.indoor-care-schedule-grid strong {
+    color: #dce9da;
+}
+
+
+html.dark-mode
+.indoor-care-schedule-grid > div,
+html.dark-mode
+.indoor-care-quick-actions button,
+html.dark-mode
+.calendar-moist-delay-button {
+    border-color: #465546;
+
+    background-color: #253025;
+    color: #d0dece;
+}
+
+
+html.dark-mode
+.indoor-care-schedule-grid small {
+    color: #aebaaa;
+}
+
+
+html.dark-mode
+.calendar-event-dot.indoor-care {
+    background-color: #4c4468;
+}
+
+
+html.dark-mode
+.calendar-care-message {
+    background-color: #304030;
+    color: #d4e6d1;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 430px) {
+    .indoor-care-schedule-grid,
+    .indoor-care-quick-actions {
+        grid-template-columns:
+            1fr;
+    }
+}
+
+/* =========================================================
+   AI GARDEN ASSISTANT — PHASE 1
+========================================================= */
+
+.garden-assistant-card {
+    display: flex;
+
+    flex-direction: column;
+    gap: 12px;
+
+    margin:
+        14px
+        auto;
+
+    padding: 15px;
+
+    border:
+        1px solid
+        rgba(
+            83,
+            119,
+            88,
+            0.18
+        );
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #fbfdf9,
+            #f4f8f1
+        );
+
+    box-shadow:
+        0 8px 24px
+        rgba(
+            55,
+            80,
+            58,
+            0.07
+        );
+}
+
+
+.garden-assistant-heading {
+    display: grid;
+
+    grid-template-columns:
+        44px
+        minmax(0, 1fr);
+
+    align-items: start;
+    gap: 10px;
+}
+
+
+.garden-assistant-icon {
+    display: grid;
+
+    width: 44px;
+    height: 44px;
+
+    place-items: center;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #dff0db,
+            #edf7e9
+        );
+
+    font-size: 1.2rem;
+}
+
+
+.garden-assistant-heading small {
+    display: block;
+
+    margin-bottom: 2px;
+
+    color: #69806d;
+
+    font-size: 0.47rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+}
+
+
+.garden-assistant-heading h2 {
+    margin: 0;
+
+    color: #304b36;
+
+    font-size: 0.78rem;
+}
+
+
+.garden-assistant-heading p {
+    margin:
+        4px
+        0
+        0;
+
+    color: #6c796b;
+
+    font-size: 0.53rem;
+    line-height: 1.5;
+}
+
+
+.garden-assistant-input {
+    display: flex;
+
+    flex-direction: column;
+    gap: 6px;
+}
+
+
+.garden-assistant-input > span {
+    color: #435947;
+
+    font-size: 0.55rem;
+    font-weight: 800;
+}
+
+
+.garden-assistant-input textarea {
+    width: 100%;
+    min-height: 112px;
+
+    box-sizing: border-box;
+
+    resize: vertical;
+
+    padding: 11px;
+
+    border: 1px solid #ceddca;
+    border-radius: 12px;
+
+    background-color: #ffffff;
+    color: #2f4032;
+
+    font: inherit;
+    font-size: 0.58rem;
+    line-height: 1.55;
+}
+
+
+.garden-assistant-input textarea:focus {
+    outline:
+        2px solid
+        rgba(
+            64,
+            111,
+            76,
+            0.18
+        );
+
+    border-color: #6c9474;
+}
+
+
+.garden-assistant-example-row {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 7px;
+}
+
+
+.garden-assistant-example-row button {
+    min-height: 38px;
+
+    border: 1px solid #d5e1d2;
+    border-radius: 10px;
+
+    background-color: #ffffff;
+    color: #58705d;
+
+    font-size: 0.48rem;
+    font-weight: 800;
+
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+
+.garden-assistant-analyze-button,
+.garden-assistant-apply-button {
+    min-height: 44px;
+
+    border: 0;
+    border-radius: 11px;
+
+    font-size: 0.56rem;
+    font-weight: 900;
+
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+
+.garden-assistant-analyze-button {
+    background-color: #3f704d;
+    color: #ffffff;
+}
+
+
+.garden-assistant-apply-button {
+    width: 100%;
+
+    background-color: #315f3d;
+    color: #ffffff;
+}
+
+
+.garden-assistant-error,
+.garden-assistant-success {
+    margin: 0;
+
+    padding:
+        8px
+        10px;
+
+    border-radius: 9px;
+
+    font-size: 0.5rem;
+    line-height: 1.4;
+}
+
+
+.garden-assistant-error {
+    background-color: #fff1ed;
+    color: #8b4a39;
+}
+
+
+.garden-assistant-success {
+    background-color: #edf7ea;
+    color: #3f6847;
+}
+
+
+.garden-assistant-results {
+    display: flex;
+
+    flex-direction: column;
+    gap: 10px;
+
+    padding-top: 11px;
+
+    border-top: 1px solid #dce7d9;
+}
+
+
+.garden-assistant-results-heading {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+
+.garden-assistant-results-heading > div {
+    display: flex;
+    min-width: 0;
+
+    flex-direction: column;
+    gap: 2px;
+}
+
+
+.garden-assistant-results-heading strong {
+    color: #38523e;
+
+    font-size: 0.62rem;
+}
+
+
+.garden-assistant-results-heading small {
+    color: #788576;
+
+    font-size: 0.47rem;
+}
+
+
+.garden-assistant-results-heading > span {
+    flex: 0 0 auto;
+
+    padding:
+        5px
+        8px;
+
+    border-radius: 999px;
+
+    background-color: #e7f1e4;
+    color: #506c56;
+
+    font-size: 0.46rem;
+    font-weight: 800;
+}
+
+
+.garden-assistant-result-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 7px;
+}
+
+
+.garden-assistant-result-grid > div {
+    display: flex;
+    min-width: 0;
+
+    flex-direction: column;
+    gap: 3px;
+
+    padding: 9px;
+
+    border: 1px solid #dfe8dc;
+    border-radius: 10px;
+
+    background-color: #ffffff;
+}
+
+
+.garden-assistant-result-grid small {
+    color: #7b8879;
+
+    font-size: 0.44rem;
+}
+
+
+.garden-assistant-result-grid strong {
+    overflow: hidden;
+
+    color: #3d5943;
+
+    font-size: 0.53rem;
+
+    text-overflow: ellipsis;
+}
+
+
+.garden-assistant-detected-group {
+    display: flex;
+
+    flex-direction: column;
+    gap: 7px;
+}
+
+
+.garden-assistant-detected-group > strong {
+    color: #405946;
+
+    font-size: 0.55rem;
+}
+
+
+.garden-assistant-chips {
+    display: flex;
+
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+
+.garden-assistant-chips span {
+    padding:
+        5px
+        8px;
+
+    border-radius: 999px;
+
+    background-color: #eaf3e7;
+    color: #4e6854;
+
+    font-size: 0.46rem;
+    font-weight: 800;
+}
+
+
+.garden-assistant-missing {
+    padding: 9px;
+
+    border: 1px solid #eadbb5;
+    border-radius: 10px;
+
+    background-color: #fff9e9;
+}
+
+
+.garden-assistant-missing strong {
+    color: #735f2f;
+
+    font-size: 0.52rem;
+}
+
+
+.garden-assistant-missing p {
+    margin:
+        4px
+        0
+        0;
+
+    color: #806e47;
+
+    font-size: 0.47rem;
+    line-height: 1.45;
+}
+
+
+.garden-assistant-disclaimer {
+    color: #798578;
+
+    font-size: 0.44rem;
+    line-height: 1.45;
+
+    text-align: center;
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+html.dark-mode
+.garden-assistant-card {
+    border-color: #405040;
+
+    background:
+        linear-gradient(
+            180deg,
+            #293429,
+            #252f25
+        );
+}
+
+
+html.dark-mode
+.garden-assistant-icon,
+html.dark-mode
+.garden-assistant-results-heading > span,
+html.dark-mode
+.garden-assistant-chips span {
+    background-color: #344434;
+}
+
+
+html.dark-mode
+.garden-assistant-heading h2,
+html.dark-mode
+.garden-assistant-input > span,
+html.dark-mode
+.garden-assistant-results-heading strong,
+html.dark-mode
+.garden-assistant-result-grid strong,
+html.dark-mode
+.garden-assistant-detected-group > strong {
+    color: #dce9da;
+}
+
+
+html.dark-mode
+.garden-assistant-heading p,
+html.dark-mode
+.garden-assistant-results-heading small,
+html.dark-mode
+.garden-assistant-result-grid small,
+html.dark-mode
+.garden-assistant-disclaimer {
+    color: #aebaaa;
+}
+
+
+html.dark-mode
+.garden-assistant-input textarea,
+html.dark-mode
+.garden-assistant-example-row button,
+html.dark-mode
+.garden-assistant-result-grid > div {
+    border-color: #435243;
+
+    background-color: #222c22;
+    color: #d8e5d6;
+}
+
+
+html.dark-mode
+.garden-assistant-results {
+    border-top-color: #405040;
+}
+
+
+html.dark-mode
+.garden-assistant-missing {
+    border-color: #645b3f;
+
+    background-color: #3d3826;
+}
+
+
+html.dark-mode
+.garden-assistant-missing strong,
+html.dark-mode
+.garden-assistant-missing p {
+    color: #dfd0a4;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 430px) {
+    .garden-assistant-example-row,
+    .garden-assistant-result-grid {
+        grid-template-columns:
+            1fr;
+    }
+}
+
+/* =========================================================
+   CALENDAR DAILY ICON DETAILS
+========================================================= */
+
+button.calendar-event-dot {
+    appearance: none;
+
+    display: inline-grid;
+
+    width: 24px;
+    height: 24px;
+
+    padding: 0;
+
+    place-items: center;
+
+    border: 1px solid transparent;
+    border-radius: 7px;
+
+    background: transparent;
+
+    color: inherit;
+
+    font: inherit;
+    line-height: 1;
+
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+
+button.calendar-event-dot:hover {
+    border-color:
+        rgba(
+            61,
+            96,
+            67,
+            0.2
+        );
+
+    background-color:
+        rgba(
+            238,
+            245,
+            235,
+            0.9
+        );
+}
+
+
+button.calendar-event-dot:focus-visible {
+    outline:
+        2px solid
+        #5f8767;
+
+    outline-offset: 2px;
+}
+
+
+button.calendar-event-dot.selected {
+    border-color: #62856a;
+
+    background-color: #e6f0e3;
+}
+
+
+.calendar-event-detail-panel {
+    display: flex;
+
+    flex-direction: column;
+    gap: 9px;
+
+    margin-top: 12px;
+    padding: 12px;
+
+    border: 1px solid #dbe6d8;
+    border-radius: 13px;
+
+    background-color: #f8fbf6;
+}
+
+
+.calendar-event-detail-header {
+    display: grid;
+
+    grid-template-columns:
+        40px
+        minmax(0, 1fr)
+        34px;
+
+    align-items: start;
+    gap: 9px;
+}
+
+
+.calendar-event-detail-icon {
+    display: grid;
+
+    width: 40px;
+    height: 40px;
+
+    place-items: center;
+
+    border-radius: 11px;
+
+    background-color: #e9f2e6;
+
+    font-size: 1.1rem;
+}
+
+
+.calendar-event-detail-header > div {
+    display: flex;
+
+    min-width: 0;
+
+    flex-direction: column;
+    gap: 2px;
+}
+
+
+.calendar-event-detail-header small {
+    color: #5c755f;
+
+    font-size: 0.46rem;
+    font-weight: 900;
+
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+
+.calendar-event-detail-header h3 {
+    margin: 0;
+
+    color: #354f3a;
+
+    font-size: 0.64rem;
+    line-height: 1.3;
+}
+
+
+.calendar-event-detail-header > div > span {
+    color: #788576;
+
+    font-size: 0.48rem;
+}
+
+
+.calendar-event-detail-close {
+    display: grid;
+
+    width: 34px;
+    height: 34px;
+
+    padding: 0;
+
+    place-items: center;
+
+    border: 1px solid #d4dfd1;
+    border-radius: 9px;
+
+    background-color: #ffffff;
+    color: #627063;
+
+    font-size: 1rem;
+
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+
+.calendar-event-detail-panel > p {
+    margin: 0;
+
+    color: #637063;
+
+    font-size: 0.52rem;
+    line-height: 1.55;
+}
+
+
+.calendar-event-detail-meta {
+    display: flex;
+
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+
+.calendar-event-detail-meta span {
+    padding:
+        4px
+        7px;
+
+    border-radius: 999px;
+
+    background-color: #eaf2e7;
+    color: #526b57;
+
+    font-size: 0.44rem;
+    font-weight: 800;
+}
+
+
+.calendar-event-detail-meta span.overdue {
+    background-color: #fff0e7;
+    color: #8c5437;
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+html.dark-mode
+button.calendar-event-dot:hover,
+html.dark-mode
+button.calendar-event-dot.selected {
+    border-color: #516451;
+
+    background-color: #344134;
+}
+
+
+html.dark-mode
+.calendar-event-detail-panel {
+    border-color: #414f41;
+
+    background-color: #293429;
+}
+
+
+html.dark-mode
+.calendar-event-detail-icon,
+html.dark-mode
+.calendar-event-detail-meta span {
+    background-color: #354335;
+}
+
+
+html.dark-mode
+.calendar-event-detail-header small,
+html.dark-mode
+.calendar-event-detail-header h3 {
+    color: #dce9da;
+}
+
+
+html.dark-mode
+.calendar-event-detail-header > div > span,
+html.dark-mode
+.calendar-event-detail-panel > p {
+    color: #aebaaa;
+}
+
+
+html.dark-mode
+.calendar-event-detail-close {
+    border-color: #465546;
+
+    background-color: #242e24;
+    color: #d3dfd1;
+}
+
+
+html.dark-mode
+.calendar-event-detail-meta span {
+    color: #d1ded0;
+}
+
+
+html.dark-mode
+.calendar-event-detail-meta span.overdue {
+    background-color: #503729;
+    color: #f0c7ad;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 430px) {
+    button.calendar-event-dot {
+        width: 28px;
+        height: 28px;
+    }
+
+
+    .calendar-event-detail-header {
+        grid-template-columns:
+            40px
+            minmax(0, 1fr)
+            34px;
+    }
+}
+

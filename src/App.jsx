@@ -63,6 +63,7 @@ const Terms = lazy(
 import SuppliesMenu from "./components/SuppliesMenu";
 import AppMenu from "./components/AppMenu";
 import AppSettings from "./components/AppSettings";
+import AppFooter from "./components/AppFooter";
 import NetworkStatusBanner from "./components/NetworkStatusBanner";
 import RouteFocusManager from "./components/RouteFocusManager";
 import GardenOnboarding from "./components/GardenOnboarding";
@@ -75,9 +76,20 @@ import {
     getCropById
 } from "./data/cropPlanningData";
 
+
+import {
+    indoorPlantData
+} from "./data/indoorPlantData";
+
 import {
     createHarvestCalendarEvents
 } from "./utils/harvestScheduleGenerator";
+
+
+import {
+    applyIndoorCareActionToPlant,
+    createIndoorCareCalendarEvents
+} from "./utils/indoorCareScheduler";
 
 import {
     clearStoragePrefix,
@@ -676,6 +688,106 @@ function resolvePlantStartDate(
 
 
 /* =========================
+   CREATE TRACKED INDOOR PLANT
+========================= */
+
+function createTrackedIndoorPlant(
+    plant
+) {
+    const addedAt =
+        new Date()
+            .toISOString();
+
+
+    return {
+        id:
+            `indoor-${plant.id}`,
+
+        indoorPlantId:
+            plant.id,
+
+        plantKey:
+            `indoor:${plant.id}`,
+
+        source:
+            "indoor",
+
+        name:
+            plant.name,
+
+        common_name:
+            plant.name,
+
+        icon:
+            plant.icon,
+
+        category:
+            "Indoor Plant",
+
+        sunlight:
+            plant.lightLabel,
+
+        watering:
+            plant.waterPreference ||
+            "Average",
+
+        water:
+            plant.waterPreference ||
+            "Average",
+
+        waterEveryDays:
+            Number(
+                plant.waterEveryDays
+            ) ||
+            7,
+
+        humidityPreference:
+            plant.humidityPreference ||
+            "Average",
+
+        careTip:
+            plant.careTip ||
+            "",
+
+        rotateEveryDays:
+            Number(
+                plant.rotateEveryDays
+            ) ||
+            14,
+
+        lightCheckEveryDays:
+            Number(
+                plant.lightCheckEveryDays
+            ) ||
+            30,
+
+        repotCheckEveryDays:
+            Number(
+                plant.repotCheckEveryDays
+            ) ||
+            0,
+
+        potDiameterInches:
+            plant.potDiameterInches,
+
+        matureWidthInches:
+            plant.matureWidthInches,
+
+        matureHeightInches:
+            plant.matureHeightInches,
+
+        placementStyle:
+            plant.placementStyle,
+
+        lightLabel:
+            plant.lightLabel,
+
+        addedAt
+    };
+}
+
+
+/* =========================
    NORMALIZE PLANT
 ========================= */
 
@@ -717,9 +829,12 @@ function normalizeGardenPlant(
         plantKey,
 
         cropId:
-            resolveCropIdFromPlant(
-                plant
-            ),
+            source ===
+            "indoor"
+                ? null
+                : resolveCropIdFromPlant(
+                    plant
+                ),
 
         startDate:
             resolvePlantStartDate(
@@ -1920,6 +2035,166 @@ function App() {
 
 
     /* =========================
+       ACTIVATE GARDEN PLAN
+    ========================= */
+
+    function activateGardenPlan(
+        profileToActivate
+    ) {
+
+        if (
+            !profileToActivate
+                ?.designSpace
+        ) {
+            return;
+        }
+
+
+        const activatedAt =
+            profileToActivate
+                .designSpace
+                .activatedAt ||
+            new Date()
+                .toISOString();
+
+
+        const activatedProfile = {
+
+            ...profileToActivate,
+
+            designSpace: {
+
+                ...profileToActivate
+                    .designSpace,
+
+                isActive:
+                    true,
+
+                activatedAt
+
+            }
+
+        };
+
+
+        saveGardenProfile(
+            activatedProfile
+        );
+
+
+        /*
+            Outdoor gardens continue to use the
+            existing "add it when you actually
+            plant it" workflow.
+
+            Indoor gardens are different: the
+            selected plants already represent
+            the actual indoor collection the
+            user designed around, so activation
+            enrolls them in care tracking.
+        */
+
+        if (
+            activatedProfile
+                .designSpace
+                .spaceType !==
+            "indoor"
+        ) {
+            return;
+        }
+
+
+        const selectedIndoorIds =
+            Array.isArray(
+                activatedProfile
+                    .designSpace
+                    .indoorPlantGoals
+            )
+                ? activatedProfile
+                    .designSpace
+                    .indoorPlantGoals
+                : [];
+
+
+        const existingKeys =
+            new Set(
+                gardenPlants.map(
+                    (plant) =>
+                        plant.plantKey
+                )
+            );
+
+
+        const indoorPlantsToAdd =
+            selectedIndoorIds
+                .map(
+                    (plantId) =>
+                        indoorPlantData.find(
+                            (plant) =>
+                                plant.id ===
+                                plantId
+                        )
+                )
+                .filter(
+                    Boolean
+                )
+                .map(
+                    createTrackedIndoorPlant
+                )
+                .map(
+                    normalizeGardenPlant
+                )
+                .filter(
+                    Boolean
+                )
+                .filter(
+                    (plant) =>
+                        !existingKeys.has(
+                            plant.plantKey
+                        )
+                );
+
+
+        const nextPlants = [
+            ...gardenPlants,
+            ...indoorPlantsToAdd
+        ];
+
+
+        setGardenPlants(
+            nextPlants
+        );
+
+
+        setWateringRecords(
+            (currentRecords) =>
+                syncWateringRecordsForPlants(
+                    nextPlants,
+                    currentRecords
+                )
+        );
+
+
+        /*
+            Re-run harvest synchronization so
+            existing outdoor plants keep their
+            normal harvest schedule. Indoor
+            plants have cropId:null and therefore
+            do not receive outdoor harvest events.
+        */
+
+        setCalendarEvents(
+            (currentEvents) =>
+                syncHarvestEventsForPlants(
+                    nextPlants,
+                    currentEvents
+                )
+        );
+
+    }
+
+
+    /* =========================
        SUPPLIES
     ========================= */
 
@@ -2305,6 +2580,53 @@ function App() {
                 )
         );
 
+    }
+
+
+    /* =========================
+       UPDATE INDOOR CARE
+    ========================= */
+
+    function updateIndoorPlantCare({
+        plantKey,
+        action
+    }) {
+        if (
+            !plantKey ||
+            !action
+        ) {
+            return;
+        }
+
+
+        const today =
+            getLocalDateString(
+                new Date()
+            );
+
+
+        setGardenPlants(
+            (currentPlants) =>
+                currentPlants.map(
+                    (plant) => {
+
+                        if (
+                            plant.plantKey !==
+                            plantKey
+                        ) {
+                            return plant;
+                        }
+
+
+                        return applyIndoorCareActionToPlant(
+                            plant,
+                            action,
+                            today
+                        );
+
+                    }
+                )
+        );
     }
 
 
@@ -3328,7 +3650,10 @@ function App() {
                             "watering",
 
                         title:
-                            `Water ${plant.name}`,
+                            plant.source ===
+                            "indoor"
+                                ? `Check moisture: ${plant.name}`
+                                : `Water ${plant.name}`,
 
                         plantKey:
                             plant.plantKey,
@@ -3362,9 +3687,19 @@ function App() {
         );
 
 
+    const automaticIndoorCareEvents =
+        createIndoorCareCalendarEvents({
+            plants:
+                gardenPlants,
+
+            gardenProfile
+        });
+
+
     const allCalendarEvents = [
         ...calendarEvents,
-        ...automaticWateringEvents
+        ...automaticWateringEvents,
+        ...automaticIndoorCareEvents
     ];
 
 
@@ -3536,6 +3871,10 @@ function App() {
                             onRecordHarvest={
                                 recordGardenHarvest
                             }
+
+                            onUpdateIndoorCare={
+                                updateIndoorPlantCare
+                            }
                         />
 
                     }
@@ -3554,6 +3893,10 @@ function App() {
 
                             onSaveGardenProfile={
                                 saveGardenProfile
+                            }
+
+                            onActivateGarden={
+                                activateGardenPlan
                             }
 
                             ownedSupplies={
@@ -3595,6 +3938,14 @@ function App() {
 
                             onMarkPlantWatered={
                                 markPlantWatered
+                            }
+
+                            onDelayWatering={
+                                delayWatering
+                            }
+
+                            onCompleteIndoorCare={
+                                updateIndoorPlantCare
                             }
 
                             gardenActive={
@@ -3674,6 +4025,9 @@ function App() {
                 </Suspense>
 
             </main>
+
+
+            <AppFooter />
 
 
             <AppMenu />

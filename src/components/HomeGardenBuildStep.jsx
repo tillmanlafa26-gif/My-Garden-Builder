@@ -23,9 +23,31 @@ import SeasonalPlantingGuide
     from "./SeasonalPlantingGuide";
 
 
+import IndoorLayoutPreview
+    from "./IndoorLayoutPreview";
+
+
+import IndoorMaterials
+    from "./IndoorMaterials";
+
+
+import IndoorSetupPlan
+    from "./IndoorSetupPlan";
+
+
 import {
     calculateGardenMaterials
 } from "../utils/materialsCalculator";
+
+
+import {
+    calculateIndoorMaterials
+} from "../utils/indoorMaterialsCalculator";
+
+
+import {
+    generateIndoorSetupPlan
+} from "../utils/indoorSetupPlanGenerator";
 
 
 import {
@@ -48,6 +70,16 @@ function HomeGardenBuildStep({
         null;
 
 
+    const isIndoorSpace =
+        designSpace.spaceType ===
+        "indoor";
+
+
+    const indoorLayout =
+        designSpace.indoorLayout ||
+        null;
+
+
     const buildOptions =
         designSpace.buildOptions ||
         {};
@@ -58,6 +90,14 @@ function HomeGardenBuildStep({
             designSpace.features
         )
             ? designSpace.features
+            : [];
+
+
+    const selectedIndoorPlants =
+        Array.isArray(
+            designSpace.indoorPlantGoals
+        )
+            ? designSpace.indoorPlantGoals
             : [];
 
 
@@ -86,11 +126,69 @@ function HomeGardenBuildStep({
     );
 
 
+    const indoorMaterialPlan =
+        useMemo(
+            () => {
+
+                if (
+                    !isIndoorSpace ||
+                    !indoorLayout
+                ) {
+                    return null;
+                }
+
+
+                return calculateIndoorMaterials({
+                    indoorLayout,
+
+                    selectedPlantIds:
+                        selectedIndoorPlants
+                });
+
+            },
+            [
+                isIndoorSpace,
+                indoorLayout,
+                selectedIndoorPlants
+            ]
+        );
+
+
+    const indoorSetupPlan =
+        useMemo(
+            () => {
+
+                if (
+                    !isIndoorSpace ||
+                    !indoorLayout ||
+                    !indoorMaterialPlan
+                ) {
+                    return null;
+                }
+
+
+                return generateIndoorSetupPlan({
+                    indoorLayout,
+
+                    materialPlan:
+                        indoorMaterialPlan
+                });
+
+            },
+            [
+                isIndoorSpace,
+                indoorLayout,
+                indoorMaterialPlan
+            ]
+        );
+
+
     const materialPlan =
         useMemo(
             () => {
 
                 if (
+                    isIndoorSpace ||
                     !layout
                 ) {
 
@@ -106,6 +204,7 @@ function HomeGardenBuildStep({
 
             },
             [
+                isIndoorSpace,
                 layout,
                 buildOptions
             ]
@@ -117,6 +216,7 @@ function HomeGardenBuildStep({
             () => {
 
                 if (
+                    isIndoorSpace ||
                     !layout ||
                     !materialPlan
                 ) {
@@ -145,6 +245,7 @@ function HomeGardenBuildStep({
 
             },
             [
+                isIndoorSpace,
                 layout,
                 materialPlan,
                 buildOptions,
@@ -152,6 +253,81 @@ function HomeGardenBuildStep({
                 selectedFeatures
             ]
         );
+
+
+    function saveIndoorBuildPlan() {
+
+        if (
+            !indoorLayout
+        ) {
+            setMessage(
+                "Generate your indoor layout before creating the setup plan."
+            );
+
+            return;
+        }
+
+
+        if (
+            !indoorMaterialPlan ||
+            !indoorSetupPlan
+        ) {
+            setMessage(
+                "The indoor materials or setup instructions could not be generated."
+            );
+
+            return;
+        }
+
+
+        const updatedProfile = {
+
+            ...gardenProfile,
+
+            designSpace: {
+
+                ...designSpace,
+
+                materials:
+                    indoorMaterialPlan,
+
+                buildPlan:
+                    indoorSetupPlan,
+
+                indoorMaterials:
+                    indoorMaterialPlan,
+
+                indoorBuildPlan:
+                    indoorSetupPlan,
+
+                isActive:
+                    buildAlreadySaved
+                        ? Boolean(
+                            designSpace.isActive
+                        )
+                        : false,
+
+                activatedAt:
+                    buildAlreadySaved
+                        ? designSpace.activatedAt ||
+                          null
+                        : null
+
+            }
+
+        };
+
+
+        onSaveGardenProfile(
+            updatedProfile
+        );
+
+
+        setMessage(
+            "✓ Your indoor garden setup is complete. The layout, materials, and setup instructions have been saved."
+        );
+
+    }
 
 
     function saveBuildPlan() {
@@ -223,6 +399,295 @@ function HomeGardenBuildStep({
             "✓ Your garden plan is complete. Planting guidance, materials, and build instructions have been saved."
         );
 
+    }
+
+
+    if (
+        isIndoorSpace
+    ) {
+
+        if (
+            !indoorLayout
+        ) {
+            return (
+                <section
+                    id="home-builder-step-build"
+                    className="home-builder-step upcoming"
+                >
+
+                    <div className="home-builder-step-heading">
+
+                        <span className="home-builder-step-number">
+                            6
+                        </span>
+
+
+                        <div>
+
+                            <small>
+                                STEP 6
+                            </small>
+
+
+                            <h2>
+                                🔨 Indoor Setup Plan
+                            </h2>
+
+
+                            <p>
+                                Generate the indoor layout first.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div className="home-builder-locked">
+
+                        <span>
+                            🔒
+                        </span>
+
+
+                        <p>
+                            Complete Step 5 before creating the indoor setup plan.
+                        </p>
+
+                    </div>
+
+                </section>
+            );
+        }
+
+
+        if (
+            buildAlreadySaved &&
+            !expanded
+        ) {
+            return (
+                <section
+                    id="home-builder-step-build"
+                    className="home-builder-step complete collapsed"
+                >
+
+                    <div className="home-builder-step-heading">
+
+                        <span className="home-builder-step-number">
+                            ✓
+                        </span>
+
+
+                        <div>
+
+                            <small>
+                                STEP 6
+                            </small>
+
+
+                            <h2>
+                                🏠 Indoor Plan Complete
+                            </h2>
+
+
+                            <p>
+                                Your indoor layout, materials, and setup instructions are saved.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div className="home-builder-collapsed-content">
+
+                        <div className="home-builder-summary">
+
+                            <strong>
+                                ✓ Indoor Setup Ready
+                            </strong>
+
+
+                            <span>
+                                Layout • Containers • Lighting • Setup
+                            </span>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            className="home-builder-edit-button"
+                            onClick={() =>
+                                setExpanded(
+                                    true
+                                )
+                            }
+                        >
+                            View
+                        </button>
+
+                    </div>
+
+                </section>
+            );
+        }
+
+
+        return (
+            <section
+                id="home-builder-step-build"
+                className="home-builder-step active"
+            >
+
+                <div className="home-builder-step-heading">
+
+                    <span className="home-builder-step-number">
+                        {
+                            buildAlreadySaved
+                                ? "✓"
+                                : "6"
+                        }
+                    </span>
+
+
+                    <div>
+
+                        <small>
+                            STEP 6
+                        </small>
+
+
+                        <h2>
+                            🔨 Indoor Materials & Setup
+                        </h2>
+
+
+                        <p>
+                            Review the plant layout, containers, grow-light needs, protective supplies, and setup instructions.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div className="home-builder-build-stack">
+
+                    <IndoorLayoutPreview
+                        indoorLayout={
+                            indoorLayout
+                        }
+                    />
+
+
+                    {
+                        indoorMaterialPlan && (
+
+                            <IndoorMaterials
+                                materialPlan={
+                                    indoorMaterialPlan
+                                }
+                            />
+
+                        )
+                    }
+
+
+                    {
+                        indoorSetupPlan && (
+
+                            <IndoorSetupPlan
+                                setupPlan={
+                                    indoorSetupPlan
+                                }
+                            />
+
+                        )
+                    }
+
+
+                    <div className="home-builder-finish-note">
+
+                        <span>
+                            🏠
+                        </span>
+
+
+                        <div>
+
+                            <strong>
+                                Ready to Set Up Your Indoor Garden?
+                            </strong>
+
+
+                            <p>
+                                Save this plan to complete the Garden Builder. Your indoor layout, container requirements, lighting plan, materials, and setup instructions will be available under My Garden.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    {
+                        message && (
+
+                            <p
+                                className={
+                                    message.startsWith(
+                                        "✓"
+                                    )
+                                        ? "home-builder-success"
+                                        : "home-builder-error"
+                                }
+                            >
+                                {
+                                    message
+                                }
+                            </p>
+
+                        )
+                    }
+
+
+                    <button
+                        type="button"
+                        className="home-builder-continue-button"
+                        onClick={
+                            saveIndoorBuildPlan
+                        }
+                    >
+                        {
+                            buildAlreadySaved
+                                ? "Save Updated Indoor Plan ✓"
+                                : "Finish Indoor Garden ✓"
+                        }
+                    </button>
+
+
+                    {
+                        buildAlreadySaved && (
+
+                            <button
+                                type="button"
+                                className="home-builder-secondary-button"
+                                onClick={() =>
+                                    setExpanded(
+                                        false
+                                    )
+                                }
+                            >
+                                Collapse Indoor Plan
+                            </button>
+
+                        )
+                    }
+
+                </div>
+
+            </section>
+        );
     }
 
 

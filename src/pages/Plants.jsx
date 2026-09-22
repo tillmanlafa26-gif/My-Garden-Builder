@@ -34,6 +34,11 @@ import {
 
 
 import {
+    indoorPlantData
+} from "../data/indoorPlantData";
+
+
+import {
     calculateHarvestSchedule
 } from "../utils/harvestScheduleGenerator";
 
@@ -41,6 +46,11 @@ import {
     getAvailableGrowthStages,
     getPlantGrowthStage
 } from "../utils/plantGrowthStage";
+
+
+import {
+    getIndoorCareScheduleForPlant
+} from "../utils/indoorCareScheduler";
 
 
 /* =========================
@@ -100,6 +110,103 @@ function createCoreGardenPlant(
 
     };
 
+}
+
+
+/* =========================
+   INDOOR PLANT CONVERSION
+========================= */
+
+function createIndoorGardenPlant(
+    plant
+) {
+    return {
+        id:
+            `indoor-${plant.id}`,
+
+        indoorPlantId:
+            plant.id,
+
+        plantKey:
+            `indoor:${plant.id}`,
+
+        source:
+            "indoor",
+
+        name:
+            plant.name,
+
+        common_name:
+            plant.name,
+
+        icon:
+            plant.icon,
+
+        category:
+            "Indoor Plant",
+
+        sunlight:
+            plant.lightLabel,
+
+        watering:
+            plant.waterPreference ||
+            "Average",
+
+        water:
+            plant.waterPreference ||
+            "Average",
+
+        waterEveryDays:
+            Number(
+                plant.waterEveryDays
+            ) ||
+            7,
+
+        humidityPreference:
+            plant.humidityPreference ||
+            "Average",
+
+        careTip:
+            plant.careTip ||
+            "",
+
+        rotateEveryDays:
+            Number(
+                plant.rotateEveryDays
+            ) ||
+            14,
+
+        lightCheckEveryDays:
+            Number(
+                plant.lightCheckEveryDays
+            ) ||
+            30,
+
+        repotCheckEveryDays:
+            Number(
+                plant.repotCheckEveryDays
+            ) ||
+            0,
+
+        potDiameterInches:
+            plant.potDiameterInches,
+
+        matureWidthInches:
+            plant.matureWidthInches,
+
+        matureHeightInches:
+            plant.matureHeightInches,
+
+        placementStyle:
+            plant.placementStyle,
+
+        lightLabel:
+            plant.lightLabel,
+
+        addedAt:
+            new Date()
+                .toISOString()
+    };
 }
 
 
@@ -276,7 +383,9 @@ function Plants({
 
     onUpdateGrowthStage,
 
-    onRecordHarvest
+    onRecordHarvest,
+
+    onUpdateIndoorCare
 
 }) {
 
@@ -323,6 +432,141 @@ function Plants({
                 gardenProfile.type
             ]
             : null;
+
+
+    const isIndoorGarden =
+        gardenProfile
+            ?.designSpace
+            ?.spaceType ===
+        "indoor";
+
+
+    const selectedIndoorPlantIds =
+        Array.isArray(
+            gardenProfile
+                ?.designSpace
+                ?.indoorPlantGoals
+        )
+            ? gardenProfile
+                .designSpace
+                .indoorPlantGoals
+            : [];
+
+
+    const selectedIndoorPlants =
+        selectedIndoorPlantIds
+            .map(
+                (plantId) =>
+                    indoorPlantData.find(
+                        (plant) =>
+                            plant.id ===
+                            plantId
+                    )
+            )
+            .filter(
+                Boolean
+            );
+
+
+    const trackedIndoorPlants =
+        gardenPlants.filter(
+            (plant) =>
+                plant.source ===
+                "indoor"
+        );
+
+
+    const outdoorGardenPlants =
+        gardenPlants.filter(
+            (plant) =>
+                plant.source !==
+                "indoor"
+        );
+
+
+    /* =========================
+       INDOOR CARE TRACKING
+    ========================= */
+
+    function getTrackedIndoorPlant(
+        plantId
+    ) {
+        return gardenPlants.find(
+            (plant) =>
+                plant.plantKey ===
+                    `indoor:${plantId}` ||
+                (
+                    plant.source ===
+                        "indoor" &&
+                    plant.indoorPlantId ===
+                        plantId
+                )
+        );
+    }
+
+
+    function handleTrackIndoorPlant(
+        indoorPlant
+    ) {
+        if (
+            getTrackedIndoorPlant(
+                indoorPlant.id
+            )
+        ) {
+            return;
+        }
+
+
+        onAddPlant?.(
+            createIndoorGardenPlant(
+                indoorPlant
+            )
+        );
+    }
+
+
+    function handleRemoveIndoorPlant(
+        indoorPlant
+    ) {
+        const tracked =
+            getTrackedIndoorPlant(
+                indoorPlant.id
+            );
+
+
+        if (
+            !tracked
+        ) {
+            return;
+        }
+
+
+        onRemovePlant?.(
+            tracked
+        );
+    }
+
+
+    function handleIndoorCareAction(
+        trackedPlant,
+        action
+    ) {
+        if (
+            !trackedPlant ||
+            typeof onUpdateIndoorCare !==
+                "function"
+        ) {
+            return;
+        }
+
+
+        onUpdateIndoorCare({
+            plantKey:
+                trackedPlant.plantKey,
+
+            action
+        });
+    }
 
 
     /* =========================
@@ -716,7 +960,15 @@ function Plants({
                             <p>
 
                                 {
-                                    selectedGarden?.name
+                                    isIndoorGarden
+                                        ? (
+                                            gardenProfile
+                                                ?.designSpace
+                                                ?.indoorLayout
+                                                ?.indoorSpaceName ||
+                                            "Indoor Plant Space"
+                                        )
+                                        : selectedGarden?.name
                                 }
 
                                 {" • "}
@@ -728,6 +980,7 @@ function Plants({
                                 }
 
                                 {
+                                    !isIndoorGarden &&
                                     gardenProfile
                                         .hardinessZone
                                         ? ` • Zone ${gardenProfile.hardinessZone}`
@@ -737,6 +990,431 @@ function Plants({
                             </p>
 
                         </div>
+
+                    </section>
+
+                )
+            }
+
+
+            {/* =========================
+                INDOOR PLANT CARE
+            ========================= */}
+
+            {
+                isIndoorGarden &&
+                selectedIndoorPlants.length >
+                0 && (
+
+                    <section className="designer-card indoor-care-section">
+
+                        <div className="designer-section-heading">
+
+                            <span>
+                                🏠
+                            </span>
+
+
+                            <div>
+
+                                <h2>
+                                    Indoor Plant Care
+                                </h2>
+
+
+                                <p>
+                                    Track plants from your indoor layout. Watering reminders are moisture-check prompts based on a starting interval, not automatic instructions to water.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div className="indoor-care-list">
+
+                            {
+                                selectedIndoorPlants.map(
+                                    (indoorPlant) => {
+
+                                        const tracked =
+                                            getTrackedIndoorPlant(
+                                                indoorPlant.id
+                                            );
+
+
+                                        const careSchedule =
+                                            tracked
+                                                ? getIndoorCareScheduleForPlant(
+                                                    tracked,
+                                                    gardenProfile
+                                                )
+                                                : null;
+
+
+                                        return (
+                                            <article
+                                                key={
+                                                    indoorPlant.id
+                                                }
+                                                className={
+                                                    tracked
+                                                        ? "indoor-care-card tracked"
+                                                        : "indoor-care-card"
+                                                }
+                                            >
+
+                                                <div className="indoor-care-card-heading">
+
+                                                    <span className="indoor-care-plant-icon">
+                                                        {
+                                                            indoorPlant.icon
+                                                        }
+                                                    </span>
+
+
+                                                    <div>
+
+                                                        <strong>
+                                                            {
+                                                                indoorPlant.name
+                                                            }
+                                                        </strong>
+
+
+                                                        <small>
+                                                            {
+                                                                indoorPlant.lightLabel
+                                                            }
+                                                        </small>
+
+                                                    </div>
+
+
+                                                    <span className="indoor-care-pot-badge">
+                                                        {
+                                                            indoorPlant.potDiameterInches
+                                                        } in pot
+                                                    </span>
+
+                                                </div>
+
+
+                                                <div className="indoor-care-facts">
+
+                                                    <div>
+
+                                                        <span>
+                                                            💧
+                                                        </span>
+
+
+                                                        <strong>
+                                                            Check about every {
+                                                                indoorPlant.waterEveryDays
+                                                            } days
+                                                        </strong>
+
+
+                                                        <small>
+                                                            {
+                                                                indoorPlant.waterPreference
+                                                            } moisture
+                                                        </small>
+
+                                                    </div>
+
+
+                                                    <div>
+
+                                                        <span>
+                                                            💨
+                                                        </span>
+
+
+                                                        <strong>
+                                                            {
+                                                                indoorPlant.humidityPreference
+                                                            }
+                                                        </strong>
+
+
+                                                        <small>
+                                                            Humidity preference
+                                                        </small>
+
+                                                    </div>
+
+
+                                                    <div>
+
+                                                        <span>
+                                                            📏
+                                                        </span>
+
+
+                                                        <strong>
+                                                            {
+                                                                indoorPlant.matureWidthInches
+                                                            } × {
+                                                                indoorPlant.matureHeightInches
+                                                            } in
+                                                        </strong>
+
+
+                                                        <small>
+                                                            Approx. mature W × H
+                                                        </small>
+
+                                                    </div>
+
+                                                </div>
+
+
+                                                <p className="indoor-care-tip">
+                                                    {
+                                                        indoorPlant.careTip
+                                                    }
+                                                </p>
+
+
+                                                {
+                                                    tracked
+                                                        ? (
+                                                            <>
+
+                                                                {
+                                                                    careSchedule && (
+
+                                                                        <div className="indoor-care-schedule">
+
+                                                                            <strong>
+                                                                                Care Schedule
+                                                                            </strong>
+
+
+                                                                            <div className="indoor-care-schedule-grid">
+
+                                                                                {
+                                                                                    careSchedule.rotation && (
+
+                                                                                        <div>
+
+                                                                                            <span>
+                                                                                                🔄
+                                                                                            </span>
+
+
+                                                                                            <strong>
+                                                                                                Rotate / orientation
+                                                                                            </strong>
+
+
+                                                                                            <small>
+                                                                                                {
+                                                                                                    careSchedule.rotation.overdue
+                                                                                                        ? "Due now"
+                                                                                                        : formatGardenDate(
+                                                                                                            careSchedule.rotation.dueDate
+                                                                                                        )
+                                                                                                }
+                                                                                            </small>
+
+                                                                                        </div>
+
+                                                                                    )
+                                                                                }
+
+
+                                                                                {
+                                                                                    careSchedule.light && (
+
+                                                                                        <div>
+
+                                                                                            <span>
+                                                                                                💡
+                                                                                            </span>
+
+
+                                                                                            <strong>
+                                                                                                {
+                                                                                                    careSchedule.needsGrowLight
+                                                                                                        ? "Grow-light check"
+                                                                                                        : "Light check"
+                                                                                                }
+                                                                                            </strong>
+
+
+                                                                                            <small>
+                                                                                                {
+                                                                                                    careSchedule.light.overdue
+                                                                                                        ? "Due now"
+                                                                                                        : formatGardenDate(
+                                                                                                            careSchedule.light.dueDate
+                                                                                                        )
+                                                                                                }
+                                                                                            </small>
+
+                                                                                        </div>
+
+                                                                                    )
+                                                                                }
+
+
+                                                                                {
+                                                                                    careSchedule.repotCheck && (
+
+                                                                                        <div>
+
+                                                                                            <span>
+                                                                                                🪴
+                                                                                            </span>
+
+
+                                                                                            <strong>
+                                                                                                Repot assessment
+                                                                                            </strong>
+
+
+                                                                                            <small>
+                                                                                                {
+                                                                                                    careSchedule.repotCheck.overdue
+                                                                                                        ? "Due now"
+                                                                                                        : formatGardenDate(
+                                                                                                            careSchedule.repotCheck.dueDate
+                                                                                                        )
+                                                                                                }
+                                                                                            </small>
+
+                                                                                        </div>
+
+                                                                                    )
+                                                                                }
+
+                                                                            </div>
+
+
+                                                                            <div className="indoor-care-quick-actions">
+
+                                                                                <button
+                                                                                    type="button"
+                                                                                    onClick={() =>
+                                                                                        handleIndoorCareAction(
+                                                                                            tracked,
+                                                                                            "rotate"
+                                                                                        )
+                                                                                    }
+                                                                                >
+                                                                                    🔄 Rotated
+                                                                                </button>
+
+
+                                                                                <button
+                                                                                    type="button"
+                                                                                    onClick={() =>
+                                                                                        handleIndoorCareAction(
+                                                                                            tracked,
+                                                                                            "light-check"
+                                                                                        )
+                                                                                    }
+                                                                                >
+                                                                                    💡 Light Checked
+                                                                                </button>
+
+
+                                                                                {
+                                                                                    careSchedule.repotCheck && (
+
+                                                                                        <button
+                                                                                            type="button"
+                                                                                            onClick={() =>
+                                                                                                handleIndoorCareAction(
+                                                                                                    tracked,
+                                                                                                    "repotted"
+                                                                                                )
+                                                                                            }
+                                                                                        >
+                                                                                            🪴 Repotted
+                                                                                        </button>
+
+                                                                                    )
+                                                                                }
+
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                    )
+                                                                }
+
+
+                                                                <div className="indoor-care-actions">
+
+                                                                    <span className="indoor-care-tracked-badge">
+                                                                        ✓ Care tracking active
+                                                                    </span>
+
+
+                                                                    <button
+                                                                        type="button"
+                                                                        className="indoor-care-remove-button"
+                                                                        onClick={() =>
+                                                                            handleRemoveIndoorPlant(
+                                                                                indoorPlant
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        Stop Tracking
+                                                                    </button>
+
+                                                                </div>
+
+                                                            </>
+                                                        )
+                                                        : (
+                                                            <button
+                                                                type="button"
+                                                                className="indoor-care-track-button"
+                                                                onClick={() =>
+                                                                    handleTrackIndoorPlant(
+                                                                        indoorPlant
+                                                                    )
+                                                                }
+                                                            >
+                                                                Track This Plant
+                                                            </button>
+                                                        )
+                                                }
+
+                                            </article>
+                                        );
+
+                                    }
+                                )
+                            }
+
+                        </div>
+
+
+                        {
+                            trackedIndoorPlants.length >
+                            0 && (
+
+                                <div className="indoor-care-note">
+
+                                    <strong>
+                                        📅 Indoor care reminders connected
+                                    </strong>
+
+
+                                    <p>
+                                        Tracked indoor plants now feed moisture checks, plant rotation, light checks, and repot assessments into the Calendar.
+                                    </p>
+
+                                </div>
+
+                            )
+                        }
 
                     </section>
 
@@ -778,7 +1456,7 @@ function Plants({
             ========================= */}
 
             {
-                gardenPlants.length >
+                outdoorGardenPlants.length >
                 0 && (
 
                     <section className="designer-card plant-growth-section">
@@ -815,7 +1493,7 @@ function Plants({
                         <div className="plant-growth-list">
 
                             {
-                                gardenPlants.map(
+                                outdoorGardenPlants.map(
                                     (plant) => {
 
                                         const growthStage =
@@ -1068,7 +1746,7 @@ function Plants({
             ========================= */}
 
             {
-                gardenPlants.length >
+                outdoorGardenPlants.length >
                 0 && (
 
                     <section className="designer-card plant-start-section">
@@ -1101,7 +1779,7 @@ function Plants({
                         <div className="plant-start-list">
 
                             {
-                                gardenPlants.map(
+                                outdoorGardenPlants.map(
                                     (plant) => {
 
                                         const isEditing =

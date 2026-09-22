@@ -7,6 +7,10 @@ import {
 import Header
     from "../components/Header";
 
+
+import GardenAssistant
+    from "../components/GardenAssistant";
+
 import WeatherCard
     from "../components/WeatherCard";
 
@@ -58,6 +62,12 @@ import {
 } from "../data/cropPlanningData";
 
 
+import {
+    indoorPlantCategories,
+    indoorPlantData
+} from "../data/indoorPlantData";
+
+
 /* =========================================================
    SPACE TYPES
 ========================================================= */
@@ -87,6 +97,44 @@ const spaceTypes = [
         id: "other",
         name: "Other",
         icon: "📐"
+    }
+];
+
+
+/* =========================================================
+   INDOOR SPACE TYPES
+========================================================= */
+
+const indoorSpaceTypes = [
+    {
+        id: "windowsill",
+        name: "Windowsill",
+        icon: "🪟"
+    },
+    {
+        id: "countertop",
+        name: "Countertop",
+        icon: "🧱"
+    },
+    {
+        id: "shelf",
+        name: "Shelf",
+        icon: "📚"
+    },
+    {
+        id: "plant-rack",
+        name: "Plant Rack",
+        icon: "🪴"
+    },
+    {
+        id: "floor",
+        name: "Floor / Corner",
+        icon: "🏠"
+    },
+    {
+        id: "grow-tent",
+        name: "Grow Tent",
+        icon: "⛺"
     }
 ];
 
@@ -257,6 +305,7 @@ function clearGeneratedPlan(
     return {
         ...designSpace,
         layout: null,
+        indoorLayout: null,
         plantingPlan: null,
         bedPlantingPlan: null,
         seasonalGuide: null,
@@ -351,6 +400,16 @@ function Home({
         {};
 
 
+    const savedSpaceType =
+        designSpace.spaceType ||
+        "backyard";
+
+
+    const isIndoorSpace =
+        savedSpaceType ===
+        "indoor";
+
+
     /* =====================================================
        STEP 1 — SPACE DRAFT
     ===================================================== */
@@ -385,6 +444,27 @@ function Home({
                 designSpace.length
             )
             : ""
+    );
+
+
+    const [
+        spaceHeight,
+        setSpaceHeight
+    ] = useState(
+        designSpace.height
+            ? String(
+                designSpace.height
+            )
+            : ""
+    );
+
+
+    const [
+        indoorSpaceType,
+        setIndoorSpaceType
+    ] = useState(
+        designSpace.indoorSpaceType ||
+        "shelf"
     );
 
 
@@ -547,11 +627,24 @@ function Home({
         selectedCrops,
         setSelectedCrops
     ] = useState(
-        Array.isArray(
-            designSpace.growGoals
+        (
+            designSpace.spaceType ===
+            "indoor"
         )
-            ? designSpace.growGoals
-            : []
+            ? (
+                Array.isArray(
+                    designSpace.indoorPlantGoals
+                )
+                    ? designSpace.indoorPlantGoals
+                    : []
+            )
+            : (
+                Array.isArray(
+                    designSpace.growGoals
+                )
+                    ? designSpace.growGoals
+                    : []
+            )
     );
 
 
@@ -589,7 +682,19 @@ function Home({
         ) > 0 &&
         Number(
             designSpace.length
-        ) > 0;
+        ) > 0 &&
+        (
+            designSpace.spaceType !==
+                "indoor" ||
+            (
+                Number(
+                    designSpace.height
+                ) > 0 &&
+                Boolean(
+                    designSpace.indoorSpaceType
+                )
+            )
+        );
 
 
     const initialEnvironmentComplete =
@@ -599,8 +704,12 @@ function Home({
         Boolean(
             gardenProfile?.sunlight
         ) &&
-        Boolean(
-            gardenProfile?.hardinessZone
+        (
+            designSpace.spaceType ===
+                "indoor" ||
+            Boolean(
+                gardenProfile?.hardinessZone
+            )
         );
 
 
@@ -617,10 +726,24 @@ function Home({
 
 
     const initialCropsComplete =
-        Array.isArray(
-            designSpace.growGoals
-        ) &&
-        designSpace.growGoals.length > 0;
+        (
+            designSpace.spaceType ===
+            "indoor"
+        )
+            ? (
+                Array.isArray(
+                    designSpace.indoorPlantGoals
+                ) &&
+                designSpace.indoorPlantGoals.length >
+                    0
+            )
+            : (
+                Array.isArray(
+                    designSpace.growGoals
+                ) &&
+                designSpace.growGoals.length >
+                    0
+            );
 
 
     /* =====================================================
@@ -697,7 +820,18 @@ function Home({
         ) > 0 &&
         Number(
             designSpace.length
-        ) > 0;
+        ) > 0 &&
+        (
+            !isIndoorSpace ||
+            (
+                Number(
+                    designSpace.height
+                ) > 0 &&
+                Boolean(
+                    designSpace.indoorSpaceType
+                )
+            )
+        );
 
 
     const environmentComplete =
@@ -707,8 +841,11 @@ function Home({
         Boolean(
             gardenProfile?.sunlight
         ) &&
-        Boolean(
-            gardenProfile?.hardinessZone
+        (
+            isIndoorSpace ||
+            Boolean(
+                gardenProfile?.hardinessZone
+            )
         );
 
 
@@ -725,16 +862,31 @@ function Home({
 
 
     const cropsComplete =
-        Array.isArray(
-            designSpace.growGoals
-        ) &&
-        designSpace.growGoals.length > 0;
+        isIndoorSpace
+            ? (
+                Array.isArray(
+                    designSpace.indoorPlantGoals
+                ) &&
+                designSpace.indoorPlantGoals.length >
+                    0
+            )
+            : (
+                Array.isArray(
+                    designSpace.growGoals
+                ) &&
+                designSpace.growGoals.length >
+                    0
+            );
 
 
     const designComplete =
-        Boolean(
-            designSpace.layout
-        );
+        isIndoorSpace
+            ? Boolean(
+                designSpace.indoorLayout
+            )
+            : Boolean(
+                designSpace.layout
+            );
 
 
     const buildComplete =
@@ -770,8 +922,14 @@ function Home({
         },
         {
             id: "crops",
-            name: "Crops",
-            icon: "🥕",
+            name:
+                isIndoorSpace
+                    ? "Plants"
+                    : "Crops",
+            icon:
+                isIndoorSpace
+                    ? "🪴"
+                    : "🥕",
             complete:
                 cropsComplete
         },
@@ -837,9 +995,25 @@ function Home({
         );
 
 
+    const numericHeight =
+        Number(
+            spaceHeight
+        );
+
+
     const draftSpaceValid =
         numericWidth > 0 &&
-        numericLength > 0;
+        numericLength > 0 &&
+        (
+            spaceType !==
+                "indoor" ||
+            (
+                numericHeight > 0 &&
+                Boolean(
+                    indoorSpaceType
+                )
+            )
+        );
 
 
     const draftNativeArea =
@@ -857,8 +1031,20 @@ function Home({
 
 
     /* =====================================================
-       CROP FILTERING
+       PLANT / CROP FILTERING
     ===================================================== */
+
+    const activePlantCatalog =
+        isIndoorSpace
+            ? indoorPlantData
+            : cropPlanningData;
+
+
+    const activePlantCategories =
+        isIndoorSpace
+            ? indoorPlantCategories
+            : cropCategories;
+
 
     const normalizedCropSearch =
         cropSearch
@@ -867,22 +1053,28 @@ function Home({
 
 
     const filteredCrops =
-        cropPlanningData.filter(
-            (crop) => {
+        activePlantCatalog.filter(
+            (plant) => {
+                const plantCategory =
+                    isIndoorSpace
+                        ? plant.category
+                        : plant.placementGroup;
+
+
                 const matchesCategory =
                     cropCategory === "all" ||
-                    crop.placementGroup ===
+                    plantCategory ===
                     cropCategory;
 
 
                 const matchesSearch =
                     normalizedCropSearch === "" ||
-                    crop.name
+                    plant.name
                         .toLowerCase()
                         .includes(
                             normalizedCropSearch
                         ) ||
-                    crop.id
+                    plant.id
                         .toLowerCase()
                         .includes(
                             normalizedCropSearch
@@ -903,13 +1095,17 @@ function Home({
         if (
             categoryId === "all"
         ) {
-            return cropPlanningData.length;
+            return activePlantCatalog.length;
         }
 
 
-        return cropPlanningData.filter(
-            (crop) =>
-                crop.placementGroup ===
+        return activePlantCatalog.filter(
+            (plant) =>
+                (
+                    isIndoorSpace
+                        ? plant.category
+                        : plant.placementGroup
+                ) ===
                 categoryId
         ).length;
     }
@@ -955,7 +1151,10 @@ function Home({
             !draftSpaceValid
         ) {
             setSpaceMessage(
-                "Enter a valid width and length."
+                spaceType ===
+                    "indoor"
+                    ? "Enter a valid width, depth, height, and indoor space type."
+                    : "Enter a valid width and length."
             );
 
             return;
@@ -963,11 +1162,41 @@ function Home({
 
 
         const spaceChanged =
-            designSpace.spaceType !== spaceType ||
-            Number(designSpace.width) !== numericWidth ||
-            Number(designSpace.length) !== numericLength ||
-            (designSpace.unit || "ft") !== spaceUnit ||
-            (designSpace.surface || "grass") !== spaceSurface;
+            designSpace.spaceType !==
+                spaceType ||
+            Number(
+                designSpace.width
+            ) !==
+                numericWidth ||
+            Number(
+                designSpace.length
+            ) !==
+                numericLength ||
+            (
+                spaceType ===
+                    "indoor" &&
+                (
+                    Number(
+                        designSpace.height
+                    ) !==
+                        numericHeight ||
+                    (
+                        designSpace.indoorSpaceType ||
+                        "shelf"
+                    ) !==
+                        indoorSpaceType
+                )
+            ) ||
+            (
+                designSpace.unit ||
+                "ft"
+            ) !==
+                spaceUnit ||
+            (
+                designSpace.surface ||
+                "grass"
+            ) !==
+                spaceSurface;
 
 
         const nextDesignSpace =
@@ -976,6 +1205,65 @@ function Home({
                     designSpace
                 )
                 : designSpace;
+
+
+        if (
+            designSpace.spaceType !==
+            spaceType
+        ) {
+            setSelectedCrops(
+                spaceType ===
+                    "indoor"
+                    ? (
+                        Array.isArray(
+                            designSpace.indoorPlantGoals
+                        )
+                            ? designSpace.indoorPlantGoals
+                            : []
+                    )
+                    : (
+                        Array.isArray(
+                            designSpace.growGoals
+                        )
+                            ? designSpace.growGoals
+                            : []
+                    )
+            );
+
+            setCropCategory(
+                "all"
+            );
+
+            setCropSearch(
+                ""
+            );
+
+            if (
+                spaceType ===
+                    "indoor" &&
+                ![
+                    "container",
+                    "hydroponic"
+                ].includes(
+                    gardenType
+                )
+            ) {
+                setGardenType(
+                    "container"
+                );
+            }
+
+
+
+            if (
+                spaceType ===
+                "indoor"
+            ) {
+                setSpaceSurface(
+                    "indoor-floor"
+                );
+            }
+        }
 
 
         const updatedProfile = {
@@ -1000,6 +1288,18 @@ function Home({
 
                 length:
                     numericLength,
+
+                height:
+                    spaceType ===
+                        "indoor"
+                        ? numericHeight
+                        : null,
+
+                indoorSpaceType:
+                    spaceType ===
+                        "indoor"
+                        ? indoorSpaceType
+                        : null,
 
                 unit:
                     spaceUnit,
@@ -1048,6 +1348,416 @@ function Home({
 
         setSpaceExpanded(
             true
+        );
+    }
+
+
+    /* =====================================================
+       AI GARDEN ASSISTANT — APPLY DRAFT
+    ===================================================== */
+
+    function applyGardenAssistantProposal(
+        proposal
+    ) {
+        if (
+            !proposal
+        ) {
+            return;
+        }
+
+
+        const assistantIndoor =
+            proposal.environment ===
+            "indoor";
+
+
+        const nextSpaceType =
+            assistantIndoor
+                ? "indoor"
+                : (
+                    proposal.spaceType ||
+                    spaceType
+                );
+
+
+        const nextUnit =
+            proposal.dimensions?.unit ||
+            spaceUnit ||
+            "ft";
+
+
+        const nextWidth =
+            proposal.dimensions?.width ??
+            (
+                spaceWidth
+                    ? Number(
+                        spaceWidth
+                    )
+                    : null
+            );
+
+
+        const nextLength =
+            proposal.dimensions?.length ??
+            (
+                spaceLength
+                    ? Number(
+                        spaceLength
+                    )
+                    : null
+            );
+
+
+        const nextHeight =
+            assistantIndoor
+                ? (
+                    proposal.dimensions?.height ??
+                    (
+                        spaceHeight
+                            ? Number(
+                                spaceHeight
+                            )
+                            : null
+                    )
+                )
+                : null;
+
+
+        const nextIndoorSpaceType =
+            assistantIndoor
+                ? (
+                    proposal.indoorSpaceType ||
+                    indoorSpaceType ||
+                    "shelf"
+                )
+                : null;
+
+
+        const nextSunlight =
+            proposal.sunlight ||
+            sunlight ||
+            (
+                assistantIndoor
+                    ? "partial"
+                    : ""
+            );
+
+
+        const nextGardenType =
+            proposal.gardenType ||
+            (
+                assistantIndoor
+                    ? "container"
+                    : gardenType
+            );
+
+
+        const nextFeatures =
+            Array.isArray(
+                proposal.features
+            ) &&
+            proposal.features.length >
+                0
+                ? proposal.features
+                : selectedFeatures;
+
+
+        const nextSelections =
+            Array.isArray(
+                proposal.selections
+            ) &&
+            proposal.selections.length >
+                0
+                ? proposal.selections
+                : (
+                    assistantIndoor ===
+                    isIndoorSpace
+                        ? selectedCrops
+                        : []
+                );
+
+
+        setSpaceType(
+            nextSpaceType
+        );
+
+
+        setSpaceWidth(
+            nextWidth
+                ? String(
+                    nextWidth
+                )
+                : ""
+        );
+
+
+        setSpaceLength(
+            nextLength
+                ? String(
+                    nextLength
+                )
+                : ""
+        );
+
+
+        setSpaceHeight(
+            nextHeight
+                ? String(
+                    nextHeight
+                )
+                : ""
+        );
+
+
+        setIndoorSpaceType(
+            nextIndoorSpaceType ||
+            "shelf"
+        );
+
+
+        setSpaceUnit(
+            nextUnit
+        );
+
+
+        setSpaceSurface(
+            assistantIndoor
+                ? "indoor-floor"
+                : (
+                    nextSpaceType ===
+                    "patio"
+                        ? "concrete"
+                        : nextSpaceType ===
+                          "balcony"
+                            ? "concrete"
+                            : spaceSurface ||
+                              "grass"
+                )
+        );
+
+
+        setGardenType(
+            nextGardenType
+        );
+
+
+        setSunlight(
+            nextSunlight
+        );
+
+
+        setSelectedFeatures(
+            nextFeatures
+        );
+
+
+        setNoAdditionalFeatures(
+            false
+        );
+
+
+        setSelectedCrops(
+            nextSelections
+        );
+
+
+        setCropCategory(
+            "all"
+        );
+
+
+        setCropSearch(
+            ""
+        );
+
+
+        const currentDesignSpace =
+            gardenProfile?.designSpace ||
+            {};
+
+
+        const nextDesignSpace =
+            clearGeneratedPlan(
+                currentDesignSpace
+            );
+
+
+        const areaSquareFeet =
+            nextWidth &&
+            nextLength
+                ? (
+                    nextUnit ===
+                    "m"
+                        ? nextWidth *
+                          nextLength *
+                          10.7639
+                        : nextWidth *
+                          nextLength
+                )
+                : (
+                    currentDesignSpace.areaSquareFeet ||
+                    null
+                );
+
+
+        const updatedProfile = {
+            ...(gardenProfile || {}),
+
+            type:
+                nextGardenType ||
+                gardenProfile?.type ||
+                "",
+
+            sunlight:
+                nextSunlight ||
+                gardenProfile?.sunlight ||
+                "",
+
+            size:
+                areaSquareFeet
+                    ? getGardenSizeFromArea(
+                        areaSquareFeet
+                    )
+                    : gardenProfile?.size,
+
+            designSpace: {
+                ...nextDesignSpace,
+
+                mode:
+                    "assistant",
+
+                assistantSourceText:
+                    proposal.sourceText,
+
+                assistantUpdatedAt:
+                    new Date()
+                        .toISOString(),
+
+                spaceType:
+                    nextSpaceType,
+
+                width:
+                    nextWidth,
+
+                length:
+                    nextLength,
+
+                height:
+                    assistantIndoor
+                        ? nextHeight
+                        : null,
+
+                indoorSpaceType:
+                    assistantIndoor
+                        ? nextIndoorSpaceType
+                        : null,
+
+                unit:
+                    nextUnit,
+
+                surface:
+                    assistantIndoor
+                        ? "indoor-floor"
+                        : (
+                            nextSpaceType ===
+                            "patio" ||
+                            nextSpaceType ===
+                            "balcony"
+                                ? "concrete"
+                                : (
+                                    currentDesignSpace.surface ||
+                                    "grass"
+                                )
+                        ),
+
+                areaSquareFeet:
+                    areaSquareFeet
+                        ? Number(
+                            areaSquareFeet.toFixed(
+                                2
+                            )
+                        )
+                        : null,
+
+                features:
+                    nextFeatures,
+
+                featuresConfirmed:
+                    false,
+
+                plantSelectionMode:
+                    assistantIndoor
+                        ? "indoor"
+                        : "outdoor",
+
+                ...(
+                    assistantIndoor
+                        ? {
+                            indoorPlantGoals:
+                                nextSelections,
+
+                            growGoals:
+                                []
+                        }
+                        : {
+                            growGoals:
+                                nextSelections,
+
+                            indoorPlantGoals:
+                                []
+                        }
+                )
+            }
+        };
+
+
+        onSaveGardenProfile(
+            updatedProfile
+        );
+
+
+        setSpaceExpanded(
+            true
+        );
+
+
+        setEnvironmentExpanded(
+            false
+        );
+
+
+        setFeaturesExpanded(
+            false
+        );
+
+
+        setCropsExpanded(
+            false
+        );
+
+
+        setSpaceMessage(
+            ""
+        );
+
+
+        setEnvironmentMessage(
+            ""
+        );
+
+
+        setFeaturesMessage(
+            ""
+        );
+
+
+        setCropsMessage(
+            ""
+        );
+
+
+        scrollToStep(
+            spaceStepRef
         );
     }
 
@@ -1171,6 +1881,7 @@ function Home({
 
 
         if (
+            !isIndoorSpace &&
             !hardinessZone
         ) {
             setEnvironmentMessage(
@@ -1453,16 +2164,30 @@ function Home({
             selectedCrops.length === 0
         ) {
             setCropsMessage(
-                "Choose at least one crop you want to grow."
+                isIndoorSpace
+                    ? "Choose at least one indoor plant."
+                    : "Choose at least one crop you want to grow."
             );
 
             return;
         }
 
 
+        const savedSelections =
+            isIndoorSpace
+                ? (
+                    designSpace.indoorPlantGoals ||
+                    []
+                )
+                : (
+                    designSpace.growGoals ||
+                    []
+                );
+
+
         const cropsChanged =
             !sameStringArray(
-                designSpace.growGoals || [],
+                savedSelections,
                 selectedCrops
             );
 
@@ -1481,8 +2206,23 @@ function Home({
             designSpace: {
                 ...nextDesignSpace,
 
-                growGoals:
-                    selectedCrops
+                ...(
+                    isIndoorSpace
+                        ? {
+                            indoorPlantGoals:
+                                selectedCrops,
+
+                            plantSelectionMode:
+                                "indoor"
+                        }
+                        : {
+                            growGoals:
+                                selectedCrops,
+
+                            plantSelectionMode:
+                                "outdoor"
+                        }
+                )
             }
         };
 
@@ -1529,6 +2269,14 @@ function Home({
         );
 
 
+    const savedIndoorSpace =
+        indoorSpaceTypes.find(
+            (item) =>
+                item.id ===
+                designSpace.indoorSpaceType
+        );
+
+
     const savedGardenSystem =
         gardenProfile?.type
             ? gardenPlans[
@@ -1564,23 +2312,37 @@ function Home({
             : [];
 
 
+    const savedSelectionIds =
+        isIndoorSpace
+            ? (
+                Array.isArray(
+                    designSpace.indoorPlantGoals
+                )
+                    ? designSpace.indoorPlantGoals
+                    : []
+            )
+            : (
+                Array.isArray(
+                    designSpace.growGoals
+                )
+                    ? designSpace.growGoals
+                    : []
+            );
+
+
     const savedCropData =
-        Array.isArray(
-            designSpace.growGoals
-        )
-            ? designSpace.growGoals
-                .map(
-                    (cropId) =>
-                        cropPlanningData.find(
-                            (crop) =>
-                                crop.id ===
-                                cropId
-                        )
-                )
-                .filter(
-                    Boolean
-                )
-            : [];
+        savedSelectionIds
+            .map(
+                (plantId) =>
+                    activePlantCatalog.find(
+                        (plant) =>
+                            plant.id ===
+                            plantId
+                    )
+            )
+            .filter(
+                Boolean
+            );
 
 
     /* =====================================================
@@ -1590,6 +2352,13 @@ function Home({
     return (
         <div className="app-container">
             <Header />
+
+
+            <GardenAssistant
+                onApplyProposal={
+                    applyGardenAssistantProposal
+                }
+            />
 
 
             {/* =================================================
@@ -1793,6 +2562,10 @@ function Home({
                                         } × {
                                             designSpace.length
                                         } {
+                                            isIndoorSpace
+                                                ? `× ${designSpace.height} `
+                                                : ""
+                                        }{
                                             designSpace.unit ||
                                             "ft"
                                         } • {
@@ -1803,6 +2576,12 @@ function Home({
                                                 0
                                             )
                                         } sq ft
+                                        {
+                                            isIndoorSpace &&
+                                            savedIndoorSpace
+                                                ? ` • ${savedIndoorSpace.icon} ${savedIndoorSpace.name}`
+                                                : ""
+                                        }
                                     </span>
                                 </div>
 
@@ -1839,11 +2618,20 @@ function Home({
                                                                 ? "home-builder-choice selected"
                                                                 : "home-builder-choice"
                                                         }
-                                                        onClick={() =>
+                                                        onClick={() => {
                                                             setSpaceType(
                                                                 space.id
-                                                            )
-                                                        }
+                                                            );
+
+                                                            if (
+                                                                space.id ===
+                                                                "indoor"
+                                                            ) {
+                                                                setSpaceSurface(
+                                                                    "indoor-floor"
+                                                                );
+                                                            }
+                                                        }}
                                                     >
                                                         <span>
                                                             {
@@ -1862,6 +2650,73 @@ function Home({
                                         }
                                     </div>
                                 </div>
+
+
+                                {
+                                    spaceType ===
+                                    "indoor" && (
+
+                                        <div className="home-builder-field-group">
+
+                                            <h3>
+                                                What kind of indoor space is it?
+                                            </h3>
+
+
+                                            <p className="home-builder-helper-text">
+                                                Choose the surface or structure that will actually hold the plants.
+                                            </p>
+
+
+                                            <div className="home-builder-choice-grid">
+
+                                                {
+                                                    indoorSpaceTypes.map(
+                                                        (space) => (
+
+                                                            <button
+                                                                type="button"
+                                                                key={
+                                                                    space.id
+                                                                }
+                                                                className={
+                                                                    indoorSpaceType ===
+                                                                    space.id
+                                                                        ? "home-builder-choice selected"
+                                                                        : "home-builder-choice"
+                                                                }
+                                                                onClick={() =>
+                                                                    setIndoorSpaceType(
+                                                                        space.id
+                                                                    )
+                                                                }
+                                                            >
+
+                                                                <span>
+                                                                    {
+                                                                        space.icon
+                                                                    }
+                                                                </span>
+
+
+                                                                <strong>
+                                                                    {
+                                                                        space.name
+                                                                    }
+                                                                </strong>
+
+                                                            </button>
+
+                                                        )
+                                                    )
+                                                }
+
+                                            </div>
+
+                                        </div>
+
+                                    )
+                                }
 
 
                                 <div className="home-builder-field-group">
@@ -1919,6 +2774,35 @@ function Home({
                                         </label>
 
 
+                                        {
+                                            spaceType ===
+                                            "indoor" && (
+
+                                                <label>
+                                                    Height
+
+                                                    <input
+                                                        type="number"
+                                                        min="1"
+                                                        step="0.1"
+                                                        inputMode="decimal"
+                                                        value={
+                                                            spaceHeight
+                                                        }
+                                                        onChange={
+                                                            (event) =>
+                                                                setSpaceHeight(
+                                                                    event.target.value
+                                                                )
+                                                        }
+                                                        placeholder="6"
+                                                    />
+                                                </label>
+
+                                            )
+                                        }
+
+
                                         <label>
                                             Unit
 
@@ -1959,6 +2843,11 @@ function Home({
                                                         } × {
                                                             spaceLength
                                                         } {
+                                                            spaceType ===
+                                                            "indoor"
+                                                                ? `× ${spaceHeight} `
+                                                                : ""
+                                                        }{
                                                             spaceUnit
                                                         }
                                                     </strong>
@@ -1985,7 +2874,19 @@ function Home({
 
                                     <div className="home-builder-choice-grid">
                                         {
-                                            surfaceTypes.map(
+                                            surfaceTypes
+                                                .filter(
+                                                    (surface) =>
+                                                        spaceType !==
+                                                            "indoor" ||
+                                                        [
+                                                            "indoor-floor",
+                                                            "other"
+                                                        ].includes(
+                                                            surface.id
+                                                        )
+                                                )
+                                                .map(
                                                 (surface) => (
                                                     <button
                                                         type="button"
@@ -2081,11 +2982,19 @@ function Home({
                         </small>
 
                         <h2>
-                            ☀️ Growing Conditions
+                            {
+                                isIndoorSpace
+                                    ? "💡 Indoor Growing Conditions"
+                                    : "☀️ Growing Conditions"
+                            }
                         </h2>
 
                         <p>
-                            Add sunlight, local growing conditions, and your growing system.
+                            {
+                                isIndoorSpace
+                                    ? "Choose the indoor growing system and available light for this space."
+                                    : "Add sunlight, local growing conditions, and your growing system."
+                            }
                         </p>
                     </div>
                 </div>
@@ -2121,21 +3030,29 @@ function Home({
 
                                         <span>
                                             {
-                                                savedSunlightName
-                                            } • Zone {
-                                                gardenProfile
-                                                    ?.hardinessZone
-                                            }
-                                            {
-                                                designSpace.location
-                                                    ? " • Location ✓"
-                                                    : ""
-                                            }
-                                            {
-                                                designSpace.lastSpringFrost ||
-                                                designSpace.firstFallFrost
-                                                    ? " • Frost data ✓"
-                                                    : ""
+                                                isIndoorSpace
+                                                    ? `${savedSunlightName} • Indoor setup`
+                                                    : (
+                                                        <>
+                                                            {
+                                                                savedSunlightName
+                                                            } • Zone {
+                                                                gardenProfile
+                                                                    ?.hardinessZone
+                                                            }
+                                                            {
+                                                                designSpace.location
+                                                                    ? " • Location ✓"
+                                                                    : ""
+                                                            }
+                                                            {
+                                                                designSpace.lastSpringFrost ||
+                                                                designSpace.firstFallFrost
+                                                                    ? " • Frost data ✓"
+                                                                    : ""
+                                                            }
+                                                        </>
+                                                    )
                                             }
                                         </span>
                                     </div>
@@ -2162,7 +3079,18 @@ function Home({
                                             {
                                                 Object.entries(
                                                     gardenPlans
-                                                ).map(
+                                                )
+                                                    .filter(
+                                                        ([key]) =>
+                                                            !isIndoorSpace ||
+                                                            [
+                                                                "container",
+                                                                "hydroponic"
+                                                            ].includes(
+                                                                key
+                                                            )
+                                                    )
+                                                    .map(
                                                     ([
                                                         key,
                                                         garden
@@ -2205,7 +3133,11 @@ function Home({
 
                                     <div className="home-builder-field-group">
                                         <h3>
-                                            Daily Sunlight
+                                            {
+                                                isIndoorSpace
+                                                    ? "Available Light"
+                                                    : "Daily Sunlight"
+                                            }
                                         </h3>
 
                                         <div className="home-builder-choice-grid">
@@ -2259,6 +3191,9 @@ function Home({
                                     </div>
 
 
+                                    {
+                                        !isIndoorSpace && (
+                                            <>
                                     {/* =========================
                                         AUTOMATIC LOCAL DATA
                                     ========================= */}
@@ -2430,6 +3365,9 @@ function Home({
                                             </label>
                                         </div>
                                     </div>
+                                            </>
+                                        )
+                                    }
 
 
                                     {
@@ -2567,7 +3505,20 @@ function Home({
 
                                         <div className="home-feature-grid">
                                             {
-                                                gardenFeatureOptions.map(
+                                                gardenFeatureOptions
+                                                    .filter(
+                                                        (feature) =>
+                                                            !isIndoorSpace ||
+                                                            [
+                                                                "containers",
+                                                                "vertical-growing",
+                                                                "irrigation",
+                                                                "hydroponics"
+                                                            ].includes(
+                                                                feature.id
+                                                            )
+                                                    )
+                                                    .map(
                                                     (feature) => {
                                                         const selected =
                                                             selectedFeatures.includes(
@@ -2781,11 +3732,19 @@ function Home({
                         </small>
 
                         <h2>
-                            🥕 Choose Crops
+                            {
+                                isIndoorSpace
+                                    ? "🪴 Choose Indoor Plants"
+                                    : "🥕 Choose Crops"
+                            }
                         </h2>
 
                         <p>
-                            Choose what you want your garden designed to grow.
+                            {
+                                isIndoorSpace
+                                    ? "Choose the houseplants, herbs, or indoor edibles you want this space designed around."
+                                    : "Choose what you want your garden designed to grow."
+                            }
                         </p>
                     </div>
                 </div>
@@ -2814,8 +3773,16 @@ function Home({
                                                 savedCropData.length
                                             } {
                                                 savedCropData.length === 1
-                                                    ? "crop selected"
-                                                    : "crops selected"
+                                                    ? (
+                                                        isIndoorSpace
+                                                            ? "plant selected"
+                                                            : "crop selected"
+                                                    )
+                                                    : (
+                                                        isIndoorSpace
+                                                            ? "plants selected"
+                                                            : "crops selected"
+                                                    )
                                             }
                                         </strong>
 
@@ -2863,13 +3830,25 @@ function Home({
                                                     selectedCrops.length
                                                 } {
                                                     selectedCrops.length === 1
-                                                        ? "crop selected"
-                                                        : "crops selected"
+                                                        ? (
+                                                            isIndoorSpace
+                                                                ? "plant selected"
+                                                                : "crop selected"
+                                                        )
+                                                        : (
+                                                            isIndoorSpace
+                                                                ? "plants selected"
+                                                                : "crops selected"
+                                                        )
                                                 }
                                             </strong>
 
                                             <small>
-                                                Choose everything you would like the design to consider.
+                                                {
+                                                    isIndoorSpace
+                                                        ? "Choose every indoor plant you want the future room layout to consider."
+                                                        : "Choose everything you would like the design to consider."
+                                                }
                                             </small>
                                         </div>
 
@@ -2895,14 +3874,18 @@ function Home({
                                                         event.target.value
                                                     )
                                             }
-                                            placeholder="Search tomatoes, broccoli, potatoes..."
+                                            placeholder={
+                                                isIndoorSpace
+                                                    ? "Search pothos, snake plant, basil..."
+                                                    : "Search tomatoes, broccoli, potatoes..."
+                                            }
                                         />
                                     </label>
 
 
                                     <div className="home-crop-category-scroll">
                                         {
-                                            cropCategories.map(
+                                            activePlantCategories.map(
                                                 (category) => (
                                                     <button
                                                         type="button"
@@ -2995,26 +3978,54 @@ function Home({
                                                                                 }
                                                                             </strong>
 
-                                                                            <small>
-                                                                                {
-                                                                                    crop.seasonType ===
-                                                                                    "warm"
-                                                                                        ? "Warm season"
-                                                                                        : "Cool season"
-                                                                                }
-                                                                            </small>
+                                                                            {
+                                                                                isIndoorSpace
+                                                                                    ? (
+                                                                                        <>
+                                                                                            <small>
+                                                                                                {
+                                                                                                    crop.lightLabel
+                                                                                                }
+                                                                                            </small>
 
-                                                                            <small>
-                                                                                {
-                                                                                    crop.preferredStartMethod ===
-                                                                                    "transplant"
-                                                                                        ? "Transplant"
-                                                                                        : crop.preferredStartMethod ===
-                                                                                          "seed"
-                                                                                            ? "Start from seed"
-                                                                                            : "Direct sow"
-                                                                                }
-                                                                            </small>
+                                                                                            <small>
+                                                                                                {
+                                                                                                    crop.potDiameterInches
+                                                                                                }
+
+                                                                                                {" in pot • "}
+
+                                                                                                {
+                                                                                                    crop.difficulty
+                                                                                                }
+                                                                                            </small>
+                                                                                        </>
+                                                                                    )
+                                                                                    : (
+                                                                                        <>
+                                                                                            <small>
+                                                                                                {
+                                                                                                    crop.seasonType ===
+                                                                                                    "warm"
+                                                                                                        ? "Warm season"
+                                                                                                        : "Cool season"
+                                                                                                }
+                                                                                            </small>
+
+                                                                                            <small>
+                                                                                                {
+                                                                                                    crop.preferredStartMethod ===
+                                                                                                    "transplant"
+                                                                                                        ? "Transplant"
+                                                                                                        : crop.preferredStartMethod ===
+                                                                                                          "seed"
+                                                                                                            ? "Start from seed"
+                                                                                                            : "Direct sow"
+                                                                                                }
+                                                                                            </small>
+                                                                                        </>
+                                                                                    )
+                                                                            }
                                                                         </div>
 
                                                                         <span className="home-crop-check">
@@ -3038,11 +4049,19 @@ function Home({
                                                     </span>
 
                                                     <strong>
-                                                        No crops found
+                                                        {
+                                                            isIndoorSpace
+                                                                ? "No indoor plants found"
+                                                                : "No crops found"
+                                                        }
                                                     </strong>
 
                                                     <p>
-                                                        Try another search or crop category.
+                                                        {
+                                                            isIndoorSpace
+                                                                ? "Try another search or indoor plant category."
+                                                                : "Try another search or crop category."
+                                                        }
                                                     </p>
                                                 </div>
                                             )
@@ -3053,7 +4072,11 @@ function Home({
                                         selectedCrops.length > 0 && (
                                             <div className="home-selected-crops">
                                                 <strong>
-                                                    Your Garden Crops
+                                                    {
+                                                        isIndoorSpace
+                                                            ? "Your Indoor Plants"
+                                                            : "Your Garden Crops"
+                                                    }
                                                 </strong>
 
                                                 <div>
@@ -3061,7 +4084,7 @@ function Home({
                                                         selectedCrops.map(
                                                             (cropId) => {
                                                                 const crop =
-                                                                    cropPlanningData.find(
+                                                                    activePlantCatalog.find(
                                                                         (item) =>
                                                                             item.id ===
                                                                             cropId
@@ -3125,7 +4148,11 @@ function Home({
                                             saveCropsStep
                                         }
                                     >
-                                        Save Crops & Continue →
+                                        {
+                                            isIndoorSpace
+                                                ? "Save Plants & Continue →"
+                                                : "Save Crops & Continue →"
+                                        }
                                     </button>
                                 </>
                             )

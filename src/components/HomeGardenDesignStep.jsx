@@ -23,6 +23,15 @@ import {
 } from "../utils/seasonalPlantingPlanner";
 
 
+import {
+    generateIndoorLayout
+} from "../utils/indoorLayoutEngine";
+
+
+import IndoorLayoutPreview
+    from "./IndoorLayoutPreview";
+
+
 /* =========================================================
    DESIGN GOALS
 ========================================================= */
@@ -97,6 +106,16 @@ function HomeGardenDesignStep({
     };
 
 
+    const indoorLayout =
+        designSpace.indoorLayout ||
+        null;
+
+
+    const isIndoorSpace =
+        designSpace.spaceType ===
+        "indoor";
+
+
     /* =====================================================
        STATE
     ===================================================== */
@@ -156,7 +175,9 @@ function HomeGardenDesignStep({
         expanded,
         setExpanded
     ] = useState(
-        !designSpace.layout
+        isIndoorSpace
+            ? !indoorLayout
+            : !designSpace.layout
     );
 
 
@@ -177,6 +198,14 @@ function HomeGardenDesignStep({
             designSpace.features
         )
             ? designSpace.features
+            : [];
+
+
+    const selectedIndoorPlants =
+        Array.isArray(
+            designSpace.indoorPlantGoals
+        )
+            ? designSpace.indoorPlantGoals
             : [];
 
 
@@ -485,6 +514,535 @@ function HomeGardenDesignStep({
             150
         );
 
+    }
+
+
+    /* =====================================================
+       GENERATE INDOOR DESIGN
+    ===================================================== */
+
+    function generateIndoorDesign() {
+
+        const width =
+            Number(
+                designSpace.width
+            );
+
+
+        const length =
+            Number(
+                designSpace.length
+            );
+
+
+        const height =
+            Number(
+                designSpace.height
+            );
+
+
+        if (
+            width <= 0 ||
+            length <= 0 ||
+            height <= 0
+        ) {
+            setMessage(
+                "Indoor width, depth, and height are required. Return to Step 1."
+            );
+
+            return;
+        }
+
+
+        if (
+            selectedIndoorPlants.length ===
+            0
+        ) {
+            setMessage(
+                "Choose at least one indoor plant before generating the layout."
+            );
+
+            return;
+        }
+
+
+        const nextIndoorLayout =
+            generateIndoorLayout({
+
+                width,
+
+                length,
+
+                height,
+
+                unit:
+                    designSpace.unit ||
+                    "ft",
+
+                indoorSpaceType:
+                    designSpace.indoorSpaceType ||
+                    "shelf",
+
+                selectedPlants:
+                    selectedIndoorPlants,
+
+                sunlight:
+                    gardenProfile?.sunlight ||
+                    "partial"
+
+            });
+
+
+        if (
+            !nextIndoorLayout
+        ) {
+            setMessage(
+                "We could not generate an indoor layout from these settings."
+            );
+
+            return;
+        }
+
+
+        const updatedProfile = {
+
+            ...gardenProfile,
+
+            designSpace: {
+
+                ...designSpace,
+
+                indoorLayout:
+                    nextIndoorLayout,
+
+                /*
+                    Indoor layouts intentionally stay
+                    separate from the outdoor layout
+                    engine.
+                */
+
+                layout:
+                    null,
+
+                plantingPlan:
+                    null,
+
+                bedPlantingPlan:
+                    null,
+
+                seasonalGuide:
+                    null,
+
+                materials:
+                    null,
+
+                buildPlan:
+                    null,
+
+                isActive:
+                    false,
+
+                activatedAt:
+                    null
+
+            }
+
+        };
+
+
+        onSaveGardenProfile(
+            updatedProfile
+        );
+
+
+        setMessage(
+            ""
+        );
+
+
+        setExpanded(
+            false
+        );
+
+
+        window.setTimeout(
+            () => {
+
+                const prefersReducedMotion =
+                    window.matchMedia?.(
+                        "(prefers-reduced-motion: reduce)"
+                    )?.matches;
+
+
+                document
+                    .getElementById(
+                        "home-builder-step-build"
+                    )
+                    ?.scrollIntoView({
+
+                        behavior:
+                            prefersReducedMotion
+                                ? "auto"
+                                : "smooth",
+
+                        block:
+                            "start"
+
+                    });
+
+            },
+            150
+        );
+
+    }
+
+
+    /* =====================================================
+       INDOOR DESIGN
+    ===================================================== */
+
+    if (
+        isIndoorSpace
+    ) {
+
+        if (
+            selectedIndoorPlants.length ===
+            0
+        ) {
+            return (
+                <section
+                    id="home-builder-step-design"
+                    className="home-builder-step upcoming"
+                >
+
+                    <div className="home-builder-step-heading">
+
+                        <span className="home-builder-step-number">
+                            5
+                        </span>
+
+
+                        <div>
+
+                            <small>
+                                STEP 5
+                            </small>
+
+
+                            <h2>
+                                🏠 Generate Indoor Layout
+                            </h2>
+
+
+                            <p>
+                                Build a layout around mature plant size, pot footprint, vertical clearance, and light.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div className="home-builder-locked">
+
+                        <span>
+                            🔒
+                        </span>
+
+
+                        <p>
+                            Choose at least one indoor plant in Step 4 first.
+                        </p>
+
+                    </div>
+
+                </section>
+            );
+        }
+
+
+        if (
+            indoorLayout &&
+            !expanded
+        ) {
+            return (
+                <section
+                    id="home-builder-step-design"
+                    className="home-builder-step complete collapsed"
+                >
+
+                    <div className="home-builder-step-heading">
+
+                        <span className="home-builder-step-number">
+                            ✓
+                        </span>
+
+
+                        <div>
+
+                            <small>
+                                STEP 5
+                            </small>
+
+
+                            <h2>
+                                🏠 Indoor Layout
+                            </h2>
+
+
+                            <p>
+                                Your indoor plant placement and light zones have been generated.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div className="home-builder-collapsed-content">
+
+                        <div className="home-builder-summary">
+
+                            <strong>
+                                {
+                                    indoorLayout.icon
+                                } {
+                                    indoorLayout.indoorSpaceName
+                                }
+                            </strong>
+
+
+                            <span>
+                                {
+                                    indoorLayout.stats
+                                        ?.placedPlantCount ||
+                                    0
+                                } of {
+                                    indoorLayout.stats
+                                        ?.selectedPlantCount ||
+                                    0
+                                } plants placed • {
+                                    indoorLayout.stats
+                                        ?.growLightZoneCount ||
+                                    0
+                                } light zone{
+                                    indoorLayout.stats
+                                        ?.growLightZoneCount ===
+                                    1
+                                        ? ""
+                                        : "s"
+                                }
+                            </span>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            className="home-builder-edit-button"
+                            onClick={() =>
+                                setExpanded(
+                                    true
+                                )
+                            }
+                        >
+                            View
+                        </button>
+
+                    </div>
+
+                </section>
+            );
+        }
+
+
+        return (
+            <section
+                id="home-builder-step-design"
+                className="home-builder-step active"
+            >
+
+                <div className="home-builder-step-heading">
+
+                    <span className="home-builder-step-number">
+                        {
+                            indoorLayout
+                                ? "✓"
+                                : "5"
+                        }
+                    </span>
+
+
+                    <div>
+
+                        <small>
+                            STEP 5
+                        </small>
+
+
+                        <h2>
+                            🏠 Generate Indoor Layout
+                        </h2>
+
+
+                        <p>
+                            Fit your selected plants into the real indoor space using mature plant size and available height.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div className="home-builder-build-stack">
+
+                    <div className="home-indoor-design-input-summary">
+
+                        <div>
+
+                            <strong>
+                                {
+                                    designSpace.indoorSpaceType ===
+                                    "windowsill"
+                                        ? "🪟 Windowsill"
+                                        : designSpace.indoorSpaceType ===
+                                          "countertop"
+                                            ? "🧱 Countertop"
+                                            : designSpace.indoorSpaceType ===
+                                              "plant-rack"
+                                                ? "🪴 Plant Rack"
+                                                : designSpace.indoorSpaceType ===
+                                                  "floor"
+                                                    ? "🏠 Floor / Corner"
+                                                    : designSpace.indoorSpaceType ===
+                                                      "grow-tent"
+                                                        ? "⛺ Grow Tent"
+                                                        : "📚 Shelf"
+                                }
+                            </strong>
+
+                            <small>
+                                {
+                                    designSpace.width
+                                } × {
+                                    designSpace.length
+                                } × {
+                                    designSpace.height
+                                } {
+                                    designSpace.unit ||
+                                    "ft"
+                                }
+                            </small>
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+                                🪴 {
+                                    selectedIndoorPlants.length
+                                }
+                            </strong>
+
+                            <small>
+                                Selected plant{
+                                    selectedIndoorPlants.length ===
+                                    1
+                                        ? ""
+                                        : "s"
+                                }
+                            </small>
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+                                💡 {
+                                    gardenProfile?.sunlight ===
+                                    "full"
+                                        ? "Bright"
+                                        : gardenProfile?.sunlight ===
+                                          "partial"
+                                            ? "Medium"
+                                            : "Low"
+                                }
+                            </strong>
+
+                            <small>
+                                Available light
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    {
+                        indoorLayout && (
+
+                            <IndoorLayoutPreview
+                                indoorLayout={
+                                    indoorLayout
+                                }
+                            />
+
+                        )
+                    }
+
+
+                    {
+                        message && (
+
+                            <p className="home-builder-error">
+                                {
+                                    message
+                                }
+                            </p>
+
+                        )
+                    }
+
+
+                    <button
+                        type="button"
+                        className="home-builder-continue-button"
+                        onClick={
+                            generateIndoorDesign
+                        }
+                    >
+                        {
+                            indoorLayout
+                                ? "Regenerate Indoor Layout"
+                                : "Generate Indoor Layout →"
+                        }
+                    </button>
+
+
+                    {
+                        indoorLayout && (
+
+                            <button
+                                type="button"
+                                className="home-builder-secondary-button"
+                                onClick={() =>
+                                    setExpanded(
+                                        false
+                                    )
+                                }
+                            >
+                                Keep This Layout
+                            </button>
+
+                        )
+                    }
+
+                </div>
+
+            </section>
+        );
     }
 
 

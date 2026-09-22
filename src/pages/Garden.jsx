@@ -39,6 +39,18 @@ import SeasonalPlantingGuide
     from "../components/SeasonalPlantingGuide";
 
 
+import IndoorLayoutPreview
+    from "../components/IndoorLayoutPreview";
+
+
+import IndoorMaterials
+    from "../components/IndoorMaterials";
+
+
+import IndoorSetupPlan
+    from "../components/IndoorSetupPlan";
+
+
 import {
     gardenPlans,
     sunlightNames
@@ -48,6 +60,11 @@ import {
 import {
     cropPlanningData
 } from "../data/cropPlanningData";
+
+
+import {
+    indoorPlantData
+} from "../data/indoorPlantData";
 
 
 import {
@@ -204,6 +221,7 @@ const gardenFeatures = [
 function Garden({
     gardenProfile,
     onSaveGardenProfile,
+    onActivateGarden,
     ownedSupplies = [],
     onOpenSupplies
 }) {
@@ -295,6 +313,16 @@ function Garden({
         null;
 
 
+    const isIndoorSpace =
+        designSpace.spaceType ===
+        "indoor";
+
+
+    const indoorLayout =
+        designSpace.indoorLayout ||
+        null;
+
+
     const plantingPlan =
         designSpace.plantingPlan ||
         null;
@@ -333,6 +361,14 @@ function Garden({
             designSpace.growGoals
         )
             ? designSpace.growGoals
+            : [];
+
+
+    const selectedIndoorPlants =
+        Array.isArray(
+            designSpace.indoorPlantGoals
+        )
+            ? designSpace.indoorPlantGoals
             : [];
 
 
@@ -398,14 +434,33 @@ function Garden({
             );
 
 
+    const selectedIndoorPlantData =
+        selectedIndoorPlants
+            .map(
+                (plantId) =>
+                    indoorPlantData.find(
+                        (plant) =>
+                            plant.id ===
+                            plantId
+                    )
+            )
+            .filter(
+                Boolean
+            );
+
+
     /* =====================================================
        COMPLETION
     ===================================================== */
 
     const designReady =
-        Boolean(
-            layout
-        );
+        isIndoorSpace
+            ? Boolean(
+                indoorLayout
+            )
+            : Boolean(
+                layout
+            );
 
 
     const buildReady =
@@ -468,13 +523,29 @@ function Garden({
     function activateGarden() {
 
         if (
-            !gardenReady ||
-            typeof onSaveGardenProfile !==
-                "function"
+            !gardenReady
         ) {
+            return;
+        }
+
+
+        if (
+            typeof onActivateGarden ===
+            "function"
+        ) {
+            onActivateGarden(
+                gardenProfile
+            );
 
             return;
+        }
 
+
+        if (
+            typeof onSaveGardenProfile !==
+            "function"
+        ) {
+            return;
         }
 
 
@@ -597,13 +668,20 @@ function Garden({
             <header className="app-header">
 
                 <h1>
-                    🪴 My Garden Plan
+                    {
+                        isIndoorSpace
+                            ? "🏠 My Indoor Garden Plan"
+                            : "🪴 My Garden Plan"
+                    }
                 </h1>
 
 
                 <p>
-                    Your design, planting plan,
-                    materials, and instructions.
+                    {
+                        isIndoorSpace
+                            ? "Your indoor plant layout, materials, lighting, and setup instructions."
+                            : "Your design, planting plan, materials, and instructions."
+                    }
                 </p>
 
             </header>
@@ -647,9 +725,17 @@ function Garden({
 
                         {
                             gardenActive
-                                ? "Garden Active"
+                                ? (
+                                    isIndoorSpace
+                                        ? "Indoor Garden Active"
+                                        : "Garden Active"
+                                )
                                 : gardenReady
-                                    ? "Garden Plan Ready"
+                                    ? (
+                                        isIndoorSpace
+                                            ? "Indoor Garden Plan Ready"
+                                            : "Garden Plan Ready"
+                                    )
                                     : "Garden Plan In Progress"
                         }
 
@@ -660,9 +746,17 @@ function Garden({
 
                         {
                             gardenActive
-                                ? "Your plan is active. Use Plants, Calendar, and Journal to manage the garden as you grow."
+                                ? (
+                                    isIndoorSpace
+                                        ? "Indoor care tracking is active. Use Plants, Calendar, and Journal to manage watering checks, light, rotation, repotting, and observations."
+                                        : "Your plan is active. Use Plants, Calendar, and Journal to manage the garden as you grow."
+                                )
                                 : gardenReady
-                                    ? "Your design and build plan are complete. Activate the garden when you are ready to start growing."
+                                    ? (
+                                        isIndoorSpace
+                                            ? "Your indoor layout, materials, grow-light guidance, and setup instructions are complete."
+                                            : "Your design and build plan are complete. Activate the garden when you are ready to start growing."
+                                    )
                                     : "Return to Home to finish the remaining Garden Builder steps."
                         }
 
@@ -700,22 +794,36 @@ function Garden({
                         <div className="garden-activation-heading">
 
                             <span className="garden-activation-icon">
-                                <Icon
-                                    name="sprout"
-                                    size={24}
-                                />
+                                {
+                                    isIndoorSpace
+                                        ? "🏠"
+                                        : (
+                                            <Icon
+                                                name="sprout"
+                                                size={24}
+                                            />
+                                        )
+                                }
                             </span>
 
 
                             <div>
 
                                 <h2>
-                                    Ready to Start Growing?
+                                    {
+                                        isIndoorSpace
+                                            ? "Ready to Start Indoor Care?"
+                                            : "Ready to Start Growing?"
+                                    }
                                 </h2>
 
 
                                 <p>
-                                    Activate this plan to make it your working garden. Your planting schedule will stay on the Calendar, and you can begin adding the plants you actually sow or transplant.
+                                    {
+                                        isIndoorSpace
+                                            ? "Activate this indoor plan to automatically start care tracking for the plants you selected. Moisture checks, light checks, rotation, and repot assessments will begin appearing in Plants and Calendar."
+                                            : "Activate this plan to make it your working garden. Your planting schedule will stay on the Calendar, and you can begin adding the plants you actually sow or transplant."
+                                    }
                                 </p>
 
                             </div>
@@ -734,13 +842,21 @@ function Garden({
                                 size={18}
                             />
 
-                            Activate My Garden
+                            {
+                                isIndoorSpace
+                                    ? "Start Indoor Care"
+                                    : "Activate My Garden"
+                            }
 
                         </button>
 
 
                         <small className="garden-activation-note">
-                            Activating the plan does not automatically mark every crop as planted. Add a crop to My Plants when you actually start it so watering and harvest tracking remain accurate.
+                            {
+                                isIndoorSpace
+                                    ? "Your selected indoor plants will be added to My Plants automatically. You can stop tracking any plant individually later."
+                                    : "Activating the plan does not automatically mark every crop as planted. Add a crop to My Plants when you actually start it so watering and harvest tracking remain accurate."
+                            }
                         </small>
 
                     </section>
@@ -767,12 +883,20 @@ function Garden({
                             <div>
 
                                 <h2>
-                                    Your Garden Is Active
+                                    {
+                                        isIndoorSpace
+                                            ? "Your Indoor Garden Is Active"
+                                            : "Your Garden Is Active"
+                                    }
                                 </h2>
 
 
                                 <p>
-                                    Move from planning into day-to-day growing. Add plants when they are started, follow your local planting calendar, and record progress in the journal.
+                                    {
+                                        isIndoorSpace
+                                            ? "Your selected indoor plants are now enrolled in care tracking. Use Plants for care actions, Calendar for reminders, and Journal for observations."
+                                            : "Move from planning into day-to-day growing. Add plants when they are started, follow your local planting calendar, and record progress in the journal."
+                                    }
                                 </p>
 
                             </div>
@@ -799,11 +923,19 @@ function Garden({
 
                                 <span>
                                     <strong>
-                                        Add Plants
+                                        {
+                                            isIndoorSpace
+                                                ? "Plant Care"
+                                                : "Add Plants"
+                                        }
                                     </strong>
 
                                     <small>
-                                        Track what you actually plant
+                                        {
+                                            isIndoorSpace
+                                                ? "Manage tracked indoor plants"
+                                                : "Track what you actually plant"
+                                        }
                                     </small>
                                 </span>
 
@@ -822,11 +954,19 @@ function Garden({
 
                                 <span>
                                     <strong>
-                                        Calendar
+                                        {
+                                            isIndoorSpace
+                                                ? "Care Calendar"
+                                                : "Calendar"
+                                        }
                                     </strong>
 
                                     <small>
-                                        Follow planting and harvest dates
+                                        {
+                                            isIndoorSpace
+                                                ? "Follow watering and care reminders"
+                                                : "Follow planting and harvest dates"
+                                        }
                                     </small>
                                 </span>
 
@@ -849,7 +989,11 @@ function Garden({
                                     </strong>
 
                                     <small>
-                                        Record growth and observations
+                                        {
+                                            isIndoorSpace
+                                                ? "Record plant health and observations"
+                                                : "Record growth and observations"
+                                        }
                                     </small>
                                 </span>
 
@@ -1022,18 +1166,30 @@ function Garden({
                     <div>
 
                         <h2>
-                            Garden Overview
+                            {
+                                isIndoorSpace
+                                    ? "Indoor Garden Overview"
+                                    : "Garden Overview"
+                            }
                         </h2>
 
 
                         <p>
 
                             {
-                                selectedDesignGoal?.name ||
-                                "Garden Design"
+                                isIndoorSpace
+                                    ? (
+                                        indoorLayout?.indoorSpaceName ||
+                                        "Indoor Plant Space"
+                                    )
+                                    : (
+                                        selectedDesignGoal?.name ||
+                                        "Garden Design"
+                                    )
                             }
 
                             {
+                                !isIndoorSpace &&
                                 selectedGarden?.name
                                     ? ` • ${selectedGarden.name}`
                                     : ""
@@ -1071,6 +1227,12 @@ function Garden({
 
                             {
                                 designSpace.length
+                            }
+
+                            {
+                                isIndoorSpace
+                                    ? ` × ${designSpace.height}`
+                                    : ""
                             }
 
                             {" "}
@@ -1142,22 +1304,34 @@ function Garden({
                     <div>
 
                         <span>
-                            🌡️
+                            {
+                                isIndoorSpace
+                                    ? "💡"
+                                    : "🌡️"
+                            }
                         </span>
 
 
                         <strong>
-                            Growing Zone
+                            {
+                                isIndoorSpace
+                                    ? "Light Zones"
+                                    : "Growing Zone"
+                            }
                         </strong>
 
 
                         <small>
 
                             {
-                                gardenProfile
-                                    .hardinessZone
-                                    ? `Zone ${gardenProfile.hardinessZone}`
-                                    : "Not set"
+                                isIndoorSpace
+                                    ? `${indoorLayout?.stats?.growLightZoneCount || 0} supplemental`
+                                    : (
+                                        gardenProfile
+                                            .hardinessZone
+                                            ? `Zone ${gardenProfile.hardinessZone}`
+                                            : "Not set"
+                                    )
                             }
 
                         </small>
@@ -1226,6 +1400,7 @@ function Garden({
 
 
                 {
+                    !isIndoorSpace &&
                     designSpace.location && (
 
                         <div className="garden-plan-location-status">
@@ -1351,21 +1526,39 @@ function Garden({
                     <div>
 
                         <h2>
-                            Planned Crops
+                            {
+                                isIndoorSpace
+                                    ? "Selected Indoor Plants"
+                                    : "Planned Crops"
+                            }
                         </h2>
 
 
                         <p>
 
                             {
-                                selectedCropData.length
+                                isIndoorSpace
+                                    ? selectedIndoorPlantData.length
+                                    : selectedCropData.length
                             }
 
                             {
-                                selectedCropData.length ===
+                                (
+                                    isIndoorSpace
+                                        ? selectedIndoorPlantData.length
+                                        : selectedCropData.length
+                                ) ===
                                 1
-                                    ? " crop"
-                                    : " crops"
+                                    ? (
+                                        isIndoorSpace
+                                            ? " plant"
+                                            : " crop"
+                                    )
+                                    : (
+                                        isIndoorSpace
+                                            ? " plants"
+                                            : " crops"
+                                    )
                             }
 
                             {" included in this design."}
@@ -1378,26 +1571,33 @@ function Garden({
 
 
                 {
-                    selectedCropData.length > 0
+                    (
+                        isIndoorSpace
+                            ? selectedIndoorPlantData
+                            : selectedCropData
+                    ).length > 0
                         ? (
 
                             <div className="garden-plan-crop-grid">
 
                                 {
-                                    selectedCropData.map(
-                                        (crop) => (
+                                    (
+                                        isIndoorSpace
+                                            ? selectedIndoorPlantData
+                                            : selectedCropData
+                                    ).map(
+                                        (plant) => (
 
                                             <div
                                                 key={
-                                                    crop.id
+                                                    plant.id
                                                 }
-
                                                 className="garden-plan-crop"
                                             >
 
                                                 <span>
                                                     {
-                                                        crop.icon
+                                                        plant.icon
                                                     }
                                                 </span>
 
@@ -1406,20 +1606,25 @@ function Garden({
 
                                                     <strong>
                                                         {
-                                                            crop.name
+                                                            plant.name
                                                         }
                                                     </strong>
 
 
                                                     <small>
-
                                                         {
-                                                            crop.seasonType ===
-                                                            "warm"
-                                                                ? "Warm season"
-                                                                : "Cool season"
+                                                            isIndoorSpace
+                                                                ? (
+                                                                    plant.lightLabel ||
+                                                                    "Indoor plant"
+                                                                )
+                                                                : (
+                                                                    plant.seasonType ===
+                                                                    "warm"
+                                                                        ? "Warm season"
+                                                                        : "Cool season"
+                                                                )
                                                         }
-
                                                     </small>
 
                                                 </div>
@@ -1436,7 +1641,11 @@ function Garden({
                         : (
 
                             <p className="garden-plan-muted">
-                                No crops selected yet.
+                                {
+                                    isIndoorSpace
+                                        ? "No indoor plants selected yet."
+                                        : "No crops selected yet."
+                                }
                             </p>
 
                         )
@@ -1450,6 +1659,119 @@ function Garden({
             ================================================= */}
 
             {
+                isIndoorSpace &&
+                indoorLayout && (
+
+                    <section className="garden-plan-section">
+
+                        <div className="garden-plan-section-heading">
+
+                            <span>
+                                📊
+                            </span>
+
+
+                            <div>
+
+                                <h2>
+                                    Indoor Design Summary
+                                </h2>
+
+
+                                <p>
+                                    Key numbers from the generated indoor layout.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div className="garden-plan-stat-grid">
+
+                            <div>
+
+                                <strong>
+                                    {
+                                        indoorLayout.stats
+                                            ?.placedPlantCount ||
+                                        0
+                                    }
+                                </strong>
+
+
+                                <small>
+                                    Plants Placed
+                                </small>
+
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    {
+                                        indoorLayout.stats
+                                            ?.levelCount ||
+                                        1
+                                    }
+                                </strong>
+
+
+                                <small>
+                                    Levels / Zones
+                                </small>
+
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    {
+                                        indoorLayout.stats
+                                            ?.growLightZoneCount ||
+                                        0
+                                    }
+                                </strong>
+
+
+                                <small>
+                                    Grow Lights
+                                </small>
+
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    {
+                                        indoorLayout.stats
+                                            ?.estimatedSurfaceUsePercent ||
+                                        0
+                                    }
+
+                                    %
+                                </strong>
+
+
+                                <small>
+                                    Surface Use
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                )
+            }
+
+
+            {
+                !isIndoorSpace &&
                 layout && (
 
                     <section className="garden-plan-section">
@@ -1561,6 +1883,20 @@ function Garden({
             ================================================= */}
 
             {
+                isIndoorSpace &&
+                indoorLayout && (
+
+                    <IndoorLayoutPreview
+                        indoorLayout={
+                            indoorLayout
+                        }
+                    />
+
+                )
+            }
+
+
+            {
                 layout && (
 
                     <GardenLayoutPreview
@@ -1584,6 +1920,7 @@ function Garden({
             ================================================= */}
 
             {
+                !isIndoorSpace &&
                 plantingPlan && (
 
                     <GardenPlantingPlan
@@ -1603,6 +1940,7 @@ function Garden({
             ================================================= */}
 
             {
+                !isIndoorSpace &&
                 bedPlantingPlan && (
 
                     <GardenBedPlantingMap
@@ -1622,6 +1960,7 @@ function Garden({
             ================================================= */}
 
             {
+                !isIndoorSpace &&
                 bedPlantingPlan
                     ?.pairingGuide && (
 
@@ -1642,6 +1981,7 @@ function Garden({
             ================================================= */}
 
             {
+                !isIndoorSpace &&
                 seasonalGuide && (
 
                     <SeasonalPlantingGuide
@@ -1661,16 +2001,23 @@ function Garden({
             ================================================= */}
 
             {
-                materialPlan && (
-
-                    <GardenMaterials
-
-                        materialPlan={
-                            materialPlan
-                        }
-
-                    />
-
+                materialPlan &&
+                (
+                    isIndoorSpace
+                        ? (
+                            <IndoorMaterials
+                                materialPlan={
+                                    materialPlan
+                                }
+                            />
+                        )
+                        : (
+                            <GardenMaterials
+                                materialPlan={
+                                    materialPlan
+                                }
+                            />
+                        )
                 )
             }
 
@@ -1680,16 +2027,23 @@ function Garden({
             ================================================= */}
 
             {
-                buildPlan && (
-
-                    <GardenBuildPlan
-
-                        buildPlan={
-                            buildPlan
-                        }
-
-                    />
-
+                buildPlan &&
+                (
+                    isIndoorSpace
+                        ? (
+                            <IndoorSetupPlan
+                                setupPlan={
+                                    buildPlan
+                                }
+                            />
+                        )
+                        : (
+                            <GardenBuildPlan
+                                buildPlan={
+                                    buildPlan
+                                }
+                            />
+                        )
                 )
             }
 
@@ -1758,15 +2112,20 @@ function Garden({
                         <div>
 
                             <strong>
-                                Your Garden Is Ready to Build
+                                {
+                                    isIndoorSpace
+                                        ? "Your Indoor Garden Is Ready to Set Up"
+                                        : "Your Garden Is Ready to Build"
+                                }
                             </strong>
 
 
                             <p>
-                                Use this page as your
-                                reference while preparing
-                                the space and building
-                                the garden.
+                                {
+                                    isIndoorSpace
+                                        ? "Use this page as your reference while arranging the space, preparing containers, installing lighting, and placing plants."
+                                        : "Use this page as your reference while preparing the space and building the garden."
+                                }
                             </p>
 
                         </div>
