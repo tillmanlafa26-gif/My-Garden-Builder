@@ -1,4 +1,5 @@
 import {
+    useEffect,
     useRef,
     useState
 } from "react";
@@ -246,6 +247,31 @@ function GardenSpacePhoto({
     const analysis =
         previewPhoto?.analysis ||
         null;
+
+
+    useEffect(
+        () => {
+            function handleOpenCamera() {
+                cameraInputRef.current
+                    ?.click();
+            }
+
+
+            window.addEventListener(
+                "garden-open-camera",
+                handleOpenCamera
+            );
+
+
+            return () => {
+                window.removeEventListener(
+                    "garden-open-camera",
+                    handleOpenCamera
+                );
+            };
+        },
+        []
+    );
 
 
     function savePreview(

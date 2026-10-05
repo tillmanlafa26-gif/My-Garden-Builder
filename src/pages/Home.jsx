@@ -799,6 +799,12 @@ function Home({
        SCROLL TARGETS
     ===================================================== */
 
+    const spaceStepRef =
+        useRef(
+            null
+        );
+
+
     const environmentStepRef =
         useRef(
             null
@@ -1121,6 +1127,46 @@ function Home({
                 ) ===
                 categoryId
         ).length;
+    }
+
+
+    /* =====================================================
+       HOME DASHBOARD ACTIONS
+    ===================================================== */
+
+    function openSpaceBuilder(
+        mode = "dimensions"
+    ) {
+        setSpaceMessage(
+            ""
+        );
+
+
+        setSpaceExpanded(
+            true
+        );
+
+
+        scrollToStep(
+            spaceStepRef
+        );
+
+
+        if (
+            mode ===
+            "camera"
+        ) {
+            window.setTimeout(
+                () => {
+                    window.dispatchEvent(
+                        new CustomEvent(
+                            "garden-open-camera"
+                        )
+                    );
+                },
+                500
+            );
+        }
     }
 
 
@@ -2372,15 +2418,40 @@ function Home({
     ===================================================== */
 
     return (
-        <div className="app-container">
+        <div className="app-container leafy-app home-page">
             <Header />
 
 
-            <GardenAssistant
-                onApplyProposal={
-                    applyGardenAssistantProposal
-                }
-            />
+            <WeatherCard />
+
+
+            <section className="leafy-home-welcome">
+
+                <div>
+
+                    <span className="leafy-home-kicker">
+                        🌿 START YOUR GARDEN
+                    </span>
+
+
+                    <h2>
+                        Build Your Garden
+                    </h2>
+
+
+                    <p>
+                        A few simple steps from your real space to a garden plan you can actually build.
+                    </p>
+
+                </div>
+
+
+                <span className="leafy-home-welcome-art" aria-hidden="true">
+                    <span>🪴</span>
+                    <small>GROW</small>
+                </span>
+
+            </section>
 
 
             {/* =================================================
@@ -2396,14 +2467,14 @@ function Home({
 
                         <div>
                             <h2>
-                                Build My Garden
+                                Your Garden Journey
                             </h2>
 
                             <p>
                                 {
                                     gardenComplete
-                                        ? "Your garden plan is ready."
-                                        : "Build your garden one step at a time."
+                                        ? "Your garden plan is ready to bring to life."
+                                        : "Follow the path from space setup to build day."
                                 }
                             </p>
                         </div>
@@ -2525,11 +2596,256 @@ function Home({
             </section>
 
 
+            <div className="leafy-home-action-intro">
+                <span>Choose how you want to begin</span>
+                <small>Measure it yourself or use a photo from your phone.</small>
+            </div>
+
+
+            <section className="leafy-home-action-grid">
+
+                <button
+                    type="button"
+                    className="leafy-home-action leafy-home-action-primary"
+                    onClick={() =>
+                        openSpaceBuilder(
+                            "dimensions"
+                        )
+                    }
+                >
+
+                    <span className="leafy-home-action-icon">
+                        📏
+                    </span>
+
+
+                    <div>
+
+                        <small>
+                            START MANUALLY
+                        </small>
+
+
+                        <strong>
+                            Enter Dimensions
+                        </strong>
+
+
+                        <p>
+                            Add the size of your real growing space.
+                        </p>
+
+                    </div>
+
+
+                    <span className="leafy-home-action-arrow">
+                        →
+                    </span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    className="leafy-home-action leafy-home-action-camera"
+                    onClick={() =>
+                        openSpaceBuilder(
+                            "camera"
+                        )
+                    }
+                >
+
+                    <span className="leafy-home-action-icon">
+                        📷
+                    </span>
+
+
+                    <div>
+
+                        <small>
+                            PHOTO MODE
+                        </small>
+
+
+                        <strong>
+                            Use Your Camera
+                        </strong>
+
+
+                        <p>
+                            Capture and map the space from your phone.
+                        </p>
+
+                    </div>
+
+
+                    <span className="leafy-home-action-arrow">
+                        →
+                    </span>
+
+                </button>
+
+            </section>
+
+
+            <SustainabilityScore
+                score={
+                    sustainabilityScore
+                }
+            />
+
+
+            <section className="leafy-inspiration-section">
+
+                <div className="leafy-section-heading">
+
+                    <div>
+
+                        <span className="leafy-section-icon">
+                            🌼
+                        </span>
+
+
+                        <div>
+
+                            <small>
+                                GET INSPIRED
+                            </small>
+
+
+                            <h2>
+                                Inspiration for Your Garden
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <span className="leafy-section-more">
+                        Pick a direction
+                    </span>
+
+                </div>
+
+
+                <div className="leafy-inspiration-grid">
+
+                    <button
+                        type="button"
+                        className="leafy-inspiration-card inspiration-small-space"
+                        onClick={() =>
+                            openSpaceBuilder(
+                                "dimensions"
+                            )
+                        }
+                    >
+
+                        <span>
+                            🪴
+                        </span>
+
+
+                        <div>
+
+                            <strong>
+                                Small Space,
+                                Big Impact
+                            </strong>
+
+
+                            <small>
+                                Containers • Vertical
+                            </small>
+
+                        </div>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        className="leafy-inspiration-card inspiration-pollinator"
+                        onClick={() =>
+                            openSpaceBuilder(
+                                "dimensions"
+                            )
+                        }
+                    >
+
+                        <span>
+                            🦋
+                        </span>
+
+
+                        <div>
+
+                            <strong>
+                                Pollinator
+                                Paradise
+                            </strong>
+
+
+                            <small>
+                                Flowers • Herbs
+                            </small>
+
+                        </div>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        className="leafy-inspiration-card inspiration-edible"
+                        onClick={() =>
+                            openSpaceBuilder(
+                                "dimensions"
+                            )
+                        }
+                    >
+
+                        <span>
+                            🍅
+                        </span>
+
+
+                        <div>
+
+                            <strong>
+                                Edible
+                                Everywhere
+                            </strong>
+
+
+                            <small>
+                                Food • Herbs
+                            </small>
+
+                        </div>
+
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <GardenAssistant
+                onApplyProposal={
+                    applyGardenAssistantProposal
+                }
+            />
+
+
             {/* =================================================
                 STEP 1 — DEFINE SPACE
             ================================================= */}
 
             <section
+                ref={
+                    spaceStepRef
+                }
                 className={
                     spaceComplete &&
                     !spaceExpanded
@@ -4265,9 +4581,6 @@ function Home({
                 CURRENT GARDEN DASHBOARD
             ================================================= */}
 
-            <WeatherCard />
-
-
             <GardenProfile
                 gardenProfile={
                     gardenProfile
@@ -4320,13 +4633,6 @@ function Home({
                 }
                 onToggle={
                     onToggleTask
-                }
-            />
-
-
-            <SustainabilityScore
-                score={
-                    sustainabilityScore
                 }
             />
 

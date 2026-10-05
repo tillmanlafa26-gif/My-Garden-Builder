@@ -32,6 +32,10 @@ import IndoorLayoutPreview
     from "./IndoorLayoutPreview";
 
 
+import GardenLayoutPreview
+    from "./GardenLayoutPreview";
+
+
 /* =========================================================
    DESIGN GOALS
 ========================================================= */
@@ -150,6 +154,15 @@ function HomeGardenDesignStep({
 
 
     const [
+        bedMaterial,
+        setBedMaterial
+    ] = useState(
+        savedBuildOptions.bedMaterial ||
+        "cedar"
+    );
+
+
+    const [
         walkwayWidth,
         setWalkwayWidth
     ] = useState(
@@ -259,6 +272,8 @@ function HomeGardenDesignStep({
                 Number(
                     bedWidth
                 ) || 4,
+
+            bedMaterial,
 
             walkwayWidth:
                 Number(
@@ -859,7 +874,7 @@ function HomeGardenDesignStep({
         return (
             <section
                 id="home-builder-step-design"
-                className="home-builder-step active"
+                className="home-builder-step active leafy-designer-step"
             >
 
                 <div className="home-builder-step-heading">
@@ -888,6 +903,129 @@ function HomeGardenDesignStep({
                         <p>
                             Fit your selected plants into the real indoor space using mature plant size and available height.
                         </p>
+
+                    </div>
+
+                </div>
+
+
+                <div className="leafy-designer-shell">
+
+                    <div className="leafy-designer-topbar">
+
+                        <div>
+
+                            <small>
+                                GARDEN DESIGNER
+                            </small>
+
+
+                            <strong>
+                                Shape the plan around your real space
+                            </strong>
+
+                        </div>
+
+
+                        <span className="leafy-designer-status">
+                            🏠 Indoor
+                        </span>
+
+                    </div>
+
+
+                    <div className="leafy-designer-mode-switch" aria-label="Current garden environment">
+
+                        <span>
+                            🌿 Outdoor Space
+                        </span>
+
+
+                        <span className="active">
+                            🏠 Indoor Space
+                        </span>
+
+                    </div>
+
+
+                    <div className="leafy-designer-context-card">
+
+                        {
+                            designSpace.spacePhoto?.dataUrl
+                                ? (
+                                    <img
+                                        src={
+                                            designSpace.spacePhoto.dataUrl
+                                        }
+                                        alt="Saved indoor garden space"
+                                    />
+                                )
+                                : (
+                                    <div className="leafy-designer-context-placeholder">
+                                        📷
+                                    </div>
+                                )
+                        }
+
+
+                        <div className="leafy-designer-context-copy">
+
+                            <small>
+                                YOUR SPACE
+                            </small>
+
+
+                            <strong>
+                                {
+                                    designSpace.indoorSpaceType ===
+                                    "windowsill"
+                                        ? "Windowsill"
+                                        : designSpace.indoorSpaceType ===
+                                          "countertop"
+                                            ? "Countertop"
+                                            : designSpace.indoorSpaceType ===
+                                              "plant-rack"
+                                                ? "Plant Rack"
+                                                : designSpace.indoorSpaceType ===
+                                                  "floor"
+                                                    ? "Floor / Corner"
+                                                    : designSpace.indoorSpaceType ===
+                                                      "grow-tent"
+                                                        ? "Grow Tent"
+                                                        : "Shelf"
+                                }
+                            </strong>
+
+
+                            <span>
+                                {
+                                    designSpace.width
+                                } × {
+                                    designSpace.length
+                                } × {
+                                    designSpace.height
+                                } {
+                                    designSpace.unit ||
+                                    "ft"
+                                }
+                            </span>
+
+                        </div>
+
+
+                        <div className="leafy-designer-context-stat">
+
+                            <strong>
+                                {
+                                    selectedIndoorPlants.length
+                                }
+                            </strong>
+
+                            <span>
+                                plants
+                            </span>
+
+                        </div>
 
                     </div>
 
@@ -1008,15 +1146,15 @@ function HomeGardenDesignStep({
 
                     <button
                         type="button"
-                        className="home-builder-continue-button"
+                        className="home-builder-continue-button leafy-designer-primary-button"
                         onClick={
                             generateIndoorDesign
                         }
                     >
                         {
                             indoorLayout
-                                ? "Regenerate Indoor Layout"
-                                : "Generate Indoor Layout →"
+                                ? "Refresh This Indoor Design"
+                                : "Create My Indoor Design →"
                         }
                     </button>
 
@@ -1240,7 +1378,10 @@ function HomeGardenDesignStep({
 
     return (
 
-        <section className="home-builder-step active">
+        <section
+            id="home-builder-step-design"
+            className="home-builder-step active leafy-designer-step"
+        >
 
             <div className="home-builder-step-heading">
 
@@ -1278,11 +1419,151 @@ function HomeGardenDesignStep({
             </div>
 
 
-            <div className="home-builder-field-group">
+            <div className="leafy-designer-shell">
 
-                <h3>
-                    What should the design prioritize?
-                </h3>
+                <div className="leafy-designer-topbar">
+
+                    <div>
+
+                        <small>
+                            GARDEN DESIGNER
+                        </small>
+
+
+                        <strong>
+                            Build a layout that fits before you buy materials
+                        </strong>
+
+                    </div>
+
+
+                    <span className="leafy-designer-status">
+                        🌿 Outdoor
+                    </span>
+
+                </div>
+
+
+                <div className="leafy-designer-mode-switch" aria-label="Current garden environment">
+
+                    <span className="active">
+                        🌿 Outdoor Space
+                    </span>
+
+
+                    <span>
+                        🏠 Indoor Space
+                    </span>
+
+                </div>
+
+
+                <div className="leafy-designer-context-card">
+
+                    {
+                        designSpace.spacePhoto?.dataUrl
+                            ? (
+                                <img
+                                    src={
+                                        designSpace.spacePhoto.dataUrl
+                                    }
+                                    alt="Saved outdoor garden space"
+                                />
+                            )
+                            : (
+                                <div className="leafy-designer-context-placeholder">
+                                    📷
+                                </div>
+                            )
+                    }
+
+
+                    <div className="leafy-designer-context-copy">
+
+                        <small>
+                            YOUR SPACE
+                        </small>
+
+
+                        <strong>
+                            {
+                                designSpace.spaceType ===
+                                "backyard"
+                                    ? "Backyard"
+                                    : designSpace.spaceType ===
+                                      "patio"
+                                        ? "Patio"
+                                        : designSpace.spaceType ===
+                                          "balcony"
+                                            ? "Balcony"
+                                            : "Outdoor Space"
+                            }
+                        </strong>
+
+
+                        <span>
+                            {
+                                designSpace.width
+                            } × {
+                                designSpace.length
+                            } {
+                                designSpace.unit ||
+                                "ft"
+                            } • {
+                                selectedFeatures.length
+                            } feature{
+                                selectedFeatures.length ===
+                                1
+                                    ? ""
+                                    : "s"
+                            }
+                        </span>
+
+                    </div>
+
+
+                    <div className="leafy-designer-context-stat">
+
+                        <strong>
+                            {
+                                selectedCrops.length
+                            }
+                        </strong>
+
+                        <span>
+                            crops
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div className="home-builder-field-group leafy-designer-priority-section">
+
+                <div className="leafy-designer-subheading">
+
+                    <div>
+
+                        <small>
+                            LAYOUT STYLE
+                        </small>
+
+
+                        <h3>
+                            What should the design prioritize?
+                        </h3>
+
+                    </div>
+
+
+                    <span>
+                        Tap to switch
+                    </span>
+
+                </div>
 
 
                 <div className="design-goal-grid">
@@ -1365,7 +1646,145 @@ function HomeGardenDesignStep({
                         </p>
 
 
-                        <div className="build-options-grid">
+                        <div className="leafy-designer-material-section">
+
+                            <div className="leafy-designer-subheading compact">
+
+                                <div>
+
+                                    <small>
+                                        BED MATERIAL
+                                    </small>
+
+
+                                    <h3>
+                                        Choose the build style
+                                    </h3>
+
+                                </div>
+
+                            </div>
+
+
+                            <div className="leafy-designer-material-grid">
+
+                                {
+                                    [
+                                        {
+                                            id:
+                                                "cedar",
+                                            icon:
+                                                "🪵",
+                                            name:
+                                                "Cedar",
+                                            detail:
+                                                "Natural"
+                                        },
+                                        {
+                                            id:
+                                                "composite",
+                                            icon:
+                                                "♻️",
+                                            name:
+                                                "Composite",
+                                            detail:
+                                                "Low upkeep"
+                                        },
+                                        {
+                                            id:
+                                                "metal",
+                                            icon:
+                                                "◻️",
+                                            name:
+                                                "Metal",
+                                            detail:
+                                                "Kit build"
+                                        },
+                                        {
+                                            id:
+                                                "pressure-treated",
+                                            icon:
+                                                "🔨",
+                                            name:
+                                                "Treated",
+                                            detail:
+                                                "Practical"
+                                        }
+                                    ].map(
+                                        (material) => (
+
+                                            <button
+                                                type="button"
+                                                key={
+                                                    material.id
+                                                }
+                                                className={
+                                                    bedMaterial ===
+                                                    material.id
+                                                        ? "leafy-material-card selected"
+                                                        : "leafy-material-card"
+                                                }
+                                                aria-pressed={
+                                                    bedMaterial ===
+                                                    material.id
+                                                }
+                                                onClick={() =>
+                                                    setBedMaterial(
+                                                        material.id
+                                                    )
+                                                }
+                                            >
+
+                                                <span>
+                                                    {
+                                                        material.icon
+                                                    }
+                                                </span>
+
+
+                                                <strong>
+                                                    {
+                                                        material.name
+                                                    }
+                                                </strong>
+
+
+                                                <small>
+                                                    {
+                                                        material.detail
+                                                    }
+                                                </small>
+
+                                            </button>
+
+                                        )
+                                    )
+                                }
+
+                            </div>
+
+                        </div>
+
+
+                        <div className="leafy-designer-subheading compact">
+
+                            <div>
+
+                                <small>
+                                    DIMENSIONS & PATHS
+                                </small>
+
+
+                                <h3>
+                                    Tune the layout
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+
+                        <div className="build-options-grid leafy-build-options-grid">
 
                             <label>
 
@@ -1615,6 +2034,137 @@ function HomeGardenDesignStep({
 
 
             {
+                designSpace.layout && (
+
+                    <div className="leafy-designer-live-preview">
+
+                        <div className="leafy-designer-subheading">
+
+                            <div>
+
+                                <small>
+                                    LIVE DESIGN PREVIEW
+                                </small>
+
+
+                                <h3>
+                                    Your Garden Layout
+                                </h3>
+
+                            </div>
+
+
+                            <span>
+                                Zoom • inspect • adjust
+                            </span>
+
+                        </div>
+
+
+                        <GardenLayoutPreview
+                            layout={
+                                designSpace.layout
+                            }
+                            bedPlantingPlan={
+                                designSpace.bedPlantingPlan
+                            }
+                        />
+
+
+                        {
+                            designSpace.bedPlantingPlan
+                                ?.pairingGuide && (
+
+                                <div className="leafy-designer-pairing-strip">
+
+                                    <div>
+
+                                        <span>
+                                            🤝
+                                        </span>
+
+
+                                        <strong>
+                                            {
+                                                designSpace
+                                                    .bedPlantingPlan
+                                                    .pairingGuide
+                                                    .stats
+                                                    ?.positivePairings ||
+                                                0
+                                            }
+                                        </strong>
+
+
+                                        <small>
+                                            good pairings
+                                        </small>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <span>
+                                            🔁
+                                        </span>
+
+
+                                        <strong>
+                                            {
+                                                designSpace
+                                                    .bedPlantingPlan
+                                                    .pairingGuide
+                                                    .stats
+                                                    ?.successionPairings ||
+                                                0
+                                            }
+                                        </strong>
+
+
+                                        <small>
+                                            succession fits
+                                        </small>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <span>
+                                            🌿
+                                        </span>
+
+
+                                        <strong>
+                                            {
+                                                designSpace
+                                                    .bedPlantingPlan
+                                                    .pairingGuide
+                                                    .safeUtilizationPercent ||
+                                                85
+                                            }%
+                                        </strong>
+
+
+                                        <small>
+                                            safe bed load
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            )
+                        }
+
+                    </div>
+
+                )
+            }
+
+
+            {
                 (
                     lastSpringFrost ||
                     firstFallFrost
@@ -1664,7 +2214,7 @@ function HomeGardenDesignStep({
             <button
                 type="button"
 
-                className="home-builder-continue-button"
+                className="home-builder-continue-button leafy-designer-primary-button"
 
                 onClick={
                     generateDesign
@@ -1673,8 +2223,8 @@ function HomeGardenDesignStep({
 
                 {
                     designSpace.layout
-                        ? "Regenerate My Garden →"
-                        : "Generate My Garden →"
+                        ? "Refresh This Design →"
+                        : "Create My Garden Design →"
                 }
 
             </button>

@@ -7649,3 +7649,4652 @@ html.dark-mode .garden-photo-plan-calibration span {
     }
 }
 
+/* =========================================================
+   LEAFY UI REWORK — PHASE 1
+   Home dashboard + shared visual system
+========================================================= */
+
+:root {
+    --leafy-forest: #1f5b35;
+    --leafy-forest-deep: #15462a;
+    --leafy-leaf: #4caf50;
+    --leafy-sage: #6b8f3e;
+    --leafy-olive: #75894c;
+    --leafy-cream: #f8f6ec;
+    --leafy-cream-2: #f1efdf;
+    --leafy-sand: #e8ddc8;
+    --leafy-earth: #8d6e63;
+    --leafy-ink: #1f3325;
+    --leafy-muted: #6e786c;
+    --leafy-line: rgba(60, 97, 61, 0.15);
+    --leafy-card: rgba(255, 255, 250, 0.94);
+    --leafy-shadow:
+        0 10px 28px rgba(45, 73, 45, 0.10),
+        0 2px 8px rgba(45, 73, 45, 0.05);
+}
+
+
+html {
+    background:
+        radial-gradient(
+            circle at 10% 0%,
+            rgba(99, 151, 80, 0.10),
+            transparent 30%
+        ),
+        var(--leafy-cream);
+}
+
+
+body {
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    background:
+        radial-gradient(
+            circle at 100% 5%,
+            rgba(76, 175, 80, 0.10),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 0% 45%,
+            rgba(107, 143, 62, 0.07),
+            transparent 30%
+        ),
+        var(--leafy-cream);
+
+    color: var(--leafy-ink);
+}
+
+
+h1,
+h2,
+h3,
+.designer-card h2,
+.garden-plan-section h2 {
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    letter-spacing: -0.02em;
+}
+
+
+.app-container.leafy-app {
+    position: relative;
+
+    max-width: 540px;
+
+    padding:
+        max(
+            14px,
+            env(safe-area-inset-top)
+        )
+        15px
+        calc(
+            112px +
+            env(safe-area-inset-bottom)
+        );
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            ellipse at 110% 2%,
+            rgba(76, 175, 80, 0.12),
+            transparent 24%
+        ),
+        radial-gradient(
+            ellipse at -10% 26%,
+            rgba(107, 143, 62, 0.08),
+            transparent 24%
+        ),
+        var(--leafy-cream);
+}
+
+
+.app-container.leafy-app::before,
+.app-container.leafy-app::after {
+    position: absolute;
+    z-index: 0;
+
+    width: 160px;
+    height: 78px;
+
+    border-radius:
+        100%
+        0
+        100%
+        0;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(47, 124, 55, 0.13),
+            rgba(107, 143, 62, 0.03)
+        );
+
+    content: "";
+
+    pointer-events: none;
+}
+
+
+.app-container.leafy-app::before {
+    top: 85px;
+    left: -112px;
+
+    transform: rotate(38deg);
+}
+
+
+.app-container.leafy-app::after {
+    top: 310px;
+    right: -122px;
+
+    transform: rotate(-42deg);
+}
+
+
+.app-container.leafy-app > * {
+    position: relative;
+    z-index: 1;
+}
+
+
+/* =========================
+   BRAND HEADER
+========================= */
+
+.leafy-brand-header {
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns:
+        52px
+        minmax(0, 1fr)
+        38px;
+
+    align-items: center;
+    gap: 10px;
+
+    min-height: 92px;
+
+    padding:
+        14px
+        8px
+        12px;
+
+    overflow: visible;
+
+    text-align: left;
+}
+
+
+.leafy-brand-header .app-brand-mark {
+    width: 50px;
+    height: 50px;
+
+    border: 0;
+    border-radius: 18px 18px 18px 5px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #e8f3e2,
+            #cfe6c7
+        );
+
+    color: var(--leafy-forest);
+
+    box-shadow:
+        inset 0 0 0 1px rgba(40, 89, 47, 0.10),
+        0 8px 20px rgba(40, 89, 47, 0.10);
+}
+
+
+.app-brand-copy {
+    display: flex;
+
+    min-width: 0;
+
+    flex-direction: column;
+    gap: 2px;
+}
+
+
+.app-brand-kicker {
+    color: var(--leafy-sage);
+
+    font-size: 0.50rem;
+    font-weight: 900;
+
+    letter-spacing: 0.18em;
+}
+
+
+.leafy-brand-header h1 {
+    margin: 0;
+
+    color: #153622;
+
+    font-size: clamp(1.45rem, 5vw, 2rem);
+    line-height: 1;
+}
+
+
+.leafy-brand-header p {
+    margin: 4px 0 0;
+
+    color: #6f786c;
+
+    font-size: 0.60rem;
+
+    font-style: italic;
+}
+
+
+.app-brand-leaf-chip {
+    display: grid;
+
+    width: 36px;
+    height: 36px;
+
+    place-items: center;
+
+    border: 1px solid rgba(61, 104, 63, 0.12);
+    border-radius: 50%;
+
+    background: rgba(255, 255, 250, 0.75);
+
+    box-shadow: 0 6px 18px rgba(36, 72, 40, 0.08);
+}
+
+
+.leafy-brand-decoration {
+    position: absolute;
+
+    z-index: -1;
+
+    width: 66px;
+    height: 24px;
+
+    border-radius:
+        100%
+        0
+        100%
+        0;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(62, 132, 62, 0.22),
+            rgba(108, 150, 73, 0.05)
+        );
+
+    pointer-events: none;
+}
+
+
+.leafy-brand-decoration-left {
+    top: 1px;
+    left: -34px;
+
+    transform: rotate(28deg);
+}
+
+
+.leafy-brand-decoration-right {
+    top: 5px;
+    right: -25px;
+
+    transform: rotate(-38deg);
+}
+
+
+/* =========================
+   SHARED CARDS
+========================= */
+
+.weather-card,
+.home-build-progress,
+.home-builder-step,
+.garden-assistant-card,
+.score-card,
+.garden-profile-card,
+.my-garden-plants,
+.watering-section,
+.watering-card,
+.add-task-section,
+.tasks-section,
+.designer-card,
+.garden-plan-overview,
+.garden-plan-section,
+.garden-plan-status,
+.garden-activation-card,
+.calendar-card,
+.calendar-form-card,
+.journal-form-card,
+.journal-entry-card {
+    border:
+        1px solid
+        var(--leafy-line);
+
+    border-radius: 18px;
+
+    background:
+        var(--leafy-card);
+
+    box-shadow:
+        var(--leafy-shadow);
+}
+
+
+/* =========================
+   WEATHER HERO
+========================= */
+
+.home-page .weather-card {
+    position: relative;
+
+    margin-bottom: 14px;
+    padding: 17px;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        rgba(
+            240,
+            247,
+            232,
+            0.17
+        );
+
+    background:
+        radial-gradient(
+            circle at 82% 10%,
+            rgba(255, 225, 101, 0.24),
+            transparent 18%
+        ),
+        linear-gradient(
+            135deg,
+            #1b5833,
+            #2f7642 62%,
+            #5d8b47
+        );
+
+    color: #ffffff;
+
+    box-shadow:
+        0 12px 28px rgba(33, 80, 43, 0.20);
+}
+
+
+.home-page .weather-card::before,
+.home-page .weather-card::after {
+    position: absolute;
+
+    width: 120px;
+    height: 54px;
+
+    border-radius:
+        100%
+        0
+        100%
+        0;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.07
+        );
+
+    content: "";
+
+    pointer-events: none;
+}
+
+
+.home-page .weather-card::before {
+    top: -15px;
+    right: -55px;
+
+    transform: rotate(-28deg);
+}
+
+
+.home-page .weather-card::after {
+    bottom: -25px;
+    left: -62px;
+
+    transform: rotate(35deg);
+}
+
+
+.home-page .weather-card h2,
+.home-page .weather-card strong,
+.home-page .weather-card p,
+.home-page .weather-card small,
+.home-page .weather-card a,
+.home-page .weather-card .weather-title .ui-icon {
+    color: #ffffff;
+}
+
+
+.home-page .weather-details > div,
+.home-page .weather-forecast-day,
+.home-page .garden-weather-message {
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.11
+        );
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+}
+
+
+.home-page .weather-refresh-button {
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.13
+        );
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.10
+        );
+
+    color: #ffffff;
+}
+
+
+/* =========================
+   HOME INTRO
+========================= */
+
+.leafy-home-welcome {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        62px;
+
+    align-items: center;
+    gap: 10px;
+
+    margin:
+        6px
+        1px
+        12px;
+
+    padding:
+        8px
+        5px;
+}
+
+
+.leafy-home-kicker {
+    display: inline-block;
+
+    margin-bottom: 3px;
+
+    color: var(--leafy-sage);
+
+    font-size: 0.48rem;
+    font-weight: 900;
+
+    letter-spacing: 0.10em;
+}
+
+
+.leafy-home-welcome h2 {
+    margin: 0;
+
+    color: #173c26;
+
+    font-size: 1.45rem;
+}
+
+
+.leafy-home-welcome p {
+    margin: 5px 0 0;
+
+    color: #697568;
+
+    font-size: 0.61rem;
+    line-height: 1.5;
+}
+
+
+.leafy-home-welcome-art {
+    display: grid;
+
+    width: 58px;
+    height: 58px;
+
+    place-items: center;
+
+    border-radius:
+        50%
+        50%
+        50%
+        16px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #eff6e9,
+            #d9e9cf
+        );
+
+    font-size: 1.7rem;
+
+    box-shadow:
+        0 8px 20px rgba(45, 85, 49, 0.11);
+}
+
+
+/* =========================
+   BUILD PROGRESS
+========================= */
+
+.home-page .home-build-progress {
+    margin-bottom: 10px;
+
+    padding: 16px;
+
+    border-color:
+        rgba(
+            73,
+            114,
+            67,
+            0.16
+        );
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 250, 0.98),
+            rgba(248, 247, 236, 0.97)
+        );
+}
+
+
+.home-build-progress-header h2 {
+    color: #173d26;
+
+    font-size: 1rem;
+}
+
+
+.home-build-progress-header p {
+    color: #758073;
+
+    font-size: 0.56rem;
+}
+
+
+.home-build-progress-percent {
+    display: grid;
+
+    min-width: 48px;
+    height: 34px;
+
+    place-items: center;
+
+    border-radius: 999px;
+
+    background: #e4efdd;
+    color: var(--leafy-forest);
+
+    font-size: 0.60rem;
+    font-weight: 900;
+}
+
+
+.home-build-progress-bar {
+    height: 8px;
+
+    background: #e4e7d8;
+}
+
+
+.home-build-progress-fill {
+    background:
+        linear-gradient(
+            90deg,
+            var(--leafy-sage),
+            var(--leafy-leaf)
+        );
+}
+
+
+.home-build-stage {
+    border:
+        1px solid
+        rgba(
+            81,
+            117,
+            77,
+            0.10
+        );
+
+    background:
+        rgba(
+            250,
+            250,
+            244,
+            0.9
+        );
+}
+
+
+.home-build-stage.active {
+    border-color:
+        rgba(
+            65,
+            113,
+            73,
+            0.32
+        );
+
+    background: #edf5e8;
+}
+
+
+.home-build-stage.complete {
+    background:
+        linear-gradient(
+            145deg,
+            #f2f7ed,
+            #e4f0df
+        );
+}
+
+
+/* =========================
+   HOME QUICK ACTIONS
+========================= */
+
+.leafy-home-action-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 9px;
+
+    margin-bottom: 12px;
+}
+
+
+.leafy-home-action {
+    position: relative;
+
+    display: grid;
+
+    min-height: 126px;
+
+    grid-template-columns:
+        38px
+        minmax(0, 1fr);
+
+    align-items: start;
+    gap: 9px;
+
+    padding: 13px;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        rgba(
+            54,
+            103,
+            61,
+            0.18
+        );
+
+    border-radius: 16px;
+
+    text-align: left;
+
+    cursor: pointer;
+    touch-action: manipulation;
+
+    box-shadow:
+        0 8px 20px rgba(43, 79, 45, 0.10);
+}
+
+
+.leafy-home-action::after {
+    position: absolute;
+
+    right: -27px;
+    bottom: -27px;
+
+    width: 72px;
+    height: 72px;
+
+    border-radius:
+        100%
+        0
+        100%
+        0;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.10
+        );
+
+    content: "";
+
+    transform: rotate(-18deg);
+}
+
+
+.leafy-home-action-primary {
+    background:
+        linear-gradient(
+            145deg,
+            #1d5a35,
+            #2e7542
+        );
+
+    color: #ffffff;
+}
+
+
+.leafy-home-action-camera {
+    background:
+        linear-gradient(
+            145deg,
+            #f8f7ec,
+            #e8efd9
+        );
+
+    color: #21462e;
+}
+
+
+.leafy-home-action-icon {
+    display: grid;
+
+    width: 38px;
+    height: 38px;
+
+    place-items: center;
+
+    border-radius: 11px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.14
+        );
+
+    font-size: 1rem;
+}
+
+
+.leafy-home-action-camera .leafy-home-action-icon {
+    background: #dce9d2;
+}
+
+
+.leafy-home-action > div {
+    display: flex;
+
+    min-width: 0;
+
+    flex-direction: column;
+}
+
+
+.leafy-home-action small {
+    margin-bottom: 3px;
+
+    opacity: 0.74;
+
+    font-size: 0.42rem;
+    font-weight: 900;
+
+    letter-spacing: 0.06em;
+}
+
+
+.leafy-home-action strong {
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 0.72rem;
+    line-height: 1.2;
+}
+
+
+.leafy-home-action p {
+    margin: 5px 0 0;
+
+    opacity: 0.79;
+
+    font-size: 0.48rem;
+    line-height: 1.4;
+}
+
+
+.leafy-home-action-arrow {
+    position: absolute;
+
+    right: 11px;
+    bottom: 10px;
+
+    display: grid;
+
+    width: 28px;
+    height: 28px;
+
+    place-items: center;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.16
+        );
+
+    border-radius: 50%;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.12
+        );
+
+    font-size: 0.74rem;
+    font-weight: 900;
+}
+
+
+.leafy-home-action-camera .leafy-home-action-arrow {
+    border-color:
+        rgba(
+            53,
+            102,
+            59,
+            0.15
+        );
+
+    background: rgba(255, 255, 255, 0.55);
+}
+
+
+/* =========================
+   SHARED SECTION HEADINGS
+========================= */
+
+.leafy-section-heading {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    margin-bottom: 10px;
+}
+
+
+.leafy-section-heading > div {
+    display: flex;
+
+    min-width: 0;
+
+    align-items: center;
+    gap: 8px;
+}
+
+
+.leafy-section-heading > div > div {
+    min-width: 0;
+}
+
+
+.leafy-section-icon {
+    display: grid;
+
+    width: 34px;
+    height: 34px;
+
+    flex: 0 0 34px;
+
+    place-items: center;
+
+    border-radius: 10px;
+
+    background: #e7f0df;
+}
+
+
+.leafy-section-heading small {
+    display: block;
+
+    color: var(--leafy-sage);
+
+    font-size: 0.42rem;
+    font-weight: 900;
+
+    letter-spacing: 0.09em;
+}
+
+
+.leafy-section-heading h2 {
+    margin: 1px 0 0;
+
+    color: #26462f;
+
+    font-size: 0.82rem;
+}
+
+
+.leafy-section-more {
+    flex: 0 0 auto;
+
+    color: #7a8578;
+
+    font-size: 0.43rem;
+}
+
+
+/* =========================
+   SUSTAINABILITY
+========================= */
+
+.leafy-sustainability-section {
+    margin: 14px 0;
+}
+
+
+.leafy-score-card {
+    display: grid;
+
+    grid-template-columns:
+        112px
+        minmax(0, 1fr);
+
+    align-items: center;
+    gap: 14px;
+
+    padding: 14px;
+}
+
+
+.leafy-score-ring {
+    position: relative;
+
+    display: grid;
+
+    width: 104px;
+    height: 104px;
+
+    place-items: center;
+
+    border-radius: 50%;
+
+    background:
+        conic-gradient(
+            var(--leafy-leaf)
+            calc(
+                var(--score-value) *
+                1%
+            ),
+            #e1e8d9
+            0
+        );
+
+    box-shadow:
+        inset 0 0 0 1px rgba(48, 99, 53, 0.06);
+}
+
+
+.leafy-score-ring-inner {
+    position: relative;
+
+    display: flex;
+
+    width: 78px;
+    height: 78px;
+
+    align-items: baseline;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #fbfbf4;
+
+    box-shadow:
+        inset 0 0 0 1px rgba(66, 104, 64, 0.08);
+}
+
+
+.leafy-score-ring-inner span {
+    position: absolute;
+
+    top: 7px;
+
+    font-size: 0.78rem;
+}
+
+
+.leafy-score-ring-inner strong {
+    margin-top: 27px;
+
+    color: #1d5d34;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 1.6rem;
+}
+
+
+.leafy-score-ring-inner small {
+    color: #809080;
+
+    font-size: 0.45rem;
+}
+
+
+.leafy-score-copy h3 {
+    margin: 0 0 9px;
+
+    color: #314a36;
+
+    font-size: 0.70rem;
+    line-height: 1.25;
+}
+
+
+.leafy-score-benefits {
+    display: flex;
+
+    flex-direction: column;
+    gap: 6px;
+}
+
+
+.leafy-score-benefits span {
+    display: flex;
+
+    align-items: center;
+    gap: 6px;
+
+    color: #687568;
+
+    font-size: 0.47rem;
+}
+
+
+.leafy-score-benefits b {
+    display: grid;
+
+    width: 16px;
+    height: 16px;
+
+    place-items: center;
+
+    border-radius: 50%;
+
+    background: #e0efdb;
+    color: #347244;
+
+    font-size: 0.43rem;
+}
+
+
+/* =========================
+   INSPIRATION
+========================= */
+
+.leafy-inspiration-section {
+    margin:
+        14px
+        0;
+}
+
+
+.leafy-inspiration-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap: 7px;
+}
+
+
+.leafy-inspiration-card {
+    position: relative;
+
+    display: flex;
+
+    min-height: 104px;
+
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 8px;
+
+    padding: 11px;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        rgba(
+            58,
+            99,
+            59,
+            0.15
+        );
+
+    border-radius: 14px;
+
+    color: #ffffff;
+
+    text-align: left;
+
+    cursor: pointer;
+    touch-action: manipulation;
+
+    box-shadow:
+        0 8px 20px rgba(46, 77, 47, 0.10);
+}
+
+
+.leafy-inspiration-card::before {
+    position: absolute;
+
+    top: -18px;
+    right: -28px;
+
+    width: 80px;
+    height: 52px;
+
+    border-radius:
+        100%
+        0
+        100%
+        0;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.11
+        );
+
+    content: "";
+
+    transform: rotate(-20deg);
+}
+
+
+.inspiration-small-space {
+    background:
+        linear-gradient(
+            145deg,
+            #315f3a,
+            #527f46
+        );
+}
+
+
+.inspiration-pollinator {
+    background:
+        linear-gradient(
+            145deg,
+            #6f7e3f,
+            #8f7a51
+        );
+}
+
+
+.inspiration-edible {
+    background:
+        linear-gradient(
+            145deg,
+            #41613d,
+            #7b6541
+        );
+}
+
+
+.leafy-inspiration-card > span {
+    position: relative;
+
+    z-index: 1;
+
+    font-size: 1.25rem;
+}
+
+
+.leafy-inspiration-card > div {
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+
+    flex-direction: column;
+    gap: 3px;
+}
+
+
+.leafy-inspiration-card strong {
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 0.62rem;
+    line-height: 1.16;
+}
+
+
+.leafy-inspiration-card small {
+    opacity: 0.76;
+
+    font-size: 0.41rem;
+}
+
+
+/* =========================
+   ASSISTANT
+========================= */
+
+.home-page .garden-assistant-card {
+    margin:
+        14px
+        0;
+
+    border-color:
+        rgba(
+            77,
+            108,
+            70,
+            0.18
+        );
+
+    background:
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(85, 138, 75, 0.09),
+            transparent 30%
+        ),
+        #fffef8;
+}
+
+
+/* =========================
+   BUILDER CARDS
+========================= */
+
+.home-page .home-builder-step {
+    position: relative;
+
+    margin-bottom: 12px;
+
+    padding: 15px;
+
+    overflow: hidden;
+
+    border-color:
+        rgba(
+            79,
+            115,
+            74,
+            0.14
+        );
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 250, 0.97),
+            rgba(249, 248, 238, 0.97)
+        );
+}
+
+
+.home-page .home-builder-step::before {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 4px;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--leafy-leaf),
+            var(--leafy-sage)
+        );
+
+    content: "";
+}
+
+
+.home-page .home-builder-step.complete::before {
+    background:
+        linear-gradient(
+            180deg,
+            #7ca35a,
+            #a2b878
+        );
+}
+
+
+.home-builder-step-number {
+    border: 0;
+
+    background:
+        linear-gradient(
+            145deg,
+            #dcebd5,
+            #edf5e7
+        );
+
+    color: #2f6d40;
+
+    box-shadow:
+        inset 0 0 0 1px rgba(53, 97, 56, 0.10);
+}
+
+
+.home-builder-choice,
+.home-feature-card,
+.home-crop-card,
+.design-goal-card,
+.build-option-button {
+    border:
+        1px solid
+        rgba(
+            83,
+            113,
+            78,
+            0.15
+        );
+
+    border-radius: 13px;
+
+    background:
+        #fffef9;
+
+    box-shadow:
+        0 4px 12px rgba(56, 82, 55, 0.05);
+}
+
+
+.home-builder-choice.selected,
+.home-feature-card.selected,
+.home-crop-card.selected,
+.design-goal-card.selected,
+.build-option-button.selected {
+    border-color:
+        rgba(
+            64,
+            119,
+            71,
+            0.58
+        );
+
+    background:
+        linear-gradient(
+            145deg,
+            #edf6e8,
+            #e2efdc
+        );
+
+    box-shadow:
+        0 6px 15px rgba(57, 98, 59, 0.10);
+}
+
+
+.home-builder-next-button,
+.designer-primary-button,
+.garden-plan-primary-link,
+.calendar-add-button {
+    border-radius: 999px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--leafy-forest),
+            #3b824c
+        );
+
+    box-shadow:
+        0 7px 16px rgba(32, 88, 48, 0.20);
+}
+
+
+/* =========================
+   BOTTOM NAV
+========================= */
+
+.leafy-bottom-nav {
+    bottom:
+        max(
+            0px,
+            env(safe-area-inset-bottom)
+        );
+
+    max-width: 540px;
+
+    padding:
+        8px
+        8px
+        calc(
+            7px +
+            env(safe-area-inset-bottom)
+        );
+
+    border-top:
+        1px solid
+        rgba(
+            56,
+            95,
+            57,
+            0.13
+        );
+
+    border-radius:
+        18px
+        18px
+        0
+        0;
+
+    background:
+        rgba(
+            255,
+            255,
+            248,
+            0.96
+        );
+
+    box-shadow:
+        0 -8px 24px rgba(46, 74, 46, 0.09);
+}
+
+
+.leafy-bottom-nav .nav-link {
+    min-height: 54px;
+
+    color: #7a8378;
+}
+
+
+.leafy-bottom-nav .nav-link-icon {
+    border-radius: 11px;
+}
+
+
+.leafy-bottom-nav .nav-link.active {
+    background: transparent;
+
+    color: var(--leafy-forest);
+}
+
+
+.leafy-bottom-nav .nav-link.active .nav-link-icon {
+    background:
+        linear-gradient(
+            145deg,
+            #e2efdc,
+            #edf5e8
+        );
+
+    color: var(--leafy-forest);
+
+    box-shadow:
+        inset 0 0 0 1px rgba(56, 99, 58, 0.10);
+}
+
+
+.leafy-bottom-nav .nav-link-leaf .nav-link-icon {
+    border-radius:
+        50%
+        50%
+        50%
+        16px;
+}
+
+
+.leafy-bottom-nav .nav-link p {
+    font-size: 0.48rem;
+    font-weight: 800;
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+html.dark-mode {
+    background: #172019;
+}
+
+
+html.dark-mode body {
+    background:
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(66, 123, 69, 0.12),
+            transparent 28%
+        ),
+        #172019;
+
+    color: #dde8dc;
+}
+
+
+html.dark-mode .app-container.leafy-app {
+    background:
+        radial-gradient(
+            ellipse at 100% 0%,
+            rgba(73, 128, 71, 0.10),
+            transparent 24%
+        ),
+        #1e2820;
+}
+
+
+html.dark-mode .leafy-brand-header h1,
+html.dark-mode .leafy-home-welcome h2,
+html.dark-mode .leafy-section-heading h2,
+html.dark-mode .leafy-score-copy h3 {
+    color: #e2ede0;
+}
+
+
+html.dark-mode .leafy-brand-header p,
+html.dark-mode .leafy-home-welcome p,
+html.dark-mode .leafy-section-more,
+html.dark-mode .leafy-score-benefits span {
+    color: #adb9ab;
+}
+
+
+html.dark-mode .leafy-brand-header .app-brand-mark,
+html.dark-mode .app-brand-leaf-chip,
+html.dark-mode .leafy-home-welcome-art,
+html.dark-mode .leafy-section-icon {
+    border-color: #405043;
+
+    background:
+        linear-gradient(
+            145deg,
+            #2c3c2f,
+            #354a37
+        );
+
+    color: #c9dec6;
+}
+
+
+html.dark-mode .home-page .home-build-progress,
+html.dark-mode .home-page .home-builder-step,
+html.dark-mode .leafy-score-card,
+html.dark-mode .home-page .garden-assistant-card {
+    border-color: #3d4d3f;
+
+    background:
+        linear-gradient(
+            180deg,
+            #273329,
+            #222d24
+        );
+}
+
+
+html.dark-mode .leafy-home-action-camera {
+    border-color: #405143;
+
+    background:
+        linear-gradient(
+            145deg,
+            #2d3b30,
+            #344637
+        );
+
+    color: #e0eade;
+}
+
+
+html.dark-mode .leafy-score-ring {
+    background:
+        conic-gradient(
+            #6fb36b
+            calc(
+                var(--score-value) *
+                1%
+            ),
+            #344137
+            0
+        );
+}
+
+
+html.dark-mode .leafy-score-ring-inner {
+    background: #222d24;
+}
+
+
+html.dark-mode .leafy-bottom-nav {
+    border-top-color: #3c4b3e;
+
+    background:
+        rgba(
+            29,
+            39,
+            31,
+            0.96
+        );
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 430px) {
+    .leafy-brand-header {
+        grid-template-columns:
+            46px
+            minmax(0, 1fr)
+            34px;
+    }
+
+
+    .leafy-brand-header .app-brand-mark {
+        width: 46px;
+        height: 46px;
+    }
+
+
+    .leafy-home-action-grid {
+        grid-template-columns:
+            1fr
+            1fr;
+    }
+
+
+    .leafy-home-action {
+        min-height: 118px;
+
+        padding: 11px;
+
+        grid-template-columns:
+            34px
+            minmax(0, 1fr);
+    }
+
+
+    .leafy-inspiration-grid {
+        grid-template-columns:
+            repeat(
+                3,
+                minmax(94px, 1fr)
+            );
+
+        overflow-x: auto;
+
+        padding-bottom: 3px;
+
+        scrollbar-width: none;
+    }
+
+
+    .leafy-inspiration-grid::-webkit-scrollbar {
+        display: none;
+    }
+
+
+    .leafy-score-card {
+        grid-template-columns:
+            96px
+            minmax(0, 1fr);
+    }
+
+
+    .leafy-score-ring {
+        width: 90px;
+        height: 90px;
+    }
+
+
+    .leafy-score-ring-inner {
+        width: 68px;
+        height: 68px;
+    }
+
+
+    .leafy-score-ring-inner strong {
+        margin-top: 24px;
+
+        font-size: 1.35rem;
+    }
+}
+
+
+@media (max-width: 350px) {
+    .leafy-home-action-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .leafy-score-card {
+        grid-template-columns:
+            1fr;
+
+        text-align: center;
+    }
+
+
+    .leafy-score-ring {
+        margin: 0 auto;
+    }
+
+
+    .leafy-score-benefits span {
+        justify-content: center;
+    }
+}
+
+/* =========================================================
+   LEAFY UI REWORK — PHASE 2 GARDEN DESIGNER
+========================================================= */
+
+.leafy-designer-step {
+    border:
+        1px solid
+        rgba(
+            61,
+            105,
+            64,
+            0.18
+        ) !important;
+
+    background:
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(79, 136, 72, 0.10),
+            transparent 25%
+        ),
+        linear-gradient(
+            180deg,
+            #fffef8,
+            #f7f5e9
+        ) !important;
+
+    box-shadow:
+        0 14px 34px rgba(44, 76, 45, 0.12) !important;
+}
+
+
+.leafy-designer-step > .home-builder-step-heading {
+    margin-bottom: 12px;
+}
+
+
+.leafy-designer-shell {
+    display: flex;
+
+    flex-direction: column;
+    gap: 9px;
+
+    margin-bottom: 14px;
+}
+
+
+.leafy-designer-topbar {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+
+.leafy-designer-topbar > div {
+    display: flex;
+
+    min-width: 0;
+
+    flex-direction: column;
+    gap: 2px;
+}
+
+
+.leafy-designer-topbar small,
+.leafy-designer-subheading small {
+    color: var(--leafy-sage);
+
+    font-size: 0.42rem;
+    font-weight: 900;
+
+    letter-spacing: 0.10em;
+}
+
+
+.leafy-designer-topbar strong {
+    color: #36523d;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 0.66rem;
+}
+
+
+.leafy-designer-status {
+    flex: 0 0 auto;
+
+    padding:
+        6px
+        9px;
+
+    border:
+        1px solid
+        rgba(
+            66,
+            108,
+            67,
+            0.12
+        );
+
+    border-radius: 999px;
+
+    background: #edf4e8;
+    color: #426748;
+
+    font-size: 0.45rem;
+    font-weight: 900;
+}
+
+
+.leafy-designer-mode-switch {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    padding: 4px;
+
+    border:
+        1px solid
+        rgba(
+            73,
+            108,
+            72,
+            0.12
+        );
+
+    border-radius: 999px;
+
+    background: #e9ebde;
+}
+
+
+.leafy-designer-mode-switch span {
+    display: grid;
+
+    min-height: 36px;
+
+    place-items: center;
+
+    padding:
+        6px
+        10px;
+
+    border-radius: 999px;
+
+    color: #738071;
+
+    font-size: 0.49rem;
+    font-weight: 800;
+}
+
+
+.leafy-designer-mode-switch span.active {
+    background:
+        linear-gradient(
+            135deg,
+            #255f39,
+            #3c7c49
+        );
+
+    color: #ffffff;
+
+    box-shadow:
+        0 5px 14px rgba(35, 91, 52, 0.18);
+}
+
+
+.leafy-designer-context-card {
+    display: grid;
+
+    grid-template-columns:
+        72px
+        minmax(0, 1fr)
+        48px;
+
+    align-items: center;
+    gap: 10px;
+
+    padding: 9px;
+
+    border:
+        1px solid
+        rgba(
+            72,
+            108,
+            68,
+            0.13
+        );
+
+    border-radius: 14px;
+
+    background:
+        rgba(
+            255,
+            255,
+            250,
+            0.85
+        );
+
+    box-shadow:
+        0 6px 16px rgba(47, 76, 47, 0.06);
+}
+
+
+.leafy-designer-context-card > img,
+.leafy-designer-context-placeholder {
+    width: 72px;
+    height: 62px;
+
+    border-radius: 11px;
+
+    object-fit: cover;
+}
+
+
+.leafy-designer-context-placeholder {
+    display: grid;
+
+    place-items: center;
+
+    background:
+        linear-gradient(
+            145deg,
+            #e8efdf,
+            #d5e5cb
+        );
+
+    font-size: 1.35rem;
+}
+
+
+.leafy-designer-context-copy {
+    display: flex;
+
+    min-width: 0;
+
+    flex-direction: column;
+    gap: 2px;
+}
+
+
+.leafy-designer-context-copy small {
+    color: #7a8977;
+
+    font-size: 0.40rem;
+    font-weight: 900;
+
+    letter-spacing: 0.08em;
+}
+
+
+.leafy-designer-context-copy strong {
+    color: #294632;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 0.69rem;
+}
+
+
+.leafy-designer-context-copy span {
+    color: #738073;
+
+    font-size: 0.46rem;
+    line-height: 1.4;
+}
+
+
+.leafy-designer-context-stat {
+    display: flex;
+
+    min-width: 44px;
+
+    flex-direction: column;
+    align-items: center;
+
+    padding:
+        8px
+        4px;
+
+    border-radius: 11px;
+
+    background: #edf4e8;
+}
+
+
+.leafy-designer-context-stat strong {
+    color: #28603a;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 1rem;
+}
+
+
+.leafy-designer-context-stat span {
+    color: #758273;
+
+    font-size: 0.40rem;
+}
+
+
+.leafy-designer-subheading {
+    display: flex;
+
+    align-items: end;
+    justify-content: space-between;
+    gap: 8px;
+
+    margin-bottom: 8px;
+}
+
+
+.leafy-designer-subheading.compact {
+    margin:
+        4px
+        0
+        7px;
+}
+
+
+.leafy-designer-subheading h3 {
+    margin:
+        1px
+        0
+        0;
+
+    color: #314b37;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 0.72rem;
+}
+
+
+.leafy-designer-subheading > span {
+    color: #8a9387;
+
+    font-size: 0.41rem;
+}
+
+
+.leafy-designer-priority-section {
+    padding-top: 2px;
+}
+
+
+.leafy-designer-step .design-goal-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 8px;
+}
+
+
+.leafy-designer-step .design-goal-card {
+    position: relative;
+
+    min-height: 106px;
+
+    padding: 12px;
+
+    overflow: hidden;
+
+    border-radius: 14px;
+
+    text-align: left;
+
+    transition:
+        transform 0.16s ease,
+        border-color 0.16s ease,
+        box-shadow 0.16s ease;
+}
+
+
+.leafy-designer-step .design-goal-card::after {
+    position: absolute;
+
+    right: -25px;
+    bottom: -25px;
+
+    width: 65px;
+    height: 48px;
+
+    border-radius:
+        100%
+        0
+        100%
+        0;
+
+    background:
+        rgba(
+            84,
+            136,
+            77,
+            0.08
+        );
+
+    content: "";
+}
+
+
+.leafy-designer-step .design-goal-card:hover {
+    transform: translateY(-1px);
+}
+
+
+.leafy-designer-step .design-goal-card.selected {
+    border-color:
+        rgba(
+            47,
+            108,
+            56,
+            0.62
+        );
+
+    background:
+        linear-gradient(
+            145deg,
+            #edf6e7,
+            #dfeeda
+        );
+
+    box-shadow:
+        0 8px 18px rgba(45, 97, 50, 0.10);
+}
+
+
+.leafy-designer-step .design-goal-icon {
+    font-size: 1.35rem;
+}
+
+
+.leafy-designer-step .design-goal-card strong {
+    color: #2f4d35;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 0.62rem;
+}
+
+
+.leafy-designer-step .design-goal-card small {
+    color: #728070;
+
+    font-size: 0.44rem;
+    line-height: 1.4;
+}
+
+
+.leafy-designer-material-section {
+    margin:
+        9px
+        0
+        12px;
+}
+
+
+.leafy-designer-material-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            4,
+            minmax(0, 1fr)
+        );
+
+    gap: 6px;
+}
+
+
+.leafy-material-card {
+    display: flex;
+
+    min-height: 80px;
+
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+
+    padding: 8px 5px;
+
+    border:
+        1px solid
+        rgba(
+            76,
+            107,
+            72,
+            0.14
+        );
+
+    border-radius: 12px;
+
+    background: #fffef9;
+    color: #516252;
+
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+
+.leafy-material-card > span {
+    font-size: 1rem;
+}
+
+
+.leafy-material-card strong {
+    color: #415a46;
+
+    font-size: 0.49rem;
+}
+
+
+.leafy-material-card small {
+    color: #8a9387;
+
+    font-size: 0.38rem;
+}
+
+
+.leafy-material-card.selected {
+    border-color: #5a8b60;
+
+    background:
+        linear-gradient(
+            145deg,
+            #eaf3e5,
+            #dfeeda
+        );
+
+    box-shadow:
+        0 5px 12px rgba(56, 100, 57, 0.10);
+}
+
+
+.leafy-build-options-grid label {
+    padding: 8px;
+
+    border:
+        1px solid
+        rgba(
+            79,
+            110,
+            75,
+            0.12
+        );
+
+    border-radius: 11px;
+
+    background: #fffef9;
+
+    color: #526452;
+
+    font-size: 0.46rem;
+    font-weight: 800;
+}
+
+
+.leafy-build-options-grid select {
+    margin-top: 5px;
+
+    border-color: #d5decf;
+
+    background: #f7f8ef;
+}
+
+
+.leafy-designer-step .home-design-input-summary,
+.leafy-designer-step .home-indoor-design-input-summary {
+    border:
+        1px solid
+        rgba(
+            73,
+            110,
+            71,
+            0.12
+        );
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #f1f5ea,
+            #e9f0e3
+        );
+}
+
+
+.leafy-designer-step .home-design-input-summary > div,
+.leafy-designer-step .home-indoor-design-input-summary > div {
+    border-radius: 11px;
+
+    background:
+        rgba(
+            255,
+            255,
+            250,
+            0.72
+        );
+}
+
+
+.leafy-designer-live-preview {
+    margin:
+        12px
+        0;
+
+    padding:
+        11px;
+
+    border:
+        1px solid
+        rgba(
+            61,
+            101,
+            61,
+            0.14
+        );
+
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #f4f6ea,
+            #eaefe2
+        );
+}
+
+
+.leafy-designer-live-preview .layout-preview-section {
+    margin: 0;
+
+    border:
+        0;
+
+    background: transparent;
+
+    box-shadow: none;
+}
+
+
+.leafy-designer-live-preview .designer-section-heading {
+    padding:
+        4px
+        2px
+        9px;
+}
+
+
+.leafy-designer-live-preview .garden-layout-viewport {
+    border:
+        1px solid
+        rgba(
+            63,
+            104,
+            62,
+            0.14
+        );
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #dfe8d5,
+            #f0efe1
+        );
+
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.45);
+}
+
+
+.leafy-designer-live-preview .garden-layout-zoom-controls {
+    padding: 7px;
+
+    border-radius: 12px;
+
+    background: rgba(255, 255, 250, 0.72);
+}
+
+
+.leafy-designer-live-preview .garden-layout-zoom-button,
+.leafy-designer-live-preview .garden-layout-zoom-reset {
+    border-color:
+        rgba(
+            70,
+            106,
+            69,
+            0.14
+        );
+
+    background: #fffef9;
+    color: #416048;
+}
+
+
+.leafy-designer-pairing-strip {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap: 7px;
+
+    margin-top: 9px;
+}
+
+
+.leafy-designer-pairing-strip > div {
+    display: flex;
+
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+
+    padding:
+        8px
+        5px;
+
+    border:
+        1px solid
+        rgba(
+            68,
+            105,
+            66,
+            0.10
+        );
+
+    border-radius: 11px;
+
+    background: rgba(255, 255, 250, 0.72);
+}
+
+
+.leafy-designer-pairing-strip span {
+    font-size: 0.82rem;
+}
+
+
+.leafy-designer-pairing-strip strong {
+    color: #2f663d;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 0.72rem;
+}
+
+
+.leafy-designer-pairing-strip small {
+    color: #7a8678;
+
+    font-size: 0.39rem;
+
+    text-align: center;
+}
+
+
+.leafy-designer-primary-button {
+    min-height: 50px !important;
+
+    border-radius: 999px !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1e5a35,
+            #3b844b
+        ) !important;
+
+    color: #ffffff !important;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 0.66rem !important;
+
+    box-shadow:
+        0 8px 18px rgba(31, 89, 48, 0.20);
+}
+
+
+/* =========================
+   INDOOR PREVIEW LEAFY POLISH
+========================= */
+
+.leafy-designer-step .indoor-layout-preview {
+    border:
+        1px solid
+        rgba(
+            66,
+            105,
+            66,
+            0.14
+        );
+
+    background:
+        linear-gradient(
+            180deg,
+            #f2f5e9,
+            #e9efe1
+        );
+
+    box-shadow: none;
+}
+
+
+.leafy-designer-step .indoor-layout-summary > div {
+    border:
+        1px solid
+        rgba(
+            73,
+            109,
+            72,
+            0.10
+        );
+
+    background:
+        rgba(
+            255,
+            255,
+            250,
+            0.76
+        );
+}
+
+
+.leafy-designer-step .indoor-rack-preview,
+.leafy-designer-step .indoor-floor-preview {
+    border-color:
+        rgba(
+            61,
+            105,
+            62,
+            0.15
+        );
+
+    background:
+        linear-gradient(
+            145deg,
+            #e7ecdf,
+            #f4f2e7
+        );
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+html.dark-mode .leafy-designer-step {
+    border-color: #3e5141 !important;
+
+    background:
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(68, 119, 67, 0.12),
+            transparent 25%
+        ),
+        linear-gradient(
+            180deg,
+            #263229,
+            #212b23
+        ) !important;
+}
+
+
+html.dark-mode .leafy-designer-topbar strong,
+html.dark-mode .leafy-designer-context-copy strong,
+html.dark-mode .leafy-designer-subheading h3,
+html.dark-mode .leafy-designer-step .design-goal-card strong,
+html.dark-mode .leafy-material-card strong {
+    color: #dce8da;
+}
+
+
+html.dark-mode .leafy-designer-status,
+html.dark-mode .leafy-designer-context-stat,
+html.dark-mode .leafy-designer-step .home-design-input-summary,
+html.dark-mode .leafy-designer-step .home-indoor-design-input-summary {
+    background: #314033;
+}
+
+
+html.dark-mode .leafy-designer-mode-switch {
+    border-color: #405143;
+
+    background: #1f2921;
+}
+
+
+html.dark-mode .leafy-designer-context-card,
+html.dark-mode .leafy-designer-step .design-goal-card,
+html.dark-mode .leafy-material-card,
+html.dark-mode .leafy-build-options-grid label,
+html.dark-mode .leafy-designer-live-preview,
+html.dark-mode .leafy-designer-pairing-strip > div,
+html.dark-mode .leafy-designer-step .indoor-layout-preview {
+    border-color: #405143;
+
+    background: #29352b;
+
+    color: #d5e1d3;
+}
+
+
+html.dark-mode .leafy-designer-context-placeholder {
+    background:
+        linear-gradient(
+            145deg,
+            #304033,
+            #394b3c
+        );
+}
+
+
+html.dark-mode .leafy-designer-step .design-goal-card.selected,
+html.dark-mode .leafy-material-card.selected {
+    border-color: #648769;
+
+    background:
+        linear-gradient(
+            145deg,
+            #324936,
+            #2c3e30
+        );
+}
+
+
+html.dark-mode .leafy-build-options-grid select {
+    border-color: #445546;
+
+    background: #222d24;
+    color: #dce8da;
+}
+
+
+html.dark-mode .leafy-designer-live-preview .garden-layout-viewport,
+html.dark-mode .leafy-designer-step .indoor-rack-preview,
+html.dark-mode .leafy-designer-step .indoor-floor-preview {
+    border-color: #405143;
+
+    background:
+        linear-gradient(
+            145deg,
+            #273229,
+            #303a2e
+        );
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 430px) {
+    .leafy-designer-context-card {
+        grid-template-columns:
+            62px
+            minmax(0, 1fr)
+            44px;
+    }
+
+
+    .leafy-designer-context-card > img,
+    .leafy-designer-context-placeholder {
+        width: 62px;
+        height: 56px;
+    }
+
+
+    .leafy-designer-material-grid {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+    }
+
+
+    .leafy-designer-step .design-goal-grid {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+    }
+}
+
+
+@media (max-width: 355px) {
+    .leafy-designer-context-card {
+        grid-template-columns:
+            54px
+            minmax(0, 1fr);
+    }
+
+
+    .leafy-designer-context-stat {
+        grid-column:
+            1 /
+            -1;
+
+        flex-direction: row;
+        justify-content: center;
+        gap: 5px;
+    }
+
+
+    .leafy-designer-context-card > img,
+    .leafy-designer-context-placeholder {
+        width: 54px;
+        height: 50px;
+    }
+
+
+    .leafy-designer-step .design-goal-grid {
+        grid-template-columns:
+            1fr;
+    }
+}
+
+
+/* =========================================================
+   LEAFY UI REWORK — PHASE 3 REVIEW & BUILD
+   Step 6 presentation only. Existing plan generation,
+   materials, planting, save, and indoor/outdoor logic stays intact.
+========================================================= */
+
+.leafy-build-step.active {
+    border: 1px solid rgba(80, 104, 55, 0.20) !important;
+    background:
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(178, 140, 64, 0.10),
+            transparent 24%
+        ),
+        radial-gradient(
+            circle at 0% 28%,
+            rgba(80, 137, 69, 0.08),
+            transparent 26%
+        ),
+        linear-gradient(
+            180deg,
+            #fffdf6,
+            #f5f1e3
+        ) !important;
+    box-shadow:
+        0 16px 36px rgba(55, 73, 42, 0.13) !important;
+}
+
+.leafy-build-step > .home-builder-step-heading {
+    margin-bottom: 12px;
+}
+
+.leafy-build-step.upcoming,
+.leafy-build-step.complete.collapsed {
+    overflow: hidden;
+}
+
+.leafy-build-step.complete.collapsed {
+    border-color: rgba(65, 112, 65, 0.18) !important;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(244, 249, 239, 0.98),
+            rgba(235, 242, 226, 0.98)
+        ) !important;
+}
+
+.leafy-build-shell {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-bottom: 13px;
+}
+
+.leafy-build-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.leafy-build-topbar > div {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.leafy-build-topbar small,
+.leafy-build-section-label small,
+.leafy-build-hero-copy small {
+    color: #81904e;
+    font-size: 0.42rem;
+    font-weight: 900;
+    letter-spacing: 0.11em;
+}
+
+.leafy-build-topbar strong {
+    color: #3f4d32;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.67rem;
+}
+
+.leafy-build-status {
+    display: inline-flex;
+    min-height: 30px;
+    flex: 0 0 auto;
+    align-items: center;
+    padding: 6px 9px;
+    border: 1px solid rgba(93, 111, 58, 0.13);
+    border-radius: 999px;
+    background: #eef0dc;
+    color: #596a36;
+    font-size: 0.45rem;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.leafy-build-hero {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr) 50px;
+    align-items: center;
+    gap: 10px;
+    padding: 9px;
+    border: 1px solid rgba(91, 106, 59, 0.14);
+    border-radius: 15px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 250, 0.94),
+            rgba(244, 241, 224, 0.94)
+        );
+    box-shadow:
+        0 7px 18px rgba(71, 78, 45, 0.07);
+}
+
+.leafy-build-hero-image,
+.leafy-build-hero-visual {
+    width: 72px;
+    height: 64px;
+    border-radius: 12px;
+}
+
+.leafy-build-hero-image {
+    object-fit: cover;
+}
+
+.leafy-build-hero-visual {
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background:
+        radial-gradient(
+            circle at 70% 20%,
+            rgba(255, 231, 159, 0.36),
+            transparent 28%
+        ),
+        linear-gradient(
+            145deg,
+            #dce8ce,
+            #ecedda
+        );
+    box-shadow:
+        inset 0 0 0 1px rgba(75, 107, 60, 0.10);
+}
+
+.leafy-build-hero-visual span {
+    font-size: 1.6rem;
+}
+
+.leafy-build-hero-copy {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.leafy-build-hero-copy strong {
+    color: #34472f;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.72rem;
+}
+
+.leafy-build-hero-copy span {
+    color: #788072;
+    font-size: 0.45rem;
+    line-height: 1.4;
+}
+
+.leafy-build-hero-badge {
+    display: flex;
+    min-width: 46px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 4px;
+    border-radius: 12px;
+    background:
+        linear-gradient(
+            145deg,
+            #e9eed8,
+            #dee8cb
+        );
+}
+
+.leafy-build-hero-badge strong {
+    color: #355c35;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.02rem;
+    line-height: 1;
+}
+
+.leafy-build-hero-badge span {
+    margin-top: 2px;
+    color: #75806d;
+    font-size: 0.39rem;
+}
+
+.leafy-build-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+}
+
+.leafy-build-metrics > div {
+    display: grid;
+    grid-template-columns: 24px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    min-width: 0;
+    align-items: center;
+    column-gap: 5px;
+    padding: 8px;
+    border: 1px solid rgba(81, 105, 60, 0.11);
+    border-radius: 12px;
+    background: rgba(255, 255, 250, 0.74);
+}
+
+.leafy-build-metrics > div > span {
+    grid-row: 1 / 3;
+    display: grid;
+    width: 24px;
+    height: 24px;
+    place-items: center;
+    border-radius: 8px;
+    background: #edf1df;
+    font-size: 0.75rem;
+}
+
+.leafy-build-metrics strong {
+    min-width: 0;
+    overflow: hidden;
+    color: #40533a;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.63rem;
+    line-height: 1.1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.leafy-build-metrics small {
+    min-width: 0;
+    overflow: hidden;
+    color: #818978;
+    font-size: 0.38rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.leafy-build-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.leafy-build-section-label {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 3px 2px 0;
+}
+
+.leafy-build-section-label > div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.leafy-build-section-label strong {
+    color: #3b4d36;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.73rem;
+}
+
+.leafy-build-section-label > span {
+    color: #929887;
+    font-size: 0.40rem;
+}
+
+.leafy-build-stack .home-build-review-heading {
+    margin: 0;
+    padding: 9px 10px;
+    border: 1px solid rgba(77, 105, 62, 0.11);
+    border-radius: 12px;
+    background: rgba(255, 255, 250, 0.73);
+}
+
+.leafy-build-stack .home-build-review-heading > span {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    border-radius: 10px;
+    background: #e8efdc;
+}
+
+.leafy-build-stack > .layout-preview-section,
+.leafy-build-stack > .garden-materials-section,
+.leafy-build-stack > .seasonal-planting-guide,
+.leafy-build-stack > .designer-card,
+.leafy-build-stack > .garden-planting-plan,
+.leafy-build-stack > .garden-bed-planting-map,
+.leafy-build-stack > .indoor-layout-preview,
+.leafy-build-stack > .indoor-materials-section,
+.leafy-build-stack > .indoor-setup-plan {
+    margin: 0;
+    border: 1px solid rgba(76, 102, 62, 0.13);
+    border-radius: 15px;
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 251, 0.92),
+            rgba(250, 249, 239, 0.94)
+        );
+    box-shadow: none;
+}
+
+.leafy-build-stack .designer-section-heading {
+    margin-bottom: 10px;
+}
+
+.leafy-build-stack .designer-section-heading > span {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    flex: 0 0 auto;
+    place-items: center;
+    border-radius: 11px;
+    background:
+        linear-gradient(
+            145deg,
+            #e8efda,
+            #dce8ce
+        );
+}
+
+.leafy-build-stack .designer-section-heading h2,
+.leafy-build-stack .seasonal-guide-heading h2 {
+    color: #354a33;
+}
+
+.leafy-build-stack .designer-section-heading p,
+.leafy-build-stack .seasonal-guide-heading p {
+    color: #7a8375;
+}
+
+.leafy-build-stack .material-build-summary,
+.leafy-build-stack .indoor-layout-summary,
+.leafy-build-stack .garden-planting-summary,
+.leafy-build-stack .seasonal-frost-summary {
+    gap: 6px;
+}
+
+.leafy-build-stack .material-build-summary > div,
+.leafy-build-stack .indoor-layout-summary > div,
+.leafy-build-stack .garden-planting-summary > div,
+.leafy-build-stack .seasonal-frost-summary > div {
+    border: 1px solid rgba(80, 106, 66, 0.09);
+    background: rgba(248, 250, 241, 0.88);
+}
+
+.leafy-build-stack .material-category {
+    margin-top: 9px;
+    padding: 9px;
+    border: 1px solid rgba(84, 104, 65, 0.10);
+    border-radius: 12px;
+    background: rgba(246, 247, 236, 0.68);
+}
+
+.leafy-build-stack .material-category h3 {
+    color: #45533a;
+}
+
+.leafy-build-stack .material-list {
+    gap: 6px;
+}
+
+.leafy-build-stack .material-item {
+    border: 1px solid rgba(80, 104, 66, 0.09);
+    border-radius: 9px;
+    background: rgba(255, 255, 251, 0.88);
+}
+
+.leafy-build-stack .material-assumptions {
+    border: 1px solid rgba(112, 103, 66, 0.10);
+    border-radius: 11px;
+    background: rgba(245, 239, 220, 0.72);
+}
+
+.leafy-build-stack .home-builder-finish-note {
+    position: relative;
+    margin: 3px 0 0;
+    overflow: hidden;
+    border: 1px solid rgba(55, 105, 60, 0.16);
+    border-radius: 14px;
+    background:
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(120, 159, 82, 0.14),
+            transparent 28%
+        ),
+        linear-gradient(
+            145deg,
+            #edf4e4,
+            #e3edd7
+        );
+}
+
+.leafy-build-stack .home-builder-finish-note > span {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 auto;
+    place-items: center;
+    border-radius: 12px;
+    background: rgba(255, 255, 250, 0.72);
+}
+
+.leafy-build-stack .home-builder-finish-note strong {
+    color: #31523a;
+    font-family: Georgia, "Times New Roman", serif;
+}
+
+.leafy-build-stack .home-builder-finish-note p {
+    color: #697966;
+}
+
+.leafy-build-primary-button {
+    min-height: 52px !important;
+    border-radius: 999px !important;
+    background:
+        linear-gradient(
+            135deg,
+            #245b35,
+            #3f7f47 62%,
+            #6e8d49
+        ) !important;
+    color: #ffffff !important;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.68rem !important;
+    letter-spacing: 0.01em;
+    box-shadow:
+        0 9px 20px rgba(38, 89, 48, 0.22);
+}
+
+.leafy-build-step .home-builder-secondary-button {
+    border-color: rgba(70, 99, 62, 0.17);
+    border-radius: 999px;
+    background: rgba(255, 255, 250, 0.65);
+    color: #53644e;
+}
+
+/* =========================
+   PHASE 3 — DARK MODE
+========================= */
+
+html.dark-mode .leafy-build-step.active {
+    border-color: #4a5540 !important;
+    background:
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(156, 129, 70, 0.08),
+            transparent 24%
+        ),
+        linear-gradient(
+            180deg,
+            #292d24,
+            #222720
+        ) !important;
+}
+
+html.dark-mode .leafy-build-step.complete.collapsed {
+    border-color: #405043 !important;
+    background: #283229 !important;
+}
+
+html.dark-mode .leafy-build-topbar strong,
+html.dark-mode .leafy-build-section-label strong,
+html.dark-mode .leafy-build-hero-copy strong,
+html.dark-mode .leafy-build-metrics strong,
+html.dark-mode .leafy-build-stack .designer-section-heading h2,
+html.dark-mode .leafy-build-stack .seasonal-guide-heading h2,
+html.dark-mode .leafy-build-stack .material-category h3,
+html.dark-mode .leafy-build-stack .home-builder-finish-note strong {
+    color: #dce5d3;
+}
+
+html.dark-mode .leafy-build-status,
+html.dark-mode .leafy-build-hero-badge,
+html.dark-mode .leafy-build-metrics > div,
+html.dark-mode .leafy-build-stack .home-build-review-heading,
+html.dark-mode .leafy-build-stack .material-build-summary > div,
+html.dark-mode .leafy-build-stack .indoor-layout-summary > div,
+html.dark-mode .leafy-build-stack .garden-planting-summary > div,
+html.dark-mode .leafy-build-stack .seasonal-frost-summary > div {
+    border-color: #424d3d;
+    background: #30372c;
+}
+
+html.dark-mode .leafy-build-hero {
+    border-color: #424d3d;
+    background:
+        linear-gradient(
+            145deg,
+            #30362c,
+            #2a3028
+        );
+}
+
+html.dark-mode .leafy-build-hero-visual,
+html.dark-mode .leafy-build-stack .designer-section-heading > span,
+html.dark-mode .leafy-build-stack .home-build-review-heading > span,
+html.dark-mode .leafy-build-metrics > div > span {
+    background: #354033;
+}
+
+html.dark-mode .leafy-build-hero-copy span,
+html.dark-mode .leafy-build-metrics small,
+html.dark-mode .leafy-build-section-label > span,
+html.dark-mode .leafy-build-stack .designer-section-heading p,
+html.dark-mode .leafy-build-stack .seasonal-guide-heading p,
+html.dark-mode .leafy-build-stack .home-builder-finish-note p {
+    color: #abb4a4;
+}
+
+html.dark-mode .leafy-build-stack > .layout-preview-section,
+html.dark-mode .leafy-build-stack > .garden-materials-section,
+html.dark-mode .leafy-build-stack > .seasonal-planting-guide,
+html.dark-mode .leafy-build-stack > .designer-card,
+html.dark-mode .leafy-build-stack > .garden-planting-plan,
+html.dark-mode .leafy-build-stack > .garden-bed-planting-map,
+html.dark-mode .leafy-build-stack > .indoor-layout-preview,
+html.dark-mode .leafy-build-stack > .indoor-materials-section,
+html.dark-mode .leafy-build-stack > .indoor-setup-plan {
+    border-color: #414b3e;
+    background: #293027;
+}
+
+html.dark-mode .leafy-build-stack .material-category {
+    border-color: #414a3d;
+    background: #30362c;
+}
+
+html.dark-mode .leafy-build-stack .material-item {
+    border-color: #414a3e;
+    background: #252b23;
+}
+
+html.dark-mode .leafy-build-stack .material-assumptions {
+    border-color: #514b37;
+    background: #393629;
+}
+
+html.dark-mode .leafy-build-stack .home-builder-finish-note {
+    border-color: #405341;
+    background:
+        linear-gradient(
+            145deg,
+            #30412f,
+            #293729
+        );
+}
+
+html.dark-mode .leafy-build-stack .home-builder-finish-note > span,
+html.dark-mode .leafy-build-step .home-builder-secondary-button {
+    border-color: #435043;
+    background: #303a2f;
+    color: #d2ddd0;
+}
+
+/* =========================
+   PHASE 3 — MOBILE
+========================= */
+
+@media (max-width: 430px) {
+    .leafy-build-hero {
+        grid-template-columns: 62px minmax(0, 1fr) 44px;
+    }
+
+    .leafy-build-hero-image,
+    .leafy-build-hero-visual {
+        width: 62px;
+        height: 58px;
+    }
+
+    .leafy-build-metrics > div {
+        grid-template-columns: 22px minmax(0, 1fr);
+        padding: 7px 6px;
+    }
+
+    .leafy-build-metrics > div > span {
+        width: 22px;
+        height: 22px;
+    }
+}
+
+@media (max-width: 355px) {
+    .leafy-build-topbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .leafy-build-hero {
+        grid-template-columns: 56px minmax(0, 1fr);
+    }
+
+    .leafy-build-hero-image,
+    .leafy-build-hero-visual {
+        width: 56px;
+        height: 54px;
+    }
+
+    .leafy-build-hero-badge {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        gap: 4px;
+    }
+
+    .leafy-build-metrics {
+        grid-template-columns: 1fr;
+    }
+
+    .leafy-build-metrics > div {
+        grid-template-columns: 26px auto minmax(0, 1fr);
+        grid-template-rows: auto;
+    }
+
+    .leafy-build-metrics > div > span {
+        grid-row: auto;
+    }
+
+    .leafy-build-metrics small {
+        text-align: right;
+    }
+
+    .leafy-build-section-label {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+/* =========================================================
+   LEAFY UI REWORK — PHASE 4
+   Reference-driven global shell + premium Home dashboard
+========================================================= */
+
+:root {
+    --leafy-forest: #235f34;
+    --leafy-forest-deep: #123c24;
+    --leafy-leaf: #4caf50;
+    --leafy-sage: #6b8f3e;
+    --leafy-olive: #718646;
+    --leafy-cream: #f8f6ec;
+    --leafy-cream-2: #f2efdf;
+    --leafy-sand: #e8ddc8;
+    --leafy-earth: #8d6e63;
+    --leafy-ink: #152b1d;
+    --leafy-muted: #687367;
+    --leafy-card: rgba(255, 255, 249, 0.96);
+    --leafy-line: rgba(51, 92, 53, 0.14);
+    --leafy-shadow-soft: 0 8px 22px rgba(39, 69, 39, 0.08);
+    --leafy-shadow-card: 0 14px 34px rgba(36, 68, 39, 0.11), 0 2px 7px rgba(36, 68, 39, 0.05);
+    --leafy-radius: 22px;
+    --leafy-radius-sm: 15px;
+}
+
+html,
+body {
+    background-color: #edf2e8;
+}
+
+body {
+    background:
+        radial-gradient(circle at 8% 5%, rgba(93, 145, 69, 0.15), transparent 22rem),
+        radial-gradient(circle at 95% 16%, rgba(166, 184, 105, 0.12), transparent 24rem),
+        linear-gradient(180deg, #edf2e7 0%, #f4f2e8 48%, #e9efe4 100%);
+}
+
+.app-container {
+    max-width: 560px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: calc(112px + env(safe-area-inset-bottom));
+    background:
+        radial-gradient(circle at 104% 4%, rgba(95, 148, 70, 0.10), transparent 18rem),
+        radial-gradient(circle at -4% 32%, rgba(128, 154, 83, 0.08), transparent 18rem),
+        var(--leafy-cream);
+}
+
+.app-container.leafy-app {
+    max-width: 560px;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+@media (min-width: 720px) {
+    .app-container {
+        box-shadow:
+            0 0 0 1px rgba(53, 84, 52, 0.07),
+            0 22px 70px rgba(43, 67, 42, 0.12);
+    }
+}
+
+/* ---------- Brand shell ---------- */
+
+.leafy-brand-header-v2 {
+    min-height: 108px;
+    grid-template-columns: 58px minmax(0, 1fr) 42px;
+    gap: 11px;
+    padding: 19px 5px 16px;
+    isolation: isolate;
+}
+
+.leafy-brand-header-v2::after {
+    position: absolute;
+    left: 66px;
+    right: 48px;
+    bottom: 8px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(65, 101, 62, 0.22), transparent);
+    content: "";
+}
+
+.leafy-brand-header-v2 .app-brand-mark {
+    width: 56px;
+    height: 56px;
+    border-radius: 50% 50% 50% 14px;
+    background:
+        radial-gradient(circle at 28% 24%, rgba(255,255,255,.92), transparent 35%),
+        linear-gradient(145deg, #e9f3df, #c9dfba);
+    box-shadow:
+        inset 0 0 0 1px rgba(40, 89, 47, 0.11),
+        0 9px 22px rgba(39, 84, 45, 0.12);
+}
+
+.leafy-brand-header-v2 h1 {
+    color: #102c1d;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.52rem, 5.2vw, 2.05rem);
+    font-weight: 800;
+    line-height: 0.96;
+    letter-spacing: -0.04em;
+}
+
+.leafy-brand-header-v2 .app-brand-kicker {
+    order: 2;
+    margin-top: 7px;
+    color: #3d6545;
+    font-size: 0.42rem;
+    letter-spacing: 0.20em;
+}
+
+.app-brand-script {
+    order: 3;
+    margin: 4px 0 0 !important;
+    color: #526655 !important;
+    font-family: "Brush Script MT", "Segoe Script", cursive;
+    font-size: 0.73rem !important;
+    font-style: normal !important;
+    line-height: 1 !important;
+    transform: rotate(-1.5deg);
+}
+
+.leafy-brand-header-v2 .app-brand-leaf-chip {
+    width: 40px;
+    height: 40px;
+    border-color: rgba(59, 97, 59, 0.13);
+    background: rgba(255,255,249,.88);
+    color: #2f6d3c;
+}
+
+.leafy-brand-vine {
+    position: absolute;
+    z-index: -1;
+    width: 160px;
+    height: 60px;
+    opacity: .36;
+    background: url("./assets/leafy-ui/brand-vine.svg") center / contain no-repeat;
+    pointer-events: none;
+}
+
+.leafy-brand-vine-left {
+    top: -22px;
+    left: -84px;
+    transform: rotate(12deg);
+}
+
+.leafy-brand-vine-right {
+    top: -17px;
+    right: -84px;
+    transform: scaleX(-1) rotate(8deg);
+}
+
+/* ---------- Weather garden hero ---------- */
+
+.home-page .weather-card.live-weather-card {
+    min-height: 278px;
+    margin: 0 0 13px;
+    padding: 15px;
+    border: 1px solid rgba(247, 250, 237, 0.28);
+    border-radius: 24px;
+    background:
+        linear-gradient(180deg, rgba(16, 49, 31, 0.24), rgba(13, 46, 27, 0.76)),
+        url("./assets/leafy-ui/weather-garden.svg") center 44% / cover no-repeat;
+    box-shadow: 0 16px 34px rgba(30, 69, 38, 0.20);
+}
+
+.home-page .weather-card.live-weather-card::before {
+    top: -30px;
+    right: -46px;
+    width: 175px;
+    height: 92px;
+    opacity: .9;
+    background: url("./assets/leafy-ui/brand-vine.svg") center / contain no-repeat;
+    transform: rotate(-6deg);
+}
+
+.home-page .weather-card.live-weather-card::after {
+    display: none;
+}
+
+.home-page .weather-card .weather-card-header {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 7px;
+}
+
+.home-page .weather-card .weather-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.76rem;
+    letter-spacing: .01em;
+}
+
+.home-page .weather-card .weather-card-header p {
+    margin: 3px 0 0;
+    font-size: .52rem;
+    opacity: .88;
+}
+
+.home-page .weather-current {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: fit-content;
+    margin: 4px 0 9px;
+    padding: 4px 3px;
+}
+
+.home-page .weather-main-icon {
+    display: grid;
+    width: 58px;
+    height: 58px;
+    place-items: center;
+    font-size: 2.65rem;
+    filter: drop-shadow(0 3px 4px rgba(0,0,0,.16));
+}
+
+.home-page .weather-temperature {
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: end;
+    column-gap: 8px;
+}
+
+.home-page .weather-temperature strong {
+    grid-row: 1 / span 2;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 2.78rem;
+    line-height: .86;
+    letter-spacing: -.05em;
+    text-shadow: 0 2px 8px rgba(18, 43, 24, .25);
+}
+
+.home-page .weather-temperature span {
+    align-self: end;
+    font-size: .68rem;
+    font-weight: 800;
+}
+
+.home-page .weather-temperature small {
+    align-self: start;
+    font-size: .48rem;
+    opacity: .86;
+}
+
+.home-page .weather-details {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+    margin: 0 0 8px;
+}
+
+.home-page .weather-details > div {
+    display: grid;
+    min-width: 0;
+    grid-template-columns: 23px minmax(0, 1fr);
+    align-items: center;
+    gap: 0 4px;
+    padding: 7px 8px;
+    border-radius: 12px;
+    box-shadow: none;
+}
+
+.home-page .weather-details > div > span {
+    grid-row: 1 / span 2;
+    font-size: .95rem;
+}
+
+.home-page .weather-details strong {
+    font-size: .55rem;
+    line-height: 1.1;
+}
+
+.home-page .weather-details small {
+    font-size: .42rem;
+    opacity: .8;
+}
+
+.home-page .garden-weather-message {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin: 0 0 8px;
+    padding: 7px 9px;
+    border-radius: 11px;
+    box-shadow: none;
+}
+
+.home-page .garden-weather-message p {
+    margin: 0;
+    font-size: .48rem;
+    line-height: 1.35;
+}
+
+.home-page .weather-forecast {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+}
+
+.home-page .weather-forecast::-webkit-scrollbar {
+    display: none;
+}
+
+.home-page .weather-forecast-day {
+    min-width: 71px;
+    flex: 1 0 71px;
+    padding: 7px 6px;
+    border-radius: 11px;
+    text-align: center;
+    box-shadow: none;
+}
+
+.home-page .weather-forecast-day strong,
+.home-page .weather-forecast-day small,
+.home-page .weather-forecast-day span {
+    font-size: .42rem;
+}
+
+.home-page .weather-forecast-icon {
+    display: block;
+    margin: 3px 0;
+    font-size: .92rem !important;
+}
+
+.home-page .weather-footer {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 8px;
+    opacity: .72;
+}
+
+.home-page .weather-footer span,
+.home-page .weather-footer a {
+    font-size: .38rem;
+}
+
+/* ---------- Build intro ---------- */
+
+.leafy-home-welcome {
+    position: relative;
+    grid-template-columns: minmax(0, 1fr) 74px;
+    min-height: 88px;
+    margin: 2px 0 4px;
+    padding: 12px 8px 10px;
+}
+
+.leafy-home-welcome::after {
+    position: absolute;
+    right: 56px;
+    bottom: 7px;
+    width: 90px;
+    height: 32px;
+    opacity: .13;
+    background: url("./assets/leafy-ui/brand-vine.svg") center / contain no-repeat;
+    content: "";
+    pointer-events: none;
+}
+
+.leafy-home-kicker {
+    margin-bottom: 4px;
+    color: #55773d;
+    font-size: .45rem;
+    letter-spacing: .15em;
+}
+
+.leafy-home-welcome h2 {
+    color: #132c1d;
+    font-size: 1.62rem;
+    line-height: 1;
+}
+
+.leafy-home-welcome p {
+    max-width: 360px;
+    margin-top: 6px;
+    color: #6c7569;
+    font-size: .60rem;
+    line-height: 1.45;
+}
+
+.leafy-home-welcome-art {
+    position: relative;
+    display: grid;
+    width: 66px;
+    height: 66px;
+    place-items: center;
+    border-radius: 50% 50% 50% 18px;
+    background:
+        radial-gradient(circle at 32% 24%, rgba(255,255,255,.95), transparent 32%),
+        linear-gradient(145deg, #f0f4df, #d9e5c5);
+    box-shadow: inset 0 0 0 1px rgba(66, 104, 62, .10), 0 9px 22px rgba(53, 82, 51, .09);
+}
+
+.leafy-home-welcome-art > span {
+    margin-top: -6px;
+    font-size: 1.65rem;
+}
+
+.leafy-home-welcome-art > small {
+    position: absolute;
+    right: 9px;
+    bottom: 8px;
+    color: #527143;
+    font-size: .35rem;
+    font-weight: 900;
+    letter-spacing: .12em;
+}
+
+/* ---------- Journey timeline ---------- */
+
+.home-page .home-build-progress {
+    position: relative;
+    margin-bottom: 10px;
+    padding: 14px 14px 12px;
+    overflow: hidden;
+    border-radius: 21px;
+    background:
+        linear-gradient(180deg, rgba(255,255,249,.98), rgba(245,244,229,.98));
+    box-shadow: var(--leafy-shadow-soft);
+}
+
+.home-page .home-build-progress::after {
+    position: absolute;
+    top: -26px;
+    right: -33px;
+    width: 124px;
+    height: 70px;
+    opacity: .12;
+    background: url("./assets/leafy-ui/brand-vine.svg") center / contain no-repeat;
+    content: "";
+    transform: rotate(-10deg);
+}
+
+.home-build-progress-header {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 8px;
+}
+
+.home-build-progress-header > div {
+    align-items: center;
+}
+
+.home-build-progress-header > div > div {
+    min-width: 0;
+}
+
+.home-build-progress-header h2 {
+    font-size: .95rem;
+}
+
+.home-build-progress-header p {
+    font-size: .49rem;
+}
+
+.home-build-progress-percent {
+    min-width: 50px;
+    height: 30px;
+    border: 1px solid rgba(71, 111, 66, .10);
+    background: #e8f1df;
+    color: #315f38;
+    font-size: .55rem;
+}
+
+.home-build-progress-bar {
+    height: 5px;
+    margin-bottom: 7px;
+    border-radius: 999px;
+    background: #e3e4d4;
+}
+
+.home-build-progress-count {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+    color: #61705e;
+}
+
+.home-build-progress-count strong,
+.home-build-progress-count span {
+    font-size: .45rem;
+}
+
+.home-build-stage-list {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 2px;
+    margin: 0 -2px;
+    padding-top: 2px;
+}
+
+.home-build-stage-list::before {
+    position: absolute;
+    top: 18px;
+    right: 8.4%;
+    left: 8.4%;
+    height: 2px;
+    background: linear-gradient(90deg, #a4c88e, #d3dac8);
+    content: "";
+}
+
+.home-page .home-build-stage {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 0 1px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    text-align: center;
+}
+
+.home-page .home-build-stage.active,
+.home-page .home-build-stage.complete {
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.home-build-stage-status {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    border: 3px solid #f8f6ec;
+    border-radius: 50%;
+    background: #e3e8d9;
+    color: #677664;
+    font-size: .74rem;
+    box-shadow: 0 0 0 1px rgba(71, 102, 68, .12);
+}
+
+.home-build-stage.complete .home-build-stage-status {
+    background: linear-gradient(145deg, #5e9a50, #3e7b43);
+    color: #fff;
+}
+
+.home-build-stage.active .home-build-stage-status {
+    background: #f2e7c6;
+    color: #315c37;
+    box-shadow: 0 0 0 2px rgba(76, 122, 70, .18);
+}
+
+.home-build-stage > div {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: center;
+}
+
+.home-build-stage > div small {
+    display: none;
+}
+
+.home-build-stage > div strong {
+    max-width: 100%;
+    overflow: hidden;
+    color: #435344;
+    font-size: .40rem;
+    line-height: 1.15;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.home-build-stage-state {
+    display: none;
+}
+
+/* ---------- Start method cards ---------- */
+
+.leafy-home-action-intro {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 14px;
+    margin: 13px 2px 7px;
+}
+
+.leafy-home-action-intro span {
+    color: #2d4c34;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: .72rem;
+    font-weight: 700;
+}
+
+.leafy-home-action-intro small {
+    max-width: 220px;
+    color: #7a8377;
+    font-size: .42rem;
+    line-height: 1.35;
+    text-align: right;
+}
+
+.leafy-home-action-grid {
+    gap: 9px;
+    margin-bottom: 12px;
+}
+
+.leafy-home-action {
+    min-height: 136px;
+    border-radius: 19px;
+    box-shadow: var(--leafy-shadow-soft);
+}
+
+.leafy-home-action::before {
+    position: absolute;
+    right: -14px;
+    bottom: -8px;
+    width: 108px;
+    height: 91px;
+    border-radius: 50%;
+    background-position: center;
+    background-size: cover;
+    content: "";
+    opacity: .23;
+    pointer-events: none;
+}
+
+.leafy-home-action-primary::before {
+    background-image: url("./assets/leafy-ui/inspiration-edible.svg");
+}
+
+.leafy-home-action-camera::before {
+    background-image: url("./assets/leafy-ui/inspiration-small-space.svg");
+    opacity: .30;
+}
+
+.leafy-home-action::after {
+    width: 82px;
+    height: 82px;
+    opacity: .7;
+}
+
+.leafy-home-action-primary {
+    border-color: rgba(238, 248, 234, .16);
+    background: linear-gradient(145deg, #164f30, #2d713d 78%);
+}
+
+.leafy-home-action-camera {
+    border-color: rgba(68, 108, 64, .14);
+    background: linear-gradient(145deg, #fffef7, #e7efd9);
+}
+
+.leafy-home-action-icon {
+    position: relative;
+    z-index: 2;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    font-size: 1.08rem;
+}
+
+.leafy-home-action > div {
+    position: relative;
+    z-index: 2;
+}
+
+.leafy-home-action small {
+    font-size: .39rem;
+    letter-spacing: .11em;
+}
+
+.leafy-home-action strong {
+    font-size: .77rem;
+}
+
+.leafy-home-action p {
+    max-width: 140px;
+    font-size: .47rem;
+}
+
+.leafy-home-action-arrow {
+    z-index: 2;
+    width: 29px;
+    height: 29px;
+}
+
+/* ---------- Sustainability ---------- */
+
+.leafy-sustainability-section {
+    margin: 15px 0;
+}
+
+.leafy-score-card {
+    grid-template-columns: 108px minmax(0, 1fr);
+    gap: 13px;
+    padding: 13px 14px;
+    border-radius: 21px;
+    background:
+        radial-gradient(circle at 100% 0%, rgba(126, 157, 78, .08), transparent 30%),
+        #fffef8;
+    box-shadow: var(--leafy-shadow-soft);
+}
+
+.leafy-score-ring {
+    width: 99px;
+    height: 99px;
+}
+
+.leafy-score-ring-inner {
+    width: 75px;
+    height: 75px;
+}
+
+.leafy-score-copy h3 {
+    color: #2b4631;
+    font-size: .69rem;
+    line-height: 1.24;
+}
+
+.leafy-score-benefits {
+    gap: 5px;
+}
+
+.leafy-score-benefits span {
+    font-size: .44rem;
+}
+
+/* ---------- Inspiration photography-style cards ---------- */
+
+.leafy-inspiration-section {
+    margin: 16px 0;
+}
+
+.leafy-inspiration-grid {
+    gap: 8px;
+}
+
+.leafy-inspiration-card {
+    min-height: 128px;
+    justify-content: flex-end;
+    padding: 11px;
+    border: 1px solid rgba(255,255,255,.20);
+    border-radius: 17px;
+    box-shadow: 0 11px 24px rgba(45, 73, 44, .12);
+    background-position: center;
+    background-size: cover;
+}
+
+.leafy-inspiration-card::after {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: linear-gradient(180deg, rgba(20,44,26,.02) 25%, rgba(15,38,22,.72) 100%);
+    content: "";
+}
+
+.leafy-inspiration-card::before {
+    top: 9px;
+    right: 9px;
+    z-index: 2;
+    display: grid;
+    width: 23px;
+    height: 23px;
+    place-items: center;
+    border: 1px solid rgba(255,255,255,.4);
+    border-radius: 50%;
+    background: rgba(255,255,255,.18);
+    content: "♡";
+    color: #fff;
+    font-size: .7rem;
+    transform: none;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.inspiration-small-space {
+    background-image: url("./assets/leafy-ui/inspiration-small-space.svg");
+}
+
+.inspiration-pollinator {
+    background-image: url("./assets/leafy-ui/inspiration-pollinator.svg");
+}
+
+.inspiration-edible {
+    background-image: url("./assets/leafy-ui/inspiration-edible.svg");
+}
+
+.leafy-inspiration-card > span {
+    display: none;
+}
+
+.leafy-inspiration-card > div {
+    z-index: 2;
+}
+
+.leafy-inspiration-card strong {
+    font-size: .68rem;
+    text-shadow: 0 2px 9px rgba(13,35,20,.35);
+}
+
+.leafy-inspiration-card small {
+    font-size: .41rem;
+    opacity: .88;
+}
+
+/* ---------- AI assistant ---------- */
+
+.home-page .garden-assistant-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 21px;
+    background:
+        radial-gradient(circle at 100% 0%, rgba(89, 132, 68, .13), transparent 35%),
+        linear-gradient(180deg, #fffef8, #f3f1e2);
+    box-shadow: var(--leafy-shadow-soft);
+}
+
+.home-page .garden-assistant-card::after {
+    position: absolute;
+    right: -44px;
+    bottom: -29px;
+    width: 132px;
+    height: 72px;
+    opacity: .08;
+    background: url("./assets/leafy-ui/brand-vine.svg") center / contain no-repeat;
+    content: "";
+    pointer-events: none;
+}
+
+/* ---------- Builder cards below dashboard ---------- */
+
+.home-page .home-builder-step {
+    margin-bottom: 13px;
+    padding: 16px;
+    border-radius: 21px;
+    background: linear-gradient(180deg, rgba(255,255,250,.98), rgba(247,246,234,.98));
+    box-shadow: var(--leafy-shadow-soft);
+}
+
+.home-page .home-builder-step::before {
+    width: 5px;
+}
+
+.home-builder-step-heading h2 {
+    color: #233f2b;
+}
+
+.home-builder-choice,
+.home-feature-card,
+.home-crop-card,
+.design-goal-card,
+.build-option-button {
+    border-radius: 15px;
+    background: #fffef9;
+}
+
+/* ---------- Premium bottom app bar ---------- */
+
+.leafy-bottom-nav {
+    max-width: 560px;
+    min-height: 72px;
+    padding: 7px 9px calc(7px + env(safe-area-inset-bottom));
+    border: 1px solid rgba(56, 95, 57, .12);
+    border-bottom: 0;
+    border-radius: 23px 23px 0 0;
+    background: rgba(255,255,249,.96);
+    box-shadow: 0 -10px 30px rgba(39, 66, 38, .10);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+.leafy-bottom-nav .nav-link {
+    min-width: 0;
+    min-height: 56px;
+    padding: 5px 3px;
+    border-radius: 16px;
+}
+
+.leafy-bottom-nav .nav-link-icon {
+    display: grid;
+    width: 34px;
+    height: 31px;
+    margin: 0 auto;
+    place-items: center;
+    border-radius: 12px;
+}
+
+.leafy-bottom-nav .nav-link:nth-child(3) {
+    position: relative;
+    margin-top: -20px;
+}
+
+.leafy-bottom-nav .nav-link:nth-child(3) .nav-link-icon {
+    width: 51px;
+    height: 51px;
+    border: 5px solid #fffef8;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #4b9a49, #2e703c);
+    color: #fff;
+    box-shadow: 0 8px 19px rgba(37, 94, 48, .25);
+}
+
+.leafy-bottom-nav .nav-link:nth-child(3).active .nav-link-icon {
+    background: linear-gradient(145deg, #55a551, #337840);
+    color: #fff;
+}
+
+.leafy-bottom-nav .nav-link:nth-child(3) p {
+    margin-top: 3px;
+    color: #3b6341;
+}
+
+.leafy-bottom-nav .nav-link.active:not(:nth-child(3)) .nav-link-icon {
+    background: #e7efdc;
+}
+
+.leafy-bottom-nav .nav-link p {
+    overflow: hidden;
+    font-size: .45rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ---------- Dark mode ---------- */
+
+html.dark-mode .app-container,
+html.dark-mode .app-container.leafy-app {
+    background:
+        radial-gradient(circle at 100% 0%, rgba(79, 132, 71, .10), transparent 18rem),
+        #1e2820;
+}
+
+html.dark-mode .leafy-brand-header-v2 h1,
+html.dark-mode .leafy-home-welcome h2 {
+    color: #eaf2e6;
+}
+
+html.dark-mode .app-brand-script,
+html.dark-mode .leafy-home-welcome p,
+html.dark-mode .leafy-home-action-intro small {
+    color: #aeb9aa !important;
+}
+
+html.dark-mode .leafy-home-action-intro span {
+    color: #dce7d9;
+}
+
+html.dark-mode .home-page .weather-card.live-weather-card {
+    border-color: rgba(213, 231, 207, .15);
+    background:
+        linear-gradient(180deg, rgba(9, 27, 16, .34), rgba(8, 27, 15, .80)),
+        url("./assets/leafy-ui/weather-garden.svg") center 44% / cover no-repeat;
+}
+
+html.dark-mode .home-page .home-build-progress,
+html.dark-mode .leafy-score-card,
+html.dark-mode .home-page .home-builder-step,
+html.dark-mode .home-page .garden-assistant-card {
+    border-color: #3d4d3f;
+    background: linear-gradient(180deg, #273329, #222d24);
+}
+
+html.dark-mode .home-build-stage-list::before {
+    background: linear-gradient(90deg, #577b53, #39493a);
+}
+
+html.dark-mode .home-build-stage-status {
+    border-color: #222d24;
+    background: #344036;
+    color: #b7c4b4;
+}
+
+html.dark-mode .home-build-stage > div strong {
+    color: #c9d5c7;
+}
+
+html.dark-mode .leafy-bottom-nav {
+    border-color: #3c4b3e;
+    background: rgba(28, 38, 30, .97);
+}
+
+html.dark-mode .leafy-bottom-nav .nav-link:nth-child(3) .nav-link-icon {
+    border-color: #1e2820;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 470px) {
+    .app-container,
+    .app-container.leafy-app {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .leafy-brand-header-v2 {
+        grid-template-columns: 50px minmax(0, 1fr) 37px;
+        min-height: 96px;
+        padding-top: 14px;
+    }
+
+    .leafy-brand-header-v2 .app-brand-mark {
+        width: 49px;
+        height: 49px;
+    }
+
+    .leafy-brand-header-v2 h1 {
+        font-size: clamp(1.36rem, 6.2vw, 1.72rem);
+    }
+
+    .leafy-brand-header-v2 .app-brand-kicker {
+        font-size: .36rem;
+        letter-spacing: .14em;
+    }
+
+    .app-brand-script {
+        font-size: .66rem !important;
+    }
+
+    .home-page .weather-card.live-weather-card {
+        min-height: 260px;
+        padding: 13px;
+    }
+
+    .home-page .weather-temperature strong {
+        font-size: 2.5rem;
+    }
+
+    .home-page .weather-details {
+        gap: 5px;
+    }
+
+    .home-page .weather-details > div {
+        grid-template-columns: 20px minmax(0, 1fr);
+        padding: 6px;
+    }
+
+    .leafy-home-welcome {
+        grid-template-columns: minmax(0, 1fr) 62px;
+        min-height: 79px;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    .leafy-home-welcome h2 {
+        font-size: 1.42rem;
+    }
+
+    .leafy-home-welcome-art {
+        width: 59px;
+        height: 59px;
+    }
+
+    .home-page .home-build-progress {
+        padding: 12px 10px 10px;
+    }
+
+    .home-build-stage-status {
+        width: 31px;
+        height: 31px;
+        font-size: .65rem;
+    }
+
+    .home-build-stage-list::before {
+        top: 16px;
+    }
+
+    .home-build-stage > div strong {
+        font-size: .36rem;
+    }
+
+    .leafy-home-action-intro {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .leafy-home-action-intro small {
+        max-width: none;
+        text-align: left;
+    }
+
+    .leafy-home-action {
+        min-height: 130px;
+        padding: 11px;
+    }
+
+    .leafy-inspiration-card {
+        min-width: 118px;
+        min-height: 124px;
+    }
+}
+
+@media (max-width: 365px) {
+    .home-build-stage-list {
+        overflow-x: auto;
+        grid-template-columns: repeat(6, 52px);
+        justify-content: start;
+        padding-bottom: 4px;
+        scrollbar-width: none;
+    }
+
+    .home-build-stage-list::-webkit-scrollbar {
+        display: none;
+    }
+
+    .home-build-stage-list::before {
+        right: auto;
+        left: 27px;
+        width: 260px;
+    }
+
+    .leafy-home-action-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .leafy-home-action {
+        min-height: 112px;
+    }
+}

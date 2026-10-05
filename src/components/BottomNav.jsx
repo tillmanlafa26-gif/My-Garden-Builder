@@ -14,12 +14,12 @@ const navItems = [
     },
     {
         to: "/garden",
-        label: "Garden",
+        label: "My Garden",
         icon: "garden"
     },
     {
         to: "/plants",
-        label: "Plants",
+        label: "Plant Guide",
         icon: "leaf"
     },
     {
@@ -39,32 +39,65 @@ function BottomNav() {
 
     return (
         <nav
-            className="bottom-nav"
+            className="bottom-nav leafy-bottom-nav"
             aria-label="Primary navigation"
         >
-            {navItems.map(
-                (item) => (
-                    <NavLink
-                        key={item.to}
-                        to={item.to}
-                        end={item.end}
-                        className="nav-link"
-                    >
-                        <span className="nav-link-icon">
-                            <Icon
-                                name={item.icon}
-                                size={21}
-                            />
-                        </span>
 
-                        <p>
-                            {item.label}
-                        </p>
-                    </NavLink>
+            {
+                navItems.map(
+                    (
+                        item,
+                        index
+                    ) => (
+
+                        <NavLink
+                            key={
+                                item.to
+                            }
+                            to={
+                                item.to
+                            }
+                            end={
+                                item.end
+                            }
+                            className={
+                                index === 2
+                                    ? "nav-link nav-link-leaf"
+                                    : "nav-link"
+                            }
+                        >
+
+                            <span className="nav-link-icon">
+
+                                <Icon
+                                    name={
+                                        item.icon
+                                    }
+                                    size={
+                                        index === 2
+                                            ? 23
+                                            : 21
+                                    }
+                                />
+
+                            </span>
+
+
+                            <p>
+                                {
+                                    item.label
+                                }
+                            </p>
+
+                        </NavLink>
+
+                    )
                 )
-            )}
+            }
+
         </nav>
     );
+
 }
 
 

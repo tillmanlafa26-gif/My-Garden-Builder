@@ -412,7 +412,7 @@ function HomeGardenBuildStep({
             return (
                 <section
                     id="home-builder-step-build"
-                    className="home-builder-step upcoming"
+                    className="home-builder-step upcoming leafy-build-step"
                 >
 
                     <div className="home-builder-step-heading">
@@ -468,7 +468,7 @@ function HomeGardenBuildStep({
             return (
                 <section
                     id="home-builder-step-build"
-                    className="home-builder-step complete collapsed"
+                    className="home-builder-step complete collapsed leafy-build-step"
                 >
 
                     <div className="home-builder-step-heading">
@@ -537,7 +537,7 @@ function HomeGardenBuildStep({
         return (
             <section
                 id="home-builder-step-build"
-                className="home-builder-step active"
+                className="home-builder-step active leafy-build-step"
             >
 
                 <div className="home-builder-step-heading">
@@ -572,7 +572,128 @@ function HomeGardenBuildStep({
                 </div>
 
 
-                <div className="home-builder-build-stack">
+                <div className="leafy-build-shell">
+
+                    <div className="leafy-build-topbar">
+
+                        <div>
+
+                            <small>
+                                BUILD CENTER
+                            </small>
+
+                            <strong>
+                                Turn the indoor design into a setup checklist
+                            </strong>
+
+                        </div>
+
+
+                        <span className="leafy-build-status">
+                            🏠 Indoor Plan
+                        </span>
+
+                    </div>
+
+
+                    <div className="leafy-build-hero">
+
+                        <div className="leafy-build-hero-visual">
+                            <span>
+                                🪴
+                            </span>
+                        </div>
+
+
+                        <div className="leafy-build-hero-copy">
+
+                            <small>
+                                READY TO SET UP
+                            </small>
+
+                            <strong>
+                                {
+                                    indoorLayout.indoorSpaceName ||
+                                    "Indoor Garden"
+                                }
+                            </strong>
+
+                            <span>
+                                Layout, containers, lighting, and setup steps are organized below.
+                            </span>
+
+                        </div>
+
+
+                        <div className="leafy-build-hero-badge">
+                            <strong>
+                                {
+                                    indoorLayout.stats?.placedPlantCount ||
+                                    0
+                                }
+                            </strong>
+
+                            <span>
+                                plants
+                            </span>
+                        </div>
+
+                    </div>
+
+
+                    <div className="leafy-build-metrics">
+
+                        <div>
+                            <span>💡</span>
+                            <strong>
+                                {
+                                    indoorLayout.stats?.growLightZoneCount ||
+                                    0
+                                }
+                            </strong>
+                            <small>Light zones</small>
+                        </div>
+
+
+                        <div>
+                            <span>📦</span>
+                            <strong>
+                                {
+                                    indoorMaterialPlan?.materials?.length ||
+                                    0
+                                }
+                            </strong>
+                            <small>Material items</small>
+                        </div>
+
+
+                        <div>
+                            <span>🧭</span>
+                            <strong>
+                                {
+                                    indoorSetupPlan?.stageCount ||
+                                    indoorSetupPlan?.stages?.length ||
+                                    0
+                                }
+                            </strong>
+                            <small>Setup stages</small>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div className="home-builder-build-stack leafy-build-stack">
+
+                    <div className="leafy-build-section-label">
+                        <div>
+                            <small>PLAN DETAILS</small>
+                            <strong>Review your indoor setup</strong>
+                        </div>
+
+                        <span>Scroll to review</span>
+                    </div>
 
                     <IndoorLayoutPreview
                         indoorLayout={
@@ -653,7 +774,7 @@ function HomeGardenBuildStep({
 
                     <button
                         type="button"
-                        className="home-builder-continue-button"
+                        className="home-builder-continue-button leafy-build-primary-button"
                         onClick={
                             saveIndoorBuildPlan
                         }
@@ -699,7 +820,7 @@ function HomeGardenBuildStep({
 
             <section
                 id="home-builder-step-build"
-                className="home-builder-step upcoming"
+                className="home-builder-step upcoming leafy-build-step"
             >
 
                 <div className="home-builder-step-heading">
@@ -762,7 +883,7 @@ function HomeGardenBuildStep({
 
             <section
                 id="home-builder-step-build"
-                className="home-builder-step complete collapsed"
+                className="home-builder-step complete collapsed leafy-build-step"
             >
 
                 <div className="home-builder-step-heading">
@@ -839,7 +960,7 @@ function HomeGardenBuildStep({
 
         <section
             id="home-builder-step-build"
-            className="home-builder-step active"
+            className="home-builder-step active leafy-build-step"
         >
 
             <div className="home-builder-step-heading">
@@ -877,7 +998,144 @@ function HomeGardenBuildStep({
             </div>
 
 
-            <div className="home-builder-build-stack">
+            <div className="leafy-build-shell">
+
+                <div className="leafy-build-topbar">
+
+                    <div>
+
+                        <small>
+                            BUILD CENTER
+                        </small>
+
+                        <strong>
+                            Turn your garden design into a build-ready plan
+                        </strong>
+
+                    </div>
+
+
+                    <span className="leafy-build-status">
+                        🌿 Outdoor Plan
+                    </span>
+
+                </div>
+
+
+                <div className="leafy-build-hero">
+
+                    {
+                        designSpace.spacePhoto?.dataUrl
+                            ? (
+                                <img
+                                    className="leafy-build-hero-image"
+                                    src={
+                                        designSpace.spacePhoto.dataUrl
+                                    }
+                                    alt="Saved garden space"
+                                />
+                            )
+                            : (
+                                <div className="leafy-build-hero-visual">
+                                    <span>
+                                        🌱
+                                    </span>
+                                </div>
+                            )
+                    }
+
+
+                    <div className="leafy-build-hero-copy">
+
+                        <small>
+                            DESIGN READY
+                        </small>
+
+                        <strong>
+                            {
+                                layout.spaceWidth
+                            } × {
+                                layout.spaceLength
+                            } ft Garden
+                        </strong>
+
+                        <span>
+                            Your layout, planting guidance, materials, and construction sequence are ready for review.
+                        </span>
+
+                    </div>
+
+
+                    <div className="leafy-build-hero-badge">
+                        <strong>
+                            {
+                                layout.stats?.raisedBedCount ||
+                                0
+                            }
+                        </strong>
+
+                        <span>
+                            beds
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <div className="leafy-build-metrics">
+
+                    <div>
+                        <span>🌱</span>
+                        <strong>
+                            {
+                                layout.stats?.growingArea ||
+                                0
+                            }
+                        </strong>
+                        <small>Growing sq ft</small>
+                    </div>
+
+
+                    <div>
+                        <span>📦</span>
+                        <strong>
+                            {
+                                materialPlan?.materials?.length ||
+                                0
+                            }
+                        </strong>
+                        <small>Material items</small>
+                    </div>
+
+
+                    <div>
+                        <span>🛠️</span>
+                        <strong>
+                            {
+                                buildPlan?.stageCount ||
+                                buildPlan?.stages?.length ||
+                                0
+                            }
+                        </strong>
+                        <small>Build stages</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div className="home-builder-build-stack leafy-build-stack">
+
+
+                <div className="leafy-build-section-label">
+                    <div>
+                        <small>PLAN DETAILS</small>
+                        <strong>Review everything before you build</strong>
+                    </div>
+
+                    <span>Scroll to review</span>
+                </div>
 
 
                 <div className="home-build-review-heading">
@@ -1035,7 +1293,7 @@ function HomeGardenBuildStep({
                 <button
                     type="button"
 
-                    className="home-builder-continue-button"
+                    className="home-builder-continue-button leafy-build-primary-button"
 
                     onClick={
                         saveBuildPlan
