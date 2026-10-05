@@ -2970,6 +2970,22 @@ function Home({
                                         onChange={
                                             setSpacePhoto
                                         }
+                                        spaceType={
+                                            spaceType
+                                        }
+                                        knownDimensions={{
+                                            width:
+                                                spaceWidth,
+
+                                            length:
+                                                spaceLength,
+
+                                            height:
+                                                spaceHeight
+                                        }}
+                                        unit={
+                                            spaceUnit
+                                        }
                                     />
 
                                 </div>

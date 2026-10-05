@@ -51,6 +51,10 @@ import IndoorSetupPlan
     from "../components/IndoorSetupPlan";
 
 
+import GardenPhotoPlanPreview
+    from "../components/GardenPhotoPlanPreview";
+
+
 import {
     gardenPlans,
     sunlightNames
@@ -1873,6 +1877,33 @@ function Garden({
                         </div>
 
                     </section>
+
+                )
+            }
+
+
+            {/* =================================================
+                PHOTO DESIGN PREVIEW
+            ================================================= */}
+
+            {
+                designSpace.spacePhoto?.dataUrl &&
+                designReady && (
+
+                    <GardenPhotoPlanPreview
+                        spacePhoto={
+                            designSpace.spacePhoto
+                        }
+                        layout={
+                            layout
+                        }
+                        indoorLayout={
+                            indoorLayout
+                        }
+                        isIndoorSpace={
+                            isIndoorSpace
+                        }
+                    />
 
                 )
             }

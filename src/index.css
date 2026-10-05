@@ -7131,3 +7131,521 @@ html.dark-mode
     }
 }
 
+/* =========================================================
+   CAMERA PHASES 2–4
+========================================================= */
+
+.garden-space-photo-image-wrap.markup-active {
+    cursor: crosshair;
+    touch-action: manipulation;
+}
+
+.garden-space-photo-overlay,
+.garden-photo-plan-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.garden-space-photo-tool-badge {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    padding: 5px 8px;
+    border-radius: 999px;
+    background: rgba(34, 47, 36, 0.88);
+    color: #ffffff;
+    font-size: 0.45rem;
+    font-weight: 900;
+}
+
+.photo-ai-usable-area {
+    fill: rgba(242, 221, 104, 0.08);
+    stroke: #f0d663;
+    stroke-width: 0.7;
+    stroke-dasharray: 2 1;
+}
+
+.photo-ai-obstacle {
+    fill: rgba(205, 91, 73, 0.12);
+    stroke: #d66c5a;
+    stroke-width: 0.55;
+}
+
+.photo-ai-structure {
+    fill: rgba(82, 112, 150, 0.08);
+    stroke: #728eaf;
+    stroke-width: 0.5;
+}
+
+.photo-manual-usable-area {
+    fill: rgba(104, 159, 99, 0.14);
+    stroke: #87d17e;
+    stroke-width: 0.9;
+}
+
+.photo-area-point {
+    fill: #ffffff;
+    stroke: #4f8357;
+    stroke-width: 0.7;
+}
+
+.photo-calibration-line {
+    stroke: #ffe06e;
+    stroke-width: 0.85;
+    stroke-dasharray: 2 1;
+}
+
+.photo-calibration-point {
+    fill: #fff2ae;
+    stroke: #79611f;
+    stroke-width: 0.6;
+}
+
+.photo-manual-obstacle {
+    fill: rgba(180, 73, 61, 0.9);
+    stroke: #ffffff;
+    stroke-width: 0.55;
+}
+
+.photo-manual-obstacle-label {
+    fill: #ffffff;
+    font-size: 3.5px;
+}
+
+.garden-photo-workflow {
+    display: grid;
+    gap: 10px;
+}
+
+.garden-photo-phase-card {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    padding: 11px;
+    border: 1px solid #dce6d9;
+    border-radius: 12px;
+    background: #f8faf6;
+}
+
+.garden-photo-phase-heading {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr);
+    align-items: start;
+    gap: 8px;
+}
+
+.garden-photo-phase-heading > span {
+    display: grid;
+    width: 32px;
+    height: 32px;
+    place-items: center;
+    border-radius: 9px;
+    background: #e7f0e4;
+    color: #46634c;
+    font-size: 0.56rem;
+    font-weight: 900;
+}
+
+.garden-photo-phase-heading > div {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.garden-photo-phase-heading strong {
+    color: #3d5943;
+    font-size: 0.57rem;
+}
+
+.garden-photo-phase-heading small {
+    color: #768375;
+    font-size: 0.46rem;
+    line-height: 1.4;
+}
+
+.garden-photo-tool-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+}
+
+.garden-photo-tool-grid button,
+.garden-photo-clear-actions button,
+.garden-photo-calibration-form button,
+.garden-photo-analysis button {
+    min-height: 40px;
+    padding: 7px 9px;
+    border: 1px solid #d0ddce;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #536a57;
+    font-size: 0.47rem;
+    font-weight: 800;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.garden-photo-tool-grid button.selected {
+    border-color: #668a6d;
+    background: #e6f1e3;
+    color: #3e6848;
+}
+
+.garden-photo-obstacle-select,
+.garden-photo-calibration-form input,
+.garden-photo-calibration-form select {
+    min-height: 40px;
+    box-sizing: border-box;
+    padding: 7px 9px;
+    border: 1px solid #cfdbcc;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #405044;
+    font: inherit;
+    font-size: 0.5rem;
+}
+
+.garden-photo-calibration-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 100px auto;
+    gap: 7px;
+}
+
+.garden-photo-calibration-form button,
+.garden-photo-ai-button {
+    border: 0;
+    background: #416e4d;
+    color: #ffffff;
+}
+
+.garden-photo-ai-button {
+    min-height: 44px;
+    padding: 8px 10px;
+    border: 0;
+    border-radius: 9px;
+    background: linear-gradient(135deg, #3e6848, #536f8b);
+    color: #ffffff;
+    font-size: 0.5rem;
+    font-weight: 900;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.garden-photo-ai-button:disabled {
+    cursor: wait;
+    opacity: 0.7;
+}
+
+.garden-photo-calibration-summary,
+.garden-photo-render-status {
+    margin: 0;
+    padding: 8px;
+    border-radius: 9px;
+    background: #edf4ea;
+    color: #5d705f;
+    font-size: 0.47rem;
+    line-height: 1.45;
+}
+
+.garden-photo-clear-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.garden-photo-clear-actions button {
+    min-height: 34px;
+}
+
+.garden-photo-analysis {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 9px;
+    border-radius: 10px;
+    background: #ffffff;
+}
+
+.garden-photo-analysis strong {
+    color: #455d49;
+    font-size: 0.52rem;
+}
+
+.garden-photo-analysis p,
+.garden-photo-analysis small {
+    margin: 0;
+    color: #6f7c6d;
+    font-size: 0.46rem;
+    line-height: 1.45;
+}
+
+.garden-photo-analysis button {
+    border: 0;
+    background: #466f50;
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   GARDEN-IN-PHOTO PREVIEW
+========================================================= */
+
+.garden-photo-plan-preview {
+    overflow: hidden;
+}
+
+.garden-photo-plan-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    margin: 10px 0;
+}
+
+.garden-photo-plan-controls label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #5e6e60;
+    font-size: 0.48rem;
+    font-weight: 800;
+}
+
+.garden-photo-opacity-control {
+    flex: 1 1 160px;
+}
+
+.garden-photo-opacity-control input {
+    flex: 1 1 100px;
+    min-width: 90px;
+}
+
+.garden-photo-plan-stage {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #d8e2d5;
+    border-radius: 13px;
+    background: #edf1ea;
+}
+
+.garden-photo-plan-stage > img {
+    display: block;
+    width: 100%;
+    max-height: 520px;
+    object-fit: cover;
+}
+
+.garden-photo-area-outline {
+    fill: rgba(100, 150, 95, 0.04);
+    stroke: #ecf6ea;
+    stroke-width: 0.7;
+    stroke-dasharray: 2 1;
+}
+
+.garden-photo-area-outline.manual {
+    stroke: #86d27e;
+}
+
+.garden-photo-area-outline.ai {
+    stroke: #efd56d;
+}
+
+.garden-photo-plan-shape {
+    fill: rgba(95, 145, 86, 0.78);
+    stroke: rgba(255, 255, 255, 0.95);
+    stroke-width: 0.45;
+}
+
+.garden-photo-plan-shape.shape-raised-bed {
+    fill: rgba(113, 78, 49, 0.84);
+}
+
+.garden-photo-plan-shape.shape-compost {
+    fill: rgba(78, 105, 68, 0.82);
+}
+
+.garden-photo-plan-shape.shape-irrigation {
+    fill: rgba(72, 125, 163, 0.68);
+}
+
+.garden-photo-plan-shape.shape-trellis {
+    fill: rgba(91, 80, 135, 0.7);
+}
+
+.garden-photo-plan-shape.shape-indoor-plant {
+    fill: rgba(83, 138, 84, 0.78);
+}
+
+.garden-photo-plan-shape-icon {
+    fill: #ffffff;
+    font-size: 3.7px;
+    paint-order: stroke;
+    stroke: rgba(30, 42, 31, 0.7);
+    stroke-width: 0.55px;
+}
+
+.garden-photo-preview-obstacle {
+    fill: rgba(202, 82, 67, 0.1);
+    stroke: #de725f;
+    stroke-width: 0.55;
+}
+
+.garden-photo-preview-structure {
+    fill: rgba(76, 104, 142, 0.07);
+    stroke: #7895b7;
+    stroke-width: 0.5;
+}
+
+.garden-photo-plan-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 9px;
+}
+
+.garden-photo-plan-legend span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #6b786b;
+    font-size: 0.45rem;
+}
+
+.garden-photo-plan-legend i {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+}
+
+.garden-photo-plan-legend .legend-plan {
+    background: #719567;
+}
+
+.garden-photo-plan-legend .legend-area {
+    border: 1px dashed #72aa6d;
+    background: rgba(114, 170, 109, 0.08);
+}
+
+.garden-photo-plan-legend .legend-obstacle {
+    border: 1px solid #d76c5c;
+    background: rgba(215, 108, 92, 0.12);
+}
+
+.garden-photo-plan-calibration,
+.garden-photo-plan-note {
+    margin-top: 10px;
+    padding: 9px;
+    border-radius: 10px;
+}
+
+.garden-photo-plan-calibration {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 6px;
+    background: #f5f1df;
+}
+
+.garden-photo-plan-calibration strong,
+.garden-photo-plan-note strong {
+    color: #536055;
+    font-size: 0.5rem;
+}
+
+.garden-photo-plan-calibration span {
+    color: #736c50;
+    font-size: 0.44rem;
+}
+
+.garden-photo-plan-note {
+    background: #f4f7f2;
+}
+
+.garden-photo-plan-note p {
+    margin: 4px 0 0;
+    color: #727e70;
+    font-size: 0.46rem;
+    line-height: 1.5;
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+html.dark-mode .garden-photo-phase-card,
+html.dark-mode .garden-photo-analysis,
+html.dark-mode .garden-photo-plan-note {
+    border-color: #414f41;
+    background: #293429;
+}
+
+html.dark-mode .garden-photo-phase-heading > span,
+html.dark-mode .garden-photo-calibration-summary {
+    background: #354435;
+}
+
+html.dark-mode .garden-photo-phase-heading strong,
+html.dark-mode .garden-photo-analysis strong,
+html.dark-mode .garden-photo-plan-note strong {
+    color: #dce8da;
+}
+
+html.dark-mode .garden-photo-phase-heading small,
+html.dark-mode .garden-photo-analysis p,
+html.dark-mode .garden-photo-analysis small,
+html.dark-mode .garden-photo-render-status,
+html.dark-mode .garden-photo-plan-controls label,
+html.dark-mode .garden-photo-plan-legend span,
+html.dark-mode .garden-photo-plan-note p {
+    color: #aebaaa;
+}
+
+html.dark-mode .garden-photo-tool-grid button,
+html.dark-mode .garden-photo-clear-actions button,
+html.dark-mode .garden-photo-obstacle-select,
+html.dark-mode .garden-photo-calibration-form input,
+html.dark-mode .garden-photo-calibration-form select {
+    border-color: #455445;
+    background: #253025;
+    color: #d5e1d3;
+}
+
+html.dark-mode .garden-photo-tool-grid button.selected {
+    background: #344934;
+}
+
+html.dark-mode .garden-photo-plan-stage {
+    border-color: #465446;
+    background: #222b22;
+}
+
+html.dark-mode .garden-photo-plan-calibration {
+    background: #3c3829;
+}
+
+html.dark-mode .garden-photo-plan-calibration strong,
+html.dark-mode .garden-photo-plan-calibration span {
+    color: #dbd1ad;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 430px) {
+    .garden-photo-tool-grid,
+    .garden-photo-calibration-form {
+        grid-template-columns: 1fr;
+    }
+
+    .garden-photo-calibration-form button {
+        width: 100%;
+    }
+}
+
