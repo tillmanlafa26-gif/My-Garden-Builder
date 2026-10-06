@@ -12298,3 +12298,791 @@ html.dark-mode .leafy-bottom-nav .nav-link:nth-child(3) .nav-link-icon {
         min-height: 112px;
     }
 }
+
+/* =========================================================
+   LEAFY UI REWORK — PHASE 5 GARDEN DESIGNER POLISH
+   Brings Step 5 closer to the premium botanical reference
+   while preserving the existing layout and planning logic.
+========================================================= */
+
+.leafy-designer-step {
+    position: relative;
+    overflow: hidden;
+    padding: 15px !important;
+    border-radius: 24px !important;
+}
+
+.leafy-designer-step::before,
+.leafy-designer-step::after {
+    position: absolute;
+    z-index: 0;
+    width: 92px;
+    height: 92px;
+    border-radius: 70% 0 70% 0;
+    background: linear-gradient(145deg, rgba(70, 130, 72, 0.16), rgba(122, 151, 84, 0.02));
+    content: "";
+    pointer-events: none;
+}
+
+.leafy-designer-step::before {
+    top: -54px;
+    right: -40px;
+    transform: rotate(18deg);
+}
+
+.leafy-designer-step::after {
+    bottom: -64px;
+    left: -44px;
+    transform: rotate(205deg);
+}
+
+.leafy-designer-step > * {
+    position: relative;
+    z-index: 1;
+}
+
+.leafy-designer-step > .home-builder-step-heading {
+    margin-bottom: 10px;
+    padding: 10px 11px;
+    border: 1px solid rgba(67, 103, 65, 0.1);
+    border-radius: 16px;
+    background: rgba(255, 255, 249, 0.72);
+}
+
+.leafy-designer-step > .home-builder-step-heading h2 {
+    margin-bottom: 2px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.88rem;
+}
+
+.leafy-designer-step > .home-builder-step-heading p {
+    font-size: 0.51rem;
+    line-height: 1.45;
+}
+
+.leafy-designer-screen-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    min-height: 78px;
+    padding: 11px 12px;
+    overflow: hidden;
+    border: 1px solid rgba(60, 104, 62, 0.13);
+    border-radius: 18px;
+    background:
+        radial-gradient(circle at 88% 18%, rgba(98, 150, 84, 0.17), transparent 28%),
+        linear-gradient(135deg, rgba(255, 255, 249, 0.98), rgba(238, 243, 225, 0.95));
+    box-shadow: 0 9px 22px rgba(44, 78, 45, 0.08);
+}
+
+.leafy-designer-title-lockup {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 9px;
+}
+
+.leafy-designer-title-icon {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    place-items: center;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #e6f2dc, #cfe5c5);
+    box-shadow: inset 0 0 0 1px rgba(53, 101, 58, 0.12);
+    font-size: 1.16rem;
+}
+
+.leafy-designer-title-lockup > div {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+}
+
+.leafy-designer-title-lockup small {
+    margin-bottom: 1px;
+    color: #72905f;
+    font-size: 0.36rem;
+    font-weight: 900;
+    letter-spacing: 0.13em;
+}
+
+.leafy-designer-title-lockup h3 {
+    margin: 0;
+    color: #183d27;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.02rem;
+    line-height: 1.05;
+}
+
+.leafy-designer-title-lockup p {
+    max-width: 245px;
+    margin: 3px 0 0;
+    color: #6c786a;
+    font-size: 0.44rem;
+    line-height: 1.4;
+}
+
+.leafy-designer-inspire-button {
+    min-height: 34px;
+    flex: 0 0 auto;
+    padding: 7px 10px;
+    border: 1px solid rgba(57, 101, 58, 0.14);
+    border-radius: 999px;
+    background: rgba(255, 255, 250, 0.9);
+    color: #315d3d;
+    font-size: 0.43rem;
+    font-weight: 900;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(43, 83, 45, 0.08);
+}
+
+.leafy-designer-status {
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 9px;
+}
+
+.leafy-designer-mode-switch {
+    gap: 7px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+}
+
+.leafy-designer-mode-switch span {
+    position: relative;
+    min-height: 52px;
+    justify-items: start;
+    padding: 9px 11px 9px 36px;
+    border: 1px solid rgba(69, 103, 67, 0.13);
+    border-radius: 15px;
+    background: rgba(255, 255, 250, 0.76);
+    color: #6d796b;
+    font-size: 0.47rem;
+    box-shadow: 0 5px 13px rgba(46, 76, 45, 0.05);
+}
+
+.leafy-designer-mode-switch span::before {
+    position: absolute;
+    left: 9px;
+    display: grid;
+    width: 20px;
+    height: 20px;
+    place-items: center;
+    border-radius: 50%;
+    background: #eef3e8;
+    content: "";
+}
+
+.leafy-designer-mode-switch span.active {
+    border-color: rgba(56, 121, 61, 0.75);
+    background: linear-gradient(145deg, #e7f4df, #d8ebd1);
+    color: #25563a;
+    box-shadow: 0 6px 16px rgba(42, 94, 46, 0.11), inset 0 0 0 1px rgba(255, 255, 255, 0.58);
+}
+
+.leafy-designer-mode-switch span.active::after {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    display: grid;
+    width: 17px;
+    height: 17px;
+    place-items: center;
+    border-radius: 50%;
+    background: #2d6f42;
+    color: #fff;
+    content: "✓";
+    font-size: 0.42rem;
+    font-weight: 900;
+}
+
+.leafy-designer-setup-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+}
+
+.leafy-designer-setup-card {
+    display: grid;
+    min-width: 0;
+    min-height: 76px;
+    grid-template-columns: 34px minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+    padding: 9px;
+    border: 1px solid rgba(67, 104, 66, 0.13);
+    border-radius: 15px;
+    background: rgba(255, 255, 250, 0.88);
+    box-shadow: 0 6px 15px rgba(45, 76, 45, 0.05);
+}
+
+.leafy-designer-setup-card > img,
+.leafy-designer-setup-icon {
+    width: 34px;
+    height: 44px;
+    border-radius: 9px;
+}
+
+.leafy-designer-setup-card > img {
+    object-fit: cover;
+}
+
+.leafy-designer-setup-icon {
+    display: grid;
+    place-items: center;
+    background: linear-gradient(145deg, #edf3e6, #dce9d3);
+    font-size: 0.98rem;
+}
+
+.leafy-designer-setup-card > div {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.leafy-designer-setup-card small {
+    color: #809078;
+    font-size: 0.34rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+}
+
+.leafy-designer-setup-card strong {
+    overflow: hidden;
+    color: #31513a;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.57rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.leafy-designer-setup-card > div > span {
+    color: #7d887a;
+    font-size: 0.39rem;
+    line-height: 1.35;
+}
+
+.leafy-designer-context-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    padding: 7px;
+    border: 1px solid rgba(68, 108, 67, 0.1);
+    border-radius: 15px;
+    background: linear-gradient(180deg, rgba(236, 243, 228, 0.92), rgba(229, 238, 220, 0.9));
+}
+
+.leafy-designer-context-strip > div {
+    display: flex;
+    min-width: 0;
+    min-height: 54px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    padding: 5px;
+    border-radius: 10px;
+    background: rgba(255, 255, 250, 0.72);
+    text-align: center;
+}
+
+.leafy-designer-context-strip > div > span {
+    font-size: 0.82rem;
+}
+
+.leafy-designer-context-strip strong {
+    max-width: 100%;
+    overflow: hidden;
+    color: #31513b;
+    font-size: 0.48rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.leafy-designer-context-strip small {
+    color: #7e897b;
+    font-size: 0.34rem;
+}
+
+.leafy-designer-priority-section,
+.leafy-designer-step > .home-builder-field-group {
+    margin-top: 12px;
+    padding: 12px;
+    border: 1px solid rgba(67, 102, 64, 0.11);
+    border-radius: 18px;
+    background: rgba(255, 255, 250, 0.73);
+}
+
+.leafy-designer-subheading small {
+    font-size: 0.37rem;
+    letter-spacing: 0.12em;
+}
+
+.leafy-designer-subheading h3 {
+    font-size: 0.72rem;
+}
+
+.leafy-designer-step .design-goal-grid {
+    gap: 7px;
+}
+
+.leafy-designer-step .design-goal-card {
+    min-height: 96px;
+    padding: 10px;
+    border-width: 1px;
+    background: #fffef8;
+    box-shadow: 0 5px 13px rgba(53, 84, 50, 0.045);
+}
+
+.leafy-designer-step .design-goal-card.selected::before {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    display: grid;
+    width: 18px;
+    height: 18px;
+    place-items: center;
+    border-radius: 50%;
+    background: #2f733f;
+    color: #fff;
+    content: "✓";
+    font-size: 0.42rem;
+    font-weight: 900;
+}
+
+.leafy-designer-material-grid {
+    gap: 7px;
+}
+
+.leafy-material-card {
+    min-height: 86px;
+    padding: 6px 5px 8px;
+    border-radius: 13px;
+}
+
+.leafy-material-swatch {
+    display: block;
+    width: 100%;
+    height: 37px;
+    margin-bottom: 3px;
+    overflow: hidden;
+    border: 1px solid rgba(61, 83, 58, 0.12);
+    border-radius: 9px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+}
+
+.leafy-material-swatch.cedar {
+    background:
+        repeating-linear-gradient(98deg, rgba(101, 57, 31, 0.16) 0 2px, transparent 2px 9px),
+        linear-gradient(135deg, #d7a06b, #ba7843 48%, #e1b47f);
+}
+
+.leafy-material-swatch.composite {
+    background:
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.11) 0 1px, transparent 1px 7px),
+        linear-gradient(135deg, #736c5f, #a49c8b);
+}
+
+.leafy-material-swatch.metal {
+    background:
+        linear-gradient(110deg, rgba(255, 255, 255, 0.58), transparent 35%, rgba(255, 255, 255, 0.26) 60%, transparent 78%),
+        linear-gradient(135deg, #bcc3c1, #7f8988);
+}
+
+.leafy-material-swatch.pressure-treated {
+    background:
+        repeating-linear-gradient(102deg, rgba(85, 68, 38, 0.14) 0 2px, transparent 2px 8px),
+        linear-gradient(135deg, #b9a379, #8f805e);
+}
+
+.leafy-material-card.selected {
+    position: relative;
+    border-color: #3b8748;
+    box-shadow: 0 7px 16px rgba(48, 103, 51, 0.12), inset 0 0 0 1px rgba(74, 139, 78, 0.16);
+}
+
+.leafy-material-card.selected::after {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    display: grid;
+    width: 17px;
+    height: 17px;
+    place-items: center;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: #2f7c42;
+    color: #fff;
+    content: "✓";
+    font-size: 0.38rem;
+    font-weight: 900;
+}
+
+.leafy-build-options-grid {
+    gap: 7px;
+}
+
+.leafy-build-options-grid label {
+    min-height: 65px;
+    justify-content: space-between;
+    padding: 8px 9px;
+    border-radius: 12px;
+    background: #fffef9;
+}
+
+.leafy-build-options-grid select {
+    min-height: 30px;
+    padding: 4px 7px;
+    border-radius: 8px;
+    font-size: 0.5rem;
+}
+
+.leafy-designer-step .home-design-input-summary,
+.leafy-designer-step .home-indoor-design-input-summary {
+    margin-top: 12px;
+    padding: 7px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.42);
+}
+
+.leafy-designer-live-preview {
+    margin-top: 13px;
+    padding: 10px;
+    border-radius: 19px;
+    background:
+        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.74), transparent 28%),
+        linear-gradient(160deg, #edf3e5, #dde7d5 48%, #ece9d8);
+    box-shadow: 0 12px 26px rgba(45, 79, 44, 0.10);
+}
+
+.leafy-preview-toggle {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    min-width: 72px;
+    padding: 3px;
+    border-radius: 999px;
+    background: rgba(215, 226, 207, 0.95);
+}
+
+.leafy-preview-toggle button {
+    min-height: 23px;
+    padding: 3px 7px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: #647062;
+    font-size: 0.42rem;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.leafy-preview-toggle button.active {
+    background: #397847;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(38, 91, 47, 0.16);
+}
+
+.leafy-layout-stage {
+    position: relative;
+    padding: 5px;
+    overflow: hidden;
+    border-radius: 15px;
+    background:
+        linear-gradient(45deg, rgba(79, 117, 68, 0.025) 25%, transparent 25%) 0 0 / 20px 20px,
+        linear-gradient(-45deg, rgba(79, 117, 68, 0.025) 25%, transparent 25%) 0 10px / 20px 20px,
+        #eef1df;
+    perspective: 850px;
+}
+
+.leafy-layout-stage .layout-preview-section {
+    transform-origin: 50% 50%;
+    transition: transform 220ms ease, filter 220ms ease;
+}
+
+.leafy-layout-stage.is-3d {
+    padding: 17px 9px 26px;
+}
+
+.leafy-layout-stage.is-3d .layout-preview-section {
+    transform: rotateX(18deg) rotateZ(-1.2deg) scale(0.96);
+    filter: drop-shadow(0 16px 12px rgba(48, 69, 43, 0.13));
+}
+
+.leafy-layout-stage.is-3d::after {
+    position: absolute;
+    right: 11px;
+    bottom: 8px;
+    padding: 4px 7px;
+    border-radius: 999px;
+    background: rgba(25, 61, 35, 0.82);
+    color: #fff;
+    content: "Perspective preview";
+    font-size: 0.34rem;
+    font-weight: 800;
+    pointer-events: none;
+}
+
+.leafy-designer-live-preview .garden-layout-viewport {
+    min-height: 285px;
+    padding: 5px;
+    background:
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.5), transparent 58%),
+        linear-gradient(145deg, #d9e3cf, #ece8d8);
+}
+
+.leafy-pairing-hints {
+    margin-top: 10px;
+    padding-top: 9px;
+    border-top: 1px solid rgba(71, 104, 68, 0.1);
+}
+
+.leafy-pairing-hint-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+}
+
+.leafy-pairing-hint-card {
+    display: flex;
+    min-width: 0;
+    min-height: 72px;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 8px;
+    border: 1px solid rgba(70, 105, 67, 0.11);
+    border-radius: 12px;
+    background: rgba(255, 255, 250, 0.78);
+}
+
+.leafy-pairing-hint-icons {
+    display: flex;
+    align-items: center;
+}
+
+.leafy-pairing-hint-icons span {
+    display: grid;
+    width: 24px;
+    height: 24px;
+    place-items: center;
+    border: 1px solid rgba(70, 106, 69, 0.09);
+    border-radius: 50%;
+    background: #edf4e8;
+    font-size: 0.72rem;
+}
+
+.leafy-pairing-hint-icons span + span {
+    margin-left: -5px;
+    background: #f8f4df;
+}
+
+.leafy-pairing-hint-card > div:last-child {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.leafy-pairing-hint-card strong {
+    overflow: hidden;
+    color: #34513a;
+    font-size: 0.44rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.leafy-pairing-hint-card small {
+    display: -webkit-box;
+    overflow: hidden;
+    color: #788476;
+    font-size: 0.34rem;
+    line-height: 1.35;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.leafy-designer-pairing-strip {
+    margin-top: 8px;
+}
+
+.leafy-designer-primary-button {
+    min-height: 52px;
+    margin-top: 13px;
+    border-radius: 999px !important;
+    font-size: 0.69rem !important;
+    letter-spacing: 0.01em;
+    box-shadow: 0 11px 22px rgba(38, 91, 46, 0.18) !important;
+}
+
+html.dark-mode .leafy-designer-screen-heading,
+html.dark-mode .leafy-designer-setup-card,
+html.dark-mode .leafy-designer-priority-section,
+html.dark-mode .leafy-designer-step > .home-builder-field-group {
+    border-color: rgba(142, 170, 137, 0.16);
+    background: rgba(37, 47, 37, 0.92);
+}
+
+html.dark-mode .leafy-designer-title-lockup h3,
+html.dark-mode .leafy-designer-setup-card strong,
+html.dark-mode .leafy-designer-context-strip strong,
+html.dark-mode .leafy-pairing-hint-card strong {
+    color: #e1ede0;
+}
+
+html.dark-mode .leafy-designer-title-lockup p,
+html.dark-mode .leafy-designer-setup-card > div > span,
+html.dark-mode .leafy-designer-context-strip small,
+html.dark-mode .leafy-pairing-hint-card small {
+    color: #a9b5a7;
+}
+
+html.dark-mode .leafy-designer-title-icon,
+html.dark-mode .leafy-designer-setup-icon,
+html.dark-mode .leafy-designer-context-strip,
+html.dark-mode .leafy-pairing-hint-icons span {
+    background: #304030;
+}
+
+html.dark-mode .leafy-designer-context-strip > div,
+html.dark-mode .leafy-pairing-hint-card {
+    border-color: rgba(139, 166, 135, 0.12);
+    background: rgba(40, 51, 40, 0.9);
+}
+
+html.dark-mode .leafy-designer-mode-switch span {
+    border-color: rgba(137, 164, 133, 0.14);
+    background: #293329;
+    color: #aeb9ac;
+}
+
+html.dark-mode .leafy-designer-mode-switch span.active {
+    border-color: #63916a;
+    background: linear-gradient(145deg, #304c34, #365a3c);
+    color: #e5f0e3;
+}
+
+html.dark-mode .leafy-designer-inspire-button {
+    border-color: rgba(139, 170, 135, 0.18);
+    background: #2c382c;
+    color: #cfe1cc;
+}
+
+html.dark-mode .leafy-layout-stage,
+html.dark-mode .leafy-designer-live-preview .garden-layout-viewport {
+    background: #2a342a;
+}
+
+html.dark-mode .leafy-preview-toggle {
+    background: #354235;
+}
+
+html.dark-mode .leafy-preview-toggle button {
+    color: #b2beb0;
+}
+
+html.dark-mode .leafy-preview-toggle button.active {
+    background: #54805b;
+    color: #fff;
+}
+
+@media (max-width: 430px) {
+    .leafy-designer-step {
+        padding: 12px !important;
+        border-radius: 20px !important;
+    }
+
+    .leafy-designer-screen-heading {
+        align-items: flex-start;
+        min-height: 76px;
+        padding: 10px;
+    }
+
+    .leafy-designer-title-icon {
+        width: 38px;
+        height: 38px;
+        flex-basis: 38px;
+    }
+
+    .leafy-designer-title-lockup h3 {
+        font-size: 0.91rem;
+    }
+
+    .leafy-designer-title-lockup p {
+        max-width: 185px;
+    }
+
+    .leafy-designer-inspire-button {
+        padding: 6px 8px;
+        font-size: 0.38rem;
+    }
+
+    .leafy-designer-setup-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .leafy-designer-setup-card {
+        grid-template-columns: 30px minmax(0, 1fr);
+        gap: 6px;
+        padding: 8px;
+    }
+
+    .leafy-designer-setup-card > img,
+    .leafy-designer-setup-icon {
+        width: 30px;
+        height: 40px;
+    }
+
+    .leafy-designer-material-grid {
+        grid-template-columns: repeat(4, minmax(70px, 1fr));
+        overflow-x: auto;
+        padding-bottom: 3px;
+        scrollbar-width: none;
+    }
+
+    .leafy-designer-material-grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .leafy-pairing-hint-grid {
+        grid-template-columns: repeat(3, minmax(105px, 1fr));
+        overflow-x: auto;
+        padding-bottom: 3px;
+        scrollbar-width: none;
+    }
+
+    .leafy-pairing-hint-grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .leafy-designer-live-preview .garden-layout-viewport {
+        min-height: 245px;
+    }
+}
+
+@media (max-width: 355px) {
+    .leafy-designer-screen-heading {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .leafy-designer-inspire-button,
+    .leafy-designer-status {
+        width: fit-content;
+    }
+
+    .leafy-designer-setup-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .leafy-designer-context-strip {
+        grid-template-columns: repeat(3, minmax(82px, 1fr));
+        overflow-x: auto;
+    }
+}
