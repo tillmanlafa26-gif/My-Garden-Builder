@@ -1,4 +1,4 @@
-const CACHE_VERSION = "my-garden-builder-v1-rc1";
+const CACHE_VERSION = "my-garden-builder-botanical-v2";
 const APP_CACHE = `${CACHE_VERSION}-app`;
 
 const scopeUrl = new URL("./", self.registration.scope);

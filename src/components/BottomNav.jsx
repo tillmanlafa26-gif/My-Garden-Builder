@@ -8,32 +8,11 @@ import Icon from "./Icon";
 
 
 const navItems = [
-    {
-        to: "/",
-        end: true,
-        label: "Home",
-        icon: "home"
-    },
-    {
-        to: "/garden",
-        label: "My Garden",
-        icon: "garden"
-    },
-    {
-        to: "/plants",
-        label: "Plant Guide",
-        icon: "leaf"
-    },
-    {
-        to: "/calendar",
-        label: "Calendar",
-        icon: "calendar"
-    },
-    {
-        to: "/journal",
-        label: "Journal",
-        icon: "journal"
-    }
+    { to: "/", end: true, label: "Home", icon: "home" },
+    { to: "/garden", label: "My Garden", icon: "sprout" },
+    { to: "/designer", label: "Build", icon: "plus" },
+    { to: "/plants", label: "Plant Library", icon: "leaf" },
+    { to: "/calendar", label: "Calendar", icon: "calendar" }
 ];
 
 

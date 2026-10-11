@@ -9,6 +9,7 @@ import {
 const pageTitles = {
     "/": "My Garden Builder",
     "/garden": "My Garden",
+    "/designer": "Garden Designer",
     "/plants": "Plants",
     "/calendar": "Garden Calendar",
     "/journal": "Garden Journal",

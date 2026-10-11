@@ -205,13 +205,14 @@ function getFollowUpQuestion(
 
 
 function GardenAssistant({
-    onApplyProposal
+    onApplyProposal,
+    initialRequest = ""
 }) {
     const [
         requestText,
         setRequestText
     ] = useState(
-        ""
+        initialRequest
     );
 
 
@@ -451,17 +452,17 @@ function GardenAssistant({
                 <div>
 
                     <small>
-                        AI GARDEN ASSISTANT — PHASE 3
+                        AI GARDEN ASSISTANT
                     </small>
 
 
                     <h2>
-                        Describe the Garden You Want
+                        Your Garden Assistant
                     </h2>
 
 
                     <p>
-                        Write naturally. The assistant interprets the request, validates it against My Garden Builder, and asks one focused follow-up question at a time when important information is missing.
+                        Tell us about your dream garden. We’ll help turn your ideas into a plan.
                     </p>
 
                 </div>

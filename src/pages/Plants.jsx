@@ -1,3 +1,4 @@
+import ReferencePlantGallery from "../components/ReferencePlantGallery";
 import {
     useState
 } from "react";
@@ -891,12 +892,14 @@ function Plants({
 
 
                 <p>
-                    Discover edible plants
-                    for your sustainable garden.
+                    Discover the perfect plants for your garden.
                 </p>
 
             </header>
 
+
+            <ReferencePlantGallery gardenPlants={gardenPlants} onAddCrop={handleAddCoreCrop} onRemoveCrop={handleRemoveCoreCrop} onAddIndoor={handleTrackIndoorPlant} onRemovePlant={onRemovePlant} />
+            <details className="reference-library-details"><summary>My plants, care & live plant database</summary>
 
             {/* =========================
                 GARDEN PROFILE NOTICE
@@ -2516,6 +2519,8 @@ function Plants({
 
             />
 
+
+            </details>
 
             <BottomNav />
 

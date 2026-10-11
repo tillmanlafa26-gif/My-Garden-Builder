@@ -1,4 +1,6 @@
+import { useLocation, useNavigate, Link } from "react-router";
 import {
+    useEffect,
     useRef,
     useState
 } from "react";
@@ -399,6 +401,11 @@ function Home({
     onDelayWatering,
     onRainWatered
 }) {
+    const location = useLocation();
+    const navigate = useNavigate();
+    const isDesigner = location.pathname === "/designer";
+    const assistantQuestion = new URLSearchParams(location.search).get("question") || "";
+
     const designSpace =
         gardenProfile?.designSpace ||
         {};
@@ -1137,6 +1144,7 @@ function Home({
     function openSpaceBuilder(
         mode = "dimensions"
     ) {
+        if (!isDesigner) { navigate(`/designer${mode === "camera" ? "?camera=1" : ""}`); return; }
         setSpaceMessage(
             ""
         );
@@ -2417,9 +2425,19 @@ function Home({
        RENDER
     ===================================================== */
 
+    useEffect(() => {
+        if (!isDesigner) return;
+        const timer = window.setTimeout(() => {
+            if (assistantQuestion) document.getElementById("assistant")?.scrollIntoView({ block: "start" });
+            if (new URLSearchParams(location.search).has("camera")) window.dispatchEvent(new CustomEvent("garden-open-camera"));
+        }, 500);
+        return () => window.clearTimeout(timer);
+    }, [isDesigner, assistantQuestion, location.search]);
+
     return (
-        <div className="app-container leafy-app home-page">
-            <Header />
+        <div className={`app-container leafy-app home-page ${isDesigner ? "reference-designer-page" : "reference-home-page"}`}>
+            {isDesigner ? <header className="reference-screen-header"><Link to="/" className="reference-back" aria-label="Back to home">‹</Link><span className="reference-title-leaf" aria-hidden="true">🌱</span><h1>Garden Designer</h1><p>Design your dream space, outdoors or in.</p></header> : <Header />}
+            <div className="reference-dashboard">
 
 
             <WeatherCard />
@@ -2440,7 +2458,7 @@ function Home({
 
 
                     <p>
-                        A few simple steps from your real space to a garden plan you can actually build.
+                        A few simple steps to your dream garden.
                     </p>
 
                 </div>
@@ -2533,14 +2551,17 @@ function Home({
 
                 <div className="home-build-stage-list">
                     {
-                        buildStages.map(
+                        [
+                            { id: "space", name: "Your Space", icon: "1", complete: spaceComplete },
+                            { id: "design", name: "Design", icon: "2", complete: environmentComplete && featuresComplete },
+                            { id: "customize", name: "Customize", icon: "3", complete: cropsComplete },
+                            { id: "grow", name: "Grow", icon: "4", complete: gardenComplete }
+                        ].map(
                             (
                                 stage,
                                 index
                             ) => {
-                                const isNext =
-                                    nextStage?.id ===
-                                    stage.id;
+                                const isNext = !stage.complete && (index === 0 || (index === 1 ? spaceComplete : index === 2 ? environmentComplete && featuresComplete : cropsComplete));
 
 
                                 return (
@@ -2831,11 +2852,8 @@ function Home({
             </section>
 
 
-            <GardenAssistant
-                onApplyProposal={
-                    applyGardenAssistantProposal
-                }
-            />
+            </div>
+            <div className="reference-builder">
 
 
             {/* =================================================
@@ -4577,6 +4595,18 @@ function Home({
             />
 
 
+            </div>
+            <details id="assistant" open={Boolean(assistantQuestion)} className="reference-designer-assistant"><summary>🌱 Ask the Garden Assistant</summary>
+            <GardenAssistant
+                key={assistantQuestion}
+                initialRequest={assistantQuestion}
+                onApplyProposal={
+                    applyGardenAssistantProposal
+                }
+            />
+            </details>
+            <details className="reference-dashboard-details"><summary>Garden care & daily tasks</summary>
+
             {/* =================================================
                 CURRENT GARDEN DASHBOARD
             ================================================= */}
@@ -4637,6 +4667,7 @@ function Home({
             />
 
 
+            </details>
             <BottomNav />
         </div>
     );

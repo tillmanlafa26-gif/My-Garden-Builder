@@ -1,172 +1,338 @@
-/* Botanical design system inspired by the garden dashboard reference. */
-:root {
-  --leafy-sage: #2f7c37;
-  --leafy-leaf: #4caf50;
-  --leafy-olive: #6b8f3e;
-  --leafy-cream: #f8f6ec;
-  --leafy-forest: #173b24;
-  --leafy-card: #fffef7;
-  --leafy-line: #e0e5cd;
-  --leafy-shadow: 0 5px 18px rgba(54, 73, 31, .07);
-}
-html:not(.dark-mode) { background: #e9edda; }
-body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif; }
-html:not(.dark-mode) body {
-  background: radial-gradient(ellipse at 15% 10%, #cadbb0 0, transparent 40%),
-    radial-gradient(ellipse at 90% 60%, #d4dfb8 0, transparent 40%), #edf0df;
-  color: #233d28;
-}
-h1, h2, h3 { font-family: Georgia, 'Times New Roman', serif; letter-spacing: -.035em; }
-button, input, select, textarea { font-family: inherit; }
-.app-container, .app-container.leafy-app {
-  max-width: 600px;
-  padding: 16px 20px calc(112px + env(safe-area-inset-bottom));
-  background: radial-gradient(ellipse at 100% 0, #e8edcc 0, transparent 350px), #f8f6ec;
-  box-shadow: 0 0 70px #324c2020;
-}
-.app-container.leafy-app::before, .app-container.leafy-app::after {
-  width: 140px; height: 180px; opacity: .5; border-radius: 0;
-  background: url('./assets/leafy-ui/brand-vine.svg') center / contain no-repeat;
-}
-.app-container.leafy-app::before { top: 390px; left: -112px; }
-.app-container.leafy-app::after { top: 740px; right: -112px; }
-.leafy-brand-header-v2 { min-height: 112px; grid-template-columns: 42px minmax(0, 1fr); padding: 20px 0; gap: 8px; }
-.leafy-brand-header-v2 .app-brand-mark {
-  width: 42px; height: 54px; background: transparent; border-radius: 0; box-shadow: none;
-  color: #397d36; transform: rotate(-12deg);
-}
-.leafy-brand-header-v2 .app-brand-mark svg { width: 42px; height: 42px; }
-.leafy-brand-header-v2 h1 { font-size: clamp(1.65rem, 5.9vw, 2.55rem); letter-spacing: -.055em; line-height: 1.1; }
-.leafy-brand-header-v2 .app-brand-kicker { font-size: .52rem; letter-spacing: .16em; line-height: 1.7; margin-top: 6px; }
-.leafy-brand-header-v2 .app-brand-script { font-size: .85rem !important; margin-top: 7px !important; }
-.leafy-brand-header-v2 .app-brand-leaf-chip { display: none; }
-.leafy-brand-vine { opacity: .8; width: 150px; height: 90px; }
-.leafy-brand-vine-left { top: -42px; left: -95px; }
-.leafy-brand-vine-right { top: -35px; right: -78px; }
-.app-header:not(.leafy-brand-header) { padding: 34px 8px 24px; }
-.app-header:not(.leafy-brand-header) h1 { font-size: 2rem; color: var(--leafy-forest); }
-.app-header:not(.leafy-brand-header) p { font-size: .85rem; }
-.home-page .weather-card.live-weather-card { border-radius: 18px; min-height: 240px; padding: 18px; background-position: center; }
-.home-page .weather-card .weather-title { font-size: .95rem; }
-.home-page .weather-card .weather-card-header p { font-size: .7rem; }
-.home-page .weather-card .weather-temperature strong { font-size: 2.7rem; }
-.home-page .weather-card .weather-details { gap: 6px; }
-.home-page .weather-card .weather-details small,
-.home-page .weather-card .weather-details span,
-.home-page .weather-card .weather-details strong { font-size: .65rem; }
-.home-page .weather-card .garden-weather-message { font-size: .7rem; }
-.leafy-home-welcome { padding: 12px 4px 8px; grid-template-columns: 1fr 58px; }
-.leafy-home-welcome h2 { font-size: 1.9rem; }
-.leafy-home-welcome p { font-size: .8rem; line-height: 1.5; }
-.leafy-home-kicker { font-size: .6rem; letter-spacing: .13em; }
-.leafy-home-welcome-art { background: #e6edcf; }
-.home-page .home-build-progress { border-radius: 18px; padding: 16px 12px; }
-.home-build-progress-header h2 { font-size: 1.15rem; }
-.home-build-progress-header p, .home-build-progress-count { font-size: .7rem; }
-.home-build-progress-percent { font-size: .8rem; }
-.home-build-stage > div strong { font-size: .7rem; }
-.home-build-stage > div small, .home-build-stage-state { font-size: .6rem; }
-.leafy-home-action-intro span { font-size: .8rem; }
-.leafy-home-action-intro small { font-size: .65rem; }
-.leafy-home-action-grid { gap: 10px; margin-bottom: 20px; }
-.leafy-home-action { min-height: 150px; grid-template-columns: 1fr; gap: 9px; padding: 16px; border-radius: 16px; }
-.leafy-home-action strong { font-size: 1.05rem; }
-.leafy-home-action small { font-size: .55rem; }
-.leafy-home-action p { font-size: .72rem; padding-right: 12px; }
-.leafy-home-action-primary { background: linear-gradient(135deg, #2c6f32, #194522); }
-.leafy-home-action-camera { background: linear-gradient(145deg, #fffef4, #e4eccb); }
-.leafy-section-heading h2 { font-size: 1.15rem; }
-.leafy-section-heading small { font-size: .55rem; }
-.leafy-section-more { font-size: .65rem; }
-.leafy-score-card { padding: 18px 14px; background: linear-gradient(120deg, #fffef8, #edf0d8); border-radius: 18px; }
-.leafy-score-copy h3 { font-size: .95rem; }
-.leafy-score-benefits span { font-size: .72rem; }
-.leafy-score-ring-inner strong { font-size: 2rem; }
-.leafy-score-ring-inner small { font-size: .65rem; }
-.leafy-inspiration-card { min-height: 145px; padding: 12px 9px; border-radius: 13px; }
-.leafy-inspiration-card strong { font-size: .95rem; text-shadow: 0 1px 5px #000; }
-.leafy-inspiration-card small { font-size: .58rem; color: white; opacity: 1; }
-.home-page .garden-assistant-card { border-radius: 18px; background: linear-gradient(135deg, #fffef8, #f0f3df); }
-.garden-assistant-card h2 { font-size: 1.3rem; }
-.garden-assistant-card p { font-size: .8rem; }
-.home-builder-step-heading h2, .home-builder-step-heading h3 { font-size: 1.2rem; }
-.home-builder-step-heading p, .home-builder-helper-text { font-size: .75rem; }
-.home-builder-field-group > label, .home-builder-field-group > h3 { font-size: .85rem; }
-.home-builder-choice strong, .home-builder-choice span { font-size: .8rem; }
-.home-builder-choice small { font-size: .68rem; }
-.home-builder-continue-button, .leafy-designer-primary-button { min-height: 48px; border-radius: 999px !important; font-size: .9rem !important; background: linear-gradient(135deg, #438638, #205629); }
-.leafy-designer-title-lockup h3 { font-size: 1.65rem; }
-.leafy-designer-title-lockup p { font-size: .75rem; }
-.leafy-designer-inspire-button, .leafy-designer-status { font-size: .65rem; }
-.leafy-designer-setup-card strong { font-size: .8rem; }
-.leafy-designer-setup-card > div > span { font-size: .68rem; }
-.leafy-designer-context-strip strong { font-size: .7rem; }
-.leafy-designer-context-strip small { font-size: .62rem; }
-.leafy-pairing-hint-card strong { font-size: .7rem; }
-.leafy-pairing-hint-card small { font-size: .6rem; }
-.leafy-pairing-hint-card { align-items: start; }
-.leafy-designer-material-grid button strong, .leafy-designer-material-grid button small { font-size: .68rem; }
-.plant-library-page .plant-profile-notice { padding: 16px; background: #edf1da; }
-.plant-library-page .plant-profile-notice p { font-size: .8rem; }
-.plant-library-page .designer-section-heading h2 { font-size: 1.4rem; }
-.plant-library-page .designer-section-heading p { font-size: .8rem; }
-.plant-library-page .feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-.plant-library-page .feature-card { border-radius: 16px; padding: 16px; background: #fffef8; text-align: left; }
-.plant-library-page .feature-card > span { display: grid; min-height: 90px; place-items: center; font-size: 3.2rem; background: radial-gradient(ellipse, #e4edca, #f7f7e9); border-radius: 10px; margin-bottom: 10px; }
-.plant-library-page .feature-card strong { font-family: Georgia, serif; font-size: 1.3rem; }
-.plant-library-page .feature-card small { font-size: .75rem; line-height: 1.5; }
-.plant-library-page .feature-card button { min-height: 40px; font-size: .75rem; border-radius: 999px; }
-.api-plant-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-.api-plant-card { overflow: hidden; border-radius: 14px; }
-.api-plant-image-container { height: 170px; }
-.api-plant-content { padding: 12px; }
-.api-plant-heading { display: block; }
-.api-plant-heading h3 { font-size: 1.3rem; }
-.api-plant-heading p { font-size: .7rem; }
-.api-badge { display: none; }
-.vegetable-search input { background: #fffef8; border: 1px solid #d9dfc6; border-radius: 14px; font-size: .85rem; }
-.vegetable-quick-search button { border-radius: 10px; min-height: 36px; background: #eef2de; color: #355b33; font-size: .75rem; }
-.leafy-bottom-nav { max-width: 600px; border-radius: 24px 24px 0 0; padding: 12px 12px calc(10px + env(safe-area-inset-bottom)); background: #fffef4f5; border-color: #dfe5cc; box-shadow: 0 -5px 25px #39532912; backdrop-filter: blur(16px); }
-.leafy-bottom-nav .nav-link p { font-size: .65rem; }
-.leafy-bottom-nav .nav-link-icon { height: 36px; }
-.leafy-bottom-nav .nav-link.active { background: #eaf0d7; color: #244b29; }
-.app-menu { right: max(16px, calc((100vw - 600px) / 2 + 16px)); }
-button:focus-visible, a:focus-visible { outline: 3px solid #6b8f3e; outline-offset: 4px; }
-html.dark-mode .app-container, html.dark-mode .app-container.leafy-app { background: #1e2820; }
-html.dark-mode .app-header:not(.leafy-brand-header) h1 { color: #e6eedc; }
-html.dark-mode .leafy-score-card, html.dark-mode .home-page .garden-assistant-card,
-html.dark-mode .plant-library-page .feature-card, html.dark-mode .plant-library-page .plant-profile-notice { background: #293629; }
-html.dark-mode .plant-library-page .feature-card > span { background: #354532; }
-html.dark-mode .leafy-bottom-nav { background: #202c22f5; border-color: #41533d; }
-html.dark-mode .leafy-bottom-nav .nav-link.active { background: #354b32; color: #e1edda; }
-@media (max-width: 400px) {
-  .app-container, .app-container.leafy-app { padding-left: 12px; padding-right: 12px; }
-  .leafy-brand-header-v2 h1 { font-size: 1.8rem; }
-  .leafy-brand-header-v2 .app-brand-kicker { font-size: .43rem; }
-  .leafy-section-heading h2 { font-size: 1rem; }
-  .leafy-section-more { font-size: .58rem; }
-  .leafy-designer-title-lockup h3 { font-size: 1.3rem; }
-  .leafy-home-action { padding: 12px; }
-  .leafy-bottom-nav .nav-link p { font-size: .58rem; }
-}
-@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
-/* Navigation is mounted outside scrolling page content and pinned to the viewport. */
-.bottom-nav.leafy-bottom-nav {
-  position: fixed;
-  width: 100%;
-  max-width: 600px;
-  z-index: 500;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-}
-.home-page .home-build-progress-count { font-size: .7rem; }
-.home-page .home-build-progress-count small { font-size: .65rem; }
-.home-page .home-build-stage > div strong { font-size: .65rem; }
-.home-page .home-build-stage-list { gap: 5px; }
-.plant-library-page .feature-card > span { width: 100%; }
-html.dark-mode .leafy-brand-header-v2 .app-brand-kicker { color: #b1cc9f; }
-html.dark-mode .leafy-brand-header-v2 .app-brand-mark { background: transparent; box-shadow: none; color: #b8d5a4; }
-html.dark-mode .leafy-bottom-nav .nav-link.active:not(:nth-child(3)) .nav-link-icon { background: #3c5636; color: #e4f0dc; }
-html.dark-mode .leafy-bottom-nav .nav-link.active p,
-html.dark-mode .leafy-bottom-nav .nav-link:nth-child(3) p { color: #d3e5c9; }
+/* Reference design: botanical photography, cream surfaces and editorial typography. */
+@font-face{font-family:Inter;src:url('/fonts/inter-400.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:Inter;src:url('/fonts/inter-600.woff2') format('woff2');font-weight:600;font-display:swap}
+@font-face{font-family:Inter;src:url('/fonts/inter-700.woff2') format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'Playfair Display';src:url('/fonts/playfair-display-600.woff2') format('woff2');font-weight:600;font-display:swap}
+@font-face{font-family:'Playfair Display';src:url('/fonts/playfair-display-700.woff2') format('woff2');font-weight:700;font-display:swap}
+:root{--leafy-sage:#2f7c37;--leafy-leaf:#4caf50;--leafy-olive:#6b8f3e;--leafy-cream:#f8f6ec;--leafy-forest:#123e21;--leafy-card:#fffef6;--leafy-line:#dfe5c8;--leafy-shadow:0 3px 12px #35502312;--reference-muted:#737b6c}
+html{background:#e7ecd5}
+body{font-family:Inter,Arial,sans-serif;color:#243b26;background:radial-gradient(ellipse at 15% 0,#cbdba9,transparent 45%),radial-gradient(ellipse at 90% 80%,#c5d59c,transparent 40%),#edf0de;background-attachment:fixed}
+h1,h2,h3{font-family:'Playfair Display',Georgia,serif;letter-spacing:-.045em}
+button,input,select,textarea{font-family:Inter,Arial,sans-serif}
+button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}
+button:focus-visible,a:focus-visible{outline:3px solid #6b8f3e;outline-offset:3px}
+.app-container,.app-container.leafy-app{position:relative;width:100%;max-width:480px;min-height:100dvh;margin:0 auto;padding:10px 14px calc(100px + env(safe-area-inset-bottom));background:linear-gradient(110deg,#fffef5e8,#f2f3dce8),#f8f6ec;overflow:clip;box-shadow:0 0 80px #334a2426;isolation:isolate}
+.app-container::before,.app-container.leafy-app::before{content:'';position:absolute;inset:0 0 auto;height:170px;width:100%;border-radius:0;background:url('/images/botanical-canopy.png') center top/100% auto no-repeat;opacity:1;transform:none;z-index:0;pointer-events:none}
+.app-container.leafy-app::after{content:'';position:absolute;top:430px;right:-95px;width:165px;height:240px;background:url('/images/botanical-canopy.png') right top/auto 100% no-repeat;opacity:.9;border-radius:0;transform:rotate(-85deg);z-index:0;pointer-events:none}
+.app-container.leafy-app > *{position:relative;z-index:1}
+.app-header,.leafy-brand-header-v2{padding:29px 3px 16px;min-height:94px;text-align:center}
+.leafy-brand-header-v2{display:flex;align-items:center;justify-content:center;gap:6px;padding-right:36px;isolation:isolate}
+.leafy-brand-header-v2::after{display:none}
+.reference-brand-leaves{position:relative;flex-shrink:0;width:37px;height:43px;color:#478b35}
+.reference-brand-leaves svg:first-child{fill:#5c9b42;stroke:#36762f;transform:rotate(-18deg)}
+.reference-brand-leaves svg:last-child{position:absolute;left:-8px;top:14px;fill:#367b30;stroke:#f8f6ec;transform:rotate(-83deg)}
+.app-brand-copy{display:flex;min-width:0;gap:4px;align-items:center}
+.leafy-brand-header-v2 h1{margin:0;color:#082415;font-size:clamp(1.38rem,6.8vw,1.9rem);font-weight:700;letter-spacing:-.055em;line-height:1.12;white-space:nowrap}
+.leafy-brand-header-v2 .app-brand-kicker{margin:0;order:0;font-family:Inter,sans-serif;color:#345f35;font-size:.39rem;letter-spacing:.19em;line-height:1.5;white-space:nowrap}
+.app-menu{top:29px;right:max(14px,calc((100vw - 480px)/2 + 14px));z-index:700}
+.app-menu-trigger{width:37px;height:37px;min-height:37px;border-radius:50%;border:1px solid #e4e8cf;background:#fffff2;color:#215e2b;box-shadow:0 3px 9px #40552514}
+.app-menu-trigger .ui-icon{fill:#226031;stroke:#226031}
+.app-menu-popover{background:#fffef6;border-radius:18px}
+.app-header:not(.leafy-brand-header) h1,.reference-screen-header h1{font-size:1.8rem;color:#092b18;margin:3px 0 6px}
+.app-header:not(.leafy-brand-header) p,.reference-screen-header p{font-size:.72rem;color:#79806e;line-height:1.5}
+.reference-screen-header{padding:30px 8px 16px;text-align:center;min-height:115px}
+.reference-title-leaf{display:block;font-size:1.6rem;line-height:1}
+.reference-back{position:absolute;top:33px;left:4px;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#fffef4;color:#285c30;font-size:1.7rem;text-decoration:none}
+.reference-dashboard{display:flex;flex-direction:column;gap:0}
+.reference-designer-page .reference-dashboard,.reference-home-page .reference-builder,.reference-home-page .reference-designer-assistant{display:none}
+.reference-designer-page .reference-dashboard-details{display:none}
+.reference-designer-assistant{scroll-margin-top:15px}
+.reference-designer-page:not(:has(.garden-assistant-input textarea:not(:placeholder-shown))) .reference-designer-assistant{order:2}
+.reference-home-page .home-builder-step{display:none}
+.home-page .weather-card.live-weather-card{position:relative;min-height:160px;padding:15px 14px 10px;margin-bottom:12px;overflow:hidden;border-radius:16px;border:1px solid #bfcbaa;background-image:linear-gradient(90deg,#153b2880,#1833200a),url('/images/garden-scenes.png');background-size:100% 100%,200% 200%;background-position:center,left top;background-repeat:no-repeat;color:white;box-shadow:0 5px 14px #35502322}
+.home-page .weather-card.live-weather-card::before{display:none}
+.home-page .weather-card.live-weather-card::after{display:none}
+.reference-weather-summary{display:flex;align-items:center;gap:10px}
+.reference-weather-summary>span{font-size:2.6rem;line-height:1}
+.reference-weather-summary strong{font-size:2.2rem;font-weight:400;color:white;line-height:1.05}
+.reference-weather-summary p{font-size:.62rem;color:white}
+.reference-weather-location{display:flex;align-items:center;gap:4px;font-size:.68rem;margin-top:7px;text-shadow:0 1px 3px #0008}
+.reference-weather-footer{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:8px 9px;margin-top:22px;border-radius:10px;background:#183c2cd9;font-size:.56rem}
+.reference-weather-footer button{display:flex;align-items:center;gap:3px;min-height:30px;padding:6px 9px;border:0;border-radius:999px;background:#f6f9e9;color:#295b2c;font-size:.6rem;white-space:nowrap;cursor:pointer}
+.home-page .weather-card .weather-card-header{margin-bottom:4px}
+.home-page .weather-card .weather-title{font-size:.7rem}
+.home-page .weather-card .weather-card-header p{font-size:.55rem}
+.home-page .weather-current{margin:0 0 6px;padding:0;gap:7px}
+.home-page .weather-main-icon{font-size:2.4rem;width:44px;height:44px}
+.home-page .weather-temperature strong{font-size:2rem}
+.home-page .weather-temperature span,.home-page .weather-temperature small{font-size:.6rem}
+.home-page .weather-card .weather-details{gap:5px;margin:6px 0 0}
+.home-page .weather-card .weather-details>div{padding:6px 4px}
+.home-page .weather-card .weather-details strong,.home-page .weather-card .weather-details small{font-size:.54rem}
+.home-page .weather-card .garden-weather-message{padding:7px;font-size:.58rem}
+.home-page .weather-forecast,.home-page .weather-footer{display:none}
+.leafy-home-welcome{display:block;margin:0;padding:10px 10px 6px;border:1px solid #e1e5c9;border-bottom:0;border-radius:15px 15px 0 0;background:#fffef2}
+.leafy-home-welcome h2{font-size:1.75rem;line-height:1.1;color:#0d2c18}
+.leafy-home-welcome p{margin-top:4px;font-size:.66rem;line-height:1.45;color:#818473}
+.leafy-home-kicker,.leafy-home-welcome-art{display:none}
+.home-page .home-build-progress{margin:0 0 10px;padding:10px 9px 12px;border:1px solid #e1e5c9;border-top:0;border-radius:0 0 15px 15px;background:#fffef2;box-shadow:none}
+.home-build-progress-header,.home-build-progress-bar,.home-build-progress-count{display:none}
+.home-build-stage-list{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:0;padding:0}
+.home-build-stage-list::before{content:'';position:absolute;top:15px;left:12%;right:12%;height:3px;background:linear-gradient(90deg,#638b41 25%,#b9b9ab 25%);z-index:0}
+.home-build-stage{display:flex;flex-direction:column;align-items:center;gap:4px;padding:0;border:0!important;background:none!important;box-shadow:none;min-width:0;text-align:center}
+.home-build-stage-status{position:relative;z-index:1;display:grid;place-items:center;width:29px;height:29px;border:3px solid #fffef2;border-radius:50%;background:#d8d7c9;color:#243624;font-family:Inter,sans-serif;font-size:.75rem;font-weight:700;box-shadow:0 0 0 1px #d8ddbd}
+.home-build-stage.active .home-build-stage-status,.home-build-stage.complete .home-build-stage-status{background:linear-gradient(#6b9447,#37652d);color:white}
+.home-build-stage>div strong{font-size:.63rem;color:#394738;font-weight:600}
+.home-build-stage>div small,.home-build-stage-state{display:none}
+.leafy-home-action-intro{display:none}
+.leafy-home-action-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 12px}
+.leafy-home-action{display:flex;flex-direction:column;min-height:116px;padding:12px 10px;gap:5px;border-radius:13px;border:1px solid #dfe6c6;box-shadow:none}
+.leafy-home-action-primary{background:linear-gradient(120deg,#225b2c,#2e642e);color:#fffef2}
+.leafy-home-action-camera{background:linear-gradient(110deg,#fffef5,#eef1d8);color:#243d25}
+.leafy-home-action-icon{background:none!important;border-radius:0;width:26px;height:26px;font-size:1.35rem}
+.leafy-home-action small{display:none}
+.leafy-home-action strong{font-family:'Playfair Display',Georgia,serif;font-size:.9rem;line-height:1.15}
+.leafy-home-action p{font-size:.6rem;line-height:1.4;margin-top:4px;max-width:90%;opacity:.88}
+.leafy-home-action-arrow{width:24px;height:24px;right:8px;bottom:8px;font-size:1rem}
+.leafy-section-heading h2{font-size:1rem;color:#14371f;line-height:1.2}
+.leafy-section-heading small{display:none}
+.leafy-section-more{font-size:.6rem;color:#476041}
+.leafy-section-icon{width:25px;height:25px;flex-basis:25px;background:none;font-size:1.4rem}
+.leafy-sustainability-section{margin:0 0 12px}
+.leafy-sustainability-section>.leafy-section-heading{display:none}
+.leafy-score-card{display:grid;grid-template-columns:100px minmax(0,1fr);gap:9px;padding:14px 10px;border:1px solid #e0e6c6;border-radius:15px;background:linear-gradient(110deg,#fffef5,#eef2d6);box-shadow:none}
+.leafy-score-ring{width:94px;height:94px;background:conic-gradient(#5d933b calc(var(--score-value)*1%),#dce5c5 0);box-shadow:none}
+.leafy-score-ring-inner{width:76px;height:76px;background:#fffef5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0}
+.leafy-score-ring-inner span{position:absolute;left:-12px;top:5px;font-size:1.1rem;transform:rotate(-25deg)}
+.leafy-score-ring-inner strong{margin:0;font-family:'Playfair Display',Georgia,serif;color:#102d1b;font-size:2.1rem;line-height:1}
+.leafy-score-ring-inner small{font-size:.8rem;color:#8a927b}
+.leafy-score-copy h2{font-size:.95rem;margin-bottom:4px;color:#162f1c}
+.leafy-score-copy h2 span{font-family:Inter;font-size:.65rem;color:#4c793d}
+.leafy-score-copy h3{font-family:Inter,sans-serif;font-size:.55rem;font-weight:400;letter-spacing:0;color:#88917e;line-height:1.4;margin-bottom:9px}
+.leafy-score-benefits{gap:5px}
+.leafy-score-benefits span{font-size:.55rem;line-height:1.3;color:#435140}
+.leafy-score-benefits b{width:14px;height:14px;flex-shrink:0;background:#3c842f;color:white;font-size:.5rem}
+.leafy-inspiration-section{margin:0 0 14px;padding:12px 9px;background:#fffef5;border:1px solid #e1e6cd;border-radius:15px}
+.leafy-inspiration-section .leafy-section-heading{margin-bottom:9px;gap:4px}
+.leafy-inspiration-section .leafy-section-heading h2{font-size:.9rem}
+.leafy-inspiration-grid{gap:7px}
+.leafy-inspiration-card{justify-content:flex-end;min-height:122px;padding:8px 6px;border-radius:10px;background-size:200% 200%;background-repeat:no-repeat;isolation:isolate}
+.leafy-inspiration-card::before{inset:0;width:auto;height:auto;border-radius:0;transform:none;background:linear-gradient(transparent 25%,#071e10da);z-index:0}
+.leafy-inspiration-card>span{position:absolute;top:7px;right:7px;display:block;line-height:1;font-size:1rem}
+.leafy-inspiration-card strong{font-family:'Playfair Display',Georgia,serif;font-size:.85rem;color:#fff;line-height:1.1}
+.leafy-inspiration-card small{display:none}
+.inspiration-small-space{background-image:url('/images/plant-scenes.png');background-position:left bottom}
+.inspiration-pollinator{background-image:url('/images/plant-scenes.png');background-position:right bottom}
+.inspiration-edible{background-image:url('/images/garden-scenes.png');background-position:right top}
+.reference-dashboard-details,.reference-library-details{margin-top:14px;border:1px solid #dee5c9;border-radius:14px;background:#fffef5;padding:12px}
+.reference-dashboard-details>summary,.reference-library-details>summary{font-size:.7rem;color:#365d31;cursor:pointer;padding:5px}
+.reference-dashboard-details[open]>summary,.reference-library-details[open]>summary{margin-bottom:12px}
+.reference-builder>.home-builder-step{margin-bottom:10px;padding:14px;border-radius:15px;border:1px solid #e0e5ce;box-shadow:none;background:#fffef5}
+.reference-builder .home-builder-step-heading{gap:8px;margin-bottom:12px}
+.reference-builder .home-builder-step-heading h2{font-size:1.15rem}
+.reference-builder .home-builder-step-heading p{font-size:.68rem;color:#7d8473}
+.reference-builder .home-builder-step-heading small{font-size:.55rem}
+.reference-builder .home-builder-step-number{width:30px;height:30px;font-size:.75rem;flex-basis:30px;background:#dae8c7}
+.reference-builder .home-builder-field-group{margin-bottom:14px}
+.reference-builder .home-builder-field-group>label,.reference-builder .home-builder-field-group>h3{font-size:.78rem;color:#334b2a}
+.reference-builder .home-builder-choice-grid{gap:7px}
+.reference-builder .home-builder-choice{min-height:66px;padding:9px;border-radius:10px;border:1px solid #e3e7d2;background:#f8f9ed}
+.reference-builder .home-builder-choice.selected{border:2px solid #6f9a44;background:#ebf2dc}
+.reference-builder .home-builder-choice strong{font-size:.73rem}
+.reference-builder .home-builder-choice span{font-size:1.3rem}
+.reference-builder .home-builder-choice small{font-size:.62rem}
+.reference-builder input,.reference-builder select{background:#fffefb;border:1px solid #e1e6d5;border-radius:10px;min-height:40px;font-size:16px;color:#243b25}
+.reference-builder .home-space-dimensions{gap:8px}
+.reference-builder .home-space-dimensions label{font-size:.62rem}
+.reference-builder .home-builder-helper-text{font-size:.65rem;line-height:1.5}
+.home-builder-continue-button,.leafy-designer-primary-button{border-radius:999px!important;min-height:43px!important;font-family:Inter,sans-serif;font-size:.8rem!important;font-weight:500;background:linear-gradient(110deg,#6d984a,#215b2c)!important;color:white;box-shadow:inset 0 1px 1px #fff5,0 3px 10px #446d2420!important}
+.reference-builder .home-builder-step.upcoming{padding:12px;background:#f7f8e9;opacity:1}
+.reference-builder .home-builder-step.upcoming h2{font-size:1rem}
+.reference-builder .home-builder-locked{font-size:.7rem;padding:10px;background:#edf1dd}
+.leafy-designer-screen-heading{padding:12px 10px;border-radius:12px;background:#f4f7e6}
+.leafy-designer-title-lockup h3{font-size:1.3rem}
+.leafy-designer-title-lockup p{font-size:.67rem}
+.leafy-designer-title-lockup small{font-size:.5rem}
+.leafy-designer-inspire-button,.leafy-designer-status{font-size:.6rem}
+.leafy-designer-material-grid{gap:7px;grid-template-columns:repeat(4,minmax(0,1fr))}
+.leafy-material-card{border-radius:10px!important}
+.leafy-material-card strong{font-size:.65rem}
+.leafy-material-card small{font-size:.55rem}
+.leafy-designer-live-preview .garden-layout-viewport{min-height:300px}
+.leafy-designer-subheading h3{font-size:1.1rem}
+.leafy-designer-subheading p,.leafy-designer-subheading small{font-size:.6rem}
+.leafy-pairing-hint-card strong{font-size:.65rem}
+.leafy-pairing-hint-card small{font-size:.55rem}
+.garden-assistant-card{margin:10px 0 14px;padding:14px;border:1px solid #dfe5cb;border-radius:15px;background:#fffef5;box-shadow:none}
+.garden-assistant-heading h2{font-size:1.15rem}
+.garden-assistant-heading p{font-size:.68rem;line-height:1.5}
+.garden-assistant-heading small{font-size:.53rem}
+.garden-assistant-input span{font-size:.7rem}
+.garden-assistant-input textarea{font-size:16px;border:1px solid #e0e5d0;border-radius:12px;background:#fffef9;min-height:90px}
+.garden-assistant-example-row button{font-size:.65rem;background:#edf3dd;border-radius:999px}
+.plant-library-page .app-header{padding:36px 5px 14px;min-height:109px}
+.plant-library-page .app-header h1{font-size:1.75rem;margin-bottom:4px;color:#082918}
+.plant-library-page .app-header p{font-size:.68rem}
+.reference-search{display:flex;align-items:center;gap:7px;padding:0 12px;background:#fffefa;border:1px solid #e1e5d5;border-radius:13px;min-height:40px;box-shadow:0 2px 5px #52623009;color:#616f56}
+.reference-search input{width:100%;height:38px;min-width:0;border:0;outline:0;background:transparent;font-size:.7rem;color:#3a4a32}
+.reference-search:focus-within{outline:2px solid #6b8f3e;outline-offset:2px}
+.reference-categories{display:flex;gap:6px;margin:10px 0 12px}
+.reference-categories button{flex:1;min-width:0;min-height:34px;padding:5px 4px;border:1px solid #e4e8d5;border-radius:9px;background:#fffef7;color:#6d7563;font-size:.6rem;cursor:pointer}
+.reference-categories button.selected{background:linear-gradient(#609847,#3d7035);border-color:#5b8b3e;color:white}
+.reference-plant-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.reference-plant-card{min-width:0;overflow:hidden;border:1px solid #e2e6cd;border-radius:11px;background:#fffef9;box-shadow:0 3px 9px #42612814}
+.reference-plant-photo{position:relative;height:150px;background-size:200% 200%;background-repeat:no-repeat}
+.plant-photo-tomato{background-image:url('/images/garden-scenes.png');background-position:left bottom}
+.plant-photo-basil{background-image:url('/images/garden-scenes.png');background-position:right bottom}
+.plant-photo-lettuce{background-image:url('/images/plant-scenes.png');background-position:left top}
+.plant-photo-monstera{background-image:url('/images/plant-scenes.png');background-position:right top}
+.plant-photo-fallback{display:grid;place-items:center;background:linear-gradient(135deg,#edf3dd,#d8e8bd);font-size:3rem}
+.reference-favorite{position:absolute;top:7px;right:7px;display:grid;place-items:center;width:30px;height:30px;min-height:30px;border:0;background:#244a2673;border-radius:50%;color:white;font-size:1.35rem;line-height:1;text-shadow:0 0 3px #163623;cursor:pointer}
+.reference-favorite:not(.saved){color:transparent;-webkit-text-stroke:1.3px white}
+.reference-favorite.saved{color:#fff;background:#3e8237}
+.reference-plant-copy{padding:8px 8px 9px}
+.reference-plant-copy h2{font-size:1.08rem;margin:0;line-height:1.2;color:#152e1b}
+.reference-plant-copy p{font-size:.57rem;line-height:1.5;color:#85877a;margin:2px 0 7px}
+.reference-plant-meta{display:flex;justify-content:space-between;gap:3px;font-size:.5rem;color:#818579}
+.reference-plant-meta span{display:flex;align-items:center;gap:3px;white-space:nowrap}
+.reference-plant-meta span:first-child svg{color:#dfa92d}
+.reference-plant-meta span:last-child svg{color:#6a9cb7;fill:#6a9cb7}
+.reference-browse-all{display:flex;align-items:center;justify-content:center;gap:5px;width:100%;border:0;background:transparent;padding:10px;color:#537443;font-size:.65rem;cursor:pointer}
+.reference-no-results{grid-column:1/-1;padding:24px;font-size:.85rem;text-align:center;color:#6e7b61}
+.reference-assistant{padding:12px 10px;border:1px solid #e1e6ca;border-radius:15px;background:linear-gradient(125deg,#fffef8,#eef3d9);box-shadow:0 3px 10px #5067280c}
+.reference-assistant-heading{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.reference-assistant-heading h2{font-size:1.1rem;margin-bottom:3px;color:#1a351f}
+.reference-assistant-heading p{font-size:.62rem;line-height:1.4;color:#7e8771}
+.reference-bot{position:relative;display:grid;place-items:center;width:48px;height:45px;flex-shrink:0;border-radius:50% 50% 45% 45%;background:linear-gradient(135deg,#f7ffee,#ccdfb8);border:2px solid #fff;box-shadow:0 4px 7px #28422226;transform:rotate(-8deg)}
+.reference-bot>svg{position:absolute;top:-17px;left:14px;color:#337c32;fill:#72a044;transform:rotate(7deg)}
+.reference-bot-face{display:flex;align-items:center;justify-content:center;gap:9px;width:35px;height:24px;background:#15351d;border-radius:50%;box-shadow:inset 0 2px 5px #0006}
+.reference-bot-face i{width:6px;height:10px;border-radius:50%;background:#c4f077;box-shadow:0 0 5px #bfff6b}
+.reference-questions{display:flex;flex-direction:column;gap:6px}
+.reference-questions button{display:flex;align-items:center;gap:7px;min-height:36px;padding:8px;border:1px solid #e1e6d0;border-radius:11px;background:#fffefa;color:#767d6e;text-align:left;font-size:.6rem;cursor:pointer}
+.reference-questions button>span{flex:1}
+.reference-questions button>svg{flex-shrink:0}
+.reference-ask{display:flex;align-items:center;gap:7px;margin-top:9px}
+.reference-ask input{min-width:0;flex:1;height:37px;padding:0 10px;border:1px solid #dde4c6;border-radius:11px;background:#fffefa;font-size:.68rem;color:#435739}
+.reference-ask button{display:grid;place-items:center;flex-shrink:0;width:35px;height:35px;border:0;border-radius:50%;background:#3c7a35;color:white;font-size:1.3rem;cursor:pointer}
+.bottom-nav.leafy-bottom-nav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);display:flex;align-items:flex-end;width:100%;max-width:480px;z-index:500;padding:9px 7px calc(8px + env(safe-area-inset-bottom));border:1px solid #e1e5ce;border-bottom:0;border-radius:23px 23px 0 0;background:#fffff1f5;box-shadow:0 -4px 14px #48652d12;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.leafy-bottom-nav .nav-link{padding:4px 2px;min-width:0;flex:1;border-radius:14px;color:#8a927e;background:transparent}
+.leafy-bottom-nav .nav-link.active{color:#164d26;background:#edf1d8}
+.leafy-bottom-nav .nav-link-icon{display:grid;place-items:center;width:29px;height:27px;margin:auto;border-radius:0}
+.leafy-bottom-nav .nav-link p{font-family:Inter,sans-serif;font-size:.53rem;margin-top:4px;color:inherit;white-space:nowrap}
+.leafy-bottom-nav .nav-link.active:not(:nth-child(3)) .nav-link-icon{background:none}
+.leafy-bottom-nav .nav-link:nth-child(3){margin-top:-17px}
+.leafy-bottom-nav .nav-link:nth-child(3) .nav-link-icon{width:46px;height:46px;border:4px solid #fffef3;border-radius:50%;background:linear-gradient(135deg,#8eba52,#397632);color:white;box-shadow:0 3px 10px #4a702b38}
+.leafy-bottom-nav .nav-link:nth-child(3) .nav-link-icon svg{width:29px;height:29px;stroke-width:2}
+.leafy-bottom-nav .nav-link:nth-child(3) p{color:#526e3d;margin-top:1px}
+.leafy-bottom-nav .nav-link:nth-child(3).active{background:none}
+.leafy-bottom-nav .nav-link:nth-child(3).active .nav-link-icon{background:linear-gradient(135deg,#7fab44,#245f2d)}
+.garden-onboarding-dialog{border:1px solid #dde5c4;background:#fffef4;border-radius:24px}
+.garden-onboarding-dialog h2{font-family:'Playfair Display',Georgia,serif;color:#17391f}
+.garden-onboarding-next{background:linear-gradient(120deg,#6b9947,#2d6c32);border-radius:999px}
+@media(min-width:600px){.app-container,.app-container.leafy-app{margin-top:24px;border-radius:25px 25px 0 0;min-height:calc(100dvh - 24px)}body::before{content:'';position:fixed;inset:0;background:url('/images/botanical-canopy.png') center top/100% auto no-repeat;pointer-events:none;opacity:.75}.reference-plant-photo{height:185px}}
+@media(max-width:355px){.app-container,.app-container.leafy-app{padding-left:10px;padding-right:10px}.leafy-brand-header-v2 h1{font-size:1.22rem}.leafy-brand-header-v2 .app-brand-kicker{font-size:.32rem}.reference-brand-leaves{width:29px}.leafy-section-heading h2{font-size:.8rem}.leafy-score-card{grid-template-columns:85px 1fr;gap:7px}.leafy-score-ring{width:80px;height:80px}.leafy-score-ring-inner{width:64px;height:64px}.leafy-score-copy h2{font-size:.82rem}.reference-plant-photo{height:125px}.reference-plant-meta{font-size:.45rem}.reference-categories button{font-size:.54rem}}
+html.dark-mode body{background:#18291d;color:#e1e9d7}
+html.dark-mode .app-container,html.dark-mode .app-container.leafy-app{background:linear-gradient(110deg,#203022,#192a1c)}
+html.dark-mode .leafy-brand-header-v2 h1,html.dark-mode .app-header h1,html.dark-mode .reference-screen-header h1{color:#eff4e4}
+html.dark-mode .app-brand-kicker{color:#b1c69a}
+html.dark-mode .leafy-home-welcome,html.dark-mode .home-page .home-build-progress,html.dark-mode .leafy-score-card,html.dark-mode .leafy-inspiration-section,html.dark-mode .reference-builder>.home-builder-step,html.dark-mode .garden-assistant-card,html.dark-mode .reference-plant-card,html.dark-mode .reference-assistant,html.dark-mode .reference-dashboard-details,html.dark-mode .reference-library-details{background:#293927;border-color:#435738}
+html.dark-mode .leafy-home-welcome h2,html.dark-mode .leafy-score-copy h2,html.dark-mode .reference-plant-copy h2,html.dark-mode .reference-assistant-heading h2,html.dark-mode .leafy-section-heading h2{color:#eef3e1}
+html.dark-mode .leafy-score-ring-inner{background:#293927}
+html.dark-mode .leafy-score-ring-inner strong,html.dark-mode .leafy-score-benefits span,html.dark-mode .home-build-stage>div strong{color:#d5e2c8}
+html.dark-mode .home-build-stage-status{border-color:#293927;background:#3b4d33;color:#e7efd9}
+html.dark-mode .reference-search,html.dark-mode .reference-categories button,html.dark-mode .reference-questions button,html.dark-mode .reference-ask input{background:#2c3d29;border-color:#4a5d3d;color:#d6e2ca}
+html.dark-mode .reference-search input{color:#d6e2ca}
+html.dark-mode .leafy-home-action-camera{background:#31472a;color:#e5eedb}
+html.dark-mode .bottom-nav.leafy-bottom-nav{background:#22351ff5;border-color:#405435}
+html.dark-mode .leafy-bottom-nav .nav-link.active{background:#394f2c;color:#e0edce}
+html.dark-mode .leafy-bottom-nav .nav-link:nth-child(3) .nav-link-icon{border-color:#22351f}
+html.dark-mode .leafy-bottom-nav .nav-link:nth-child(3) p{color:#c8dfaf}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+/* Compact garden studio mirrors the reference's single-screen design workspace. */
+.studio-environments{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:10px}
+.studio-environment{position:relative;display:flex;align-items:flex-end;gap:7px;min-height:87px;padding:10px 8px;border:2px solid transparent;border-radius:11px;color:white;text-align:left;overflow:hidden;cursor:pointer;background-size:200% 200%;isolation:isolate}
+.studio-environment::before{content:'';position:absolute;inset:0;background:linear-gradient(transparent,#15361cce);z-index:-1}
+.studio-outdoor{background-image:url('/images/garden-scenes.png');background-position:left top}
+.studio-indoor{background-image:url('/images/plant-scenes.png');background-position:right top}
+.studio-environment.selected{border-color:#72ad3c;box-shadow:0 0 0 2px #d8ecc0}
+.studio-environment>svg{flex-shrink:0;width:27px;height:27px;padding:4px;border-radius:50%;background:#fffef3;color:#3b7034}
+.studio-environment strong{display:block;font-family:'Playfair Display';font-size:.82rem;line-height:1.2}
+.studio-environment small{display:block;font-size:.51rem;line-height:1.5;color:#e8eed8}
+.studio-environment b{position:absolute;top:6px;right:6px;width:18px;height:18px;display:grid;place-items:center;border-radius:50%;background:#fffef5;color:#37802e;font-size:.7rem}
+.studio-setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:9px}
+.studio-setup-card,.studio-card{padding:10px 9px;border:1px solid #e4e7d1;border-radius:13px;background:#fffef7;box-shadow:0 3px 10px #43652b0a;min-width:0}
+.studio-setup-card h2{display:flex;align-items:center;gap:4px;white-space:nowrap;font-family:Inter,sans-serif;font-size:.64rem;letter-spacing:-.03em;margin:0 0 9px;color:#293d28;font-weight:600}
+.studio-setup-card h2 svg{flex-shrink:0}
+.studio-setup-card h2 small{font-size:.5rem;color:#848a7b;font-weight:400;letter-spacing:0}
+.studio-dimensions{display:grid;grid-template-columns:1fr 1fr 45px;gap:5px}
+.studio-dimensions label,.studio-height{display:flex;flex-direction:column;gap:4px;font-size:.52rem;color:#8a8e7e}
+.studio-dimensions input,.studio-dimensions select,.studio-height input{width:100%;min-width:0;height:31px;padding:4px 6px;border:1px solid #e4e7d9;border-radius:7px;background:white;color:#283d26;font-size:16px}
+.studio-dimensions select{padding:3px;font-size:.7rem}
+.studio-height{margin-top:8px}
+.studio-photo-copy{display:flex;align-items:center;gap:4px;margin-bottom:7px}
+.studio-photo-copy p{font-size:.54rem;line-height:1.35;color:#888c7c;flex:1}
+.studio-photo-thumb,.studio-photo-copy img{display:block;width:48px;height:36px;border-radius:6px;object-fit:cover;background-image:url('/images/garden-scenes.png');background-size:200% 200%;background-position:left top}
+.studio-photo-card>button{display:flex;justify-content:center;align-items:center;gap:4px;width:100%;min-height:25px;padding:3px;border:1px solid #e1e6cc;border-radius:8px;background:#eff4de;color:#4c713b;font-size:.52rem;cursor:pointer}
+.studio-photo-mapping{margin-bottom:10px;padding:0 7px}
+.studio-photo-mapping>summary{font-size:.58rem;color:#65824e;cursor:pointer}
+.studio-photo-mapping[open]{padding:12px;border-radius:12px;border:1px solid #dfe7ca;background:#fffef5}
+.studio-card{margin-bottom:10px}
+.studio-section-title{display:flex;align-items:center;justify-content:space-between;gap:5px;margin-bottom:9px}
+.studio-section-title h2{display:flex;align-items:center;gap:5px;font-family:Inter,sans-serif;font-weight:600;font-size:.66rem;letter-spacing:-.02em;color:#293b26;margin:0}
+.studio-section-title>span,.studio-section-title>a{font-size:.53rem;color:#5c7b46;text-decoration:none}
+.studio-section-title svg{flex-shrink:0;color:#355a2d}
+.studio-material-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px}
+.studio-material-grid button{padding:0;overflow:hidden;border:2px solid transparent;border-radius:8px;background:#f7f6ef;color:#767969;cursor:pointer}
+.studio-material-grid button.selected{border-color:#58983c;background:#f2f8e7;color:#395d2e}
+.studio-material-grid small{display:block;padding:5px 1px;font-size:.45rem;line-height:1.25}
+.studio-swatch{position:relative;display:block;height:40px}
+.studio-swatch b{position:absolute;right:2px;top:2px;display:grid;place-items:center;border-radius:50%;background:#3a9736;color:white;width:14px;height:14px;font-size:.55rem}
+.swatch-stone{background:repeating-linear-gradient(32deg,transparent 0 13px,#938b7460 13px 15px),repeating-linear-gradient(-50deg,#d6d0b3 0 15px,#b8b39a 15px 17px)}
+.swatch-wood{background:repeating-linear-gradient(90deg,#b58d57 0 7px,#91683c 7px 9px,#d4b47b 9px 13px)}
+.swatch-gravel{background:radial-gradient(ellipse at 30% 20%,#e6dbc0 0 14%,transparent 15%),radial-gradient(ellipse at 80% 70%,#b5ad94 0 14%,transparent 15%),radial-gradient(ellipse at 20% 80%,#8c846e 0 17%,transparent 18%),#c4b99d;background-size:13px 12px,15px 17px,19px 16px}
+.swatch-pavers{background:repeating-linear-gradient(0deg,transparent 0 17px,#b5b3a4 17px 19px),repeating-linear-gradient(90deg,#dfded3 0 18px,#b3b1a3 18px 20px)}
+.swatch-mulch{background:repeating-linear-gradient(32deg,#7f582f 0 3px,#b3894c 3px 5px,#654b2e 5px 7px)}
+.swatch-concrete{background:linear-gradient(130deg,#d8d7c9,#bcbcae)}
+.studio-view-switch{display:flex;overflow:hidden;border-radius:999px;background:#e8edd7}
+.studio-view-switch button{border:0;padding:4px 13px;color:#7b886b;background:transparent;font-size:.56rem;cursor:pointer}
+.studio-view-switch button.active{background:#4b833b;color:white;border-radius:999px}
+.studio-preview{padding:10px 8px 8px}
+.studio-inspiration-photo{position:relative;height:265px;border-radius:10px;background-image:url('/images/garden-scenes.png');background-size:200% 200%;background-position:right top;overflow:hidden;border:1px solid #c3d0a7}
+.studio-inspiration-photo>span{position:absolute;top:8px;left:8px;background:#fffef4eb;color:#446236;border-radius:999px;padding:4px 7px;font-size:.5rem}
+.studio-inspiration-photo>button{position:absolute;left:10px;right:10px;bottom:9px;padding:7px;border:1px solid #ffffe577;border-radius:999px;background:#234b27e8;color:#fffef0;font-size:.65rem;cursor:pointer}
+.studio-real-layout{min-height:265px;padding:4px;border-radius:10px;background:#e7edcc;overflow:hidden}
+.studio-real-layout .garden-layout-viewport{min-height:265px;max-height:350px;overflow:auto}
+.studio-real-layout .garden-layout-preview{margin:0;border:0;padding:4px;background:transparent;box-shadow:none}
+.studio-isometric{perspective:800px;padding:20px 5px 30px;background:#dfe8bf}
+.studio-isometric .garden-layout-canvas,.studio-isometric .indoor-floor-preview{transform:rotateX(30deg) rotateZ(-12deg);transform-origin:center;box-shadow:8px 14px 0 #93a578}
+.studio-pairing-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.studio-pairing-grid>div{display:flex;align-items:center;gap:4px;background:#f6f8ed;border:1px solid #ebeddd;border-radius:10px;padding:4px;min-width:0}
+.pairing-photo{display:block;flex-shrink:0;width:30px;height:38px;border-radius:50%;background-size:200% 200%}
+.pairing-basil{background-image:url('/images/garden-scenes.png');background-position:right bottom}
+.pairing-lettuce{background-image:url('/images/plant-scenes.png');background-position:left top}
+.pairing-flowers{background-image:url('/images/plant-scenes.png');background-position:right bottom}
+.studio-pairing-grid strong{display:block;font-family:Inter;font-size:.5rem;line-height:1.4}
+.studio-pairing-grid small{display:block;font-size:.44rem;color:#8a907b;line-height:1.4}
+.studio-preferences,.studio-assistant{margin:8px 0 10px;padding:6px 9px;border:1px solid #e1e6cd;border-radius:11px;background:#fffef6}
+.studio-preferences>summary,.studio-assistant>summary{font-size:.64rem;cursor:pointer;color:#557941;padding:5px 0}
+.studio-preferences[open]>summary{margin-bottom:9px}
+.studio-preferences>label{display:flex;justify-content:space-between;gap:8px;font-size:.7rem;align-items:center;margin-bottom:9px}
+.studio-preferences select{max-width:60%;padding:7px;border:1px solid #dce5c5;border-radius:8px;background:#fbfcf2;color:#3b5831;font-size:.7rem}
+.studio-preferences>p{font-size:.7rem;margin:10px 0 8px}
+.studio-crop-options{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.studio-crop-options button{padding:6px 8px;border:1px solid #e0e5cd;border-radius:999px;background:#f8f9ed;color:#6a7a5b;font-size:.6rem;cursor:pointer}
+.studio-crop-options button[aria-pressed=true]{background:#4b8137;color:white;border-color:#4b8137}
+.studio-preferences>small{display:block;font-size:.6rem;line-height:1.5;color:#8a927c}
+.studio-message{font-size:.75rem;padding:10px;color:#496137;background:#edf3d8;border-radius:9px;margin-bottom:10px}
+.studio-apply{display:flex;justify-content:center;align-items:center;gap:12px;width:100%;min-height:41px;border:1px solid #6e974d;border-radius:999px;background:linear-gradient(125deg,#759a50,#22592b);box-shadow:inset 0 1px 2px #fff5,0 4px 12px #4b6f2626;color:white;font-size:.85rem;cursor:pointer}
+.studio-apply span{font-size:1.2rem}
+.reference-home-page .leafy-home-action::before,.reference-home-page .leafy-home-action::after{display:none}
+.reference-home-page .leafy-home-action-camera{background-image:linear-gradient(90deg,#fffef8ed,#f3f5dfba),url('/images/plant-scenes.png');background-size:100% 100%,200% 200%;background-position:center,left bottom}
+html.dark-mode .studio-card,html.dark-mode .studio-setup-card,html.dark-mode .studio-preferences,html.dark-mode .studio-assistant{background:#293b25;border-color:#495e39;color:#dae8cc}
+html.dark-mode .studio-section-title h2,html.dark-mode .studio-setup-card h2{color:#e7efd8}
+html.dark-mode .studio-pairing-grid>div{background:#35482c;border-color:#4b603d}
+html.dark-mode .studio-dimensions input,html.dark-mode .studio-dimensions select,html.dark-mode .studio-height input,html.dark-mode .studio-preferences select{background:#354b2d;border-color:#50633e;color:#e0edce}
+@media(max-width:355px){.studio-setup-card h2{font-size:.55rem}.studio-setup-card h2 small{font-size:.42rem}.studio-dimensions{grid-template-columns:1fr 1fr 37px;gap:3px}.studio-pairing-grid small{font-size:.4rem}.studio-material-grid{gap:3px}.studio-material-grid small{font-size:.4rem}.studio-inspiration-photo{height:240px}}
+
+.app-footer{display:none}
+.studio-preferences>label>input{max-width:60%;min-width:0;padding:7px;border:1px solid #dce5c5;border-radius:8px;background:#fbfcf2;color:#3b5831;font-size:.7rem}
+.studio-real-layout.finish-stone .layout-walkway{background:#d5cfb4}
+.studio-real-layout.finish-wood .layout-walkway{background:repeating-linear-gradient(90deg,#b58d57 0 7px,#91683c 7px 9px)}
+.studio-real-layout.finish-gravel .layout-walkway{background:#aaa38c}
+.studio-real-layout.finish-pavers .layout-walkway{background:repeating-linear-gradient(0deg,#dddcd0 0 15px,#aaa998 15px 17px)}
+.studio-real-layout.finish-mulch .layout-walkway{background:#987044}
+.studio-real-layout.finish-concrete .layout-walkway{background:#d1d1c5}
+
+.studio-build-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.studio-build-options label{font-size:.6rem;color:#6e805d}
+.studio-build-options input{display:block;width:100%;padding:7px;margin-top:4px;border:1px solid #dce5c5;border-radius:8px;background:#fbfcf2;color:#3b5831;font-size:16px}

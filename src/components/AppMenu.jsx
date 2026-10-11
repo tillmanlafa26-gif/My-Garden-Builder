@@ -172,7 +172,7 @@ function AppMenu() {
                     name={
                         isOpen
                             ? "close"
-                            : "menu"
+                            : "user"
                     }
                     size={21}
                 />
@@ -193,6 +193,8 @@ function AppMenu() {
                             Quick access
                         </small>
                     </div>
+
+                    <button type="button" className="app-menu-item" role="menuitem" onClick={() => { setIsOpen(false); navigate("/journal"); }}><span className="app-menu-item-icon"><Icon name="journal" size={18}/></span><span><strong>Garden Journal</strong><small>Your notes, photos, and growing progress.</small></span></button>
 
                     <button
                         type="button"

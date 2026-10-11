@@ -183,66 +183,13 @@ function WeatherCard() {
     }
 
 
-    if (
-        error
-    ) {
-
-        return (
-
-            <section className="weather-card live-weather-card">
-
-                <div className="weather-card-header">
-
-                    <div>
-
-                        <h2 className="weather-title">
-                            <Icon
-                                name="cloudSun"
-                                size={19}
-                            />
-                            <span>Local Weather</span>
-                        </h2>
-
-                        <p>
-                            Weather helps improve
-                            garden care.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div className="weather-error">
-
-                    <span>
-                        <Icon
-                            name="mapPin"
-                            size={22}
-                        />
-                    </span>
-
-                    <p>
-                        {error}
-                    </p>
-
-                    <button
-                        type="button"
-                        onClick={() =>
-                            refreshWeather()
-                        }
-                    >
-                        Try Location Again
-                    </button>
-
-                </div>
-
-            </section>
-
-        );
-
+    if (error) {
+        return <section className="weather-card live-weather-card reference-weather-unavailable" aria-label="Local garden weather">
+            <div className="reference-weather-summary"><span aria-hidden="true">☀️</span><div><strong>—°</strong><p>Local forecast</p></div></div>
+            <p className="reference-weather-location"><Icon name="mapPin" size={15}/> Your garden, your forecast</p>
+            <div className="reference-weather-footer"><span title={error}>Add your location for live weather</span><button type="button" onClick={() => refreshWeather()}>Set location <Icon name="chevronRight" size={14}/></button></div>
+        </section>;
     }
-
 
     if (
         !weather

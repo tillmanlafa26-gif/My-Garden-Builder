@@ -1,3 +1,4 @@
+import Designer from "./pages/Designer";
 import {
     lazy,
     Suspense,
@@ -3837,6 +3838,8 @@ function App() {
                     }
                 />
 
+
+                <Route path="/designer" element={<Designer gardenProfile={gardenProfile} onSaveGardenProfile={saveGardenProfile} />} />
 
                 <Route
                     path="/plants"

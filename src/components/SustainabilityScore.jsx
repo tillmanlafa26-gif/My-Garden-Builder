@@ -83,7 +83,7 @@ function SustainabilityScore({
                 </div>
 
 
-                <div className="leafy-score-copy">
+                <div className="leafy-score-copy"><h2>Sustainability Score <span aria-hidden="true">ⓘ</span></h2>
 
                     <h3>
                         A greener garden for a brighter tomorrow
