@@ -7,6 +7,7 @@ import AppErrorBoundary from "./components/AppErrorBoundary.jsx";
 import { WeatherProvider } from "./context/WeatherContext.jsx";
 import { registerServiceWorker } from "./utils/registerServiceWorker.js";
 import "./index.css";
+import "./reference-theme.css";
 
 createRoot(document.getElementById("root")).render(
     <StrictMode>

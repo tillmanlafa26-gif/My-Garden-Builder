@@ -876,7 +876,7 @@ function Plants({
 
     return (
 
-        <div className="app-container">
+        <div className="app-container leafy-app plant-library-page">
 
 
             {/* =========================

@@ -247,7 +247,7 @@ function Garden({
 
         return (
 
-            <div className="app-container">
+            <div className="app-container leafy-app garden-page">
 
 
                 <header className="app-header">
@@ -662,7 +662,7 @@ function Garden({
 
     return (
 
-        <div className="app-container">
+        <div className="app-container leafy-app garden-page">
 
 
             {/* =================================================

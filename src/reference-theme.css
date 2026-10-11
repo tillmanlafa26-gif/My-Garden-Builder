@@ -1,0 +1,172 @@
+/* Botanical design system inspired by the garden dashboard reference. */
+:root {
+  --leafy-sage: #2f7c37;
+  --leafy-leaf: #4caf50;
+  --leafy-olive: #6b8f3e;
+  --leafy-cream: #f8f6ec;
+  --leafy-forest: #173b24;
+  --leafy-card: #fffef7;
+  --leafy-line: #e0e5cd;
+  --leafy-shadow: 0 5px 18px rgba(54, 73, 31, .07);
+}
+html:not(.dark-mode) { background: #e9edda; }
+body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif; }
+html:not(.dark-mode) body {
+  background: radial-gradient(ellipse at 15% 10%, #cadbb0 0, transparent 40%),
+    radial-gradient(ellipse at 90% 60%, #d4dfb8 0, transparent 40%), #edf0df;
+  color: #233d28;
+}
+h1, h2, h3 { font-family: Georgia, 'Times New Roman', serif; letter-spacing: -.035em; }
+button, input, select, textarea { font-family: inherit; }
+.app-container, .app-container.leafy-app {
+  max-width: 600px;
+  padding: 16px 20px calc(112px + env(safe-area-inset-bottom));
+  background: radial-gradient(ellipse at 100% 0, #e8edcc 0, transparent 350px), #f8f6ec;
+  box-shadow: 0 0 70px #324c2020;
+}
+.app-container.leafy-app::before, .app-container.leafy-app::after {
+  width: 140px; height: 180px; opacity: .5; border-radius: 0;
+  background: url('./assets/leafy-ui/brand-vine.svg') center / contain no-repeat;
+}
+.app-container.leafy-app::before { top: 390px; left: -112px; }
+.app-container.leafy-app::after { top: 740px; right: -112px; }
+.leafy-brand-header-v2 { min-height: 112px; grid-template-columns: 42px minmax(0, 1fr); padding: 20px 0; gap: 8px; }
+.leafy-brand-header-v2 .app-brand-mark {
+  width: 42px; height: 54px; background: transparent; border-radius: 0; box-shadow: none;
+  color: #397d36; transform: rotate(-12deg);
+}
+.leafy-brand-header-v2 .app-brand-mark svg { width: 42px; height: 42px; }
+.leafy-brand-header-v2 h1 { font-size: clamp(1.65rem, 5.9vw, 2.55rem); letter-spacing: -.055em; line-height: 1.1; }
+.leafy-brand-header-v2 .app-brand-kicker { font-size: .52rem; letter-spacing: .16em; line-height: 1.7; margin-top: 6px; }
+.leafy-brand-header-v2 .app-brand-script { font-size: .85rem !important; margin-top: 7px !important; }
+.leafy-brand-header-v2 .app-brand-leaf-chip { display: none; }
+.leafy-brand-vine { opacity: .8; width: 150px; height: 90px; }
+.leafy-brand-vine-left { top: -42px; left: -95px; }
+.leafy-brand-vine-right { top: -35px; right: -78px; }
+.app-header:not(.leafy-brand-header) { padding: 34px 8px 24px; }
+.app-header:not(.leafy-brand-header) h1 { font-size: 2rem; color: var(--leafy-forest); }
+.app-header:not(.leafy-brand-header) p { font-size: .85rem; }
+.home-page .weather-card.live-weather-card { border-radius: 18px; min-height: 240px; padding: 18px; background-position: center; }
+.home-page .weather-card .weather-title { font-size: .95rem; }
+.home-page .weather-card .weather-card-header p { font-size: .7rem; }
+.home-page .weather-card .weather-temperature strong { font-size: 2.7rem; }
+.home-page .weather-card .weather-details { gap: 6px; }
+.home-page .weather-card .weather-details small,
+.home-page .weather-card .weather-details span,
+.home-page .weather-card .weather-details strong { font-size: .65rem; }
+.home-page .weather-card .garden-weather-message { font-size: .7rem; }
+.leafy-home-welcome { padding: 12px 4px 8px; grid-template-columns: 1fr 58px; }
+.leafy-home-welcome h2 { font-size: 1.9rem; }
+.leafy-home-welcome p { font-size: .8rem; line-height: 1.5; }
+.leafy-home-kicker { font-size: .6rem; letter-spacing: .13em; }
+.leafy-home-welcome-art { background: #e6edcf; }
+.home-page .home-build-progress { border-radius: 18px; padding: 16px 12px; }
+.home-build-progress-header h2 { font-size: 1.15rem; }
+.home-build-progress-header p, .home-build-progress-count { font-size: .7rem; }
+.home-build-progress-percent { font-size: .8rem; }
+.home-build-stage > div strong { font-size: .7rem; }
+.home-build-stage > div small, .home-build-stage-state { font-size: .6rem; }
+.leafy-home-action-intro span { font-size: .8rem; }
+.leafy-home-action-intro small { font-size: .65rem; }
+.leafy-home-action-grid { gap: 10px; margin-bottom: 20px; }
+.leafy-home-action { min-height: 150px; grid-template-columns: 1fr; gap: 9px; padding: 16px; border-radius: 16px; }
+.leafy-home-action strong { font-size: 1.05rem; }
+.leafy-home-action small { font-size: .55rem; }
+.leafy-home-action p { font-size: .72rem; padding-right: 12px; }
+.leafy-home-action-primary { background: linear-gradient(135deg, #2c6f32, #194522); }
+.leafy-home-action-camera { background: linear-gradient(145deg, #fffef4, #e4eccb); }
+.leafy-section-heading h2 { font-size: 1.15rem; }
+.leafy-section-heading small { font-size: .55rem; }
+.leafy-section-more { font-size: .65rem; }
+.leafy-score-card { padding: 18px 14px; background: linear-gradient(120deg, #fffef8, #edf0d8); border-radius: 18px; }
+.leafy-score-copy h3 { font-size: .95rem; }
+.leafy-score-benefits span { font-size: .72rem; }
+.leafy-score-ring-inner strong { font-size: 2rem; }
+.leafy-score-ring-inner small { font-size: .65rem; }
+.leafy-inspiration-card { min-height: 145px; padding: 12px 9px; border-radius: 13px; }
+.leafy-inspiration-card strong { font-size: .95rem; text-shadow: 0 1px 5px #000; }
+.leafy-inspiration-card small { font-size: .58rem; color: white; opacity: 1; }
+.home-page .garden-assistant-card { border-radius: 18px; background: linear-gradient(135deg, #fffef8, #f0f3df); }
+.garden-assistant-card h2 { font-size: 1.3rem; }
+.garden-assistant-card p { font-size: .8rem; }
+.home-builder-step-heading h2, .home-builder-step-heading h3 { font-size: 1.2rem; }
+.home-builder-step-heading p, .home-builder-helper-text { font-size: .75rem; }
+.home-builder-field-group > label, .home-builder-field-group > h3 { font-size: .85rem; }
+.home-builder-choice strong, .home-builder-choice span { font-size: .8rem; }
+.home-builder-choice small { font-size: .68rem; }
+.home-builder-continue-button, .leafy-designer-primary-button { min-height: 48px; border-radius: 999px !important; font-size: .9rem !important; background: linear-gradient(135deg, #438638, #205629); }
+.leafy-designer-title-lockup h3 { font-size: 1.65rem; }
+.leafy-designer-title-lockup p { font-size: .75rem; }
+.leafy-designer-inspire-button, .leafy-designer-status { font-size: .65rem; }
+.leafy-designer-setup-card strong { font-size: .8rem; }
+.leafy-designer-setup-card > div > span { font-size: .68rem; }
+.leafy-designer-context-strip strong { font-size: .7rem; }
+.leafy-designer-context-strip small { font-size: .62rem; }
+.leafy-pairing-hint-card strong { font-size: .7rem; }
+.leafy-pairing-hint-card small { font-size: .6rem; }
+.leafy-pairing-hint-card { align-items: start; }
+.leafy-designer-material-grid button strong, .leafy-designer-material-grid button small { font-size: .68rem; }
+.plant-library-page .plant-profile-notice { padding: 16px; background: #edf1da; }
+.plant-library-page .plant-profile-notice p { font-size: .8rem; }
+.plant-library-page .designer-section-heading h2 { font-size: 1.4rem; }
+.plant-library-page .designer-section-heading p { font-size: .8rem; }
+.plant-library-page .feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.plant-library-page .feature-card { border-radius: 16px; padding: 16px; background: #fffef8; text-align: left; }
+.plant-library-page .feature-card > span { display: grid; min-height: 90px; place-items: center; font-size: 3.2rem; background: radial-gradient(ellipse, #e4edca, #f7f7e9); border-radius: 10px; margin-bottom: 10px; }
+.plant-library-page .feature-card strong { font-family: Georgia, serif; font-size: 1.3rem; }
+.plant-library-page .feature-card small { font-size: .75rem; line-height: 1.5; }
+.plant-library-page .feature-card button { min-height: 40px; font-size: .75rem; border-radius: 999px; }
+.api-plant-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.api-plant-card { overflow: hidden; border-radius: 14px; }
+.api-plant-image-container { height: 170px; }
+.api-plant-content { padding: 12px; }
+.api-plant-heading { display: block; }
+.api-plant-heading h3 { font-size: 1.3rem; }
+.api-plant-heading p { font-size: .7rem; }
+.api-badge { display: none; }
+.vegetable-search input { background: #fffef8; border: 1px solid #d9dfc6; border-radius: 14px; font-size: .85rem; }
+.vegetable-quick-search button { border-radius: 10px; min-height: 36px; background: #eef2de; color: #355b33; font-size: .75rem; }
+.leafy-bottom-nav { max-width: 600px; border-radius: 24px 24px 0 0; padding: 12px 12px calc(10px + env(safe-area-inset-bottom)); background: #fffef4f5; border-color: #dfe5cc; box-shadow: 0 -5px 25px #39532912; backdrop-filter: blur(16px); }
+.leafy-bottom-nav .nav-link p { font-size: .65rem; }
+.leafy-bottom-nav .nav-link-icon { height: 36px; }
+.leafy-bottom-nav .nav-link.active { background: #eaf0d7; color: #244b29; }
+.app-menu { right: max(16px, calc((100vw - 600px) / 2 + 16px)); }
+button:focus-visible, a:focus-visible { outline: 3px solid #6b8f3e; outline-offset: 4px; }
+html.dark-mode .app-container, html.dark-mode .app-container.leafy-app { background: #1e2820; }
+html.dark-mode .app-header:not(.leafy-brand-header) h1 { color: #e6eedc; }
+html.dark-mode .leafy-score-card, html.dark-mode .home-page .garden-assistant-card,
+html.dark-mode .plant-library-page .feature-card, html.dark-mode .plant-library-page .plant-profile-notice { background: #293629; }
+html.dark-mode .plant-library-page .feature-card > span { background: #354532; }
+html.dark-mode .leafy-bottom-nav { background: #202c22f5; border-color: #41533d; }
+html.dark-mode .leafy-bottom-nav .nav-link.active { background: #354b32; color: #e1edda; }
+@media (max-width: 400px) {
+  .app-container, .app-container.leafy-app { padding-left: 12px; padding-right: 12px; }
+  .leafy-brand-header-v2 h1 { font-size: 1.8rem; }
+  .leafy-brand-header-v2 .app-brand-kicker { font-size: .43rem; }
+  .leafy-section-heading h2 { font-size: 1rem; }
+  .leafy-section-more { font-size: .58rem; }
+  .leafy-designer-title-lockup h3 { font-size: 1.3rem; }
+  .leafy-home-action { padding: 12px; }
+  .leafy-bottom-nav .nav-link p { font-size: .58rem; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+/* Navigation is mounted outside scrolling page content and pinned to the viewport. */
+.bottom-nav.leafy-bottom-nav {
+  position: fixed;
+  width: 100%;
+  max-width: 600px;
+  z-index: 500;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.home-page .home-build-progress-count { font-size: .7rem; }
+.home-page .home-build-progress-count small { font-size: .65rem; }
+.home-page .home-build-stage > div strong { font-size: .65rem; }
+.home-page .home-build-stage-list { gap: 5px; }
+.plant-library-page .feature-card > span { width: 100%; }
+html.dark-mode .leafy-brand-header-v2 .app-brand-kicker { color: #b1cc9f; }
+html.dark-mode .leafy-brand-header-v2 .app-brand-mark { background: transparent; box-shadow: none; color: #b8d5a4; }
+html.dark-mode .leafy-bottom-nav .nav-link.active:not(:nth-child(3)) .nav-link-icon { background: #3c5636; color: #e4f0dc; }
+html.dark-mode .leafy-bottom-nav .nav-link.active p,
+html.dark-mode .leafy-bottom-nav .nav-link:nth-child(3) p { color: #d3e5c9; }

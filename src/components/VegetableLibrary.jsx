@@ -202,7 +202,8 @@ function VegetableLibrary({
       <form className="vegetable-search" onSubmit={handleSearch}>
         <input
           type="search"
-          placeholder="Search tomato, broccoli, carrot..."
+          aria-label="Search plant library"
+          placeholder="Search plants, herbs, vegetables…"
           value={searchInput}
           onChange={(event) => setSearchInput(event.target.value)}
         />

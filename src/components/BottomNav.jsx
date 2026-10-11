@@ -1,3 +1,5 @@
+import { createPortal } from "react-dom";
+
 import {
     NavLink
 } from "react-router";
@@ -37,7 +39,7 @@ const navItems = [
 
 function BottomNav() {
 
-    return (
+    return createPortal(
         <nav
             className="bottom-nav leafy-bottom-nav"
             aria-label="Primary navigation"
@@ -95,7 +97,8 @@ function BottomNav() {
                 )
             }
 
-        </nav>
+        </nav>,
+        document.body
     );
 
 }
