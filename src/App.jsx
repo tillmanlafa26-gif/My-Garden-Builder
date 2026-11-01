@@ -103,6 +103,9 @@ import {
     RUNTIME_CACHE_PREFIX
 } from "./utils/runtimeCache";
 
+import useGardenPersistence
+    from "./hooks/useGardenPersistence";
+
 
 /* =========================
    ROUTE LOADING FALLBACK
@@ -1799,6 +1802,25 @@ function App() {
     ] = useState(
         false
     );
+
+
+    const cloudSync =
+        useGardenPersistence({
+            tasks,
+            setTasks,
+            gardenProfile,
+            setGardenProfile,
+            ownedSupplies,
+            setOwnedSupplies,
+            gardenPlants,
+            setGardenPlants,
+            calendarEvents,
+            setCalendarEvents,
+            wateringRecords,
+            setWateringRecords,
+            journalEntries,
+            setJournalEntries
+        });
 
 
     /* =========================
@@ -4074,6 +4096,10 @@ function App() {
             <AppSettings
                 onResetApp={
                     resetAppToOriginalState
+                }
+
+                cloudSync={
+                    cloudSync
                 }
             />
 
