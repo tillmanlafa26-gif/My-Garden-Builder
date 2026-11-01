@@ -179,22 +179,37 @@ function deriveDesignCollections(
                     .features
                 : [],
         gardenMaterials:
-            designSpace
-                .materials ||
-            designSpace
-                .materialList ||
-            designSpace
-                .generatedMaterials ||
-            [],
+            Array.isArray(
+                designSpace
+                    .materials
+            )
+                ? designSpace
+                    .materials
+                : (
+                    designSpace
+                        .materials
+                        ?.materials ||
+                    designSpace
+                        .indoorMaterials
+                        ?.materials ||
+                    []
+                ),
         buildSteps:
-            designSpace
-                .buildSteps ||
-            designSpace
-                .steps ||
-            designSpace
-                .buildPlan
-                ?.steps ||
-            []
+            Array.isArray(
+                designSpace
+                    .buildSteps
+            )
+                ? designSpace
+                    .buildSteps
+                : (
+                    designSpace
+                        .buildPlan
+                        ?.stages ||
+                    designSpace
+                        .indoorBuildPlan
+                        ?.stages ||
+                    []
+                )
     };
 }
 
