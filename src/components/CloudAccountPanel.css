@@ -1,0 +1,56 @@
+.cloud-account-form {
+    display: grid;
+    gap: 14px;
+    padding: 16px;
+    border: 1px solid rgba(63, 112, 77, 0.18);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.52);
+}
+
+.cloud-account-form > div:first-child {
+    display: grid;
+    gap: 4px;
+}
+
+.cloud-account-form p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+.cloud-account-form label {
+    display: grid;
+    gap: 6px;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.cloud-account-form input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 12px;
+    border: 1px solid rgba(63, 112, 77, 0.28);
+    border-radius: 12px;
+    background: var(--surface, #ffffff);
+    color: inherit;
+    font: inherit;
+}
+
+.cloud-account-form input:focus {
+    outline: 2px solid rgba(63, 112, 77, 0.28);
+    outline-offset: 2px;
+}
+
+.cloud-account-status {
+    cursor: default;
+}
+
+html.dark-mode .cloud-account-form {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+html.dark-mode .cloud-account-form input {
+    background: #1d271d;
+    border-color: #405040;
+    color: #f4f7f2;
+}
