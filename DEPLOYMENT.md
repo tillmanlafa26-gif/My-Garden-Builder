@@ -77,3 +77,23 @@ PWA installation and service workers require HTTPS in production. Major deployme
 
 ## 8. After deployment
 Open the production URL on a phone and desktop, complete the QA checklist, then install it to the device home screen.
+
+## Optional Supabase cloud sync
+
+Cloud sync is designed to fail safely. The app remains local-first when these variables are absent:
+
+```text
+VITE_SUPABASE_URL
+VITE_SUPABASE_ANON_KEY
+```
+
+Before enabling the variables in production, apply the Supabase migrations in order:
+
+1. `20261011_0001_initial_garden_schema.sql`
+2. `20261101_0002_builder_data_layer.sql`
+3. `20261101_0003_persistence_hardening.sql`
+
+After adding `@supabase/supabase-js`, run `npm install` locally so `package-lock.json` is refreshed before the next dependency maintenance commit.
+
+The Phase 3 migration adds one-active-garden enforcement, idempotent legacy-browser migration support, stronger garden ownership policies, and an atomic garden snapshot RPC.
+
