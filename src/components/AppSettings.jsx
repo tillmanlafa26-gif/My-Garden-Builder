@@ -10,6 +10,9 @@ import {
 
 import Icon from "./Icon";
 
+import CloudAccountPanel
+    from "./CloudAccountPanel";
+
 import {
     readText,
     writeText
@@ -33,7 +36,8 @@ function isIosDevice() {
 }
 
 function AppSettings({
-    onResetApp
+    onResetApp,
+    cloudSync
 }) {
     const navigate =
         useNavigate();
@@ -681,7 +685,13 @@ function AppSettings({
                             </button>
                         </section>
 
-                        <section className="app-settings-section">
+                                                <CloudAccountPanel
+                            cloudSync={
+                                cloudSync
+                            }
+                        />
+
+<section className="app-settings-section">
                             <div className="app-settings-section-heading">
                                 <span>
                                     <Icon
@@ -693,7 +703,7 @@ function AppSettings({
                                 <div>
                                     <strong>App Data</strong>
                                     <small>
-                                        Manage garden information stored in this browser.
+                                        Manage the local copy of your garden information.
                                     </small>
                                 </div>
                             </div>
@@ -743,7 +753,7 @@ function AppSettings({
                                             Reset Everything?
                                         </strong>
                                         <p>
-                                            This removes your saved garden profile, plants, tasks, calendar events, watering history, journal entries, supplies, theme, and onboarding status from this browser.
+                                            This removes the local copy of your garden profile, plants, tasks, calendar events, watering history, journal entries, supplies, theme, and onboarding status from this browser. Signed-in cloud data is not deleted.
                                         </p>
                                     </div>
 
@@ -779,7 +789,11 @@ function AppSettings({
                             </span>
 
                             <p>
-                                Garden data is currently stored locally in this browser. Version {APP_VERSION}.
+                                {
+                                    cloudSync?.user
+                                        ? `Garden data is saved locally and synced to your signed-in account. Version ${APP_VERSION}.`
+                                        : `Garden data is saved locally in this browser. Sign in above to enable cloud sync. Version ${APP_VERSION}.`
+                                }
                             </p>
                         </div>
                     </section>
