@@ -651,6 +651,20 @@ export default async function handler(
         getBackendConfig();
 
 
+    if (
+        !apiKey
+    ) {
+        return response
+            .status(
+                503
+            )
+            .json({
+                error:
+                    "AI garden analysis is not configured."
+            });
+    }
+
+
     const instructions = `
 You extract structured inputs for My Garden Builder.
 
