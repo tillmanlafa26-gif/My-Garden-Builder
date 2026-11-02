@@ -1,4 +1,4 @@
-const CACHE_VERSION = "my-garden-builder-botanical-v2";
+const CACHE_VERSION = "my-garden-builder-botanical-v3";
 const APP_CACHE = `${CACHE_VERSION}-app`;
 
 const scopeUrl = new URL("./", self.registration.scope);
@@ -53,6 +53,11 @@ self.addEventListener("fetch", (event) => {
 
     // Cross-origin API calls are handled by the app's runtime cache.
     if (url.origin !== self.location.origin) {
+        return;
+    }
+
+    // API responses should always use their own network/cache policy.
+    if (url.pathname.startsWith("/api/")) {
         return;
     }
 
