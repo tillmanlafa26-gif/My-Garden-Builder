@@ -1,3 +1,7 @@
+import {
+    getBackendConfig
+} from "../config/env.js";
+
 const OUTDOOR_SELECTION_IDS =
     new Set([
     "tomato",
@@ -638,29 +642,13 @@ export default async function handler(
     }
 
 
-    const apiKey =
-        process.env
-            .OPENAI_API_KEY;
-
-
-    if (
-        !apiKey
-    ) {
-        return response
-            .status(
-                503
-            )
-            .json({
-                error:
-                    "AI garden analysis is not configured."
-            });
-    }
-
-
-    const model =
-        process.env
-            .OPENAI_GARDEN_MODEL ||
-        "gpt-5.6-luna";
+    const {
+        openAiApiKey:
+            apiKey,
+        openAiGardenModel:
+            model
+    } =
+        getBackendConfig();
 
 
     const instructions = `
