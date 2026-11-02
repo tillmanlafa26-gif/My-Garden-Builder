@@ -85,7 +85,9 @@ Apply migrations in timestamp order:
 
 1. `20261011_0001_initial_garden_schema.sql`
 2. `20261101_0002_builder_data_layer.sql`
-3. `20261101_0003_persistence_hardening.sql`
+3. `20261102000000_persistence_hardening.sql`
+4. `20261102041005_user_id_fk_indexes.sql`
+5. `20261102042136_restrict_function_execute.sql`
 
 Preview first:
 
