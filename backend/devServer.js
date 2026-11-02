@@ -1,7 +1,14 @@
 import http
     from "node:http";
 
+import fs
+    from "node:fs";
+
+import path
+    from "node:path";
+
 import {
+    fileURLToPath,
     URL
 } from "node:url";
 
@@ -20,6 +27,130 @@ import healthHandler
 import {
     getBackendConfig
 } from "./config/env.js";
+
+
+function loadLocalEnvironment() {
+    const currentFile =
+        fileURLToPath(
+            import.meta.url
+        );
+
+    const projectRoot =
+        path.resolve(
+            path.dirname(
+                currentFile
+            ),
+            ".."
+        );
+
+    const envPath =
+        path.join(
+            projectRoot,
+            ".env"
+        );
+
+    if (
+        !fs.existsSync(
+            envPath
+        )
+    ) {
+        return;
+    }
+
+    const lines =
+        fs.readFileSync(
+            envPath,
+            "utf8"
+        )
+            .split(
+                /\r?\n/
+            );
+
+    for (
+        const rawLine
+        of lines
+    ) {
+        const line =
+            rawLine.trim();
+
+        if (
+            !line ||
+            line.startsWith(
+                "#"
+            )
+        ) {
+            continue;
+        }
+
+        const separator =
+            line.indexOf(
+                "="
+            );
+
+        if (
+            separator <=
+            0
+        ) {
+            continue;
+        }
+
+        const key =
+            line
+                .slice(
+                    0,
+                    separator
+                )
+                .trim();
+
+        let value =
+            line
+                .slice(
+                    separator +
+                    1
+                )
+                .trim();
+
+        if (
+            (
+                value.startsWith(
+                    '"'
+                ) &&
+                value.endsWith(
+                    '"'
+                )
+            ) ||
+            (
+                value.startsWith(
+                    "'"
+                ) &&
+                value.endsWith(
+                    "'"
+                )
+            )
+        ) {
+            value =
+                value.slice(
+                    1,
+                    -1
+                );
+        }
+
+        if (
+            process.env[
+                key
+            ] ===
+            undefined
+        ) {
+            process.env[
+                key
+            ] =
+                value;
+        }
+    }
+}
+
+
+loadLocalEnvironment();
 
 const MAX_JSON_BODY_BYTES =
     4 * 1024 * 1024;
