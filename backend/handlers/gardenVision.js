@@ -1,3 +1,7 @@
+import {
+    getBackendConfig
+} from "../config/env.js";
+
 const BOX_SCHEMA = {
     type: "object",
     additionalProperties: false,
@@ -225,7 +229,13 @@ export default async function handler(request, response) {
             });
     }
 
-    const apiKey = process.env.OPENAI_API_KEY;
+    const {
+        openAiApiKey:
+            apiKey,
+        openAiVisionModel:
+            model
+    } =
+        getBackendConfig();
 
     if (!apiKey) {
         return response
@@ -235,11 +245,6 @@ export default async function handler(request, response) {
                     "AI photo analysis is not configured. Manual photo mapping still works."
             });
     }
-
-    const model =
-        process.env.OPENAI_GARDEN_VISION_MODEL ||
-        process.env.OPENAI_GARDEN_MODEL ||
-        "gpt-5.6-luna";
 
     const context = {
         spaceType:
