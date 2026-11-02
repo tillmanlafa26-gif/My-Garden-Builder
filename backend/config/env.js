@@ -40,7 +40,10 @@ export function getBackendHealth() {
         supabaseClient:
             Boolean(
                 process.env.VITE_SUPABASE_URL &&
-                process.env.VITE_SUPABASE_ANON_KEY
+                (
+                    process.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+                    process.env.VITE_SUPABASE_ANON_KEY
+                )
             )
     };
 }
