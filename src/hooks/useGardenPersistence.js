@@ -14,6 +14,7 @@ import {
     createGarden,
     getActiveGarden,
     getCurrentSession,
+    getProfile,
     listGardens,
     loadGardenSnapshot,
     migrateLegacyGardenToDatabase,
@@ -22,7 +23,8 @@ import {
     signInWithEmail,
     signOut as signOutFromSupabase,
     signUpWithEmail,
-    subscribeToAuthChanges
+    subscribeToAuthChanges,
+    updateProfile as updateProfileInSupabase
 } from "../services/cloudGardenRepository";
 
 const AUTOSAVE_DELAY_MS = 1600;
@@ -308,6 +310,17 @@ export default function useGardenPersistence({
     ] = useState(
         null
     );
+
+    const [
+        profile,
+        setProfile
+    ] = useState(
+        null
+    );
+
+    const userId =
+        session?.user?.id ??
+        null;
 
     const hydrationRef =
         useRef(
@@ -727,6 +740,71 @@ export default function useGardenPersistence({
         ]
     );
 
+    useEffect(
+        () => {
+            if (
+                !userId
+            ) {
+                return undefined;
+            }
+
+            let cancelled =
+                false;
+
+            getProfile()
+                .then(
+                    (
+                        nextProfile
+                    ) => {
+                        if (
+                            !cancelled
+                        ) {
+                            setProfile(
+                                nextProfile
+                            );
+                        }
+                    }
+                )
+                .catch(
+                    (
+                        error
+                    ) => {
+                        console.error(
+                            "Unable to load profile:",
+                            error
+                        );
+                    }
+                );
+
+            return () => {
+                cancelled =
+                    true;
+            };
+        },
+        [
+            userId
+        ]
+    );
+
+    const updateProfile =
+        useCallback(
+            async (
+                changes
+            ) => {
+                const savedProfile =
+                    await updateProfileInSupabase(
+                        changes
+                    );
+
+                setProfile(
+                    savedProfile
+                );
+
+                return savedProfile;
+            },
+            []
+        );
+
     const saveNow =
         useCallback(
             async () => {
@@ -992,6 +1070,15 @@ export default function useGardenPersistence({
         user:
             session?.user ??
             null,
+        // Only expose a profile that belongs to the signed-in user, so a
+        // previous account's profile never shows after switching or signing out.
+        profile:
+            userId &&
+            profile?.id ===
+            userId
+                ? profile
+                : null,
+        updateProfile,
         activeGardenId,
         syncStatus,
         syncMessage,
