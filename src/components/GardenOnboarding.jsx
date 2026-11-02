@@ -86,7 +86,9 @@ const onboardingSteps = [
 ];
 
 
-function GardenOnboarding() {
+function GardenOnboarding({
+    cloudSync
+}) {
     const dialogRef =
         useRef(null);
 
@@ -114,13 +116,69 @@ function GardenOnboarding() {
                 null
             ) === "true"
                 ? "tour"
-                : "prompt"
+                : "account"
     );
 
     const [
         currentStep,
         setCurrentStep
     ] = useState(0);
+
+    const [
+        accountMode,
+        setAccountMode
+    ] = useState("signup");
+
+    const [
+        displayName,
+        setDisplayName
+    ] = useState("");
+
+    const [
+        email,
+        setEmail
+    ] = useState("");
+
+    const [
+        password,
+        setPassword
+    ] = useState("");
+
+    const [
+        accountBusy,
+        setAccountBusy
+    ] = useState(false);
+
+    const [
+        accountMessage,
+        setAccountMessage
+    ] = useState("");
+
+    const [
+        awaitingConfirmation,
+        setAwaitingConfirmation
+    ] = useState(false);
+
+
+    // The account step only applies when cloud accounts are configured and
+    // nobody is signed in yet. Once a session exists the tour takes over.
+    const needsAccount =
+        Boolean(
+            cloudSync?.configured &&
+            !cloudSync?.user
+        );
+
+    const activeView =
+        view === "account" &&
+        !needsAccount &&
+        !awaitingConfirmation
+            ? "tour"
+            : view;
+
+    const checkingSession =
+        activeView === "account" &&
+        cloudSync?.syncStatus ===
+        "checking";
 
 
     const step =
@@ -151,7 +209,59 @@ function GardenOnboarding() {
 
     function beginFirstTour() {
         setCurrentStep(0);
+        setAwaitingConfirmation(false);
         setView("tour");
+    }
+
+
+    async function handleAccountSubmit(event) {
+        event.preventDefault();
+
+        setAccountBusy(true);
+        setAccountMessage("");
+
+        try {
+            if (accountMode === "signup") {
+                const result =
+                    await cloudSync.signUp({
+                        displayName,
+                        email,
+                        password
+                    });
+
+                // With email confirmation on, Supabase creates the account
+                // without a session; let the user continue to the tour.
+                if (!result?.session) {
+                    setAwaitingConfirmation(true);
+                }
+            } else {
+                await cloudSync.signIn({
+                    email,
+                    password
+                });
+            }
+
+            setPassword("");
+        } catch (error) {
+            setAccountMessage(
+                error?.message ||
+                "Unable to complete that account request."
+            );
+        } finally {
+            setAccountBusy(false);
+        }
+    }
+
+
+    function toggleAccountMode() {
+        setAccountMode(
+            (current) =>
+                current === "signup"
+                    ? "signin"
+                    : "signup"
+        );
+
+        setAccountMessage("");
     }
 
 
@@ -221,6 +331,12 @@ function GardenOnboarding() {
                 return undefined;
             }
 
+            // Account creation is required on first launch, so Escape
+            // only dismisses the tour.
+            if (activeView === "account") {
+                return undefined;
+            }
+
             function handleKeyDown(event) {
                 if (event.key === "Escape") {
                     closeOnboarding();
@@ -240,7 +356,8 @@ function GardenOnboarding() {
             };
         },
         [
-            isOpen
+            isOpen,
+            activeView
         ]
     );
 
@@ -321,7 +438,10 @@ function GardenOnboarding() {
         },
         [
             isOpen,
-            view,
+            activeView,
+            accountMode,
+            awaitingConfirmation,
+            checkingSession,
             currentStep
         ]
     );
@@ -358,12 +478,18 @@ function GardenOnboarding() {
         return null;
     }
 
-
     /* =====================================================
-       FIRST-LAUNCH PROMPT
+       FIRST-LAUNCH ACCOUNT STEP
     ===================================================== */
 
-    if (view === "prompt") {
+    if (checkingSession) {
+        return null;
+    }
+
+    if (
+        activeView === "account" &&
+        awaitingConfirmation
+    ) {
         return (
             <div
                 className="garden-onboarding-overlay"
@@ -374,8 +500,61 @@ function GardenOnboarding() {
                     className="garden-onboarding-dialog garden-onboarding-welcome"
                     role="dialog"
                     aria-modal="true"
-                    aria-labelledby="garden-welcome-title"
-                    aria-describedby="garden-welcome-description"
+                    aria-labelledby="garden-confirm-title"
+                    aria-describedby="garden-confirm-description"
+                >
+                    <div className="garden-onboarding-welcome-content">
+                        <div
+                            className="garden-onboarding-welcome-logo"
+                            aria-hidden="true"
+                        >
+                            ✉️
+                        </div>
+
+                        <small className="garden-onboarding-eyebrow">
+                            ACCOUNT CREATED
+                        </small>
+
+                        <h2 id="garden-confirm-title">
+                            Check your email
+                        </h2>
+
+                        <p id="garden-confirm-description">
+                            We sent a confirmation link to {email.trim()}. Confirm it, then sign in from ☰ → Settings to sync your garden. You can start exploring now.
+                        </p>
+                    </div>
+
+                    <div className="garden-onboarding-welcome-actions">
+                        <button
+                            ref={firstActionRef}
+                            type="button"
+                            className="garden-onboarding-next"
+                            onClick={beginFirstTour}
+                        >
+                            Continue to the Tour →
+                        </button>
+                    </div>
+                </section>
+            </div>
+        );
+    }
+
+    if (activeView === "account") {
+        const isSignUp =
+            accountMode === "signup";
+
+        return (
+            <div
+                className="garden-onboarding-overlay"
+                role="presentation"
+            >
+                <section
+                    ref={dialogRef}
+                    className="garden-onboarding-dialog garden-onboarding-welcome"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="garden-account-title"
+                    aria-describedby="garden-account-description"
                 >
                     <div className="garden-onboarding-welcome-content">
                         <div
@@ -389,87 +568,139 @@ function GardenOnboarding() {
                             WELCOME TO MY GARDEN BUILDER
                         </small>
 
-                        <h2 id="garden-welcome-title">
-                            Ready to build your garden?
+                        <h2 id="garden-account-title">
+                            {
+                                isSignUp
+                                    ? "Create your account"
+                                    : "Welcome back"
+                            }
                         </h2>
 
-                        <p id="garden-welcome-description">
-                            Before you start, would you like a quick walkthrough of how the app works?
+                        <p id="garden-account-description">
+                            {
+                                isSignUp
+                                    ? "Your account keeps your garden saved and available on every device."
+                                    : "Sign in to load your saved garden."
+                            }
                         </p>
+                    </div>
 
-                        <div className="garden-onboarding-welcome-points">
-                            <div>
-                                <span aria-hidden="true">
-                                    📐
-                                </span>
+                    <form
+                        className="garden-onboarding-account-form"
+                        onSubmit={handleAccountSubmit}
+                    >
+                        {
+                            isSignUp && (
+                                <label>
+                                    <span>
+                                        Display name
+                                    </span>
 
-                                <span>
-                                    <strong>
-                                        Design
-                                    </strong>
+                                    <input
+                                        ref={firstActionRef}
+                                        type="text"
+                                        value={displayName}
+                                        onChange={
+                                            (event) =>
+                                                setDisplayName(
+                                                    event.target.value
+                                                )
+                                        }
+                                        autoComplete="name"
+                                        maxLength={60}
+                                    />
+                                </label>
+                            )
+                        }
 
-                                    <small>
-                                        Build around your real available space.
-                                    </small>
-                                </span>
-                            </div>
+                        <label>
+                            <span>
+                                Email
+                            </span>
 
-                            <div>
-                                <span aria-hidden="true">
-                                    🔨
-                                </span>
+                            <input
+                                ref={
+                                    isSignUp
+                                        ? undefined
+                                        : firstActionRef
+                                }
+                                type="email"
+                                value={email}
+                                onChange={
+                                    (event) =>
+                                        setEmail(
+                                            event.target.value
+                                        )
+                                }
+                                autoComplete="email"
+                                required
+                            />
+                        </label>
 
-                                <span>
-                                    <strong>
-                                        Build
-                                    </strong>
+                        <label>
+                            <span>
+                                Password
+                            </span>
 
-                                    <small>
-                                        Get layouts, materials, and instructions.
-                                    </small>
-                                </span>
-                            </div>
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={
+                                    (event) =>
+                                        setPassword(
+                                            event.target.value
+                                        )
+                                }
+                                autoComplete={
+                                    isSignUp
+                                        ? "new-password"
+                                        : "current-password"
+                                }
+                                minLength={6}
+                                required
+                            />
+                        </label>
 
-                            <div>
-                                <span aria-hidden="true">
-                                    🪴
-                                </span>
+                        {
+                            accountMessage && (
+                                <p
+                                    className="garden-onboarding-account-message"
+                                    role="alert"
+                                >
+                                    {accountMessage}
+                                </p>
+                            )
+                        }
 
-                                <span>
-                                    <strong>
-                                        Grow
-                                    </strong>
+                        <div className="garden-onboarding-welcome-actions">
+                            <button
+                                type="submit"
+                                className="garden-onboarding-next"
+                                disabled={accountBusy}
+                            >
+                                {
+                                    accountBusy
+                                        ? "Working…"
+                                        : isSignUp
+                                            ? "Create Account →"
+                                            : "Sign In →"
+                                }
+                            </button>
 
-                                    <small>
-                                        Track planting, watering, growth, and harvests.
-                                    </small>
-                                </span>
-                            </div>
+                            <button
+                                type="button"
+                                className="garden-onboarding-not-now"
+                                onClick={toggleAccountMode}
+                                disabled={accountBusy}
+                            >
+                                {
+                                    isSignUp
+                                        ? "I already have an account"
+                                        : "Create a new account"
+                                }
+                            </button>
                         </div>
-                    </div>
-
-                    <div className="garden-onboarding-welcome-actions">
-                        <button
-                            ref={firstActionRef}
-                            type="button"
-                            className="garden-onboarding-next"
-                            onClick={beginFirstTour}
-                        >
-                            Take the Quick Tour →
-                        </button>
-
-                        <button
-                            type="button"
-                            className="garden-onboarding-not-now"
-                            onClick={closeOnboarding}
-                        >
-                            Skip for Now
-                        </button>
-                    </div>
-
-                    <p className="garden-onboarding-welcome-note">
-                        You can reopen this guide anytime from ☰ → How to Use.
-                    </p>
+                    </form>
                 </section>
             </div>
         );
