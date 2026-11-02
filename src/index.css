@@ -8737,6 +8737,60 @@ html.dark-mode .route-loading-bar span {
     touch-action: manipulation;
 }
 
+.garden-onboarding-account-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    padding: 0 16px 6px;
+}
+
+.garden-onboarding-account-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.garden-onboarding-account-form label span {
+    color: #3c563f;
+
+    font-size: 0.6rem;
+    font-weight: 700;
+}
+
+.garden-onboarding-account-form input {
+    min-height: 44px;
+
+    padding: 0 12px;
+
+    border: 1px solid #cad8c7;
+    border-radius: 11px;
+
+    background-color: #ffffff;
+    color: #304735;
+
+    font: inherit;
+    font-size: 0.7rem;
+}
+
+.garden-onboarding-account-form input:focus-visible {
+    outline: 2px solid #52705a;
+    outline-offset: 1px;
+}
+
+.garden-onboarding-account-form .garden-onboarding-welcome-actions {
+    padding: 4px 0 10px;
+}
+
+.garden-onboarding-account-message {
+    margin: 0;
+
+    color: #a2412f;
+
+    font-size: 0.6rem;
+    line-height: 1.45;
+}
+
 .garden-onboarding-welcome-note {
     margin: 0 16px 16px;
 
@@ -8779,6 +8833,20 @@ html.dark-mode .garden-onboarding-not-now {
     border-color: #4c5b4c;
     background-color: #293329;
     color: #d4e1d2;
+}
+
+html.dark-mode .garden-onboarding-account-form label span {
+    color: #dce8da;
+}
+
+html.dark-mode .garden-onboarding-account-form input {
+    border-color: #4c5b4c;
+    background-color: #293329;
+    color: #e2eee0;
+}
+
+html.dark-mode .garden-onboarding-account-message {
+    color: #f0a493;
 }
 
 /* =========================

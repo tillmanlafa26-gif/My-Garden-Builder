@@ -3783,7 +3783,11 @@ function App() {
 
             <NetworkStatusBanner />
 
-            <GardenOnboarding />
+            <GardenOnboarding
+                cloudSync={
+                    cloudSync
+                }
+            />
 
             <main
                 id="main-content"
