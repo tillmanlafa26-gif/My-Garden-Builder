@@ -1,10 +1,12 @@
 {
-  "name": "vite-project",
+  "name": "my-garden-builder",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "node scripts/dev.mjs",
+    "dev:web": "vite",
+    "dev:api": "node backend/devServer.js",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
