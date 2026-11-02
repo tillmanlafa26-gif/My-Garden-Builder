@@ -9,28 +9,8 @@ import {
     withCacheMeta
 } from "../utils/runtimeCache";
 
-const API_BASE_URL =
-    "https://perenual.com/api/v2";
-
-const API_KEY =
-    import.meta.env
-        .VITE_PERENUAL_API_KEY;
-
 const PLANT_CACHE_MAX_AGE_MS =
     7 * 24 * 60 * 60 * 1000;
-
-function checkApiKey() {
-    if (
-        !API_KEY ||
-        API_KEY.includes(
-            "YOUR_API_KEY"
-        )
-    ) {
-        throw new Error(
-            "Perenual API key is missing. Check your .env file and restart Vite."
-        );
-    }
-}
 
 function normalizePlant(
     plant
@@ -123,6 +103,59 @@ function returnCachedOrThrow(
     );
 }
 
+async function requestBackend(
+    parameters
+) {
+    let response;
+
+    try {
+        response =
+            await fetch(
+                `/api/plants?${parameters.toString()}`,
+                {
+                    headers: {
+                        Accept:
+                            "application/json"
+                    }
+                }
+            );
+    } catch (
+        error
+    ) {
+        console.error(
+            "Plant backend network request failed:",
+            error
+        );
+
+        throw new Error(
+            "network-error"
+        );
+    }
+
+    const data =
+        await response.json()
+            .catch(
+                () => null
+            );
+
+    if (
+        !response.ok
+    ) {
+        const error =
+            new Error(
+                data?.error ||
+                `Plant backend returned ${response.status}.`
+            );
+
+        error.status =
+            response.status;
+
+        throw error;
+    }
+
+    return data;
+}
+
 export async function searchPlants(
     searchTerm = "",
     page = 1,
@@ -164,31 +197,12 @@ export async function searchPlants(
         );
     }
 
-    try {
-        checkApiKey();
-    } catch (error) {
-        if (
-            cached
-        ) {
-            return withCacheMeta(
-                cached.data,
-                cached,
-                {
-                    fallbackReason:
-                        "api-key"
-                }
-            );
-        }
-
-        throw error;
-    }
-
     const parameters =
         new URLSearchParams();
 
     parameters.set(
-        "key",
-        API_KEY
+        "action",
+        "search"
     );
 
     parameters.set(
@@ -209,16 +223,6 @@ export async function searchPlants(
         );
     }
 
-    parameters.set(
-        "edible",
-        "1"
-    );
-
-    parameters.set(
-        "order",
-        "asc"
-    );
-
     if (
         searchTerm.trim()
     ) {
@@ -228,65 +232,56 @@ export async function searchPlants(
         );
     }
 
-    let response;
+    let data;
 
     try {
-        response =
-            await fetch(
-                `${API_BASE_URL}/species-list?${parameters.toString()}`
+        data =
+            await requestBackend(
+                parameters
             );
-    } catch (error) {
+    } catch (
+        error
+    ) {
         console.error(
-            "Plant API network request failed:",
+            "Plant search failed:",
             error
         );
 
         return returnCachedOrThrow(
             cached,
-            "The online plant library is temporarily unavailable. Try again when your connection is stable.",
+            error?.status ===
+                503
+                ? "The online plant library is not configured yet. Your built-in crop planner and saved garden still work."
+                : "The online plant library is temporarily unavailable. Try again when your connection is stable.",
             {
                 fallbackReason:
-                    "network-error"
+                    error?.status
+                        ? `http-${error.status}`
+                        : "network-error"
             }
         );
     }
-
-    if (
-        !response.ok
-    ) {
-        return returnCachedOrThrow(
-            cached,
-            `The plant library is temporarily unavailable (${response.status}). Please try again shortly.`,
-            {
-                fallbackReason:
-                    `http-${response.status}`
-            }
-        );
-    }
-
-    const data =
-        await response.json();
 
     const result = {
         plants:
             Array.isArray(
-                data.data
+                data?.data
             )
                 ? data.data.map(
                     normalizePlant
                 )
                 : [],
         currentPage:
-            data.current_page ||
+            data?.current_page ||
             page,
         lastPage:
-            data.last_page ||
+            data?.last_page ||
             1,
         total:
-            data.total ||
+            data?.total ||
             0,
         perPage:
-            data.per_page ||
+            data?.per_page ||
             30
     };
 
@@ -335,71 +330,50 @@ export async function getPlantDetails(
         );
     }
 
-    try {
-        checkApiKey();
-    } catch (error) {
-        if (
-            cached
-        ) {
-            return withCacheMeta(
-                cached.data,
-                cached,
-                {
-                    fallbackReason:
-                        "api-key"
-                }
-            );
-        }
-
-        throw error;
-    }
-
     const parameters =
         new URLSearchParams();
 
     parameters.set(
-        "key",
-        API_KEY
+        "action",
+        "details"
     );
 
-    let response;
+    parameters.set(
+        "id",
+        String(
+            plantId
+        )
+    );
+
+    let result;
 
     try {
-        response =
-            await fetch(
-                `${API_BASE_URL}/species/details/${plantId}?${parameters.toString()}`
+        result =
+            await requestBackend(
+                parameters
             );
-    } catch (error) {
+    } catch (
+        error
+    ) {
         console.error(
-            "Plant detail network request failed:",
+            "Plant detail request failed:",
             error
         );
 
         return returnCachedOrThrow(
             cached,
-            "Plant details are temporarily unavailable. Try again when your connection is stable.",
+            error?.status ===
+                503
+                ? "The online plant library is not configured yet."
+                : "Plant details are temporarily unavailable. Try again when your connection is stable.",
             {
                 fallbackReason:
-                    "network-error"
+                    error?.status
+                        ? `http-${error.status}`
+                        : "network-error"
             }
         );
     }
-
-    if (
-        !response.ok
-    ) {
-        return returnCachedOrThrow(
-            cached,
-            `Plant details are temporarily unavailable (${response.status}).`,
-            {
-                fallbackReason:
-                    `http-${response.status}`
-            }
-        );
-    }
-
-    const result =
-        await response.json();
 
     saveRuntimeCache(
         cacheKey,
