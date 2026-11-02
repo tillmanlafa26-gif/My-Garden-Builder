@@ -1,99 +1,147 @@
-# My Garden Builder — Production Deployment
+# My Garden Builder — Development & Deployment
 
-## 1. Merge the release candidate
-Copy these items into the existing Vite project root:
+## Architecture
 
-- `src/` — replace the current source folder
-- `public/` — merge/replace the provided PWA files
-- `index.html` — replace the current Vite index file
-- `vercel.json` — keep only if deploying to Vercel
-- `.env.example` — reference only; do not rename over an existing `.env`
+My Garden Builder is a full-stack Vite application.
 
-Keep the existing `package.json`, `package-lock.json`, and Vite configuration unless you intentionally need to change them.
+- `src/` — React frontend
+- `backend/` — server-side application code
+- `api/` — thin Vercel Function entry points
+- `supabase/` — database configuration and SQL migrations
+- `public/` — PWA/service-worker assets
 
-## 2. Verify environment variables
-The existing local `.env` should contain:
+Production uses Vercel Functions for the Node backend and Supabase for authentication/PostgreSQL/storage.
 
-```text
-VITE_PERENUAL_API_KEY=YOUR_REAL_KEY
-```
+## Local development
 
-Do not commit the real `.env` file.
+Install packages first:
 
-## 3. Production build
-From the project root:
-
-```bash
+```powershell
 npm install
-npm run build
 ```
 
-The build should create `dist/`.
+Then start the complete local application:
 
-## 4. Test the production build locally
-
-```bash
-npm run preview
+```powershell
+npm run dev
 ```
 
-Use the preview URL rather than the Vite development URL for PWA testing. The service worker intentionally registers only in production mode.
+That starts the local backend on port 8787 and the Vite frontend on port 5173. Vite proxies `/api/*` to the backend.
 
-Test:
-- page reloads on `/garden`, `/plants`, `/calendar`, `/journal`, `/privacy`, `/terms`
-- Settings → Install App
-- offline reload after first successful production load
-- weather/API fallback behavior
-- dark mode persistence
-- reset behavior
+You can also run the two processes separately:
 
-## 5. Vercel
-The included `vercel.json` provides the SPA fallback needed for BrowserRouter routes.
+```powershell
+npm run dev:api
+npm run dev:web
+```
 
-Set `VITE_PERENUAL_API_KEY` in the Vercel project environment variables before the production build.
-
-## 6. Netlify / Cloudflare Pages
-The included `public/_redirects` is copied into `dist` by Vite and provides:
+Backend health check:
 
 ```text
-/* /index.html 200
+http://127.0.0.1:8787/api/health
 ```
 
-Use build command:
+## Environment variables
+
+Copy `.env.example` to `.env` for local development. Never commit the real `.env`.
+
+Server-only values:
 
 ```text
-npm run build
+OPENAI_API_KEY
+OPENAI_GARDEN_MODEL
+OPENAI_GARDEN_VISION_MODEL
+PERENUAL_API_KEY
+PERENUAL_API_BASE_URL
+BACKEND_PORT
 ```
 
-Publish directory:
+The Perenual key is intentionally server-only. Do not use `VITE_PERENUAL_API_KEY`.
 
-```text
-dist
-```
-
-Set `VITE_PERENUAL_API_KEY` in the host's build environment.
-
-## 7. HTTPS
-PWA installation and service workers require HTTPS in production. Major deployment hosts provide HTTPS automatically.
-
-## 8. After deployment
-Open the production URL on a phone and desktop, complete the QA checklist, then install it to the device home screen.
-
-## Optional Supabase cloud sync
-
-Cloud sync is designed to fail safely. The app remains local-first when these variables are absent:
+Public Supabase browser configuration:
 
 ```text
 VITE_SUPABASE_URL
-VITE_SUPABASE_ANON_KEY
+VITE_SUPABASE_PUBLISHABLE_KEY
 ```
 
-Before enabling the variables in production, apply the Supabase migrations in order:
+`VITE_SUPABASE_ANON_KEY` remains supported as a backward-compatible fallback.
+
+Never place a Supabase service-role or secret key in a `VITE_` variable.
+
+## Supabase database
+
+The repository is now initialized as a Supabase CLI project with `supabase/config.toml`.
+
+Install the Supabase CLI as a project dependency when you are ready to work with the hosted database:
+
+```powershell
+npm install supabase --save-dev
+npx supabase login
+npx supabase link --project-ref YOUR_PROJECT_REF
+```
+
+Apply migrations in timestamp order:
 
 1. `20261011_0001_initial_garden_schema.sql`
 2. `20261101_0002_builder_data_layer.sql`
 3. `20261101_0003_persistence_hardening.sql`
 
-After adding `@supabase/supabase-js`, run `npm install` locally so `package-lock.json` is refreshed before the next dependency maintenance commit.
+Preview first:
 
-The Phase 3 migration adds one-active-garden enforcement, idempotent legacy-browser migration support, stronger garden ownership policies, and an atomic garden snapshot RPC.
+```powershell
+npx supabase db push --dry-run
+```
 
+Then apply:
+
+```powershell
+npx supabase db push
+```
+
+## Production build
+
+```powershell
+npm install
+npm run build
+```
+
+The build output is `dist/`.
+
+## Vercel
+
+Configure these server environment variables in Vercel:
+
+```text
+OPENAI_API_KEY
+OPENAI_GARDEN_MODEL
+OPENAI_GARDEN_VISION_MODEL
+PERENUAL_API_KEY
+```
+
+When cloud sync is enabled, also configure:
+
+```text
+VITE_SUPABASE_URL
+VITE_SUPABASE_PUBLISHABLE_KEY
+```
+
+After changing Vercel environment variables, create a new deployment so the Vite build receives the public Supabase values.
+
+## PWA testing
+
+Use a production build or deployed URL when testing the service worker.
+
+Verify:
+
+- direct route reloads
+- installability
+- offline app shell
+- local garden persistence
+- `/api/health`
+- AI assistant
+- garden photo analysis
+- plant library
+- Supabase sign-in and cloud sync, when configured
+
+API GET responses are deliberately excluded from the service-worker app cache. The plant library maintains its own runtime cache instead.
