@@ -12,6 +12,7 @@ export function getBackendConfig() {
             "gpt-5.6-luna",
         perenualApiKey:
             process.env.PERENUAL_API_KEY?.trim() ||
+            process.env.VITE_PERENUAL_API_KEY?.trim() ||
             "",
         perenualBaseUrl:
             process.env.PERENUAL_API_BASE_URL?.trim() ||
