@@ -67,10 +67,85 @@ function CloudAccountPanel({
         false
     );
 
+    const [
+        editingName,
+        setEditingName
+    ] = useState(
+        false
+    );
+
+    const [
+        nameDraft,
+        setNameDraft
+    ] = useState(
+        ""
+    );
+
     if (
         !cloudSync
     ) {
         return null;
+    }
+
+    const profileName =
+        cloudSync
+            .profile
+            ?.display_name ||
+        "";
+
+    function handleStartEditName() {
+        setNameDraft(
+            profileName
+        );
+
+        setMessage(
+            ""
+        );
+
+        setEditingName(
+            true
+        );
+    }
+
+    async function handleSaveName(
+        event
+    ) {
+        event.preventDefault();
+
+        setBusy(
+            true
+        );
+
+        setMessage(
+            ""
+        );
+
+        try {
+            await cloudSync
+                .updateProfile({
+                    displayName:
+                        nameDraft
+                });
+
+            setEditingName(
+                false
+            );
+
+            setMessage(
+                "Display name saved."
+            );
+        } catch (
+            error
+        ) {
+            setMessage(
+                error?.message ||
+                "Unable to save your display name."
+            );
+        } finally {
+            setBusy(
+                false
+            );
+        }
     }
 
     async function handleSubmit(
@@ -146,6 +221,10 @@ function CloudAccountPanel({
         try {
             await cloudSync
                 .signOut();
+
+            setEditingName(
+                false
+            );
 
             setMessage(
                 "Signed out. Local garden data remains on this device."
@@ -262,6 +341,7 @@ function CloudAccountPanel({
                                     <div>
                                         <strong>
                                             {
+                                                profileName ||
                                                 cloudSync
                                                     .user
                                                     .email
@@ -269,6 +349,10 @@ function CloudAccountPanel({
                                         </strong>
 
                                         <small>
+                                            {
+                                                profileName &&
+                                                `${cloudSync.user.email} · `
+                                            }
                                             {
                                                 cloudSync
                                                     .syncMessage
@@ -284,9 +368,103 @@ function CloudAccountPanel({
                                     </div>
                                 </div>
 
+                                {
+                                    editingName &&
+                                    (
+                                        <form
+                                            onSubmit={
+                                                handleSaveName
+                                            }
+                                            className="cloud-account-form"
+                                        >
+                                            <label>
+                                                <span>
+                                                    Display name
+                                                </span>
+
+                                                <input
+                                                    type="text"
+                                                    value={
+                                                        nameDraft
+                                                    }
+                                                    onChange={
+                                                        (
+                                                            event
+                                                        ) =>
+                                                            setNameDraft(
+                                                                event
+                                                                    .target
+                                                                    .value
+                                                            )
+                                                    }
+                                                    autoComplete="name"
+                                                    maxLength={60}
+                                                    autoFocus
+                                                />
+                                            </label>
+
+                                            <div
+                                                className="app-settings-reset-actions"
+                                            >
+                                                <button
+                                                    type="submit"
+                                                    className="app-settings-cancel-button"
+                                                    disabled={
+                                                        busy
+                                                    }
+                                                >
+                                                    {
+                                                        busy
+                                                            ? "Saving…"
+                                                            : "Save Name"
+                                                    }
+                                                </button>
+
+                                                <button
+                                                    type="button"
+                                                    className="app-settings-cancel-button"
+                                                    onClick={
+                                                        () =>
+                                                            setEditingName(
+                                                                false
+                                                            )
+                                                    }
+                                                    disabled={
+                                                        busy
+                                                    }
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </form>
+                                    )
+                                }
+
                                 <div
                                     className="app-settings-reset-actions"
                                 >
+                                    {
+                                        !editingName &&
+                                        (
+                                            <button
+                                                type="button"
+                                                className="app-settings-cancel-button"
+                                                onClick={
+                                                    handleStartEditName
+                                                }
+                                                disabled={
+                                                    busy
+                                                }
+                                            >
+                                                {
+                                                    profileName
+                                                        ? "Edit Name"
+                                                        : "Add Name"
+                                                }
+                                            </button>
+                                        )
+                                    }
+
                                     <button
                                         type="button"
                                         className="app-settings-cancel-button"

@@ -155,6 +155,49 @@ export async function signOut() {
     }
 }
 
+const PROFILE_COLUMNS = "id, display_name, avatar_path, updated_at";
+
+export async function getProfile() {
+    const supabase = getSupabase();
+    const user = await requireUser();
+
+    const { data, error } = await supabase
+        .from("profiles")
+        .select(PROFILE_COLUMNS)
+        .eq("id", user.id)
+        .maybeSingle();
+
+    if (error) {
+        throw error;
+    }
+
+    return data;
+}
+
+export async function updateProfile({ displayName }) {
+    const supabase = getSupabase();
+    const user = await requireUser();
+
+    // Upsert so accounts created before the signup trigger still get a row.
+    const { data, error } = await supabase
+        .from("profiles")
+        .upsert(
+            {
+                id: user.id,
+                display_name: displayName?.trim() || null
+            },
+            { onConflict: "id" }
+        )
+        .select(PROFILE_COLUMNS)
+        .single();
+
+    if (error) {
+        throw error;
+    }
+
+    return data;
+}
+
 export async function listGardens() {
     const supabase = getSupabase();
     await requireUser();
